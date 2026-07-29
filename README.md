@@ -70,6 +70,18 @@ Do **not** put project docs on the Desktop. Authority lives in this repository.
 
 Builds freestanding Multiboot kernel (`src/main_kernel.zig`) when QEMU is available.
 
-## License / attribution
+## License
 
-FSOT neural implementation by Damian Arthur Palumbo. Seed constants and scalar law follow the FSOT methodology pin used in the monorepo.
+**Apache License 2.0** — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+Copyright 2026 Damian Arthur Palumbo.
+
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+```
+
+Apache-2.0 includes an express patent grant (useful for neural / systems code). Seed constants and scalar law follow the FSOT methodology pin used in the monorepo.
