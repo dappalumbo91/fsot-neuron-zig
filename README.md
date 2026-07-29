@@ -50,6 +50,7 @@ Or double-click `BOOT_MIND.cmd` for the live organism.
 | `machine-lang-stress` | 1000-frame round-trip stress |
 | `english` | Lexicon choose + TTS real words |
 | `practice` | Utter → TTS → self-hear → encode |
+| `novel` | Single complex inquiry ? novel synthesis |
 | `grade` | PK/K/G1 teach facts → quiz → solve problems |
 | `mind` | Live senses + attention + EN_SAY + machine frames |
 | `stress` / `all` | Fixed suite gates |
