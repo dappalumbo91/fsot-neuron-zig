@@ -1,0 +1,68 @@
+const std = @import("std");
+
+pub fn build(b: *std.Build) void {
+    const target_host = b.standardTargetOptions(.{});
+    const optimize = b.standardOptimizeOption(.{});
+
+    // --- Host self-test (fast, no QEMU) — parity / TRACE dump ---
+    const host = b.addExecutable(.{
+        .name = "fsot_trit_host",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main_host.zig"),
+            .target = target_host,
+            .optimize = optimize,
+        }),
+    });
+    // Install host only via explicit `zig build host` so a locked
+    // zig-out binary (AV / leftover process) does not block `zig build mind`.
+    const run_host = b.addRunArtifact(host);
+    const host_step = b.step("host", "Build+run trinary + neuron self-test on host");
+    host_step.dependOn(&b.addInstallArtifact(host, .{}).step);
+    host_step.dependOn(&run_host.step);
+
+    // --- Mind host: multi-region brain + learning (neural authority) ---
+    const mind = b.addExecutable(.{
+        .name = "fsot_mind",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main_mind.zig"),
+            .target = target_host,
+            .optimize = optimize,
+        }),
+    });
+    b.installArtifact(mind);
+    const run_mind = b.addRunArtifact(mind);
+    if (b.args) |args| {
+        run_mind.addArgs(args);
+    }
+    const mind_step = b.step("mind", "Run Zig mind host (selftest|learn|memory|organism|all)");
+    mind_step.dependOn(&b.addInstallArtifact(mind, .{}).step);
+    mind_step.dependOn(&run_mind.step);
+
+    // --- Freestanding Multiboot kernel for QEMU ---
+    // QEMU -kernel Multiboot1 path wants a 32-bit image (not x86_64 ELF).
+    const kernel_target = b.resolveTargetQuery(.{
+        .cpu_arch = .x86,
+        .os_tag = .freestanding,
+        .abi = .none,
+    });
+
+    const kernel = b.addExecutable(.{
+        .name = "fsot_trit_kernel",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main_kernel.zig"),
+            .target = kernel_target,
+            .optimize = .ReleaseSafe,
+            .code_model = .kernel,
+            .red_zone = false,
+        }),
+    });
+    kernel.entry = .{ .symbol_name = "_start" };
+    kernel.setLinkerScript(b.path("linker.ld"));
+    // Multiboot / QEMU -kernel expects ELF; disable PIE if needed
+    kernel.pie = false;
+    kernel.link_eh_frame_hdr = false;
+    b.installArtifact(kernel);
+
+    const kernel_step = b.step("kernel", "Build freestanding QEMU kernel");
+    kernel_step.dependOn(&b.addInstallArtifact(kernel, .{}).step);
+}

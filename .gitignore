@@ -1,0 +1,8 @@
+﻿zig-out/
+.zig-cache/
+*.exe
+*.pdb
+*.o
+*.obj
+.DS_Store
+__pycache__/
