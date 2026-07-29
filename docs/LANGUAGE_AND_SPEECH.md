@@ -12,7 +12,8 @@ English is a **codec** (lexicon + TTS plant). Any LLM/Ollama teacher lives **out
 | `lexicon_en_fixed.zig` | English word ↔ role ↔ choose-by-meaning |
 | `host_tts_fixed.zig` | Windows SAPI TTS plant |
 | `language_practice_fixed.zig` | Utter → TTS → self-re-ingest → encode |
-| `grade_practice_fixed.zig` | PK/K/G1 teach facts → quiz → solve |
+| `grade_practice_fixed.zig
+| `reason_practice_fixed.zig` | Multi-hop open reason + process log |` | PK/K/G1 teach facts → quiz → solve |
 | `mind_live_fixed.zig` | Live organism: EN_SAY + machine frames + TTS |
 | `ambient_scene_fixed.zig` | Auditory scene filter |
 | `attention_fixed.zig` / `eeg_gate_anchors_fixed.zig` | Attention gates |
@@ -27,6 +28,7 @@ fsot_mind english               # lexicon + one TTS line
 fsot_mind practice              # self-hear language loop
 fsot_mind grade                 # facts + problems apply
 fsot_mind mind                  # full connected organism
+fsot_mind reason              # open multi-hop reason (bio process)
 fsot_mind stress                # fixed suite
 ```
 
