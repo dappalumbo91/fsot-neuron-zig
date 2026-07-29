@@ -85,3 +85,8 @@ You may obtain a copy of the License at
 ```
 
 Apache-2.0 includes an express patent grant (useful for neural / systems code). Seed constants and scalar law follow the FSOT methodology pin used in the monorepo.
+
+## Language learning
+
+See monorepo docs/LANGUAGE_LEARNING_METHODOLOGY.md for the reproducible lexicon + PK/K/G1 pipeline (machine language student; Ollama teacher optional).
+
