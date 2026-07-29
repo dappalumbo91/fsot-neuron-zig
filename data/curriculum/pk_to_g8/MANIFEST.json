@@ -1,0 +1,46 @@
+{
+  "n_facts_jsonl": 2613,
+  "n_problems_jsonl": 674,
+  "n_bank_rows": 3533,
+  "by_domain": {
+    "math": 2699,
+    "literacy": 560,
+    "science": 184,
+    "vision": 90
+  },
+  "by_grade": {
+    "preschool": 234,
+    "kindergarten": 346,
+    "grade1": 315,
+    "grade2": 303,
+    "grade3": 432,
+    "grade4": 206,
+    "grade5": 229,
+    "grade6": 321,
+    "grade7": 853,
+    "grade8": 294
+  },
+  "by_kind": {
+    "fact": 2961,
+    "problem": 544,
+    "rel": 28
+  },
+  "grades": [
+    "preschool",
+    "kindergarten",
+    "grade1",
+    "grade2",
+    "grade3",
+    "grade4",
+    "grade5",
+    "grade6",
+    "grade7",
+    "grade8"
+  ],
+  "paths": {
+    "facts": "I:\\fsot nuron\\data\\curriculum\\pk_to_g8\\facts.jsonl",
+    "problems": "I:\\fsot nuron\\data\\curriculum\\pk_to_g8\\problems.jsonl",
+    "bank": "I:\\fsot nuron\\data\\curriculum\\pk_to_g8\\bank.tsv"
+  },
+  "doctrine": "open PK\u2192G8; Zig domain \u226595% gates; middle school target"
+}

@@ -1,0 +1,674 @@
+{"id": "addp-0-0", "grade": "preschool", "domain": "math", "prompt": "0+0", "answer": "0", "kind": "problem", "keywords": ["0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-1", "grade": "preschool", "domain": "math", "prompt": "0+1", "answer": "1", "kind": "problem", "keywords": ["1", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-2", "grade": "preschool", "domain": "math", "prompt": "0+2", "answer": "2", "kind": "problem", "keywords": ["2", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-3", "grade": "preschool", "domain": "math", "prompt": "0+3", "answer": "3", "kind": "problem", "keywords": ["3", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-4", "grade": "kindergarten", "domain": "math", "prompt": "0+4", "answer": "4", "kind": "problem", "keywords": ["4", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-5", "grade": "kindergarten", "domain": "math", "prompt": "0+5", "answer": "5", "kind": "problem", "keywords": ["5", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-6", "grade": "kindergarten", "domain": "math", "prompt": "0+6", "answer": "6", "kind": "problem", "keywords": ["6", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-7", "grade": "kindergarten", "domain": "math", "prompt": "0+7", "answer": "7", "kind": "problem", "keywords": ["7", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-8", "grade": "kindergarten", "domain": "math", "prompt": "0+8", "answer": "8", "kind": "problem", "keywords": ["8", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-9", "grade": "kindergarten", "domain": "math", "prompt": "0+9", "answer": "9", "kind": "problem", "keywords": ["9", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-0-10", "grade": "kindergarten", "domain": "math", "prompt": "0+10", "answer": "10", "kind": "problem", "keywords": ["10", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-0-0", "grade": "preschool", "domain": "math", "prompt": "0-0", "answer": "0", "kind": "problem", "keywords": ["0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-0", "grade": "preschool", "domain": "math", "prompt": "1+0", "answer": "1", "kind": "problem", "keywords": ["1", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-1", "grade": "preschool", "domain": "math", "prompt": "1+1", "answer": "2", "kind": "problem", "keywords": ["2", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-2", "grade": "preschool", "domain": "math", "prompt": "1+2", "answer": "3", "kind": "problem", "keywords": ["3", "1", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-3", "grade": "preschool", "domain": "math", "prompt": "1+3", "answer": "4", "kind": "problem", "keywords": ["4", "1", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-4", "grade": "kindergarten", "domain": "math", "prompt": "1+4", "answer": "5", "kind": "problem", "keywords": ["5", "1", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-5", "grade": "kindergarten", "domain": "math", "prompt": "1+5", "answer": "6", "kind": "problem", "keywords": ["6", "1", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-6", "grade": "kindergarten", "domain": "math", "prompt": "1+6", "answer": "7", "kind": "problem", "keywords": ["7", "1", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-7", "grade": "kindergarten", "domain": "math", "prompt": "1+7", "answer": "8", "kind": "problem", "keywords": ["8", "1", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-8", "grade": "kindergarten", "domain": "math", "prompt": "1+8", "answer": "9", "kind": "problem", "keywords": ["9", "1", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-9", "grade": "kindergarten", "domain": "math", "prompt": "1+9", "answer": "10", "kind": "problem", "keywords": ["10", "1", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-1-10", "grade": "grade1", "domain": "math", "prompt": "1+10", "answer": "11", "kind": "problem", "keywords": ["11", "1", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-1-0", "grade": "preschool", "domain": "math", "prompt": "1-0", "answer": "1", "kind": "problem", "keywords": ["1", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-1-1", "grade": "preschool", "domain": "math", "prompt": "1-1", "answer": "0", "kind": "problem", "keywords": ["0", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-0", "grade": "preschool", "domain": "math", "prompt": "2+0", "answer": "2", "kind": "problem", "keywords": ["2", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-1", "grade": "preschool", "domain": "math", "prompt": "2+1", "answer": "3", "kind": "problem", "keywords": ["3", "2", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-2", "grade": "preschool", "domain": "math", "prompt": "2+2", "answer": "4", "kind": "problem", "keywords": ["4", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-3", "grade": "preschool", "domain": "math", "prompt": "2+3", "answer": "5", "kind": "problem", "keywords": ["5", "2", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-4", "grade": "kindergarten", "domain": "math", "prompt": "2+4", "answer": "6", "kind": "problem", "keywords": ["6", "2", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-5", "grade": "kindergarten", "domain": "math", "prompt": "2+5", "answer": "7", "kind": "problem", "keywords": ["7", "2", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-6", "grade": "kindergarten", "domain": "math", "prompt": "2+6", "answer": "8", "kind": "problem", "keywords": ["8", "2", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-7", "grade": "kindergarten", "domain": "math", "prompt": "2+7", "answer": "9", "kind": "problem", "keywords": ["9", "2", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-8", "grade": "kindergarten", "domain": "math", "prompt": "2+8", "answer": "10", "kind": "problem", "keywords": ["10", "2", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-9", "grade": "grade1", "domain": "math", "prompt": "2+9", "answer": "11", "kind": "problem", "keywords": ["11", "2", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-2-10", "grade": "grade1", "domain": "math", "prompt": "2+10", "answer": "12", "kind": "problem", "keywords": ["12", "2", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-2-0", "grade": "preschool", "domain": "math", "prompt": "2-0", "answer": "2", "kind": "problem", "keywords": ["2", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-2-1", "grade": "preschool", "domain": "math", "prompt": "2-1", "answer": "1", "kind": "problem", "keywords": ["1", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-2-2", "grade": "preschool", "domain": "math", "prompt": "2-2", "answer": "0", "kind": "problem", "keywords": ["0", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-0", "grade": "preschool", "domain": "math", "prompt": "3+0", "answer": "3", "kind": "problem", "keywords": ["3", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-1", "grade": "preschool", "domain": "math", "prompt": "3+1", "answer": "4", "kind": "problem", "keywords": ["4", "3", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-2", "grade": "preschool", "domain": "math", "prompt": "3+2", "answer": "5", "kind": "problem", "keywords": ["5", "3", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-3", "grade": "kindergarten", "domain": "math", "prompt": "3+3", "answer": "6", "kind": "problem", "keywords": ["6", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-4", "grade": "kindergarten", "domain": "math", "prompt": "3+4", "answer": "7", "kind": "problem", "keywords": ["7", "3", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-5", "grade": "kindergarten", "domain": "math", "prompt": "3+5", "answer": "8", "kind": "problem", "keywords": ["8", "3", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-6", "grade": "kindergarten", "domain": "math", "prompt": "3+6", "answer": "9", "kind": "problem", "keywords": ["9", "3", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-7", "grade": "kindergarten", "domain": "math", "prompt": "3+7", "answer": "10", "kind": "problem", "keywords": ["10", "3", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-8", "grade": "grade1", "domain": "math", "prompt": "3+8", "answer": "11", "kind": "problem", "keywords": ["11", "3", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-9", "grade": "grade1", "domain": "math", "prompt": "3+9", "answer": "12", "kind": "problem", "keywords": ["12", "3", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-3-10", "grade": "grade1", "domain": "math", "prompt": "3+10", "answer": "13", "kind": "problem", "keywords": ["13", "3", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-3-0", "grade": "preschool", "domain": "math", "prompt": "3-0", "answer": "3", "kind": "problem", "keywords": ["3", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-3-1", "grade": "preschool", "domain": "math", "prompt": "3-1", "answer": "2", "kind": "problem", "keywords": ["2", "3", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-3-2", "grade": "preschool", "domain": "math", "prompt": "3-2", "answer": "1", "kind": "problem", "keywords": ["1", "3", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-3-3", "grade": "preschool", "domain": "math", "prompt": "3-3", "answer": "0", "kind": "problem", "keywords": ["0", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-0", "grade": "kindergarten", "domain": "math", "prompt": "4+0", "answer": "4", "kind": "problem", "keywords": ["4", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-1", "grade": "kindergarten", "domain": "math", "prompt": "4+1", "answer": "5", "kind": "problem", "keywords": ["5", "4", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-2", "grade": "kindergarten", "domain": "math", "prompt": "4+2", "answer": "6", "kind": "problem", "keywords": ["6", "4", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-3", "grade": "kindergarten", "domain": "math", "prompt": "4+3", "answer": "7", "kind": "problem", "keywords": ["7", "4", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-4", "grade": "kindergarten", "domain": "math", "prompt": "4+4", "answer": "8", "kind": "problem", "keywords": ["8", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-5", "grade": "kindergarten", "domain": "math", "prompt": "4+5", "answer": "9", "kind": "problem", "keywords": ["9", "4", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-6", "grade": "kindergarten", "domain": "math", "prompt": "4+6", "answer": "10", "kind": "problem", "keywords": ["10", "4", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-7", "grade": "grade1", "domain": "math", "prompt": "4+7", "answer": "11", "kind": "problem", "keywords": ["11", "4", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-8", "grade": "grade1", "domain": "math", "prompt": "4+8", "answer": "12", "kind": "problem", "keywords": ["12", "4", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-9", "grade": "grade1", "domain": "math", "prompt": "4+9", "answer": "13", "kind": "problem", "keywords": ["13", "4", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-4-10", "grade": "grade1", "domain": "math", "prompt": "4+10", "answer": "14", "kind": "problem", "keywords": ["14", "4", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-4-0", "grade": "preschool", "domain": "math", "prompt": "4-0", "answer": "4", "kind": "problem", "keywords": ["4", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-4-1", "grade": "preschool", "domain": "math", "prompt": "4-1", "answer": "3", "kind": "problem", "keywords": ["3", "4", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-4-2", "grade": "preschool", "domain": "math", "prompt": "4-2", "answer": "2", "kind": "problem", "keywords": ["2", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-4-3", "grade": "preschool", "domain": "math", "prompt": "4-3", "answer": "1", "kind": "problem", "keywords": ["1", "4", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-4-4", "grade": "preschool", "domain": "math", "prompt": "4-4", "answer": "0", "kind": "problem", "keywords": ["0", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-0", "grade": "kindergarten", "domain": "math", "prompt": "5+0", "answer": "5", "kind": "problem", "keywords": ["5", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-1", "grade": "kindergarten", "domain": "math", "prompt": "5+1", "answer": "6", "kind": "problem", "keywords": ["6", "5", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-2", "grade": "kindergarten", "domain": "math", "prompt": "5+2", "answer": "7", "kind": "problem", "keywords": ["7", "5", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-3", "grade": "kindergarten", "domain": "math", "prompt": "5+3", "answer": "8", "kind": "problem", "keywords": ["8", "5", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-4", "grade": "kindergarten", "domain": "math", "prompt": "5+4", "answer": "9", "kind": "problem", "keywords": ["9", "5", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-5", "grade": "kindergarten", "domain": "math", "prompt": "5+5", "answer": "10", "kind": "problem", "keywords": ["10", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-6", "grade": "grade1", "domain": "math", "prompt": "5+6", "answer": "11", "kind": "problem", "keywords": ["11", "5", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-7", "grade": "grade1", "domain": "math", "prompt": "5+7", "answer": "12", "kind": "problem", "keywords": ["12", "5", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-8", "grade": "grade1", "domain": "math", "prompt": "5+8", "answer": "13", "kind": "problem", "keywords": ["13", "5", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-9", "grade": "grade1", "domain": "math", "prompt": "5+9", "answer": "14", "kind": "problem", "keywords": ["14", "5", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-5-10", "grade": "grade1", "domain": "math", "prompt": "5+10", "answer": "15", "kind": "problem", "keywords": ["15", "5", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-5-0", "grade": "preschool", "domain": "math", "prompt": "5-0", "answer": "5", "kind": "problem", "keywords": ["5", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-5-1", "grade": "preschool", "domain": "math", "prompt": "5-1", "answer": "4", "kind": "problem", "keywords": ["4", "5", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-5-2", "grade": "preschool", "domain": "math", "prompt": "5-2", "answer": "3", "kind": "problem", "keywords": ["3", "5", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-5-3", "grade": "preschool", "domain": "math", "prompt": "5-3", "answer": "2", "kind": "problem", "keywords": ["2", "5", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-5-4", "grade": "preschool", "domain": "math", "prompt": "5-4", "answer": "1", "kind": "problem", "keywords": ["1", "5", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-5-5", "grade": "preschool", "domain": "math", "prompt": "5-5", "answer": "0", "kind": "problem", "keywords": ["0", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-0", "grade": "kindergarten", "domain": "math", "prompt": "6+0", "answer": "6", "kind": "problem", "keywords": ["6", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-1", "grade": "kindergarten", "domain": "math", "prompt": "6+1", "answer": "7", "kind": "problem", "keywords": ["7", "6", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-2", "grade": "kindergarten", "domain": "math", "prompt": "6+2", "answer": "8", "kind": "problem", "keywords": ["8", "6", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-3", "grade": "kindergarten", "domain": "math", "prompt": "6+3", "answer": "9", "kind": "problem", "keywords": ["9", "6", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-4", "grade": "kindergarten", "domain": "math", "prompt": "6+4", "answer": "10", "kind": "problem", "keywords": ["10", "6", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-5", "grade": "grade1", "domain": "math", "prompt": "6+5", "answer": "11", "kind": "problem", "keywords": ["11", "6", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-6", "grade": "grade1", "domain": "math", "prompt": "6+6", "answer": "12", "kind": "problem", "keywords": ["12", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-7", "grade": "grade1", "domain": "math", "prompt": "6+7", "answer": "13", "kind": "problem", "keywords": ["13", "6", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-8", "grade": "grade1", "domain": "math", "prompt": "6+8", "answer": "14", "kind": "problem", "keywords": ["14", "6", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-9", "grade": "grade1", "domain": "math", "prompt": "6+9", "answer": "15", "kind": "problem", "keywords": ["15", "6", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-6-10", "grade": "grade1", "domain": "math", "prompt": "6+10", "answer": "16", "kind": "problem", "keywords": ["16", "6", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-0", "grade": "kindergarten", "domain": "math", "prompt": "6-0", "answer": "6", "kind": "problem", "keywords": ["6", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-1", "grade": "kindergarten", "domain": "math", "prompt": "6-1", "answer": "5", "kind": "problem", "keywords": ["5", "6", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-2", "grade": "kindergarten", "domain": "math", "prompt": "6-2", "answer": "4", "kind": "problem", "keywords": ["4", "6", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-3", "grade": "kindergarten", "domain": "math", "prompt": "6-3", "answer": "3", "kind": "problem", "keywords": ["3", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-4", "grade": "kindergarten", "domain": "math", "prompt": "6-4", "answer": "2", "kind": "problem", "keywords": ["2", "6", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-5", "grade": "kindergarten", "domain": "math", "prompt": "6-5", "answer": "1", "kind": "problem", "keywords": ["1", "6", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-6-6", "grade": "kindergarten", "domain": "math", "prompt": "6-6", "answer": "0", "kind": "problem", "keywords": ["0", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-0", "grade": "kindergarten", "domain": "math", "prompt": "7+0", "answer": "7", "kind": "problem", "keywords": ["7", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-1", "grade": "kindergarten", "domain": "math", "prompt": "7+1", "answer": "8", "kind": "problem", "keywords": ["8", "7", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-2", "grade": "kindergarten", "domain": "math", "prompt": "7+2", "answer": "9", "kind": "problem", "keywords": ["9", "7", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-3", "grade": "kindergarten", "domain": "math", "prompt": "7+3", "answer": "10", "kind": "problem", "keywords": ["10", "7", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-4", "grade": "grade1", "domain": "math", "prompt": "7+4", "answer": "11", "kind": "problem", "keywords": ["11", "7", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-5", "grade": "grade1", "domain": "math", "prompt": "7+5", "answer": "12", "kind": "problem", "keywords": ["12", "7", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-6", "grade": "grade1", "domain": "math", "prompt": "7+6", "answer": "13", "kind": "problem", "keywords": ["13", "7", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-7", "grade": "grade1", "domain": "math", "prompt": "7+7", "answer": "14", "kind": "problem", "keywords": ["14", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-8", "grade": "grade1", "domain": "math", "prompt": "7+8", "answer": "15", "kind": "problem", "keywords": ["15", "7", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-9", "grade": "grade1", "domain": "math", "prompt": "7+9", "answer": "16", "kind": "problem", "keywords": ["16", "7", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-7-10", "grade": "grade1", "domain": "math", "prompt": "7+10", "answer": "17", "kind": "problem", "keywords": ["17", "7", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-0", "grade": "kindergarten", "domain": "math", "prompt": "7-0", "answer": "7", "kind": "problem", "keywords": ["7", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-1", "grade": "kindergarten", "domain": "math", "prompt": "7-1", "answer": "6", "kind": "problem", "keywords": ["6", "7", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-2", "grade": "kindergarten", "domain": "math", "prompt": "7-2", "answer": "5", "kind": "problem", "keywords": ["5", "7", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-3", "grade": "kindergarten", "domain": "math", "prompt": "7-3", "answer": "4", "kind": "problem", "keywords": ["4", "7", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-4", "grade": "kindergarten", "domain": "math", "prompt": "7-4", "answer": "3", "kind": "problem", "keywords": ["3", "7", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-5", "grade": "kindergarten", "domain": "math", "prompt": "7-5", "answer": "2", "kind": "problem", "keywords": ["2", "7", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-6", "grade": "kindergarten", "domain": "math", "prompt": "7-6", "answer": "1", "kind": "problem", "keywords": ["1", "7", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-7-7", "grade": "kindergarten", "domain": "math", "prompt": "7-7", "answer": "0", "kind": "problem", "keywords": ["0", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-0", "grade": "kindergarten", "domain": "math", "prompt": "8+0", "answer": "8", "kind": "problem", "keywords": ["8", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-1", "grade": "kindergarten", "domain": "math", "prompt": "8+1", "answer": "9", "kind": "problem", "keywords": ["9", "8", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-2", "grade": "kindergarten", "domain": "math", "prompt": "8+2", "answer": "10", "kind": "problem", "keywords": ["10", "8", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-3", "grade": "grade1", "domain": "math", "prompt": "8+3", "answer": "11", "kind": "problem", "keywords": ["11", "8", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-4", "grade": "grade1", "domain": "math", "prompt": "8+4", "answer": "12", "kind": "problem", "keywords": ["12", "8", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-5", "grade": "grade1", "domain": "math", "prompt": "8+5", "answer": "13", "kind": "problem", "keywords": ["13", "8", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-6", "grade": "grade1", "domain": "math", "prompt": "8+6", "answer": "14", "kind": "problem", "keywords": ["14", "8", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-7", "grade": "grade1", "domain": "math", "prompt": "8+7", "answer": "15", "kind": "problem", "keywords": ["15", "8", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-8", "grade": "grade1", "domain": "math", "prompt": "8+8", "answer": "16", "kind": "problem", "keywords": ["16", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-9", "grade": "grade1", "domain": "math", "prompt": "8+9", "answer": "17", "kind": "problem", "keywords": ["17", "8", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-8-10", "grade": "grade1", "domain": "math", "prompt": "8+10", "answer": "18", "kind": "problem", "keywords": ["18", "8", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-0", "grade": "kindergarten", "domain": "math", "prompt": "8-0", "answer": "8", "kind": "problem", "keywords": ["8", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-1", "grade": "kindergarten", "domain": "math", "prompt": "8-1", "answer": "7", "kind": "problem", "keywords": ["7", "8", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-2", "grade": "kindergarten", "domain": "math", "prompt": "8-2", "answer": "6", "kind": "problem", "keywords": ["6", "8", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-3", "grade": "kindergarten", "domain": "math", "prompt": "8-3", "answer": "5", "kind": "problem", "keywords": ["5", "8", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-4", "grade": "kindergarten", "domain": "math", "prompt": "8-4", "answer": "4", "kind": "problem", "keywords": ["4", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-5", "grade": "kindergarten", "domain": "math", "prompt": "8-5", "answer": "3", "kind": "problem", "keywords": ["3", "8", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-6", "grade": "kindergarten", "domain": "math", "prompt": "8-6", "answer": "2", "kind": "problem", "keywords": ["2", "8", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-7", "grade": "kindergarten", "domain": "math", "prompt": "8-7", "answer": "1", "kind": "problem", "keywords": ["1", "8", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-8-8", "grade": "kindergarten", "domain": "math", "prompt": "8-8", "answer": "0", "kind": "problem", "keywords": ["0", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-0", "grade": "kindergarten", "domain": "math", "prompt": "9+0", "answer": "9", "kind": "problem", "keywords": ["9", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-1", "grade": "kindergarten", "domain": "math", "prompt": "9+1", "answer": "10", "kind": "problem", "keywords": ["10", "9", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-2", "grade": "grade1", "domain": "math", "prompt": "9+2", "answer": "11", "kind": "problem", "keywords": ["11", "9", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-3", "grade": "grade1", "domain": "math", "prompt": "9+3", "answer": "12", "kind": "problem", "keywords": ["12", "9", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-4", "grade": "grade1", "domain": "math", "prompt": "9+4", "answer": "13", "kind": "problem", "keywords": ["13", "9", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-5", "grade": "grade1", "domain": "math", "prompt": "9+5", "answer": "14", "kind": "problem", "keywords": ["14", "9", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-6", "grade": "grade1", "domain": "math", "prompt": "9+6", "answer": "15", "kind": "problem", "keywords": ["15", "9", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-7", "grade": "grade1", "domain": "math", "prompt": "9+7", "answer": "16", "kind": "problem", "keywords": ["16", "9", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-8", "grade": "grade1", "domain": "math", "prompt": "9+8", "answer": "17", "kind": "problem", "keywords": ["17", "9", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-9", "grade": "grade1", "domain": "math", "prompt": "9+9", "answer": "18", "kind": "problem", "keywords": ["18", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-9-10", "grade": "grade1", "domain": "math", "prompt": "9+10", "answer": "19", "kind": "problem", "keywords": ["19", "9", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-0", "grade": "grade1", "domain": "math", "prompt": "9-0", "answer": "9", "kind": "problem", "keywords": ["9", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-1", "grade": "grade1", "domain": "math", "prompt": "9-1", "answer": "8", "kind": "problem", "keywords": ["8", "9", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-2", "grade": "grade1", "domain": "math", "prompt": "9-2", "answer": "7", "kind": "problem", "keywords": ["7", "9", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-3", "grade": "grade1", "domain": "math", "prompt": "9-3", "answer": "6", "kind": "problem", "keywords": ["6", "9", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-4", "grade": "grade1", "domain": "math", "prompt": "9-4", "answer": "5", "kind": "problem", "keywords": ["5", "9", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-5", "grade": "grade1", "domain": "math", "prompt": "9-5", "answer": "4", "kind": "problem", "keywords": ["4", "9", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-6", "grade": "grade1", "domain": "math", "prompt": "9-6", "answer": "3", "kind": "problem", "keywords": ["3", "9", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-7", "grade": "grade1", "domain": "math", "prompt": "9-7", "answer": "2", "kind": "problem", "keywords": ["2", "9", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-8", "grade": "grade1", "domain": "math", "prompt": "9-8", "answer": "1", "kind": "problem", "keywords": ["1", "9", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-9-9", "grade": "grade1", "domain": "math", "prompt": "9-9", "answer": "0", "kind": "problem", "keywords": ["0", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-0", "grade": "kindergarten", "domain": "math", "prompt": "10+0", "answer": "10", "kind": "problem", "keywords": ["10", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-1", "grade": "grade1", "domain": "math", "prompt": "10+1", "answer": "11", "kind": "problem", "keywords": ["11", "10", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-2", "grade": "grade1", "domain": "math", "prompt": "10+2", "answer": "12", "kind": "problem", "keywords": ["12", "10", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-3", "grade": "grade1", "domain": "math", "prompt": "10+3", "answer": "13", "kind": "problem", "keywords": ["13", "10", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-4", "grade": "grade1", "domain": "math", "prompt": "10+4", "answer": "14", "kind": "problem", "keywords": ["14", "10", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-5", "grade": "grade1", "domain": "math", "prompt": "10+5", "answer": "15", "kind": "problem", "keywords": ["15", "10", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-6", "grade": "grade1", "domain": "math", "prompt": "10+6", "answer": "16", "kind": "problem", "keywords": ["16", "10", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-7", "grade": "grade1", "domain": "math", "prompt": "10+7", "answer": "17", "kind": "problem", "keywords": ["17", "10", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-8", "grade": "grade1", "domain": "math", "prompt": "10+8", "answer": "18", "kind": "problem", "keywords": ["18", "10", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-9", "grade": "grade1", "domain": "math", "prompt": "10+9", "answer": "19", "kind": "problem", "keywords": ["19", "10", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "addp-10-10", "grade": "grade1", "domain": "math", "prompt": "10+10", "answer": "20", "kind": "problem", "keywords": ["20", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-0", "grade": "grade1", "domain": "math", "prompt": "10-0", "answer": "10", "kind": "problem", "keywords": ["10", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-1", "grade": "grade1", "domain": "math", "prompt": "10-1", "answer": "9", "kind": "problem", "keywords": ["9", "10", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-2", "grade": "grade1", "domain": "math", "prompt": "10-2", "answer": "8", "kind": "problem", "keywords": ["8", "10", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-3", "grade": "grade1", "domain": "math", "prompt": "10-3", "answer": "7", "kind": "problem", "keywords": ["7", "10", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-4", "grade": "grade1", "domain": "math", "prompt": "10-4", "answer": "6", "kind": "problem", "keywords": ["6", "10", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-5", "grade": "grade1", "domain": "math", "prompt": "10-5", "answer": "5", "kind": "problem", "keywords": ["5", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-6", "grade": "grade1", "domain": "math", "prompt": "10-6", "answer": "4", "kind": "problem", "keywords": ["4", "10", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-7", "grade": "grade1", "domain": "math", "prompt": "10-7", "answer": "3", "kind": "problem", "keywords": ["3", "10", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-8", "grade": "grade1", "domain": "math", "prompt": "10-8", "answer": "2", "kind": "problem", "keywords": ["2", "10", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-9", "grade": "grade1", "domain": "math", "prompt": "10-9", "answer": "1", "kind": "problem", "keywords": ["1", "10", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "subp-10-10", "grade": "grade1", "domain": "math", "prompt": "10-10", "answer": "0", "kind": "problem", "keywords": ["0", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-10-1", "grade": "grade2", "domain": "math", "prompt": "10+1", "answer": "11", "kind": "problem", "keywords": ["11", "10", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-10-5", "grade": "grade2", "domain": "math", "prompt": "10+5", "answer": "15", "kind": "problem", "keywords": ["15", "10", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-10-10", "grade": "grade2", "domain": "math", "prompt": "10+10", "answer": "20", "kind": "problem", "keywords": ["20", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-10-12", "grade": "grade2", "domain": "math", "prompt": "10+12", "answer": "22", "kind": "problem", "keywords": ["22", "10", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-17-1", "grade": "grade2", "domain": "math", "prompt": "17+1", "answer": "18", "kind": "problem", "keywords": ["18", "17", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-17-5", "grade": "grade2", "domain": "math", "prompt": "17+5", "answer": "22", "kind": "problem", "keywords": ["22", "17", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-17-10", "grade": "grade2", "domain": "math", "prompt": "17+10", "answer": "27", "kind": "problem", "keywords": ["27", "17", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-17-12", "grade": "grade2", "domain": "math", "prompt": "17+12", "answer": "29", "kind": "problem", "keywords": ["29", "17", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-24-1", "grade": "grade2", "domain": "math", "prompt": "24+1", "answer": "25", "kind": "problem", "keywords": ["25", "24", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-24-5", "grade": "grade2", "domain": "math", "prompt": "24+5", "answer": "29", "kind": "problem", "keywords": ["29", "24", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-24-10", "grade": "grade2", "domain": "math", "prompt": "24+10", "answer": "34", "kind": "problem", "keywords": ["34", "24", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-24-12", "grade": "grade2", "domain": "math", "prompt": "24+12", "answer": "36", "kind": "problem", "keywords": ["36", "24", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-31-1", "grade": "grade2", "domain": "math", "prompt": "31+1", "answer": "32", "kind": "problem", "keywords": ["32", "31", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-31-5", "grade": "grade2", "domain": "math", "prompt": "31+5", "answer": "36", "kind": "problem", "keywords": ["36", "31", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-31-10", "grade": "grade2", "domain": "math", "prompt": "31+10", "answer": "41", "kind": "problem", "keywords": ["41", "31", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-31-12", "grade": "grade2", "domain": "math", "prompt": "31+12", "answer": "43", "kind": "problem", "keywords": ["43", "31", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-38-1", "grade": "grade2", "domain": "math", "prompt": "38+1", "answer": "39", "kind": "problem", "keywords": ["39", "38", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-38-5", "grade": "grade2", "domain": "math", "prompt": "38+5", "answer": "43", "kind": "problem", "keywords": ["43", "38", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-38-10", "grade": "grade2", "domain": "math", "prompt": "38+10", "answer": "48", "kind": "problem", "keywords": ["48", "38", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-38-12", "grade": "grade2", "domain": "math", "prompt": "38+12", "answer": "50", "kind": "problem", "keywords": ["50", "38", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-45-1", "grade": "grade2", "domain": "math", "prompt": "45+1", "answer": "46", "kind": "problem", "keywords": ["46", "45", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-45-5", "grade": "grade2", "domain": "math", "prompt": "45+5", "answer": "50", "kind": "problem", "keywords": ["50", "45", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-45-10", "grade": "grade2", "domain": "math", "prompt": "45+10", "answer": "55", "kind": "problem", "keywords": ["55", "45", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-45-12", "grade": "grade2", "domain": "math", "prompt": "45+12", "answer": "57", "kind": "problem", "keywords": ["57", "45", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-52-1", "grade": "grade2", "domain": "math", "prompt": "52+1", "answer": "53", "kind": "problem", "keywords": ["53", "52", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-52-5", "grade": "grade2", "domain": "math", "prompt": "52+5", "answer": "57", "kind": "problem", "keywords": ["57", "52", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-52-10", "grade": "grade2", "domain": "math", "prompt": "52+10", "answer": "62", "kind": "problem", "keywords": ["62", "52", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-52-12", "grade": "grade2", "domain": "math", "prompt": "52+12", "answer": "64", "kind": "problem", "keywords": ["64", "52", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-59-1", "grade": "grade2", "domain": "math", "prompt": "59+1", "answer": "60", "kind": "problem", "keywords": ["60", "59", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-59-5", "grade": "grade2", "domain": "math", "prompt": "59+5", "answer": "64", "kind": "problem", "keywords": ["64", "59", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-59-10", "grade": "grade2", "domain": "math", "prompt": "59+10", "answer": "69", "kind": "problem", "keywords": ["69", "59", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-59-12", "grade": "grade2", "domain": "math", "prompt": "59+12", "answer": "71", "kind": "problem", "keywords": ["71", "59", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-66-1", "grade": "grade2", "domain": "math", "prompt": "66+1", "answer": "67", "kind": "problem", "keywords": ["67", "66", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-66-5", "grade": "grade2", "domain": "math", "prompt": "66+5", "answer": "71", "kind": "problem", "keywords": ["71", "66", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-66-10", "grade": "grade2", "domain": "math", "prompt": "66+10", "answer": "76", "kind": "problem", "keywords": ["76", "66", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-66-12", "grade": "grade2", "domain": "math", "prompt": "66+12", "answer": "78", "kind": "problem", "keywords": ["78", "66", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-73-1", "grade": "grade2", "domain": "math", "prompt": "73+1", "answer": "74", "kind": "problem", "keywords": ["74", "73", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-73-5", "grade": "grade2", "domain": "math", "prompt": "73+5", "answer": "78", "kind": "problem", "keywords": ["78", "73", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-73-10", "grade": "grade2", "domain": "math", "prompt": "73+10", "answer": "83", "kind": "problem", "keywords": ["83", "73", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-73-12", "grade": "grade2", "domain": "math", "prompt": "73+12", "answer": "85", "kind": "problem", "keywords": ["85", "73", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-80-1", "grade": "grade2", "domain": "math", "prompt": "80+1", "answer": "81", "kind": "problem", "keywords": ["81", "80", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-80-5", "grade": "grade2", "domain": "math", "prompt": "80+5", "answer": "85", "kind": "problem", "keywords": ["85", "80", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-80-10", "grade": "grade2", "domain": "math", "prompt": "80+10", "answer": "90", "kind": "problem", "keywords": ["90", "80", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-80-12", "grade": "grade2", "domain": "math", "prompt": "80+12", "answer": "92", "kind": "problem", "keywords": ["92", "80", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-87-1", "grade": "grade2", "domain": "math", "prompt": "87+1", "answer": "88", "kind": "problem", "keywords": ["88", "87", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-87-5", "grade": "grade2", "domain": "math", "prompt": "87+5", "answer": "92", "kind": "problem", "keywords": ["92", "87", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-87-10", "grade": "grade2", "domain": "math", "prompt": "87+10", "answer": "97", "kind": "problem", "keywords": ["97", "87", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-87-12", "grade": "grade2", "domain": "math", "prompt": "87+12", "answer": "99", "kind": "problem", "keywords": ["99", "87", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-94-1", "grade": "grade2", "domain": "math", "prompt": "94+1", "answer": "95", "kind": "problem", "keywords": ["95", "94", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "g2addp-94-5", "grade": "grade2", "domain": "math", "prompt": "94+5", "answer": "99", "kind": "problem", "keywords": ["99", "94", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-0", "grade": "grade2", "domain": "math", "prompt": "0x0", "answer": "0", "kind": "problem", "keywords": ["0", "0x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-1", "grade": "grade2", "domain": "math", "prompt": "0x1", "answer": "0", "kind": "problem", "keywords": ["0", "0x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-2", "grade": "grade2", "domain": "math", "prompt": "0x2", "answer": "0", "kind": "problem", "keywords": ["0", "0x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-3", "grade": "grade2", "domain": "math", "prompt": "0x3", "answer": "0", "kind": "problem", "keywords": ["0", "0x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-4", "grade": "grade2", "domain": "math", "prompt": "0x4", "answer": "0", "kind": "problem", "keywords": ["0", "0x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-5", "grade": "grade2", "domain": "math", "prompt": "0x5", "answer": "0", "kind": "problem", "keywords": ["0", "0x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-6", "grade": "grade3", "domain": "math", "prompt": "0x6", "answer": "0", "kind": "problem", "keywords": ["0", "0x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-7", "grade": "grade3", "domain": "math", "prompt": "0x7", "answer": "0", "kind": "problem", "keywords": ["0", "0x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-8", "grade": "grade3", "domain": "math", "prompt": "0x8", "answer": "0", "kind": "problem", "keywords": ["0", "0x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-9", "grade": "grade3", "domain": "math", "prompt": "0x9", "answer": "0", "kind": "problem", "keywords": ["0", "0x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-10", "grade": "grade3", "domain": "math", "prompt": "0x10", "answer": "0", "kind": "problem", "keywords": ["0", "0x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-11", "grade": "grade4", "domain": "math", "prompt": "0x11", "answer": "0", "kind": "problem", "keywords": ["0", "0x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-0-12", "grade": "grade4", "domain": "math", "prompt": "0x12", "answer": "0", "kind": "problem", "keywords": ["0", "0x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-0", "grade": "grade2", "domain": "math", "prompt": "1x0", "answer": "0", "kind": "problem", "keywords": ["0", "1x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-1", "grade": "grade2", "domain": "math", "prompt": "1x1", "answer": "1", "kind": "problem", "keywords": ["1", "1x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-2", "grade": "grade2", "domain": "math", "prompt": "1x2", "answer": "2", "kind": "problem", "keywords": ["2", "1x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-3", "grade": "grade2", "domain": "math", "prompt": "1x3", "answer": "3", "kind": "problem", "keywords": ["3", "1x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-4", "grade": "grade2", "domain": "math", "prompt": "1x4", "answer": "4", "kind": "problem", "keywords": ["4", "1x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-5", "grade": "grade2", "domain": "math", "prompt": "1x5", "answer": "5", "kind": "problem", "keywords": ["5", "1x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-6", "grade": "grade3", "domain": "math", "prompt": "1x6", "answer": "6", "kind": "problem", "keywords": ["6", "1x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-7", "grade": "grade3", "domain": "math", "prompt": "1x7", "answer": "7", "kind": "problem", "keywords": ["7", "1x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-8", "grade": "grade3", "domain": "math", "prompt": "1x8", "answer": "8", "kind": "problem", "keywords": ["8", "1x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-9", "grade": "grade3", "domain": "math", "prompt": "1x9", "answer": "9", "kind": "problem", "keywords": ["9", "1x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-10", "grade": "grade3", "domain": "math", "prompt": "1x10", "answer": "10", "kind": "problem", "keywords": ["10", "1x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-11", "grade": "grade4", "domain": "math", "prompt": "1x11", "answer": "11", "kind": "problem", "keywords": ["11", "1x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-1-12", "grade": "grade4", "domain": "math", "prompt": "1x12", "answer": "12", "kind": "problem", "keywords": ["12", "1x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-0", "grade": "grade2", "domain": "math", "prompt": "2x0", "answer": "0", "kind": "problem", "keywords": ["0", "2x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-1", "grade": "grade2", "domain": "math", "prompt": "2x1", "answer": "2", "kind": "problem", "keywords": ["2", "2x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-2", "grade": "grade2", "domain": "math", "prompt": "2x2", "answer": "4", "kind": "problem", "keywords": ["4", "2x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-3", "grade": "grade2", "domain": "math", "prompt": "2x3", "answer": "6", "kind": "problem", "keywords": ["6", "2x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-4", "grade": "grade2", "domain": "math", "prompt": "2x4", "answer": "8", "kind": "problem", "keywords": ["8", "2x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-5", "grade": "grade2", "domain": "math", "prompt": "2x5", "answer": "10", "kind": "problem", "keywords": ["10", "2x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-6", "grade": "grade3", "domain": "math", "prompt": "2x6", "answer": "12", "kind": "problem", "keywords": ["12", "2x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-7", "grade": "grade3", "domain": "math", "prompt": "2x7", "answer": "14", "kind": "problem", "keywords": ["14", "2x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-8", "grade": "grade3", "domain": "math", "prompt": "2x8", "answer": "16", "kind": "problem", "keywords": ["16", "2x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-9", "grade": "grade3", "domain": "math", "prompt": "2x9", "answer": "18", "kind": "problem", "keywords": ["18", "2x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-10", "grade": "grade3", "domain": "math", "prompt": "2x10", "answer": "20", "kind": "problem", "keywords": ["20", "2x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-11", "grade": "grade4", "domain": "math", "prompt": "2x11", "answer": "22", "kind": "problem", "keywords": ["22", "2x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-2-12", "grade": "grade4", "domain": "math", "prompt": "2x12", "answer": "24", "kind": "problem", "keywords": ["24", "2x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-0", "grade": "grade2", "domain": "math", "prompt": "3x0", "answer": "0", "kind": "problem", "keywords": ["0", "3x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-1", "grade": "grade2", "domain": "math", "prompt": "3x1", "answer": "3", "kind": "problem", "keywords": ["3", "3x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-2", "grade": "grade2", "domain": "math", "prompt": "3x2", "answer": "6", "kind": "problem", "keywords": ["6", "3x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-3", "grade": "grade2", "domain": "math", "prompt": "3x3", "answer": "9", "kind": "problem", "keywords": ["9", "3x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-4", "grade": "grade2", "domain": "math", "prompt": "3x4", "answer": "12", "kind": "problem", "keywords": ["12", "3x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-5", "grade": "grade2", "domain": "math", "prompt": "3x5", "answer": "15", "kind": "problem", "keywords": ["15", "3x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-6", "grade": "grade3", "domain": "math", "prompt": "3x6", "answer": "18", "kind": "problem", "keywords": ["18", "3x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-7", "grade": "grade3", "domain": "math", "prompt": "3x7", "answer": "21", "kind": "problem", "keywords": ["21", "3x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-8", "grade": "grade3", "domain": "math", "prompt": "3x8", "answer": "24", "kind": "problem", "keywords": ["24", "3x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-9", "grade": "grade3", "domain": "math", "prompt": "3x9", "answer": "27", "kind": "problem", "keywords": ["27", "3x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-10", "grade": "grade3", "domain": "math", "prompt": "3x10", "answer": "30", "kind": "problem", "keywords": ["30", "3x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-11", "grade": "grade4", "domain": "math", "prompt": "3x11", "answer": "33", "kind": "problem", "keywords": ["33", "3x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-3-12", "grade": "grade4", "domain": "math", "prompt": "3x12", "answer": "36", "kind": "problem", "keywords": ["36", "3x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-0", "grade": "grade2", "domain": "math", "prompt": "4x0", "answer": "0", "kind": "problem", "keywords": ["0", "4x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-1", "grade": "grade2", "domain": "math", "prompt": "4x1", "answer": "4", "kind": "problem", "keywords": ["4", "4x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-2", "grade": "grade2", "domain": "math", "prompt": "4x2", "answer": "8", "kind": "problem", "keywords": ["8", "4x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-3", "grade": "grade2", "domain": "math", "prompt": "4x3", "answer": "12", "kind": "problem", "keywords": ["12", "4x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-4", "grade": "grade2", "domain": "math", "prompt": "4x4", "answer": "16", "kind": "problem", "keywords": ["16", "4x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-5", "grade": "grade2", "domain": "math", "prompt": "4x5", "answer": "20", "kind": "problem", "keywords": ["20", "4x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-6", "grade": "grade3", "domain": "math", "prompt": "4x6", "answer": "24", "kind": "problem", "keywords": ["24", "4x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-7", "grade": "grade3", "domain": "math", "prompt": "4x7", "answer": "28", "kind": "problem", "keywords": ["28", "4x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-8", "grade": "grade3", "domain": "math", "prompt": "4x8", "answer": "32", "kind": "problem", "keywords": ["32", "4x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-9", "grade": "grade3", "domain": "math", "prompt": "4x9", "answer": "36", "kind": "problem", "keywords": ["36", "4x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-10", "grade": "grade3", "domain": "math", "prompt": "4x10", "answer": "40", "kind": "problem", "keywords": ["40", "4x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-11", "grade": "grade4", "domain": "math", "prompt": "4x11", "answer": "44", "kind": "problem", "keywords": ["44", "4x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-4-12", "grade": "grade4", "domain": "math", "prompt": "4x12", "answer": "48", "kind": "problem", "keywords": ["48", "4x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-0", "grade": "grade2", "domain": "math", "prompt": "5x0", "answer": "0", "kind": "problem", "keywords": ["0", "5x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-1", "grade": "grade2", "domain": "math", "prompt": "5x1", "answer": "5", "kind": "problem", "keywords": ["5", "5x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-2", "grade": "grade2", "domain": "math", "prompt": "5x2", "answer": "10", "kind": "problem", "keywords": ["10", "5x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-3", "grade": "grade2", "domain": "math", "prompt": "5x3", "answer": "15", "kind": "problem", "keywords": ["15", "5x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-4", "grade": "grade2", "domain": "math", "prompt": "5x4", "answer": "20", "kind": "problem", "keywords": ["20", "5x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-5", "grade": "grade2", "domain": "math", "prompt": "5x5", "answer": "25", "kind": "problem", "keywords": ["25", "5x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-6", "grade": "grade3", "domain": "math", "prompt": "5x6", "answer": "30", "kind": "problem", "keywords": ["30", "5x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-7", "grade": "grade3", "domain": "math", "prompt": "5x7", "answer": "35", "kind": "problem", "keywords": ["35", "5x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-8", "grade": "grade3", "domain": "math", "prompt": "5x8", "answer": "40", "kind": "problem", "keywords": ["40", "5x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-9", "grade": "grade3", "domain": "math", "prompt": "5x9", "answer": "45", "kind": "problem", "keywords": ["45", "5x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-10", "grade": "grade3", "domain": "math", "prompt": "5x10", "answer": "50", "kind": "problem", "keywords": ["50", "5x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-11", "grade": "grade4", "domain": "math", "prompt": "5x11", "answer": "55", "kind": "problem", "keywords": ["55", "5x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-5-12", "grade": "grade4", "domain": "math", "prompt": "5x12", "answer": "60", "kind": "problem", "keywords": ["60", "5x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-0", "grade": "grade3", "domain": "math", "prompt": "6x0", "answer": "0", "kind": "problem", "keywords": ["0", "6x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-1", "grade": "grade3", "domain": "math", "prompt": "6x1", "answer": "6", "kind": "problem", "keywords": ["6", "6x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-2", "grade": "grade3", "domain": "math", "prompt": "6x2", "answer": "12", "kind": "problem", "keywords": ["12", "6x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-3", "grade": "grade3", "domain": "math", "prompt": "6x3", "answer": "18", "kind": "problem", "keywords": ["18", "6x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-4", "grade": "grade3", "domain": "math", "prompt": "6x4", "answer": "24", "kind": "problem", "keywords": ["24", "6x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-5", "grade": "grade3", "domain": "math", "prompt": "6x5", "answer": "30", "kind": "problem", "keywords": ["30", "6x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-6", "grade": "grade3", "domain": "math", "prompt": "6x6", "answer": "36", "kind": "problem", "keywords": ["36", "6x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-7", "grade": "grade3", "domain": "math", "prompt": "6x7", "answer": "42", "kind": "problem", "keywords": ["42", "6x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-8", "grade": "grade3", "domain": "math", "prompt": "6x8", "answer": "48", "kind": "problem", "keywords": ["48", "6x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-9", "grade": "grade3", "domain": "math", "prompt": "6x9", "answer": "54", "kind": "problem", "keywords": ["54", "6x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-10", "grade": "grade3", "domain": "math", "prompt": "6x10", "answer": "60", "kind": "problem", "keywords": ["60", "6x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-11", "grade": "grade4", "domain": "math", "prompt": "6x11", "answer": "66", "kind": "problem", "keywords": ["66", "6x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-6-12", "grade": "grade4", "domain": "math", "prompt": "6x12", "answer": "72", "kind": "problem", "keywords": ["72", "6x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-0", "grade": "grade3", "domain": "math", "prompt": "7x0", "answer": "0", "kind": "problem", "keywords": ["0", "7x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-1", "grade": "grade3", "domain": "math", "prompt": "7x1", "answer": "7", "kind": "problem", "keywords": ["7", "7x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-2", "grade": "grade3", "domain": "math", "prompt": "7x2", "answer": "14", "kind": "problem", "keywords": ["14", "7x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-3", "grade": "grade3", "domain": "math", "prompt": "7x3", "answer": "21", "kind": "problem", "keywords": ["21", "7x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-4", "grade": "grade3", "domain": "math", "prompt": "7x4", "answer": "28", "kind": "problem", "keywords": ["28", "7x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-5", "grade": "grade3", "domain": "math", "prompt": "7x5", "answer": "35", "kind": "problem", "keywords": ["35", "7x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-6", "grade": "grade3", "domain": "math", "prompt": "7x6", "answer": "42", "kind": "problem", "keywords": ["42", "7x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-7", "grade": "grade3", "domain": "math", "prompt": "7x7", "answer": "49", "kind": "problem", "keywords": ["49", "7x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-8", "grade": "grade3", "domain": "math", "prompt": "7x8", "answer": "56", "kind": "problem", "keywords": ["56", "7x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-9", "grade": "grade3", "domain": "math", "prompt": "7x9", "answer": "63", "kind": "problem", "keywords": ["63", "7x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-10", "grade": "grade3", "domain": "math", "prompt": "7x10", "answer": "70", "kind": "problem", "keywords": ["70", "7x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-11", "grade": "grade4", "domain": "math", "prompt": "7x11", "answer": "77", "kind": "problem", "keywords": ["77", "7x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-7-12", "grade": "grade4", "domain": "math", "prompt": "7x12", "answer": "84", "kind": "problem", "keywords": ["84", "7x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-0", "grade": "grade3", "domain": "math", "prompt": "8x0", "answer": "0", "kind": "problem", "keywords": ["0", "8x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-1", "grade": "grade3", "domain": "math", "prompt": "8x1", "answer": "8", "kind": "problem", "keywords": ["8", "8x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-2", "grade": "grade3", "domain": "math", "prompt": "8x2", "answer": "16", "kind": "problem", "keywords": ["16", "8x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-3", "grade": "grade3", "domain": "math", "prompt": "8x3", "answer": "24", "kind": "problem", "keywords": ["24", "8x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-4", "grade": "grade3", "domain": "math", "prompt": "8x4", "answer": "32", "kind": "problem", "keywords": ["32", "8x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-5", "grade": "grade3", "domain": "math", "prompt": "8x5", "answer": "40", "kind": "problem", "keywords": ["40", "8x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-6", "grade": "grade3", "domain": "math", "prompt": "8x6", "answer": "48", "kind": "problem", "keywords": ["48", "8x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-7", "grade": "grade3", "domain": "math", "prompt": "8x7", "answer": "56", "kind": "problem", "keywords": ["56", "8x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-8", "grade": "grade3", "domain": "math", "prompt": "8x8", "answer": "64", "kind": "problem", "keywords": ["64", "8x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-9", "grade": "grade3", "domain": "math", "prompt": "8x9", "answer": "72", "kind": "problem", "keywords": ["72", "8x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-10", "grade": "grade3", "domain": "math", "prompt": "8x10", "answer": "80", "kind": "problem", "keywords": ["80", "8x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-11", "grade": "grade4", "domain": "math", "prompt": "8x11", "answer": "88", "kind": "problem", "keywords": ["88", "8x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-8-12", "grade": "grade4", "domain": "math", "prompt": "8x12", "answer": "96", "kind": "problem", "keywords": ["96", "8x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-0", "grade": "grade3", "domain": "math", "prompt": "9x0", "answer": "0", "kind": "problem", "keywords": ["0", "9x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-1", "grade": "grade3", "domain": "math", "prompt": "9x1", "answer": "9", "kind": "problem", "keywords": ["9", "9x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-2", "grade": "grade3", "domain": "math", "prompt": "9x2", "answer": "18", "kind": "problem", "keywords": ["18", "9x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-3", "grade": "grade3", "domain": "math", "prompt": "9x3", "answer": "27", "kind": "problem", "keywords": ["27", "9x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-4", "grade": "grade3", "domain": "math", "prompt": "9x4", "answer": "36", "kind": "problem", "keywords": ["36", "9x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-5", "grade": "grade3", "domain": "math", "prompt": "9x5", "answer": "45", "kind": "problem", "keywords": ["45", "9x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-6", "grade": "grade3", "domain": "math", "prompt": "9x6", "answer": "54", "kind": "problem", "keywords": ["54", "9x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-7", "grade": "grade3", "domain": "math", "prompt": "9x7", "answer": "63", "kind": "problem", "keywords": ["63", "9x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-8", "grade": "grade3", "domain": "math", "prompt": "9x8", "answer": "72", "kind": "problem", "keywords": ["72", "9x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-9", "grade": "grade3", "domain": "math", "prompt": "9x9", "answer": "81", "kind": "problem", "keywords": ["81", "9x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-10", "grade": "grade3", "domain": "math", "prompt": "9x10", "answer": "90", "kind": "problem", "keywords": ["90", "9x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-11", "grade": "grade4", "domain": "math", "prompt": "9x11", "answer": "99", "kind": "problem", "keywords": ["99", "9x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-9-12", "grade": "grade4", "domain": "math", "prompt": "9x12", "answer": "108", "kind": "problem", "keywords": ["108", "9x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-0", "grade": "grade3", "domain": "math", "prompt": "10x0", "answer": "0", "kind": "problem", "keywords": ["0", "10x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-1", "grade": "grade3", "domain": "math", "prompt": "10x1", "answer": "10", "kind": "problem", "keywords": ["10", "10x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-2", "grade": "grade3", "domain": "math", "prompt": "10x2", "answer": "20", "kind": "problem", "keywords": ["20", "10x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-3", "grade": "grade3", "domain": "math", "prompt": "10x3", "answer": "30", "kind": "problem", "keywords": ["30", "10x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-4", "grade": "grade3", "domain": "math", "prompt": "10x4", "answer": "40", "kind": "problem", "keywords": ["40", "10x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-5", "grade": "grade3", "domain": "math", "prompt": "10x5", "answer": "50", "kind": "problem", "keywords": ["50", "10x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-6", "grade": "grade3", "domain": "math", "prompt": "10x6", "answer": "60", "kind": "problem", "keywords": ["60", "10x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-7", "grade": "grade3", "domain": "math", "prompt": "10x7", "answer": "70", "kind": "problem", "keywords": ["70", "10x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-8", "grade": "grade3", "domain": "math", "prompt": "10x8", "answer": "80", "kind": "problem", "keywords": ["80", "10x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-9", "grade": "grade3", "domain": "math", "prompt": "10x9", "answer": "90", "kind": "problem", "keywords": ["90", "10x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-10", "grade": "grade3", "domain": "math", "prompt": "10x10", "answer": "100", "kind": "problem", "keywords": ["100", "10x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-11", "grade": "grade4", "domain": "math", "prompt": "10x11", "answer": "110", "kind": "problem", "keywords": ["110", "10x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-10-12", "grade": "grade4", "domain": "math", "prompt": "10x12", "answer": "120", "kind": "problem", "keywords": ["120", "10x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-0", "grade": "grade4", "domain": "math", "prompt": "11x0", "answer": "0", "kind": "problem", "keywords": ["0", "11x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-1", "grade": "grade4", "domain": "math", "prompt": "11x1", "answer": "11", "kind": "problem", "keywords": ["11", "11x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-2", "grade": "grade4", "domain": "math", "prompt": "11x2", "answer": "22", "kind": "problem", "keywords": ["22", "11x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-3", "grade": "grade4", "domain": "math", "prompt": "11x3", "answer": "33", "kind": "problem", "keywords": ["33", "11x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-4", "grade": "grade4", "domain": "math", "prompt": "11x4", "answer": "44", "kind": "problem", "keywords": ["44", "11x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-5", "grade": "grade4", "domain": "math", "prompt": "11x5", "answer": "55", "kind": "problem", "keywords": ["55", "11x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-6", "grade": "grade4", "domain": "math", "prompt": "11x6", "answer": "66", "kind": "problem", "keywords": ["66", "11x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-7", "grade": "grade4", "domain": "math", "prompt": "11x7", "answer": "77", "kind": "problem", "keywords": ["77", "11x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-8", "grade": "grade4", "domain": "math", "prompt": "11x8", "answer": "88", "kind": "problem", "keywords": ["88", "11x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-9", "grade": "grade4", "domain": "math", "prompt": "11x9", "answer": "99", "kind": "problem", "keywords": ["99", "11x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-10", "grade": "grade4", "domain": "math", "prompt": "11x10", "answer": "110", "kind": "problem", "keywords": ["110", "11x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-11", "grade": "grade4", "domain": "math", "prompt": "11x11", "answer": "121", "kind": "problem", "keywords": ["121", "11x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-11-12", "grade": "grade4", "domain": "math", "prompt": "11x12", "answer": "132", "kind": "problem", "keywords": ["132", "11x12"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-0", "grade": "grade4", "domain": "math", "prompt": "12x0", "answer": "0", "kind": "problem", "keywords": ["0", "12x0"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-1", "grade": "grade4", "domain": "math", "prompt": "12x1", "answer": "12", "kind": "problem", "keywords": ["12", "12x1"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-2", "grade": "grade4", "domain": "math", "prompt": "12x2", "answer": "24", "kind": "problem", "keywords": ["24", "12x2"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-3", "grade": "grade4", "domain": "math", "prompt": "12x3", "answer": "36", "kind": "problem", "keywords": ["36", "12x3"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-4", "grade": "grade4", "domain": "math", "prompt": "12x4", "answer": "48", "kind": "problem", "keywords": ["48", "12x4"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-5", "grade": "grade4", "domain": "math", "prompt": "12x5", "answer": "60", "kind": "problem", "keywords": ["60", "12x5"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-6", "grade": "grade4", "domain": "math", "prompt": "12x6", "answer": "72", "kind": "problem", "keywords": ["72", "12x6"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-7", "grade": "grade4", "domain": "math", "prompt": "12x7", "answer": "84", "kind": "problem", "keywords": ["84", "12x7"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-8", "grade": "grade4", "domain": "math", "prompt": "12x8", "answer": "96", "kind": "problem", "keywords": ["96", "12x8"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-9", "grade": "grade4", "domain": "math", "prompt": "12x9", "answer": "108", "kind": "problem", "keywords": ["108", "12x9"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-10", "grade": "grade4", "domain": "math", "prompt": "12x10", "answer": "120", "kind": "problem", "keywords": ["120", "12x10"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-11", "grade": "grade4", "domain": "math", "prompt": "12x11", "answer": "132", "kind": "problem", "keywords": ["132", "12x11"], "source": "open_curriculum_pk_g8"}
+{"id": "mulp-12-12", "grade": "grade4", "domain": "math", "prompt": "12x12", "answer": "144", "kind": "problem", "keywords": ["144", "12x12"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-1", "grade": "grade3", "domain": "math", "prompt": "0/1", "answer": "0", "kind": "problem", "keywords": ["0", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-2", "grade": "grade3", "domain": "math", "prompt": "0/2", "answer": "0", "kind": "problem", "keywords": ["0", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-3", "grade": "grade3", "domain": "math", "prompt": "0/3", "answer": "0", "kind": "problem", "keywords": ["0", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-4", "grade": "grade3", "domain": "math", "prompt": "0/4", "answer": "0", "kind": "problem", "keywords": ["0", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-5", "grade": "grade3", "domain": "math", "prompt": "0/5", "answer": "0", "kind": "problem", "keywords": ["0", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-6", "grade": "grade3", "domain": "math", "prompt": "0/6", "answer": "0", "kind": "problem", "keywords": ["0", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-7", "grade": "grade3", "domain": "math", "prompt": "0/7", "answer": "0", "kind": "problem", "keywords": ["0", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-8", "grade": "grade3", "domain": "math", "prompt": "0/8", "answer": "0", "kind": "problem", "keywords": ["0", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-9", "grade": "grade3", "domain": "math", "prompt": "0/9", "answer": "0", "kind": "problem", "keywords": ["0", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-0-10", "grade": "grade3", "domain": "math", "prompt": "0/10", "answer": "0", "kind": "problem", "keywords": ["0", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-1-1", "grade": "grade3", "domain": "math", "prompt": "1/1", "answer": "1", "kind": "problem", "keywords": ["1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-2-2", "grade": "grade3", "domain": "math", "prompt": "2/2", "answer": "1", "kind": "problem", "keywords": ["1", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-3-3", "grade": "grade3", "domain": "math", "prompt": "3/3", "answer": "1", "kind": "problem", "keywords": ["1", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-4-4", "grade": "grade3", "domain": "math", "prompt": "4/4", "answer": "1", "kind": "problem", "keywords": ["1", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-5-5", "grade": "grade3", "domain": "math", "prompt": "5/5", "answer": "1", "kind": "problem", "keywords": ["1", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-6-6", "grade": "grade3", "domain": "math", "prompt": "6/6", "answer": "1", "kind": "problem", "keywords": ["1", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-7-7", "grade": "grade3", "domain": "math", "prompt": "7/7", "answer": "1", "kind": "problem", "keywords": ["1", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-8-8", "grade": "grade3", "domain": "math", "prompt": "8/8", "answer": "1", "kind": "problem", "keywords": ["1", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-9-9", "grade": "grade3", "domain": "math", "prompt": "9/9", "answer": "1", "kind": "problem", "keywords": ["1", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-10-10", "grade": "grade3", "domain": "math", "prompt": "10/10", "answer": "1", "kind": "problem", "keywords": ["1", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-2-1", "grade": "grade3", "domain": "math", "prompt": "2/1", "answer": "2", "kind": "problem", "keywords": ["2", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-4-2", "grade": "grade3", "domain": "math", "prompt": "4/2", "answer": "2", "kind": "problem", "keywords": ["2", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-6-3", "grade": "grade3", "domain": "math", "prompt": "6/3", "answer": "2", "kind": "problem", "keywords": ["2", "6", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-8-4", "grade": "grade3", "domain": "math", "prompt": "8/4", "answer": "2", "kind": "problem", "keywords": ["2", "8", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-10-5", "grade": "grade3", "domain": "math", "prompt": "10/5", "answer": "2", "kind": "problem", "keywords": ["2", "10", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-12-6", "grade": "grade3", "domain": "math", "prompt": "12/6", "answer": "2", "kind": "problem", "keywords": ["2", "12", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-14-7", "grade": "grade3", "domain": "math", "prompt": "14/7", "answer": "2", "kind": "problem", "keywords": ["2", "14", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-16-8", "grade": "grade3", "domain": "math", "prompt": "16/8", "answer": "2", "kind": "problem", "keywords": ["2", "16", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-18-9", "grade": "grade3", "domain": "math", "prompt": "18/9", "answer": "2", "kind": "problem", "keywords": ["2", "18", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-20-10", "grade": "grade3", "domain": "math", "prompt": "20/10", "answer": "2", "kind": "problem", "keywords": ["2", "20", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-3-1", "grade": "grade3", "domain": "math", "prompt": "3/1", "answer": "3", "kind": "problem", "keywords": ["3", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-6-2", "grade": "grade3", "domain": "math", "prompt": "6/2", "answer": "3", "kind": "problem", "keywords": ["3", "6", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-9-3", "grade": "grade3", "domain": "math", "prompt": "9/3", "answer": "3", "kind": "problem", "keywords": ["3", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-12-4", "grade": "grade3", "domain": "math", "prompt": "12/4", "answer": "3", "kind": "problem", "keywords": ["3", "12", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-15-5", "grade": "grade3", "domain": "math", "prompt": "15/5", "answer": "3", "kind": "problem", "keywords": ["3", "15", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-18-6", "grade": "grade3", "domain": "math", "prompt": "18/6", "answer": "3", "kind": "problem", "keywords": ["3", "18", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-21-7", "grade": "grade3", "domain": "math", "prompt": "21/7", "answer": "3", "kind": "problem", "keywords": ["3", "21", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-24-8", "grade": "grade3", "domain": "math", "prompt": "24/8", "answer": "3", "kind": "problem", "keywords": ["3", "24", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-27-9", "grade": "grade3", "domain": "math", "prompt": "27/9", "answer": "3", "kind": "problem", "keywords": ["3", "27", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-30-10", "grade": "grade3", "domain": "math", "prompt": "30/10", "answer": "3", "kind": "problem", "keywords": ["3", "30", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-4-1", "grade": "grade3", "domain": "math", "prompt": "4/1", "answer": "4", "kind": "problem", "keywords": ["4", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-8-2", "grade": "grade3", "domain": "math", "prompt": "8/2", "answer": "4", "kind": "problem", "keywords": ["4", "8", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-12-3", "grade": "grade3", "domain": "math", "prompt": "12/3", "answer": "4", "kind": "problem", "keywords": ["4", "12", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-16-4", "grade": "grade3", "domain": "math", "prompt": "16/4", "answer": "4", "kind": "problem", "keywords": ["4", "16"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-20-5", "grade": "grade3", "domain": "math", "prompt": "20/5", "answer": "4", "kind": "problem", "keywords": ["4", "20", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-24-6", "grade": "grade3", "domain": "math", "prompt": "24/6", "answer": "4", "kind": "problem", "keywords": ["4", "24", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-28-7", "grade": "grade3", "domain": "math", "prompt": "28/7", "answer": "4", "kind": "problem", "keywords": ["4", "28", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-32-8", "grade": "grade3", "domain": "math", "prompt": "32/8", "answer": "4", "kind": "problem", "keywords": ["4", "32", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-36-9", "grade": "grade3", "domain": "math", "prompt": "36/9", "answer": "4", "kind": "problem", "keywords": ["4", "36", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-40-10", "grade": "grade3", "domain": "math", "prompt": "40/10", "answer": "4", "kind": "problem", "keywords": ["4", "40", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-5-1", "grade": "grade3", "domain": "math", "prompt": "5/1", "answer": "5", "kind": "problem", "keywords": ["5", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-10-2", "grade": "grade3", "domain": "math", "prompt": "10/2", "answer": "5", "kind": "problem", "keywords": ["5", "10", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-15-3", "grade": "grade3", "domain": "math", "prompt": "15/3", "answer": "5", "kind": "problem", "keywords": ["5", "15", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-20-4", "grade": "grade3", "domain": "math", "prompt": "20/4", "answer": "5", "kind": "problem", "keywords": ["5", "20", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-25-5", "grade": "grade3", "domain": "math", "prompt": "25/5", "answer": "5", "kind": "problem", "keywords": ["5", "25"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-30-6", "grade": "grade3", "domain": "math", "prompt": "30/6", "answer": "5", "kind": "problem", "keywords": ["5", "30", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-35-7", "grade": "grade3", "domain": "math", "prompt": "35/7", "answer": "5", "kind": "problem", "keywords": ["5", "35", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-40-8", "grade": "grade3", "domain": "math", "prompt": "40/8", "answer": "5", "kind": "problem", "keywords": ["5", "40", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-45-9", "grade": "grade3", "domain": "math", "prompt": "45/9", "answer": "5", "kind": "problem", "keywords": ["5", "45", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-50-10", "grade": "grade3", "domain": "math", "prompt": "50/10", "answer": "5", "kind": "problem", "keywords": ["5", "50", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-6-1", "grade": "grade3", "domain": "math", "prompt": "6/1", "answer": "6", "kind": "problem", "keywords": ["6", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-12-2", "grade": "grade3", "domain": "math", "prompt": "12/2", "answer": "6", "kind": "problem", "keywords": ["6", "12", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-18-3", "grade": "grade3", "domain": "math", "prompt": "18/3", "answer": "6", "kind": "problem", "keywords": ["6", "18", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-24-4", "grade": "grade3", "domain": "math", "prompt": "24/4", "answer": "6", "kind": "problem", "keywords": ["6", "24", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-30-5", "grade": "grade3", "domain": "math", "prompt": "30/5", "answer": "6", "kind": "problem", "keywords": ["6", "30", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-36-6", "grade": "grade3", "domain": "math", "prompt": "36/6", "answer": "6", "kind": "problem", "keywords": ["6", "36"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-42-7", "grade": "grade3", "domain": "math", "prompt": "42/7", "answer": "6", "kind": "problem", "keywords": ["6", "42", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-48-8", "grade": "grade3", "domain": "math", "prompt": "48/8", "answer": "6", "kind": "problem", "keywords": ["6", "48", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-54-9", "grade": "grade4", "domain": "math", "prompt": "54/9", "answer": "6", "kind": "problem", "keywords": ["6", "54", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-60-10", "grade": "grade4", "domain": "math", "prompt": "60/10", "answer": "6", "kind": "problem", "keywords": ["6", "60", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-7-1", "grade": "grade3", "domain": "math", "prompt": "7/1", "answer": "7", "kind": "problem", "keywords": ["7", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-14-2", "grade": "grade3", "domain": "math", "prompt": "14/2", "answer": "7", "kind": "problem", "keywords": ["7", "14", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-21-3", "grade": "grade3", "domain": "math", "prompt": "21/3", "answer": "7", "kind": "problem", "keywords": ["7", "21", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-28-4", "grade": "grade3", "domain": "math", "prompt": "28/4", "answer": "7", "kind": "problem", "keywords": ["7", "28", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-35-5", "grade": "grade3", "domain": "math", "prompt": "35/5", "answer": "7", "kind": "problem", "keywords": ["7", "35", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-42-6", "grade": "grade3", "domain": "math", "prompt": "42/6", "answer": "7", "kind": "problem", "keywords": ["7", "42", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-49-7", "grade": "grade3", "domain": "math", "prompt": "49/7", "answer": "7", "kind": "problem", "keywords": ["7", "49"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-56-8", "grade": "grade4", "domain": "math", "prompt": "56/8", "answer": "7", "kind": "problem", "keywords": ["7", "56", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-63-9", "grade": "grade4", "domain": "math", "prompt": "63/9", "answer": "7", "kind": "problem", "keywords": ["7", "63", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-70-10", "grade": "grade4", "domain": "math", "prompt": "70/10", "answer": "7", "kind": "problem", "keywords": ["7", "70", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-8-1", "grade": "grade3", "domain": "math", "prompt": "8/1", "answer": "8", "kind": "problem", "keywords": ["8", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-16-2", "grade": "grade3", "domain": "math", "prompt": "16/2", "answer": "8", "kind": "problem", "keywords": ["8", "16", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-24-3", "grade": "grade3", "domain": "math", "prompt": "24/3", "answer": "8", "kind": "problem", "keywords": ["8", "24", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-32-4", "grade": "grade3", "domain": "math", "prompt": "32/4", "answer": "8", "kind": "problem", "keywords": ["8", "32", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-40-5", "grade": "grade3", "domain": "math", "prompt": "40/5", "answer": "8", "kind": "problem", "keywords": ["8", "40", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-48-6", "grade": "grade3", "domain": "math", "prompt": "48/6", "answer": "8", "kind": "problem", "keywords": ["8", "48", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-56-7", "grade": "grade4", "domain": "math", "prompt": "56/7", "answer": "8", "kind": "problem", "keywords": ["8", "56", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-64-8", "grade": "grade4", "domain": "math", "prompt": "64/8", "answer": "8", "kind": "problem", "keywords": ["8", "64"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-72-9", "grade": "grade4", "domain": "math", "prompt": "72/9", "answer": "8", "kind": "problem", "keywords": ["8", "72", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-80-10", "grade": "grade4", "domain": "math", "prompt": "80/10", "answer": "8", "kind": "problem", "keywords": ["8", "80", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-9-1", "grade": "grade3", "domain": "math", "prompt": "9/1", "answer": "9", "kind": "problem", "keywords": ["9", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-18-2", "grade": "grade3", "domain": "math", "prompt": "18/2", "answer": "9", "kind": "problem", "keywords": ["9", "18", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-27-3", "grade": "grade3", "domain": "math", "prompt": "27/3", "answer": "9", "kind": "problem", "keywords": ["9", "27", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-36-4", "grade": "grade3", "domain": "math", "prompt": "36/4", "answer": "9", "kind": "problem", "keywords": ["9", "36", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-45-5", "grade": "grade3", "domain": "math", "prompt": "45/5", "answer": "9", "kind": "problem", "keywords": ["9", "45", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-54-6", "grade": "grade4", "domain": "math", "prompt": "54/6", "answer": "9", "kind": "problem", "keywords": ["9", "54", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-63-7", "grade": "grade4", "domain": "math", "prompt": "63/7", "answer": "9", "kind": "problem", "keywords": ["9", "63", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-72-8", "grade": "grade4", "domain": "math", "prompt": "72/8", "answer": "9", "kind": "problem", "keywords": ["9", "72", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-81-9", "grade": "grade4", "domain": "math", "prompt": "81/9", "answer": "9", "kind": "problem", "keywords": ["9", "81"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-90-10", "grade": "grade4", "domain": "math", "prompt": "90/10", "answer": "9", "kind": "problem", "keywords": ["9", "90", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-10-1", "grade": "grade3", "domain": "math", "prompt": "10/1", "answer": "10", "kind": "problem", "keywords": ["10", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-20-2", "grade": "grade3", "domain": "math", "prompt": "20/2", "answer": "10", "kind": "problem", "keywords": ["10", "20", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-30-3", "grade": "grade3", "domain": "math", "prompt": "30/3", "answer": "10", "kind": "problem", "keywords": ["10", "30", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-40-4", "grade": "grade3", "domain": "math", "prompt": "40/4", "answer": "10", "kind": "problem", "keywords": ["10", "40", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-50-5", "grade": "grade3", "domain": "math", "prompt": "50/5", "answer": "10", "kind": "problem", "keywords": ["10", "50", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-60-6", "grade": "grade4", "domain": "math", "prompt": "60/6", "answer": "10", "kind": "problem", "keywords": ["10", "60", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-70-7", "grade": "grade4", "domain": "math", "prompt": "70/7", "answer": "10", "kind": "problem", "keywords": ["10", "70", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-80-8", "grade": "grade4", "domain": "math", "prompt": "80/8", "answer": "10", "kind": "problem", "keywords": ["10", "80", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-90-9", "grade": "grade4", "domain": "math", "prompt": "90/9", "answer": "10", "kind": "problem", "keywords": ["10", "90", "9"], "source": "open_curriculum_pk_g8"}
+{"id": "divp-100-10", "grade": "grade4", "domain": "math", "prompt": "100/10", "answer": "10", "kind": "problem", "keywords": ["10", "100"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-1-2", "grade": "grade3", "domain": "math", "prompt": "fraction 1 over 2", "answer": "half", "kind": "problem", "keywords": ["half", "fraction", "1", "over", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-1-3", "grade": "grade3", "domain": "math", "prompt": "fraction 1 over 3", "answer": "third", "kind": "problem", "keywords": ["third", "fraction", "1", "over", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-1-4", "grade": "grade3", "domain": "math", "prompt": "fraction 1 over 4", "answer": "fourth", "kind": "problem", "keywords": ["fourth", "fraction", "1", "over", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-2-4", "grade": "grade3", "domain": "math", "prompt": "fraction 2 over 4", "answer": "half", "kind": "problem", "keywords": ["half", "fraction", "2", "over", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-3-4", "grade": "grade3", "domain": "math", "prompt": "fraction 3 over 4", "answer": "three-fourths", "kind": "problem", "keywords": ["three", "fourths", "fraction", "3", "over", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-1-5", "grade": "grade4", "domain": "math", "prompt": "fraction 1 over 5", "answer": "fifth", "kind": "problem", "keywords": ["fifth", "fraction", "1", "over", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-2-5", "grade": "grade4", "domain": "math", "prompt": "fraction 2 over 5", "answer": "two-fifths", "kind": "problem", "keywords": ["two", "fifths", "fraction", "2", "over", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "fracp-1-10", "grade": "grade4", "domain": "math", "prompt": "fraction 1 over 10", "answer": "tenth", "kind": "problem", "keywords": ["tenth", "fraction", "1", "over", "10"], "source": "open_curriculum_pk_g8"}
+{"id": "oop-2+3*4", "grade": "grade6", "domain": "math", "prompt": "compute 2+3*4", "answer": "14", "kind": "problem", "keywords": ["14", "compute", "2", "3", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "oop-10-2*3", "grade": "grade6", "domain": "math", "prompt": "compute 10-2*3", "answer": "4", "kind": "problem", "keywords": ["4", "compute", "10", "2", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "oop-(2+3)*4", "grade": "grade6", "domain": "math", "prompt": "compute (2+3)*4", "answer": "20", "kind": "problem", "keywords": ["20", "compute", "2", "3", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "oop-12/3+2", "grade": "grade6", "domain": "math", "prompt": "compute 12/3+2", "answer": "6", "kind": "problem", "keywords": ["6", "compute", "12", "3", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "oop-5*2-4", "grade": "grade6", "domain": "math", "prompt": "compute 5*2-4", "answer": "6", "kind": "problem", "keywords": ["6", "compute", "5", "2", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "pythp-3-4", "grade": "grade8", "domain": "math", "prompt": "3^2+4^2", "answer": "25", "kind": "problem", "keywords": ["25", "3", "2", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "pythp-5-12", "grade": "grade8", "domain": "math", "prompt": "5^2+12^2", "answer": "169", "kind": "problem", "keywords": ["169", "5", "2", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "pythp-6-8", "grade": "grade8", "domain": "math", "prompt": "6^2+8^2", "answer": "100", "kind": "problem", "keywords": ["100", "6", "2", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "pythp-9-12", "grade": "grade8", "domain": "math", "prompt": "9^2+12^2", "answer": "225", "kind": "problem", "keywords": ["225", "9", "2", "12"], "source": "open_curriculum_pk_g8"}
+{"id": "pythp-8-15", "grade": "grade8", "domain": "math", "prompt": "8^2+15^2", "answer": "289", "kind": "problem", "keywords": ["289", "8", "2", "15"], "source": "open_curriculum_pk_g8"}
+{"id": "pythp-7-24", "grade": "grade8", "domain": "math", "prompt": "7^2+24^2", "answer": "625", "kind": "problem", "keywords": ["625", "7", "2", "24"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-0", "grade": "grade8", "domain": "math", "prompt": "10^0", "answer": "1", "kind": "problem", "keywords": ["1", "10", "0"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-1", "grade": "grade8", "domain": "math", "prompt": "10^1", "answer": "10", "kind": "problem", "keywords": ["10", "1"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-2", "grade": "grade8", "domain": "math", "prompt": "10^2", "answer": "100", "kind": "problem", "keywords": ["100", "10", "2"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-3", "grade": "grade8", "domain": "math", "prompt": "10^3", "answer": "1000", "kind": "problem", "keywords": ["1000", "10", "3"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-4", "grade": "grade8", "domain": "math", "prompt": "10^4", "answer": "10000", "kind": "problem", "keywords": ["10000", "10", "4"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-5", "grade": "grade8", "domain": "math", "prompt": "10^5", "answer": "100000", "kind": "problem", "keywords": ["100000", "10", "5"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-6", "grade": "grade8", "domain": "math", "prompt": "10^6", "answer": "1000000", "kind": "problem", "keywords": ["1000000", "10", "6"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-7", "grade": "grade8", "domain": "math", "prompt": "10^7", "answer": "10000000", "kind": "problem", "keywords": ["10000000", "10", "7"], "source": "open_curriculum_pk_g8"}
+{"id": "pow10p-8", "grade": "grade8", "domain": "math", "prompt": "10^8", "answer": "100000000", "kind": "problem", "keywords": ["100000000", "10", "8"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-0", "grade": "grade1", "domain": "literacy", "prompt": "sentence starts", "answer": "capital", "kind": "problem", "keywords": ["capital", "sentence", "starts"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-1", "grade": "grade1", "domain": "literacy", "prompt": "sentence ends", "answer": "period", "kind": "problem", "keywords": ["period", "sentence", "ends"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-2", "grade": "grade1", "domain": "literacy", "prompt": "question ends", "answer": "mark", "kind": "problem", "keywords": ["mark", "question", "ends"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-3", "grade": "grade2", "domain": "literacy", "prompt": "noun is", "answer": "person", "kind": "problem", "keywords": ["person", "noun", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-4", "grade": "grade2", "domain": "literacy", "prompt": "verb is", "answer": "action", "kind": "problem", "keywords": ["action", "verb", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-5", "grade": "grade2", "domain": "literacy", "prompt": "adjective describes", "answer": "noun", "kind": "problem", "keywords": ["noun", "adjective", "describes"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-6", "grade": "grade2", "domain": "literacy", "prompt": "pronoun replaces", "answer": "noun", "kind": "problem", "keywords": ["noun", "pronoun", "replaces"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-7", "grade": "grade2", "domain": "literacy", "prompt": "comma can separate", "answer": "items", "kind": "problem", "keywords": ["items", "comma", "can", "separate"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-8", "grade": "grade3", "domain": "literacy", "prompt": "plural adds", "answer": "s", "kind": "problem", "keywords": ["s", "plural", "adds"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-9", "grade": "grade3", "domain": "literacy", "prompt": "past tense often ends", "answer": "ed", "kind": "problem", "keywords": ["ed", "past", "tense", "often", "ends"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-10", "grade": "grade3", "domain": "literacy", "prompt": "subject does the", "answer": "action", "kind": "problem", "keywords": ["action", "subject", "does", "the"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-11", "grade": "grade3", "domain": "literacy", "prompt": "predicate tells", "answer": "action", "kind": "problem", "keywords": ["action", "predicate", "tells"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-12", "grade": "grade3", "domain": "literacy", "prompt": "synonym means", "answer": "same", "kind": "problem", "keywords": ["same", "synonym", "means"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-13", "grade": "grade3", "domain": "literacy", "prompt": "antonym means", "answer": "opposite", "kind": "problem", "keywords": ["opposite", "antonym", "means"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-14", "grade": "grade4", "domain": "literacy", "prompt": "paragraph has", "answer": "topic", "kind": "problem", "keywords": ["topic", "paragraph", "has"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-15", "grade": "grade4", "domain": "literacy", "prompt": "dictionary finds", "answer": "meaning", "kind": "problem", "keywords": ["meaning", "dictionary", "finds"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-16", "grade": "grade4", "domain": "literacy", "prompt": "prefix un means", "answer": "not", "kind": "problem", "keywords": ["not", "prefix", "un", "means"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-17", "grade": "grade4", "domain": "literacy", "prompt": "suffix er means", "answer": "one", "kind": "problem", "keywords": ["one", "suffix", "er", "means"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-18", "grade": "grade4", "domain": "literacy", "prompt": "main idea is", "answer": "point", "kind": "problem", "keywords": ["point", "main", "idea", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-19", "grade": "grade5", "domain": "literacy", "prompt": "metaphor compares without", "answer": "like", "kind": "problem", "keywords": ["like", "metaphor", "compares", "without"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-20", "grade": "grade5", "domain": "literacy", "prompt": "simile uses", "answer": "like", "kind": "problem", "keywords": ["like", "simile", "uses"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-21", "grade": "grade5", "domain": "literacy", "prompt": "idiom meaning is", "answer": "figurative", "kind": "problem", "keywords": ["figurative", "idiom", "meaning", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-22", "grade": "grade5", "domain": "literacy", "prompt": "personification gives", "answer": "human", "kind": "problem", "keywords": ["human", "personification", "gives"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-23", "grade": "grade5", "domain": "literacy", "prompt": "plot is the", "answer": "events", "kind": "problem", "keywords": ["events", "plot", "is", "the"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-24", "grade": "grade5", "domain": "literacy", "prompt": "setting is", "answer": "where", "kind": "problem", "keywords": ["where", "setting", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-25", "grade": "grade5", "domain": "literacy", "prompt": "character is a", "answer": "person", "kind": "problem", "keywords": ["person", "character", "is", "a"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-26", "grade": "grade5", "domain": "literacy", "prompt": "summary retells", "answer": "main", "kind": "problem", "keywords": ["main", "summary", "retells"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-27", "grade": "grade6", "domain": "literacy", "prompt": "thesis states", "answer": "claim", "kind": "problem", "keywords": ["claim", "thesis", "states"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-28", "grade": "grade6", "domain": "literacy", "prompt": "evidence supports", "answer": "claim", "kind": "problem", "keywords": ["claim", "evidence", "supports"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-29", "grade": "grade6", "domain": "literacy", "prompt": "conclusion wraps", "answer": "ideas", "kind": "problem", "keywords": ["ideas", "conclusion", "wraps"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-30", "grade": "grade6", "domain": "literacy", "prompt": "transition connects", "answer": "ideas", "kind": "problem", "keywords": ["ideas", "transition", "connects"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-31", "grade": "grade6", "domain": "literacy", "prompt": "audience is the", "answer": "reader", "kind": "problem", "keywords": ["reader", "audience", "is", "the"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-32", "grade": "grade6", "domain": "literacy", "prompt": "tone is the", "answer": "attitude", "kind": "problem", "keywords": ["attitude", "tone", "is", "the"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-33", "grade": "grade6", "domain": "literacy", "prompt": "mood is the", "answer": "feeling", "kind": "problem", "keywords": ["feeling", "mood", "is", "the"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-34", "grade": "grade6", "domain": "literacy", "prompt": "context clues help", "answer": "meaning", "kind": "problem", "keywords": ["meaning", "context", "clues", "help"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-35", "grade": "grade7", "domain": "literacy", "prompt": "citation gives", "answer": "source", "kind": "problem", "keywords": ["source", "citation", "gives"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-36", "grade": "grade7", "domain": "literacy", "prompt": "argument has", "answer": "claim", "kind": "problem", "keywords": ["claim", "argument", "has"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-37", "grade": "grade7", "domain": "literacy", "prompt": "counterargument opposes", "answer": "claim", "kind": "problem", "keywords": ["claim", "counterargument", "opposes"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-38", "grade": "grade7", "domain": "literacy", "prompt": "rhetoric aims to", "answer": "persuade", "kind": "problem", "keywords": ["persuade", "rhetoric", "aims", "to"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-39", "grade": "grade7", "domain": "literacy", "prompt": "connotation is", "answer": "feeling", "kind": "problem", "keywords": ["feeling", "connotation", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-40", "grade": "grade7", "domain": "literacy", "prompt": "denotation is", "answer": "dictionary", "kind": "problem", "keywords": ["dictionary", "denotation", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-41", "grade": "grade7", "domain": "literacy", "prompt": "allusion refers to", "answer": "known", "kind": "problem", "keywords": ["known", "allusion", "refers", "to"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-42", "grade": "grade7", "domain": "literacy", "prompt": "irony contrasts", "answer": "expectation", "kind": "problem", "keywords": ["expectation", "irony", "contrasts"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-43", "grade": "grade8", "domain": "literacy", "prompt": "theme is", "answer": "message", "kind": "problem", "keywords": ["message", "theme", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-44", "grade": "grade8", "domain": "literacy", "prompt": "bias favors", "answer": "side", "kind": "problem", "keywords": ["side", "bias", "favors"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-45", "grade": "grade8", "domain": "literacy", "prompt": "rhetoric ethos is", "answer": "credibility", "kind": "problem", "keywords": ["credibility", "rhetoric", "ethos", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-46", "grade": "grade8", "domain": "literacy", "prompt": "rhetoric pathos is", "answer": "emotion", "kind": "problem", "keywords": ["emotion", "rhetoric", "pathos", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-47", "grade": "grade8", "domain": "literacy", "prompt": "rhetoric logos is", "answer": "logic", "kind": "problem", "keywords": ["logic", "rhetoric", "logos", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-48", "grade": "grade8", "domain": "literacy", "prompt": "structure is how", "answer": "organized", "kind": "problem", "keywords": ["organized", "structure", "is", "how"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-49", "grade": "grade8", "domain": "literacy", "prompt": "syntax is", "answer": "sentence", "kind": "problem", "keywords": ["sentence", "syntax", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-50", "grade": "grade8", "domain": "literacy", "prompt": "parallelism repeats", "answer": "structure", "kind": "problem", "keywords": ["structure", "parallelism", "repeats"], "source": "open_curriculum_pk_g8"}
+{"id": "grp-51", "grade": "grade8", "domain": "literacy", "prompt": "fallacy is a", "answer": "error", "kind": "problem", "keywords": ["error", "fallacy", "is", "a"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-sky", "grade": "preschool", "domain": "science", "prompt": "color of sky", "answer": "blue", "kind": "problem", "keywords": ["blue", "color", "of", "sky"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-grass", "grade": "preschool", "domain": "science", "prompt": "color of grass", "answer": "green", "kind": "problem", "keywords": ["green", "color", "of", "grass"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-sun", "grade": "preschool", "domain": "science", "prompt": "when is sun out", "answer": "day", "kind": "problem", "keywords": ["day", "when", "is", "sun", "out"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-moon", "grade": "preschool", "domain": "science", "prompt": "when is moon out", "answer": "night", "kind": "problem", "keywords": ["night", "when", "is", "moon", "out"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-eyes", "grade": "preschool", "domain": "science", "prompt": "what sees", "answer": "eyes", "kind": "problem", "keywords": ["eyes", "what", "sees"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-ears", "grade": "preschool", "domain": "science", "prompt": "what hears", "answer": "ears", "kind": "problem", "keywords": ["ears", "what", "hears"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-dog", "grade": "preschool", "domain": "science", "prompt": "is dog animal", "answer": "animal", "kind": "problem", "keywords": ["animal", "is", "dog"], "source": "open_curriculum_pk_g8"}
+{"id": "p-pk-water", "grade": "preschool", "domain": "science", "prompt": "what do we drink", "answer": "water", "kind": "problem", "keywords": ["water", "what", "do", "we", "drink"], "source": "open_curriculum_pk_g8"}
+{"id": "p-k-plant-sun", "grade": "kindergarten", "domain": "science", "prompt": "what plants need", "answer": "sun", "kind": "problem", "keywords": ["sun", "what", "plants", "need"], "source": "open_curriculum_pk_g8"}
+{"id": "p-k-plant-water", "grade": "kindergarten", "domain": "science", "prompt": "plants water", "answer": "water", "kind": "problem", "keywords": ["water", "plants"], "source": "open_curriculum_pk_g8"}
+{"id": "p-k-people-water", "grade": "kindergarten", "domain": "science", "prompt": "what people need", "answer": "water", "kind": "problem", "keywords": ["water", "what", "people", "need"], "source": "open_curriculum_pk_g8"}
+{"id": "p-k-stop", "grade": "kindergarten", "domain": "science", "prompt": "red light do", "answer": "stop", "kind": "problem", "keywords": ["stop", "red", "light", "do"], "source": "open_curriculum_pk_g8"}
+{"id": "p-k-winter", "grade": "kindergarten", "domain": "science", "prompt": "is winter cold", "answer": "cold", "kind": "problem", "keywords": ["cold", "is", "winter"], "source": "open_curriculum_pk_g8"}
+{"id": "p-k-summer", "grade": "kindergarten", "domain": "science", "prompt": "is summer hot", "answer": "hot", "kind": "problem", "keywords": ["hot", "is", "summer"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g1-earth", "grade": "grade1", "domain": "science", "prompt": "home planet", "answer": "earth", "kind": "problem", "keywords": ["earth", "home", "planet"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g1-map", "grade": "grade1", "domain": "science", "prompt": "find places tool", "answer": "map", "kind": "problem", "keywords": ["map", "find", "places", "tool"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g1-living", "grade": "grade1", "domain": "science", "prompt": "living things need", "answer": "water", "kind": "problem", "keywords": ["water", "living", "things", "need"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g1-ice", "grade": "grade1", "domain": "science", "prompt": "ice form", "answer": "solid", "kind": "problem", "keywords": ["solid", "ice", "form"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g1-seed", "grade": "grade1", "domain": "science", "prompt": "seed becomes", "answer": "plant", "kind": "problem", "keywords": ["plant", "seed", "becomes"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g1-week", "grade": "grade1", "domain": "science", "prompt": "how many days week", "answer": "seven", "kind": "problem", "keywords": ["seven", "how", "many", "days", "week"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-solid", "grade": "grade2", "domain": "science", "prompt": "solid property", "answer": "shape", "kind": "problem", "keywords": ["shape", "solid", "property"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-liquid", "grade": "grade2", "domain": "science", "prompt": "liquid property", "answer": "shape", "kind": "problem", "keywords": ["shape", "liquid", "property"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-habitat", "grade": "grade2", "domain": "science", "prompt": "what is habitat", "answer": "home", "kind": "problem", "keywords": ["home", "what", "is", "habitat"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-push", "grade": "grade2", "domain": "science", "prompt": "what push does", "answer": "move", "kind": "problem", "keywords": ["move", "what", "push", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-pull", "grade": "grade2", "domain": "science", "prompt": "what pull does", "answer": "move", "kind": "problem", "keywords": ["move", "what", "pull", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-plant-parts", "grade": "grade2", "domain": "science", "prompt": "what roots do", "answer": "water", "kind": "problem", "keywords": ["water", "what", "roots", "do"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g2-weather", "grade": "grade2", "domain": "science", "prompt": "what is weather", "answer": "air", "kind": "problem", "keywords": ["air", "what", "is", "weather"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g3-force", "grade": "grade3", "domain": "science", "prompt": "what is force", "answer": "push", "kind": "problem", "keywords": ["push", "what", "is", "force"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g3-magnet", "grade": "grade3", "domain": "science", "prompt": "what magnets attract", "answer": "iron", "kind": "problem", "keywords": ["iron", "what", "magnets", "attract"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g3-life-cycle", "grade": "grade3", "domain": "science", "prompt": "butterfly life", "answer": "stages", "kind": "problem", "keywords": ["stages", "butterfly", "life"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g3-soil", "grade": "grade3", "domain": "science", "prompt": "where plants grow", "answer": "soil", "kind": "problem", "keywords": ["soil", "where", "plants", "grow"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g3-energy-sun", "grade": "grade3", "domain": "science", "prompt": "sun is source of", "answer": "energy", "kind": "problem", "keywords": ["energy", "sun", "is", "source", "of"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g3-water-cycle", "grade": "grade3", "domain": "science", "prompt": "rain belongs to", "answer": "cycle", "kind": "problem", "keywords": ["cycle", "rain", "belongs", "to"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g4-matter", "grade": "grade4", "domain": "science", "prompt": "what matter has", "answer": "mass", "kind": "problem", "keywords": ["mass", "what", "matter", "has"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g4-energy", "grade": "grade4", "domain": "science", "prompt": "what energy does", "answer": "happen", "kind": "problem", "keywords": ["happen", "what", "energy", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g4-ecosystem", "grade": "grade4", "domain": "science", "prompt": "ecosystem includes", "answer": "living", "kind": "problem", "keywords": ["living", "ecosystem", "includes"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g4-earthquake", "grade": "grade4", "domain": "science", "prompt": "what earthquake does", "answer": "shake", "kind": "problem", "keywords": ["shake", "what", "earthquake", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g4-fossil", "grade": "grade4", "domain": "science", "prompt": "what fossils are", "answer": "remains", "kind": "problem", "keywords": ["remains", "what", "fossils", "are"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g4-circuit", "grade": "grade4", "domain": "science", "prompt": "circuit allows", "answer": "flow", "kind": "problem", "keywords": ["flow", "circuit", "allows"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-gravity", "grade": "grade5", "domain": "science", "prompt": "gravity toward", "answer": "earth", "kind": "problem", "keywords": ["earth", "gravity", "toward"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-photosynthesis", "grade": "grade5", "domain": "science", "prompt": "photosynthesis needs", "answer": "sunlight", "kind": "problem", "keywords": ["sunlight", "photosynthesis", "needs"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-molecule", "grade": "grade5", "domain": "science", "prompt": "molecule parts", "answer": "atoms", "kind": "problem", "keywords": ["atoms", "molecule", "parts"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-solar", "grade": "grade5", "domain": "science", "prompt": "earth goes around", "answer": "sun", "kind": "problem", "keywords": ["sun", "earth", "goes", "around"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-food-chain", "grade": "grade5", "domain": "science", "prompt": "food chain is", "answer": "eats", "kind": "problem", "keywords": ["eats", "food", "chain", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-volume", "grade": "grade5", "domain": "science", "prompt": "what volume measures", "answer": "space", "kind": "problem", "keywords": ["space", "what", "volume", "measures"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-cell", "grade": "grade6", "domain": "science", "prompt": "life unit", "answer": "cell", "kind": "problem", "keywords": ["cell", "life", "unit"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-atom", "grade": "grade6", "domain": "science", "prompt": "matter unit", "answer": "atom", "kind": "problem", "keywords": ["atom", "matter", "unit"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-ratio", "grade": "grade6", "domain": "science", "prompt": "what ratio does", "answer": "quantities", "kind": "problem", "keywords": ["quantities", "what", "ratio", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-variable", "grade": "grade6", "domain": "science", "prompt": "what is variable", "answer": "symbol", "kind": "problem", "keywords": ["symbol", "what", "is", "variable"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-plate", "grade": "grade6", "domain": "science", "prompt": "earth crust", "answer": "plates", "kind": "problem", "keywords": ["plates", "earth", "crust"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-kinetic", "grade": "grade6", "domain": "science", "prompt": "kinetic means", "answer": "motion", "kind": "problem", "keywords": ["motion", "kinetic", "means"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-potential", "grade": "grade7", "domain": "science", "prompt": "potential means", "answer": "stored", "kind": "problem", "keywords": ["stored", "potential", "means"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-element", "grade": "grade7", "domain": "science", "prompt": "what is element", "answer": "pure", "kind": "problem", "keywords": ["pure", "what", "is", "element"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-gene", "grade": "grade7", "domain": "science", "prompt": "what genes carry", "answer": "information", "kind": "problem", "keywords": ["information", "what", "genes", "carry"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-density", "grade": "grade7", "domain": "science", "prompt": "density formula start", "answer": "mass", "kind": "problem", "keywords": ["mass", "density", "formula", "start"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-ecosystem-energy", "grade": "grade7", "domain": "science", "prompt": "energy path", "answer": "ecosystems", "kind": "problem", "keywords": ["ecosystems", "energy", "path"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-newton", "grade": "grade7", "domain": "science", "prompt": "force effect", "answer": "motion", "kind": "problem", "keywords": ["motion", "force", "effect"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-slope", "grade": "grade8", "domain": "science", "prompt": "what slope measures", "answer": "steepness", "kind": "problem", "keywords": ["steepness", "what", "slope", "measures"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-function", "grade": "grade8", "domain": "science", "prompt": "function does", "answer": "input", "kind": "problem", "keywords": ["input", "function", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-pythagorean", "grade": "grade8", "domain": "science", "prompt": "a2 plus b2", "answer": "pythagorean", "kind": "problem", "keywords": ["pythagorean", "a2", "plus", "b2"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-scientific", "grade": "grade8", "domain": "science", "prompt": "sci notation", "answer": "powers", "kind": "problem", "keywords": ["powers", "sci", "notation"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-wave", "grade": "grade8", "domain": "science", "prompt": "what waves transfer", "answer": "energy", "kind": "problem", "keywords": ["energy", "what", "waves", "transfer"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-evolution", "grade": "grade8", "domain": "science", "prompt": "selection explains", "answer": "evolution", "kind": "problem", "keywords": ["evolution", "selection", "explains"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-mixture", "grade": "grade5", "domain": "science", "prompt": "mixture property", "answer": "properties", "kind": "problem", "keywords": ["properties", "mixture", "property"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-solution", "grade": "grade5", "domain": "science", "prompt": "solution is", "answer": "same", "kind": "problem", "keywords": ["same", "solution", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g5-phase", "grade": "grade5", "domain": "science", "prompt": "phase needs", "answer": "heat", "kind": "problem", "keywords": ["heat", "phase", "needs"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-mass", "grade": "grade6", "domain": "science", "prompt": "what mass is", "answer": "matter", "kind": "problem", "keywords": ["matter", "what", "mass", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-volume", "grade": "grade6", "domain": "science", "prompt": "what volume is", "answer": "space", "kind": "problem", "keywords": ["space", "what", "volume", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-hypothesis", "grade": "grade6", "domain": "science", "prompt": "what hypothesis is", "answer": "prediction", "kind": "problem", "keywords": ["prediction", "what", "hypothesis", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g6-control", "grade": "grade6", "domain": "science", "prompt": "experiment control", "answer": "standard", "kind": "problem", "keywords": ["standard", "experiment", "control"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-compound", "grade": "grade7", "domain": "science", "prompt": "compound is", "answer": "elements", "kind": "problem", "keywords": ["elements", "compound", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-reaction", "grade": "grade7", "domain": "science", "prompt": "reaction makes", "answer": "substances", "kind": "problem", "keywords": ["substances", "reaction", "makes"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-velocity", "grade": "grade7", "domain": "science", "prompt": "velocity is", "answer": "direction", "kind": "problem", "keywords": ["direction", "velocity", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g7-acceleration", "grade": "grade7", "domain": "science", "prompt": "what acceleration is", "answer": "velocity", "kind": "problem", "keywords": ["velocity", "what", "acceleration", "is"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-isotope", "grade": "grade8", "domain": "science", "prompt": "isotope difference", "answer": "neutrons", "kind": "problem", "keywords": ["neutrons", "isotope", "difference"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-periodictable", "grade": "grade8", "domain": "science", "prompt": "periodic table", "answer": "elements", "kind": "problem", "keywords": ["elements", "periodic", "table"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-genetics", "grade": "grade8", "domain": "science", "prompt": "dna does", "answer": "instructions", "kind": "problem", "keywords": ["instructions", "dna", "does"], "source": "open_curriculum_pk_g8"}
+{"id": "p-g8-climate", "grade": "grade8", "domain": "science", "prompt": "what climate is", "answer": "long-term", "kind": "problem", "keywords": ["long", "term", "what", "climate", "is"], "source": "open_curriculum_pk_g8"}

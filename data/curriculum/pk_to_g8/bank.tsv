@@ -1,0 +1,3535 @@
+# domain	grade	kind	question	answer
+# Open PK→G8 curriculum — curriculum_open.py
+math	preschool	fact	number 0	zero
+math	preschool	fact	count word zero	0
+math	preschool	fact	after zero	one
+math	preschool	fact	number 1	one
+math	preschool	fact	count word one	1
+math	preschool	fact	after one	two
+math	preschool	fact	before one	zero
+math	preschool	fact	number 2	two
+math	preschool	fact	count word two	2
+math	preschool	fact	after two	three
+math	preschool	fact	before two	one
+math	preschool	fact	number 3	three
+math	preschool	fact	count word three	3
+math	preschool	fact	after three	four
+math	preschool	fact	before three	two
+math	preschool	fact	number 4	four
+math	preschool	fact	count word four	4
+math	preschool	fact	after four	five
+math	preschool	fact	before four	three
+math	preschool	fact	number 5	five
+math	preschool	fact	count word five	5
+math	preschool	fact	after five	six
+math	preschool	fact	before five	four
+math	kindergarten	fact	number 6	six
+math	kindergarten	fact	count word six	6
+math	kindergarten	fact	after six	seven
+math	kindergarten	fact	before six	five
+math	kindergarten	fact	number 7	seven
+math	kindergarten	fact	count word seven	7
+math	kindergarten	fact	after seven	eight
+math	kindergarten	fact	before seven	six
+math	kindergarten	fact	number 8	eight
+math	kindergarten	fact	count word eight	8
+math	kindergarten	fact	after eight	nine
+math	kindergarten	fact	before eight	seven
+math	kindergarten	fact	number 9	nine
+math	kindergarten	fact	count word nine	9
+math	kindergarten	fact	after nine	ten
+math	kindergarten	fact	before nine	eight
+math	kindergarten	fact	number 10	ten
+math	kindergarten	fact	count word ten	10
+math	kindergarten	fact	after ten	eleven
+math	kindergarten	fact	before ten	nine
+math	grade1	fact	number 11	eleven
+math	grade1	fact	count word eleven	11
+math	grade1	fact	after eleven	twelve
+math	grade1	fact	before eleven	ten
+math	grade1	fact	number 12	twelve
+math	grade1	fact	count word twelve	12
+math	grade1	fact	after twelve	thirteen
+math	grade1	fact	before twelve	eleven
+math	grade1	fact	number 13	thirteen
+math	grade1	fact	count word thirteen	13
+math	grade1	fact	after thirteen	fourteen
+math	grade1	fact	before thirteen	twelve
+math	grade1	fact	number 14	fourteen
+math	grade1	fact	count word fourteen	14
+math	grade1	fact	after fourteen	fifteen
+math	grade1	fact	before fourteen	thirteen
+math	grade1	fact	number 15	fifteen
+math	grade1	fact	count word fifteen	15
+math	grade1	fact	after fifteen	sixteen
+math	grade1	fact	before fifteen	fourteen
+math	grade1	fact	number 16	sixteen
+math	grade1	fact	count word sixteen	16
+math	grade1	fact	after sixteen	seventeen
+math	grade1	fact	before sixteen	fifteen
+math	grade1	fact	number 17	seventeen
+math	grade1	fact	count word seventeen	17
+math	grade1	fact	after seventeen	eighteen
+math	grade1	fact	before seventeen	sixteen
+math	grade1	fact	number 18	eighteen
+math	grade1	fact	count word eighteen	18
+math	grade1	fact	after eighteen	nineteen
+math	grade1	fact	before eighteen	seventeen
+math	grade1	fact	number 19	nineteen
+math	grade1	fact	count word nineteen	19
+math	grade1	fact	after nineteen	twenty
+math	grade1	fact	before nineteen	eighteen
+math	grade1	fact	number 20	twenty
+math	grade1	fact	count word twenty	20
+math	grade1	fact	before twenty	nineteen
+math	preschool	fact	0 plus 0	zero
+math	preschool	problem	0+0	0
+math	preschool	fact	0 plus 1	one
+math	preschool	problem	0+1	1
+math	preschool	fact	0 plus 2	two
+math	preschool	problem	0+2	2
+math	preschool	fact	0 plus 3	three
+math	preschool	problem	0+3	3
+math	kindergarten	fact	0 plus 4	four
+math	kindergarten	problem	0+4	4
+math	kindergarten	fact	0 plus 5	five
+math	kindergarten	problem	0+5	5
+math	kindergarten	fact	0 plus 6	six
+math	kindergarten	problem	0+6	6
+math	kindergarten	fact	0 plus 7	seven
+math	kindergarten	problem	0+7	7
+math	kindergarten	fact	0 plus 8	eight
+math	kindergarten	problem	0+8	8
+math	kindergarten	fact	0 plus 9	nine
+math	kindergarten	problem	0+9	9
+math	kindergarten	fact	0 plus 10	ten
+math	kindergarten	problem	0+10	10
+math	preschool	fact	0 minus 0	zero
+math	preschool	problem	0-0	0
+math	preschool	fact	1 plus 0	one
+math	preschool	problem	1+0	1
+math	preschool	fact	1 plus 1	two
+math	preschool	problem	1+1	2
+math	preschool	fact	1 plus 2	three
+math	preschool	problem	1+2	3
+math	preschool	fact	1 plus 3	four
+math	preschool	problem	1+3	4
+math	kindergarten	fact	1 plus 4	five
+math	kindergarten	problem	1+4	5
+math	kindergarten	fact	1 plus 5	six
+math	kindergarten	problem	1+5	6
+math	kindergarten	fact	1 plus 6	seven
+math	kindergarten	problem	1+6	7
+math	kindergarten	fact	1 plus 7	eight
+math	kindergarten	problem	1+7	8
+math	kindergarten	fact	1 plus 8	nine
+math	kindergarten	problem	1+8	9
+math	kindergarten	fact	1 plus 9	ten
+math	kindergarten	problem	1+9	10
+math	grade1	fact	1 plus 10	eleven
+math	grade1	problem	1+10	11
+math	preschool	fact	1 minus 0	one
+math	preschool	problem	1-0	1
+math	preschool	fact	1 minus 1	zero
+math	preschool	problem	1-1	0
+math	preschool	fact	2 plus 0	two
+math	preschool	problem	2+0	2
+math	preschool	fact	2 plus 1	three
+math	preschool	problem	2+1	3
+math	preschool	fact	2 plus 2	four
+math	preschool	problem	2+2	4
+math	preschool	fact	2 plus 3	five
+math	preschool	problem	2+3	5
+math	kindergarten	fact	2 plus 4	six
+math	kindergarten	problem	2+4	6
+math	kindergarten	fact	2 plus 5	seven
+math	kindergarten	problem	2+5	7
+math	kindergarten	fact	2 plus 6	eight
+math	kindergarten	problem	2+6	8
+math	kindergarten	fact	2 plus 7	nine
+math	kindergarten	problem	2+7	9
+math	kindergarten	fact	2 plus 8	ten
+math	kindergarten	problem	2+8	10
+math	grade1	fact	2 plus 9	eleven
+math	grade1	problem	2+9	11
+math	grade1	fact	2 plus 10	twelve
+math	grade1	problem	2+10	12
+math	preschool	fact	2 minus 0	two
+math	preschool	problem	2-0	2
+math	preschool	fact	2 minus 1	one
+math	preschool	problem	2-1	1
+math	preschool	fact	2 minus 2	zero
+math	preschool	problem	2-2	0
+math	preschool	fact	3 plus 0	three
+math	preschool	problem	3+0	3
+math	preschool	fact	3 plus 1	four
+math	preschool	problem	3+1	4
+math	preschool	fact	3 plus 2	five
+math	preschool	problem	3+2	5
+math	kindergarten	fact	3 plus 3	six
+math	kindergarten	problem	3+3	6
+math	kindergarten	fact	3 plus 4	seven
+math	kindergarten	problem	3+4	7
+math	kindergarten	fact	3 plus 5	eight
+math	kindergarten	problem	3+5	8
+math	kindergarten	fact	3 plus 6	nine
+math	kindergarten	problem	3+6	9
+math	kindergarten	fact	3 plus 7	ten
+math	kindergarten	problem	3+7	10
+math	grade1	fact	3 plus 8	eleven
+math	grade1	problem	3+8	11
+math	grade1	fact	3 plus 9	twelve
+math	grade1	problem	3+9	12
+math	grade1	fact	3 plus 10	thirteen
+math	grade1	problem	3+10	13
+math	preschool	fact	3 minus 0	three
+math	preschool	problem	3-0	3
+math	preschool	fact	3 minus 1	two
+math	preschool	problem	3-1	2
+math	preschool	fact	3 minus 2	one
+math	preschool	problem	3-2	1
+math	preschool	fact	3 minus 3	zero
+math	preschool	problem	3-3	0
+math	kindergarten	fact	4 plus 0	four
+math	kindergarten	problem	4+0	4
+math	kindergarten	fact	4 plus 1	five
+math	kindergarten	problem	4+1	5
+math	kindergarten	fact	4 plus 2	six
+math	kindergarten	problem	4+2	6
+math	kindergarten	fact	4 plus 3	seven
+math	kindergarten	problem	4+3	7
+math	kindergarten	fact	4 plus 4	eight
+math	kindergarten	problem	4+4	8
+math	kindergarten	fact	4 plus 5	nine
+math	kindergarten	problem	4+5	9
+math	kindergarten	fact	4 plus 6	ten
+math	kindergarten	problem	4+6	10
+math	grade1	fact	4 plus 7	eleven
+math	grade1	problem	4+7	11
+math	grade1	fact	4 plus 8	twelve
+math	grade1	problem	4+8	12
+math	grade1	fact	4 plus 9	thirteen
+math	grade1	problem	4+9	13
+math	grade1	fact	4 plus 10	fourteen
+math	grade1	problem	4+10	14
+math	preschool	fact	4 minus 0	four
+math	preschool	problem	4-0	4
+math	preschool	fact	4 minus 1	three
+math	preschool	problem	4-1	3
+math	preschool	fact	4 minus 2	two
+math	preschool	problem	4-2	2
+math	preschool	fact	4 minus 3	one
+math	preschool	problem	4-3	1
+math	preschool	fact	4 minus 4	zero
+math	preschool	problem	4-4	0
+math	kindergarten	fact	5 plus 0	five
+math	kindergarten	problem	5+0	5
+math	kindergarten	fact	5 plus 1	six
+math	kindergarten	problem	5+1	6
+math	kindergarten	fact	5 plus 2	seven
+math	kindergarten	problem	5+2	7
+math	kindergarten	fact	5 plus 3	eight
+math	kindergarten	problem	5+3	8
+math	kindergarten	fact	5 plus 4	nine
+math	kindergarten	problem	5+4	9
+math	kindergarten	fact	5 plus 5	ten
+math	kindergarten	problem	5+5	10
+math	grade1	fact	5 plus 6	eleven
+math	grade1	problem	5+6	11
+math	grade1	fact	5 plus 7	twelve
+math	grade1	problem	5+7	12
+math	grade1	fact	5 plus 8	thirteen
+math	grade1	problem	5+8	13
+math	grade1	fact	5 plus 9	fourteen
+math	grade1	problem	5+9	14
+math	grade1	fact	5 plus 10	fifteen
+math	grade1	problem	5+10	15
+math	preschool	fact	5 minus 0	five
+math	preschool	problem	5-0	5
+math	preschool	fact	5 minus 1	four
+math	preschool	problem	5-1	4
+math	preschool	fact	5 minus 2	three
+math	preschool	problem	5-2	3
+math	preschool	fact	5 minus 3	two
+math	preschool	problem	5-3	2
+math	preschool	fact	5 minus 4	one
+math	preschool	problem	5-4	1
+math	preschool	fact	5 minus 5	zero
+math	preschool	problem	5-5	0
+math	kindergarten	fact	6 plus 0	six
+math	kindergarten	problem	6+0	6
+math	kindergarten	fact	6 plus 1	seven
+math	kindergarten	problem	6+1	7
+math	kindergarten	fact	6 plus 2	eight
+math	kindergarten	problem	6+2	8
+math	kindergarten	fact	6 plus 3	nine
+math	kindergarten	problem	6+3	9
+math	kindergarten	fact	6 plus 4	ten
+math	kindergarten	problem	6+4	10
+math	grade1	fact	6 plus 5	eleven
+math	grade1	problem	6+5	11
+math	grade1	fact	6 plus 6	twelve
+math	grade1	problem	6+6	12
+math	grade1	fact	6 plus 7	thirteen
+math	grade1	problem	6+7	13
+math	grade1	fact	6 plus 8	fourteen
+math	grade1	problem	6+8	14
+math	grade1	fact	6 plus 9	fifteen
+math	grade1	problem	6+9	15
+math	grade1	fact	6 plus 10	sixteen
+math	grade1	problem	6+10	16
+math	kindergarten	fact	6 minus 0	six
+math	kindergarten	problem	6-0	6
+math	kindergarten	fact	6 minus 1	five
+math	kindergarten	problem	6-1	5
+math	kindergarten	fact	6 minus 2	four
+math	kindergarten	problem	6-2	4
+math	kindergarten	fact	6 minus 3	three
+math	kindergarten	problem	6-3	3
+math	kindergarten	fact	6 minus 4	two
+math	kindergarten	problem	6-4	2
+math	kindergarten	fact	6 minus 5	one
+math	kindergarten	problem	6-5	1
+math	kindergarten	fact	6 minus 6	zero
+math	kindergarten	problem	6-6	0
+math	kindergarten	fact	7 plus 0	seven
+math	kindergarten	problem	7+0	7
+math	kindergarten	fact	7 plus 1	eight
+math	kindergarten	problem	7+1	8
+math	kindergarten	fact	7 plus 2	nine
+math	kindergarten	problem	7+2	9
+math	kindergarten	fact	7 plus 3	ten
+math	kindergarten	problem	7+3	10
+math	grade1	fact	7 plus 4	eleven
+math	grade1	problem	7+4	11
+math	grade1	fact	7 plus 5	twelve
+math	grade1	problem	7+5	12
+math	grade1	fact	7 plus 6	thirteen
+math	grade1	problem	7+6	13
+math	grade1	fact	7 plus 7	fourteen
+math	grade1	problem	7+7	14
+math	grade1	fact	7 plus 8	fifteen
+math	grade1	problem	7+8	15
+math	grade1	fact	7 plus 9	sixteen
+math	grade1	problem	7+9	16
+math	grade1	fact	7 plus 10	seventeen
+math	grade1	problem	7+10	17
+math	kindergarten	fact	7 minus 0	seven
+math	kindergarten	problem	7-0	7
+math	kindergarten	fact	7 minus 1	six
+math	kindergarten	problem	7-1	6
+math	kindergarten	fact	7 minus 2	five
+math	kindergarten	problem	7-2	5
+math	kindergarten	fact	7 minus 3	four
+math	kindergarten	problem	7-3	4
+math	kindergarten	fact	7 minus 4	three
+math	kindergarten	problem	7-4	3
+math	kindergarten	fact	7 minus 5	two
+math	kindergarten	problem	7-5	2
+math	kindergarten	fact	7 minus 6	one
+math	kindergarten	problem	7-6	1
+math	kindergarten	fact	7 minus 7	zero
+math	kindergarten	problem	7-7	0
+math	kindergarten	fact	8 plus 0	eight
+math	kindergarten	problem	8+0	8
+math	kindergarten	fact	8 plus 1	nine
+math	kindergarten	problem	8+1	9
+math	kindergarten	fact	8 plus 2	ten
+math	kindergarten	problem	8+2	10
+math	grade1	fact	8 plus 3	eleven
+math	grade1	problem	8+3	11
+math	grade1	fact	8 plus 4	twelve
+math	grade1	problem	8+4	12
+math	grade1	fact	8 plus 5	thirteen
+math	grade1	problem	8+5	13
+math	grade1	fact	8 plus 6	fourteen
+math	grade1	problem	8+6	14
+math	grade1	fact	8 plus 7	fifteen
+math	grade1	problem	8+7	15
+math	grade1	fact	8 plus 8	sixteen
+math	grade1	problem	8+8	16
+math	grade1	fact	8 plus 9	seventeen
+math	grade1	problem	8+9	17
+math	grade1	fact	8 plus 10	eighteen
+math	grade1	problem	8+10	18
+math	kindergarten	fact	8 minus 0	eight
+math	kindergarten	problem	8-0	8
+math	kindergarten	fact	8 minus 1	seven
+math	kindergarten	problem	8-1	7
+math	kindergarten	fact	8 minus 2	six
+math	kindergarten	problem	8-2	6
+math	kindergarten	fact	8 minus 3	five
+math	kindergarten	problem	8-3	5
+math	kindergarten	fact	8 minus 4	four
+math	kindergarten	problem	8-4	4
+math	kindergarten	fact	8 minus 5	three
+math	kindergarten	problem	8-5	3
+math	kindergarten	fact	8 minus 6	two
+math	kindergarten	problem	8-6	2
+math	kindergarten	fact	8 minus 7	one
+math	kindergarten	problem	8-7	1
+math	kindergarten	fact	8 minus 8	zero
+math	kindergarten	problem	8-8	0
+math	kindergarten	fact	9 plus 0	nine
+math	kindergarten	problem	9+0	9
+math	kindergarten	fact	9 plus 1	ten
+math	kindergarten	problem	9+1	10
+math	grade1	fact	9 plus 2	eleven
+math	grade1	problem	9+2	11
+math	grade1	fact	9 plus 3	twelve
+math	grade1	problem	9+3	12
+math	grade1	fact	9 plus 4	thirteen
+math	grade1	problem	9+4	13
+math	grade1	fact	9 plus 5	fourteen
+math	grade1	problem	9+5	14
+math	grade1	fact	9 plus 6	fifteen
+math	grade1	problem	9+6	15
+math	grade1	fact	9 plus 7	sixteen
+math	grade1	problem	9+7	16
+math	grade1	fact	9 plus 8	seventeen
+math	grade1	problem	9+8	17
+math	grade1	fact	9 plus 9	eighteen
+math	grade1	problem	9+9	18
+math	grade1	fact	9 plus 10	nineteen
+math	grade1	problem	9+10	19
+math	grade1	fact	9 minus 0	nine
+math	grade1	problem	9-0	9
+math	grade1	fact	9 minus 1	eight
+math	grade1	problem	9-1	8
+math	grade1	fact	9 minus 2	seven
+math	grade1	problem	9-2	7
+math	grade1	fact	9 minus 3	six
+math	grade1	problem	9-3	6
+math	grade1	fact	9 minus 4	five
+math	grade1	problem	9-4	5
+math	grade1	fact	9 minus 5	four
+math	grade1	problem	9-5	4
+math	grade1	fact	9 minus 6	three
+math	grade1	problem	9-6	3
+math	grade1	fact	9 minus 7	two
+math	grade1	problem	9-7	2
+math	grade1	fact	9 minus 8	one
+math	grade1	problem	9-8	1
+math	grade1	fact	9 minus 9	zero
+math	grade1	problem	9-9	0
+math	kindergarten	fact	10 plus 0	ten
+math	kindergarten	problem	10+0	10
+math	grade1	fact	10 plus 1	eleven
+math	grade1	problem	10+1	11
+math	grade1	fact	10 plus 2	twelve
+math	grade1	problem	10+2	12
+math	grade1	fact	10 plus 3	thirteen
+math	grade1	problem	10+3	13
+math	grade1	fact	10 plus 4	fourteen
+math	grade1	problem	10+4	14
+math	grade1	fact	10 plus 5	fifteen
+math	grade1	problem	10+5	15
+math	grade1	fact	10 plus 6	sixteen
+math	grade1	problem	10+6	16
+math	grade1	fact	10 plus 7	seventeen
+math	grade1	problem	10+7	17
+math	grade1	fact	10 plus 8	eighteen
+math	grade1	problem	10+8	18
+math	grade1	fact	10 plus 9	nineteen
+math	grade1	problem	10+9	19
+math	grade1	fact	10 plus 10	twenty
+math	grade1	problem	10+10	20
+math	grade1	fact	10 minus 0	ten
+math	grade1	problem	10-0	10
+math	grade1	fact	10 minus 1	nine
+math	grade1	problem	10-1	9
+math	grade1	fact	10 minus 2	eight
+math	grade1	problem	10-2	8
+math	grade1	fact	10 minus 3	seven
+math	grade1	problem	10-3	7
+math	grade1	fact	10 minus 4	six
+math	grade1	problem	10-4	6
+math	grade1	fact	10 minus 5	five
+math	grade1	problem	10-5	5
+math	grade1	fact	10 minus 6	four
+math	grade1	problem	10-6	4
+math	grade1	fact	10 minus 7	three
+math	grade1	problem	10-7	3
+math	grade1	fact	10 minus 8	two
+math	grade1	problem	10-8	2
+math	grade1	fact	10 minus 9	one
+math	grade1	problem	10-9	1
+math	grade1	fact	10 minus 10	zero
+math	grade1	problem	10-10	0
+math	kindergarten	fact	make ten with 0	ten
+math	kindergarten	fact	make ten with 1	nine
+math	kindergarten	fact	make ten with 2	eight
+math	kindergarten	fact	make ten with 3	seven
+math	kindergarten	fact	make ten with 4	six
+math	kindergarten	fact	make ten with 5	five
+math	grade1	fact	make ten with 6	four
+math	grade1	fact	make ten with 7	three
+math	grade1	fact	make ten with 8	two
+math	grade1	fact	make ten with 9	one
+math	grade1	fact	make ten with 10	zero
+math	grade1	fact	tens in 10	1
+math	grade2	fact	1 tens equals	10
+math	grade1	fact	tens in 20	2
+math	grade2	fact	2 tens equals	20
+math	grade1	fact	tens in 30	3
+math	grade2	fact	3 tens equals	30
+math	grade1	fact	tens in 40	4
+math	grade2	fact	4 tens equals	40
+math	grade1	fact	tens in 50	5
+math	grade2	fact	5 tens equals	50
+math	grade1	fact	tens in 60	6
+math	grade2	fact	6 tens equals	60
+math	grade1	fact	tens in 70	7
+math	grade2	fact	7 tens equals	70
+math	grade1	fact	tens in 80	8
+math	grade2	fact	8 tens equals	80
+math	grade1	fact	tens in 90	9
+math	grade2	fact	9 tens equals	90
+math	grade2	fact	10 plus 1	11
+math	grade2	problem	10+1	11
+math	grade2	fact	10 minus 1	9
+math	grade2	fact	10 plus 5	15
+math	grade2	problem	10+5	15
+math	grade2	fact	10 minus 5	5
+math	grade2	fact	10 plus 10	20
+math	grade2	problem	10+10	20
+math	grade2	fact	10 minus 10	0
+math	grade2	fact	10 plus 12	22
+math	grade2	problem	10+12	22
+math	grade2	fact	17 plus 1	18
+math	grade2	problem	17+1	18
+math	grade2	fact	17 minus 1	16
+math	grade2	fact	17 plus 5	22
+math	grade2	problem	17+5	22
+math	grade2	fact	17 minus 5	12
+math	grade2	fact	17 plus 10	27
+math	grade2	problem	17+10	27
+math	grade2	fact	17 minus 10	7
+math	grade2	fact	17 plus 12	29
+math	grade2	problem	17+12	29
+math	grade2	fact	17 minus 12	5
+math	grade2	fact	24 plus 1	25
+math	grade2	problem	24+1	25
+math	grade2	fact	24 minus 1	23
+math	grade2	fact	24 plus 5	29
+math	grade2	problem	24+5	29
+math	grade2	fact	24 minus 5	19
+math	grade2	fact	24 plus 10	34
+math	grade2	problem	24+10	34
+math	grade2	fact	24 minus 10	14
+math	grade2	fact	24 plus 12	36
+math	grade2	problem	24+12	36
+math	grade2	fact	24 minus 12	12
+math	grade2	fact	31 plus 1	32
+math	grade2	problem	31+1	32
+math	grade2	fact	31 minus 1	30
+math	grade2	fact	31 plus 5	36
+math	grade2	problem	31+5	36
+math	grade2	fact	31 minus 5	26
+math	grade2	fact	31 plus 10	41
+math	grade2	problem	31+10	41
+math	grade2	fact	31 minus 10	21
+math	grade2	fact	31 plus 12	43
+math	grade2	problem	31+12	43
+math	grade2	fact	31 minus 12	19
+math	grade2	fact	38 plus 1	39
+math	grade2	problem	38+1	39
+math	grade2	fact	38 minus 1	37
+math	grade2	fact	38 plus 5	43
+math	grade2	problem	38+5	43
+math	grade2	fact	38 minus 5	33
+math	grade2	fact	38 plus 10	48
+math	grade2	problem	38+10	48
+math	grade2	fact	38 minus 10	28
+math	grade2	fact	38 plus 12	50
+math	grade2	problem	38+12	50
+math	grade2	fact	38 minus 12	26
+math	grade2	fact	45 plus 1	46
+math	grade2	problem	45+1	46
+math	grade2	fact	45 minus 1	44
+math	grade2	fact	45 plus 5	50
+math	grade2	problem	45+5	50
+math	grade2	fact	45 minus 5	40
+math	grade2	fact	45 plus 10	55
+math	grade2	problem	45+10	55
+math	grade2	fact	45 minus 10	35
+math	grade2	fact	45 plus 12	57
+math	grade2	problem	45+12	57
+math	grade2	fact	45 minus 12	33
+math	grade2	fact	52 plus 1	53
+math	grade2	problem	52+1	53
+math	grade2	fact	52 minus 1	51
+math	grade2	fact	52 plus 5	57
+math	grade2	problem	52+5	57
+math	grade2	fact	52 minus 5	47
+math	grade2	fact	52 plus 10	62
+math	grade2	problem	52+10	62
+math	grade2	fact	52 minus 10	42
+math	grade2	fact	52 plus 12	64
+math	grade2	problem	52+12	64
+math	grade2	fact	52 minus 12	40
+math	grade2	fact	59 plus 1	60
+math	grade2	problem	59+1	60
+math	grade2	fact	59 minus 1	58
+math	grade2	fact	59 plus 5	64
+math	grade2	problem	59+5	64
+math	grade2	fact	59 minus 5	54
+math	grade2	fact	59 plus 10	69
+math	grade2	problem	59+10	69
+math	grade2	fact	59 minus 10	49
+math	grade2	fact	59 plus 12	71
+math	grade2	problem	59+12	71
+math	grade2	fact	59 minus 12	47
+math	grade2	fact	66 plus 1	67
+math	grade2	problem	66+1	67
+math	grade2	fact	66 minus 1	65
+math	grade2	fact	66 plus 5	71
+math	grade2	problem	66+5	71
+math	grade2	fact	66 minus 5	61
+math	grade2	fact	66 plus 10	76
+math	grade2	problem	66+10	76
+math	grade2	fact	66 minus 10	56
+math	grade2	fact	66 plus 12	78
+math	grade2	problem	66+12	78
+math	grade2	fact	66 minus 12	54
+math	grade2	fact	73 plus 1	74
+math	grade2	problem	73+1	74
+math	grade2	fact	73 minus 1	72
+math	grade2	fact	73 plus 5	78
+math	grade2	problem	73+5	78
+math	grade2	fact	73 minus 5	68
+math	grade2	fact	73 plus 10	83
+math	grade2	problem	73+10	83
+math	grade2	fact	73 minus 10	63
+math	grade2	fact	73 plus 12	85
+math	grade2	problem	73+12	85
+math	grade2	fact	73 minus 12	61
+math	grade2	fact	80 plus 1	81
+math	grade2	problem	80+1	81
+math	grade2	fact	80 minus 1	79
+math	grade2	fact	80 plus 5	85
+math	grade2	problem	80+5	85
+math	grade2	fact	80 minus 5	75
+math	grade2	fact	80 plus 10	90
+math	grade2	problem	80+10	90
+math	grade2	fact	80 minus 10	70
+math	grade2	fact	80 plus 12	92
+math	grade2	problem	80+12	92
+math	grade2	fact	80 minus 12	68
+math	grade2	fact	87 plus 1	88
+math	grade2	problem	87+1	88
+math	grade2	fact	87 minus 1	86
+math	grade2	fact	87 plus 5	92
+math	grade2	problem	87+5	92
+math	grade2	fact	87 minus 5	82
+math	grade2	fact	87 plus 10	97
+math	grade2	problem	87+10	97
+math	grade2	fact	87 minus 10	77
+math	grade2	fact	87 plus 12	99
+math	grade2	problem	87+12	99
+math	grade2	fact	87 minus 12	75
+math	grade2	fact	94 plus 1	95
+math	grade2	problem	94+1	95
+math	grade2	fact	94 minus 1	93
+math	grade2	fact	94 plus 5	99
+math	grade2	problem	94+5	99
+math	grade2	fact	94 minus 5	89
+math	grade2	fact	94 minus 10	84
+math	grade2	fact	94 minus 12	82
+math	grade2	fact	0 times 0	0
+math	grade2	problem	0x0	0
+math	grade2	fact	0 times 1	0
+math	grade2	problem	0x1	0
+math	grade2	fact	0 times 2	0
+math	grade2	problem	0x2	0
+math	grade2	fact	0 times 3	0
+math	grade2	problem	0x3	0
+math	grade2	fact	0 times 4	0
+math	grade2	problem	0x4	0
+math	grade2	fact	0 times 5	0
+math	grade2	problem	0x5	0
+math	grade3	fact	0 times 6	0
+math	grade3	problem	0x6	0
+math	grade3	fact	0 times 7	0
+math	grade3	problem	0x7	0
+math	grade3	fact	0 times 8	0
+math	grade3	problem	0x8	0
+math	grade3	fact	0 times 9	0
+math	grade3	problem	0x9	0
+math	grade3	fact	0 times 10	0
+math	grade3	problem	0x10	0
+math	grade4	fact	0 times 11	0
+math	grade4	problem	0x11	0
+math	grade4	fact	0 times 12	0
+math	grade4	problem	0x12	0
+math	grade2	fact	1 times 0	0
+math	grade2	problem	1x0	0
+math	grade2	fact	1 times 1	1
+math	grade2	problem	1x1	1
+math	grade2	fact	1 times 2	2
+math	grade2	problem	1x2	2
+math	grade2	fact	1 times 3	3
+math	grade2	problem	1x3	3
+math	grade2	fact	1 times 4	4
+math	grade2	problem	1x4	4
+math	grade2	fact	1 times 5	5
+math	grade2	problem	1x5	5
+math	grade3	fact	1 times 6	6
+math	grade3	problem	1x6	6
+math	grade3	fact	1 times 7	7
+math	grade3	problem	1x7	7
+math	grade3	fact	1 times 8	8
+math	grade3	problem	1x8	8
+math	grade3	fact	1 times 9	9
+math	grade3	problem	1x9	9
+math	grade3	fact	1 times 10	10
+math	grade3	problem	1x10	10
+math	grade4	fact	1 times 11	11
+math	grade4	problem	1x11	11
+math	grade4	fact	1 times 12	12
+math	grade4	problem	1x12	12
+math	grade2	fact	2 times 0	0
+math	grade2	problem	2x0	0
+math	grade2	fact	2 times 1	2
+math	grade2	problem	2x1	2
+math	grade2	fact	2 times 2	4
+math	grade2	problem	2x2	4
+math	grade2	fact	2 times 3	6
+math	grade2	problem	2x3	6
+math	grade2	fact	2 times 4	8
+math	grade2	problem	2x4	8
+math	grade2	fact	2 times 5	10
+math	grade2	problem	2x5	10
+math	grade3	fact	2 times 6	12
+math	grade3	problem	2x6	12
+math	grade3	fact	2 times 7	14
+math	grade3	problem	2x7	14
+math	grade3	fact	2 times 8	16
+math	grade3	problem	2x8	16
+math	grade3	fact	2 times 9	18
+math	grade3	problem	2x9	18
+math	grade3	fact	2 times 10	20
+math	grade3	problem	2x10	20
+math	grade4	fact	2 times 11	22
+math	grade4	problem	2x11	22
+math	grade4	fact	2 times 12	24
+math	grade4	problem	2x12	24
+math	grade2	fact	3 times 0	0
+math	grade2	problem	3x0	0
+math	grade2	fact	3 times 1	3
+math	grade2	problem	3x1	3
+math	grade2	fact	3 times 2	6
+math	grade2	problem	3x2	6
+math	grade2	fact	3 times 3	9
+math	grade2	problem	3x3	9
+math	grade2	fact	3 times 4	12
+math	grade2	problem	3x4	12
+math	grade2	fact	3 times 5	15
+math	grade2	problem	3x5	15
+math	grade3	fact	3 times 6	18
+math	grade3	problem	3x6	18
+math	grade3	fact	3 times 7	21
+math	grade3	problem	3x7	21
+math	grade3	fact	3 times 8	24
+math	grade3	problem	3x8	24
+math	grade3	fact	3 times 9	27
+math	grade3	problem	3x9	27
+math	grade3	fact	3 times 10	30
+math	grade3	problem	3x10	30
+math	grade4	fact	3 times 11	33
+math	grade4	problem	3x11	33
+math	grade4	fact	3 times 12	36
+math	grade4	problem	3x12	36
+math	grade2	fact	4 times 0	0
+math	grade2	problem	4x0	0
+math	grade2	fact	4 times 1	4
+math	grade2	problem	4x1	4
+math	grade2	fact	4 times 2	8
+math	grade2	problem	4x2	8
+math	grade2	fact	4 times 3	12
+math	grade2	problem	4x3	12
+math	grade2	fact	4 times 4	16
+math	grade2	problem	4x4	16
+math	grade2	fact	4 times 5	20
+math	grade2	problem	4x5	20
+math	grade3	fact	4 times 6	24
+math	grade3	problem	4x6	24
+math	grade3	fact	4 times 7	28
+math	grade3	problem	4x7	28
+math	grade3	fact	4 times 8	32
+math	grade3	problem	4x8	32
+math	grade3	fact	4 times 9	36
+math	grade3	problem	4x9	36
+math	grade3	fact	4 times 10	40
+math	grade3	problem	4x10	40
+math	grade4	fact	4 times 11	44
+math	grade4	problem	4x11	44
+math	grade4	fact	4 times 12	48
+math	grade4	problem	4x12	48
+math	grade2	fact	5 times 0	0
+math	grade2	problem	5x0	0
+math	grade2	fact	5 times 1	5
+math	grade2	problem	5x1	5
+math	grade2	fact	5 times 2	10
+math	grade2	problem	5x2	10
+math	grade2	fact	5 times 3	15
+math	grade2	problem	5x3	15
+math	grade2	fact	5 times 4	20
+math	grade2	problem	5x4	20
+math	grade2	fact	5 times 5	25
+math	grade2	problem	5x5	25
+math	grade3	fact	5 times 6	30
+math	grade3	problem	5x6	30
+math	grade3	fact	5 times 7	35
+math	grade3	problem	5x7	35
+math	grade3	fact	5 times 8	40
+math	grade3	problem	5x8	40
+math	grade3	fact	5 times 9	45
+math	grade3	problem	5x9	45
+math	grade3	fact	5 times 10	50
+math	grade3	problem	5x10	50
+math	grade4	fact	5 times 11	55
+math	grade4	problem	5x11	55
+math	grade4	fact	5 times 12	60
+math	grade4	problem	5x12	60
+math	grade3	fact	6 times 0	0
+math	grade3	problem	6x0	0
+math	grade3	fact	6 times 1	6
+math	grade3	problem	6x1	6
+math	grade3	fact	6 times 2	12
+math	grade3	problem	6x2	12
+math	grade3	fact	6 times 3	18
+math	grade3	problem	6x3	18
+math	grade3	fact	6 times 4	24
+math	grade3	problem	6x4	24
+math	grade3	fact	6 times 5	30
+math	grade3	problem	6x5	30
+math	grade3	fact	6 times 6	36
+math	grade3	problem	6x6	36
+math	grade3	fact	6 times 7	42
+math	grade3	problem	6x7	42
+math	grade3	fact	6 times 8	48
+math	grade3	problem	6x8	48
+math	grade3	fact	6 times 9	54
+math	grade3	problem	6x9	54
+math	grade3	fact	6 times 10	60
+math	grade3	problem	6x10	60
+math	grade4	fact	6 times 11	66
+math	grade4	problem	6x11	66
+math	grade4	fact	6 times 12	72
+math	grade4	problem	6x12	72
+math	grade3	fact	7 times 0	0
+math	grade3	problem	7x0	0
+math	grade3	fact	7 times 1	7
+math	grade3	problem	7x1	7
+math	grade3	fact	7 times 2	14
+math	grade3	problem	7x2	14
+math	grade3	fact	7 times 3	21
+math	grade3	problem	7x3	21
+math	grade3	fact	7 times 4	28
+math	grade3	problem	7x4	28
+math	grade3	fact	7 times 5	35
+math	grade3	problem	7x5	35
+math	grade3	fact	7 times 6	42
+math	grade3	problem	7x6	42
+math	grade3	fact	7 times 7	49
+math	grade3	problem	7x7	49
+math	grade3	fact	7 times 8	56
+math	grade3	problem	7x8	56
+math	grade3	fact	7 times 9	63
+math	grade3	problem	7x9	63
+math	grade3	fact	7 times 10	70
+math	grade3	problem	7x10	70
+math	grade4	fact	7 times 11	77
+math	grade4	problem	7x11	77
+math	grade4	fact	7 times 12	84
+math	grade4	problem	7x12	84
+math	grade3	fact	8 times 0	0
+math	grade3	problem	8x0	0
+math	grade3	fact	8 times 1	8
+math	grade3	problem	8x1	8
+math	grade3	fact	8 times 2	16
+math	grade3	problem	8x2	16
+math	grade3	fact	8 times 3	24
+math	grade3	problem	8x3	24
+math	grade3	fact	8 times 4	32
+math	grade3	problem	8x4	32
+math	grade3	fact	8 times 5	40
+math	grade3	problem	8x5	40
+math	grade3	fact	8 times 6	48
+math	grade3	problem	8x6	48
+math	grade3	fact	8 times 7	56
+math	grade3	problem	8x7	56
+math	grade3	fact	8 times 8	64
+math	grade3	problem	8x8	64
+math	grade3	fact	8 times 9	72
+math	grade3	problem	8x9	72
+math	grade3	fact	8 times 10	80
+math	grade3	problem	8x10	80
+math	grade4	fact	8 times 11	88
+math	grade4	problem	8x11	88
+math	grade4	fact	8 times 12	96
+math	grade4	problem	8x12	96
+math	grade3	fact	9 times 0	0
+math	grade3	problem	9x0	0
+math	grade3	fact	9 times 1	9
+math	grade3	problem	9x1	9
+math	grade3	fact	9 times 2	18
+math	grade3	problem	9x2	18
+math	grade3	fact	9 times 3	27
+math	grade3	problem	9x3	27
+math	grade3	fact	9 times 4	36
+math	grade3	problem	9x4	36
+math	grade3	fact	9 times 5	45
+math	grade3	problem	9x5	45
+math	grade3	fact	9 times 6	54
+math	grade3	problem	9x6	54
+math	grade3	fact	9 times 7	63
+math	grade3	problem	9x7	63
+math	grade3	fact	9 times 8	72
+math	grade3	problem	9x8	72
+math	grade3	fact	9 times 9	81
+math	grade3	problem	9x9	81
+math	grade3	fact	9 times 10	90
+math	grade3	problem	9x10	90
+math	grade4	fact	9 times 11	99
+math	grade4	problem	9x11	99
+math	grade4	fact	9 times 12	108
+math	grade4	problem	9x12	108
+math	grade3	fact	10 times 0	0
+math	grade3	problem	10x0	0
+math	grade3	fact	10 times 1	10
+math	grade3	problem	10x1	10
+math	grade3	fact	10 times 2	20
+math	grade3	problem	10x2	20
+math	grade3	fact	10 times 3	30
+math	grade3	problem	10x3	30
+math	grade3	fact	10 times 4	40
+math	grade3	problem	10x4	40
+math	grade3	fact	10 times 5	50
+math	grade3	problem	10x5	50
+math	grade3	fact	10 times 6	60
+math	grade3	problem	10x6	60
+math	grade3	fact	10 times 7	70
+math	grade3	problem	10x7	70
+math	grade3	fact	10 times 8	80
+math	grade3	problem	10x8	80
+math	grade3	fact	10 times 9	90
+math	grade3	problem	10x9	90
+math	grade3	fact	10 times 10	100
+math	grade3	problem	10x10	100
+math	grade4	fact	10 times 11	110
+math	grade4	problem	10x11	110
+math	grade4	fact	10 times 12	120
+math	grade4	problem	10x12	120
+math	grade4	fact	11 times 0	0
+math	grade4	problem	11x0	0
+math	grade4	fact	11 times 1	11
+math	grade4	problem	11x1	11
+math	grade4	fact	11 times 2	22
+math	grade4	problem	11x2	22
+math	grade4	fact	11 times 3	33
+math	grade4	problem	11x3	33
+math	grade4	fact	11 times 4	44
+math	grade4	problem	11x4	44
+math	grade4	fact	11 times 5	55
+math	grade4	problem	11x5	55
+math	grade4	fact	11 times 6	66
+math	grade4	problem	11x6	66
+math	grade4	fact	11 times 7	77
+math	grade4	problem	11x7	77
+math	grade4	fact	11 times 8	88
+math	grade4	problem	11x8	88
+math	grade4	fact	11 times 9	99
+math	grade4	problem	11x9	99
+math	grade4	fact	11 times 10	110
+math	grade4	problem	11x10	110
+math	grade4	fact	11 times 11	121
+math	grade4	problem	11x11	121
+math	grade4	fact	11 times 12	132
+math	grade4	problem	11x12	132
+math	grade4	fact	12 times 0	0
+math	grade4	problem	12x0	0
+math	grade4	fact	12 times 1	12
+math	grade4	problem	12x1	12
+math	grade4	fact	12 times 2	24
+math	grade4	problem	12x2	24
+math	grade4	fact	12 times 3	36
+math	grade4	problem	12x3	36
+math	grade4	fact	12 times 4	48
+math	grade4	problem	12x4	48
+math	grade4	fact	12 times 5	60
+math	grade4	problem	12x5	60
+math	grade4	fact	12 times 6	72
+math	grade4	problem	12x6	72
+math	grade4	fact	12 times 7	84
+math	grade4	problem	12x7	84
+math	grade4	fact	12 times 8	96
+math	grade4	problem	12x8	96
+math	grade4	fact	12 times 9	108
+math	grade4	problem	12x9	108
+math	grade4	fact	12 times 10	120
+math	grade4	problem	12x10	120
+math	grade4	fact	12 times 11	132
+math	grade4	problem	12x11	132
+math	grade4	fact	12 times 12	144
+math	grade4	problem	12x12	144
+math	grade3	fact	0 divided by 1	0
+math	grade3	problem	0/1	0
+math	grade3	fact	0 divided by 2	0
+math	grade3	problem	0/2	0
+math	grade3	fact	0 divided by 3	0
+math	grade3	problem	0/3	0
+math	grade3	fact	0 divided by 4	0
+math	grade3	problem	0/4	0
+math	grade3	fact	0 divided by 5	0
+math	grade3	problem	0/5	0
+math	grade3	fact	0 divided by 6	0
+math	grade3	problem	0/6	0
+math	grade3	fact	0 divided by 7	0
+math	grade3	problem	0/7	0
+math	grade3	fact	0 divided by 8	0
+math	grade3	problem	0/8	0
+math	grade3	fact	0 divided by 9	0
+math	grade3	problem	0/9	0
+math	grade3	fact	0 divided by 10	0
+math	grade3	problem	0/10	0
+math	grade3	fact	1 divided by 1	1
+math	grade3	problem	1/1	1
+math	grade3	fact	2 divided by 2	1
+math	grade3	problem	2/2	1
+math	grade3	fact	3 divided by 3	1
+math	grade3	problem	3/3	1
+math	grade3	fact	4 divided by 4	1
+math	grade3	problem	4/4	1
+math	grade3	fact	5 divided by 5	1
+math	grade3	problem	5/5	1
+math	grade3	fact	6 divided by 6	1
+math	grade3	problem	6/6	1
+math	grade3	fact	7 divided by 7	1
+math	grade3	problem	7/7	1
+math	grade3	fact	8 divided by 8	1
+math	grade3	problem	8/8	1
+math	grade3	fact	9 divided by 9	1
+math	grade3	problem	9/9	1
+math	grade3	fact	10 divided by 10	1
+math	grade3	problem	10/10	1
+math	grade3	fact	2 divided by 1	2
+math	grade3	problem	2/1	2
+math	grade3	fact	4 divided by 2	2
+math	grade3	problem	4/2	2
+math	grade3	fact	6 divided by 3	2
+math	grade3	problem	6/3	2
+math	grade3	fact	8 divided by 4	2
+math	grade3	problem	8/4	2
+math	grade3	fact	10 divided by 5	2
+math	grade3	problem	10/5	2
+math	grade3	fact	12 divided by 6	2
+math	grade3	problem	12/6	2
+math	grade3	fact	14 divided by 7	2
+math	grade3	problem	14/7	2
+math	grade3	fact	16 divided by 8	2
+math	grade3	problem	16/8	2
+math	grade3	fact	18 divided by 9	2
+math	grade3	problem	18/9	2
+math	grade3	fact	20 divided by 10	2
+math	grade3	problem	20/10	2
+math	grade3	fact	3 divided by 1	3
+math	grade3	problem	3/1	3
+math	grade3	fact	6 divided by 2	3
+math	grade3	problem	6/2	3
+math	grade3	fact	9 divided by 3	3
+math	grade3	problem	9/3	3
+math	grade3	fact	12 divided by 4	3
+math	grade3	problem	12/4	3
+math	grade3	fact	15 divided by 5	3
+math	grade3	problem	15/5	3
+math	grade3	fact	18 divided by 6	3
+math	grade3	problem	18/6	3
+math	grade3	fact	21 divided by 7	3
+math	grade3	problem	21/7	3
+math	grade3	fact	24 divided by 8	3
+math	grade3	problem	24/8	3
+math	grade3	fact	27 divided by 9	3
+math	grade3	problem	27/9	3
+math	grade3	fact	30 divided by 10	3
+math	grade3	problem	30/10	3
+math	grade3	fact	4 divided by 1	4
+math	grade3	problem	4/1	4
+math	grade3	fact	8 divided by 2	4
+math	grade3	problem	8/2	4
+math	grade3	fact	12 divided by 3	4
+math	grade3	problem	12/3	4
+math	grade3	fact	16 divided by 4	4
+math	grade3	problem	16/4	4
+math	grade3	fact	20 divided by 5	4
+math	grade3	problem	20/5	4
+math	grade3	fact	24 divided by 6	4
+math	grade3	problem	24/6	4
+math	grade3	fact	28 divided by 7	4
+math	grade3	problem	28/7	4
+math	grade3	fact	32 divided by 8	4
+math	grade3	problem	32/8	4
+math	grade3	fact	36 divided by 9	4
+math	grade3	problem	36/9	4
+math	grade3	fact	40 divided by 10	4
+math	grade3	problem	40/10	4
+math	grade3	fact	5 divided by 1	5
+math	grade3	problem	5/1	5
+math	grade3	fact	10 divided by 2	5
+math	grade3	problem	10/2	5
+math	grade3	fact	15 divided by 3	5
+math	grade3	problem	15/3	5
+math	grade3	fact	20 divided by 4	5
+math	grade3	problem	20/4	5
+math	grade3	fact	25 divided by 5	5
+math	grade3	problem	25/5	5
+math	grade3	fact	30 divided by 6	5
+math	grade3	problem	30/6	5
+math	grade3	fact	35 divided by 7	5
+math	grade3	problem	35/7	5
+math	grade3	fact	40 divided by 8	5
+math	grade3	problem	40/8	5
+math	grade3	fact	45 divided by 9	5
+math	grade3	problem	45/9	5
+math	grade3	fact	50 divided by 10	5
+math	grade3	problem	50/10	5
+math	grade3	fact	6 divided by 1	6
+math	grade3	problem	6/1	6
+math	grade3	fact	12 divided by 2	6
+math	grade3	problem	12/2	6
+math	grade3	fact	18 divided by 3	6
+math	grade3	problem	18/3	6
+math	grade3	fact	24 divided by 4	6
+math	grade3	problem	24/4	6
+math	grade3	fact	30 divided by 5	6
+math	grade3	problem	30/5	6
+math	grade3	fact	36 divided by 6	6
+math	grade3	problem	36/6	6
+math	grade3	fact	42 divided by 7	6
+math	grade3	problem	42/7	6
+math	grade3	fact	48 divided by 8	6
+math	grade3	problem	48/8	6
+math	grade4	fact	54 divided by 9	6
+math	grade4	problem	54/9	6
+math	grade4	fact	60 divided by 10	6
+math	grade4	problem	60/10	6
+math	grade3	fact	7 divided by 1	7
+math	grade3	problem	7/1	7
+math	grade3	fact	14 divided by 2	7
+math	grade3	problem	14/2	7
+math	grade3	fact	21 divided by 3	7
+math	grade3	problem	21/3	7
+math	grade3	fact	28 divided by 4	7
+math	grade3	problem	28/4	7
+math	grade3	fact	35 divided by 5	7
+math	grade3	problem	35/5	7
+math	grade3	fact	42 divided by 6	7
+math	grade3	problem	42/6	7
+math	grade3	fact	49 divided by 7	7
+math	grade3	problem	49/7	7
+math	grade4	fact	56 divided by 8	7
+math	grade4	problem	56/8	7
+math	grade4	fact	63 divided by 9	7
+math	grade4	problem	63/9	7
+math	grade4	fact	70 divided by 10	7
+math	grade4	problem	70/10	7
+math	grade3	fact	8 divided by 1	8
+math	grade3	problem	8/1	8
+math	grade3	fact	16 divided by 2	8
+math	grade3	problem	16/2	8
+math	grade3	fact	24 divided by 3	8
+math	grade3	problem	24/3	8
+math	grade3	fact	32 divided by 4	8
+math	grade3	problem	32/4	8
+math	grade3	fact	40 divided by 5	8
+math	grade3	problem	40/5	8
+math	grade3	fact	48 divided by 6	8
+math	grade3	problem	48/6	8
+math	grade4	fact	56 divided by 7	8
+math	grade4	problem	56/7	8
+math	grade4	fact	64 divided by 8	8
+math	grade4	problem	64/8	8
+math	grade4	fact	72 divided by 9	8
+math	grade4	problem	72/9	8
+math	grade4	fact	80 divided by 10	8
+math	grade4	problem	80/10	8
+math	grade3	fact	9 divided by 1	9
+math	grade3	problem	9/1	9
+math	grade3	fact	18 divided by 2	9
+math	grade3	problem	18/2	9
+math	grade3	fact	27 divided by 3	9
+math	grade3	problem	27/3	9
+math	grade3	fact	36 divided by 4	9
+math	grade3	problem	36/4	9
+math	grade3	fact	45 divided by 5	9
+math	grade3	problem	45/5	9
+math	grade4	fact	54 divided by 6	9
+math	grade4	problem	54/6	9
+math	grade4	fact	63 divided by 7	9
+math	grade4	problem	63/7	9
+math	grade4	fact	72 divided by 8	9
+math	grade4	problem	72/8	9
+math	grade4	fact	81 divided by 9	9
+math	grade4	problem	81/9	9
+math	grade4	fact	90 divided by 10	9
+math	grade4	problem	90/10	9
+math	grade3	fact	10 divided by 1	10
+math	grade3	problem	10/1	10
+math	grade3	fact	20 divided by 2	10
+math	grade3	problem	20/2	10
+math	grade3	fact	30 divided by 3	10
+math	grade3	problem	30/3	10
+math	grade3	fact	40 divided by 4	10
+math	grade3	problem	40/4	10
+math	grade3	fact	50 divided by 5	10
+math	grade3	problem	50/5	10
+math	grade4	fact	60 divided by 6	10
+math	grade4	problem	60/6	10
+math	grade4	fact	70 divided by 7	10
+math	grade4	problem	70/7	10
+math	grade4	fact	80 divided by 8	10
+math	grade4	problem	80/8	10
+math	grade4	fact	90 divided by 9	10
+math	grade4	problem	90/9	10
+math	grade4	fact	100 divided by 10	10
+math	grade4	problem	100/10	10
+math	grade3	fact	1/2 is	half
+math	grade3	problem	fraction 1 over 2	half
+math	grade3	fact	1/3 is	third
+math	grade3	problem	fraction 1 over 3	third
+math	grade3	fact	1/4 is	fourth
+math	grade3	problem	fraction 1 over 4	fourth
+math	grade3	fact	2/4 is	half
+math	grade3	problem	fraction 2 over 4	half
+math	grade3	fact	3/4 is	three-fourths
+math	grade3	problem	fraction 3 over 4	three-fourths
+math	grade4	fact	1/5 is	fifth
+math	grade4	problem	fraction 1 over 5	fifth
+math	grade4	fact	2/5 is	two-fifths
+math	grade4	problem	fraction 2 over 5	two-fifths
+math	grade4	fact	1/10 is	tenth
+math	grade4	problem	fraction 1 over 10	tenth
+math	grade4	fact	decimal 0.5 is	half
+math	grade4	fact	decimal 0.25 is	fourth
+math	grade4	fact	decimal 0.1 is	tenth
+math	grade4	fact	decimal 1.5 is	one-point-five
+math	grade4	fact	decimal 0.75 is	three-fourths
+math	grade4	fact	decimal 0.2 is	fifth
+math	grade4	fact	decimal 2.5 is	two-point-five
+math	grade5	fact	0.5 plus 0.25	0.75
+math	grade5	fact	0.5 minus 0.25	0.25
+math	grade5	fact	0.5 plus 0.5	1.0
+math	grade5	fact	0.5 minus 0.5	0.0
+math	grade5	fact	0.5 plus 1.0	1.5
+math	grade5	fact	0.5 plus 1.5	2.0
+math	grade5	fact	0.5 plus 2.25	2.75
+math	grade5	fact	1.0 plus 0.25	1.25
+math	grade5	fact	1.0 minus 0.25	0.75
+math	grade5	fact	1.0 plus 0.5	1.5
+math	grade5	fact	1.0 minus 0.5	0.5
+math	grade5	fact	1.0 plus 1.0	2.0
+math	grade5	fact	1.0 minus 1.0	0.0
+math	grade5	fact	1.0 plus 1.5	2.5
+math	grade5	fact	1.0 plus 2.25	3.25
+math	grade5	fact	1.5 plus 0.25	1.75
+math	grade5	fact	1.5 minus 0.25	1.25
+math	grade5	fact	1.5 plus 0.5	2.0
+math	grade5	fact	1.5 minus 0.5	1.0
+math	grade5	fact	1.5 plus 1.0	2.5
+math	grade5	fact	1.5 minus 1.0	0.5
+math	grade5	fact	1.5 plus 1.5	3.0
+math	grade5	fact	1.5 minus 1.5	0.0
+math	grade5	fact	1.5 plus 2.25	3.75
+math	grade5	fact	2.0 plus 0.25	2.25
+math	grade5	fact	2.0 minus 0.25	1.75
+math	grade5	fact	2.0 plus 0.5	2.5
+math	grade5	fact	2.0 minus 0.5	1.5
+math	grade5	fact	2.0 plus 1.0	3.0
+math	grade5	fact	2.0 minus 1.0	1.0
+math	grade5	fact	2.0 plus 1.5	3.5
+math	grade5	fact	2.0 minus 1.5	0.5
+math	grade5	fact	2.0 plus 2.25	4.25
+math	grade5	fact	2.5 plus 0.25	2.75
+math	grade5	fact	2.5 minus 0.25	2.25
+math	grade5	fact	2.5 plus 0.5	3.0
+math	grade5	fact	2.5 minus 0.5	2.0
+math	grade5	fact	2.5 plus 1.0	3.5
+math	grade5	fact	2.5 minus 1.0	1.5
+math	grade5	fact	2.5 plus 1.5	4.0
+math	grade5	fact	2.5 minus 1.5	1.0
+math	grade5	fact	2.5 plus 2.25	4.75
+math	grade5	fact	2.5 minus 2.25	0.25
+math	grade5	fact	3.25 plus 0.25	3.5
+math	grade5	fact	3.25 minus 0.25	3.0
+math	grade5	fact	3.25 plus 0.5	3.75
+math	grade5	fact	3.25 minus 0.5	2.75
+math	grade5	fact	3.25 plus 1.0	4.25
+math	grade5	fact	3.25 minus 1.0	2.25
+math	grade5	fact	3.25 plus 1.5	4.75
+math	grade5	fact	3.25 minus 1.5	1.75
+math	grade5	fact	3.25 plus 2.25	5.5
+math	grade5	fact	3.25 minus 2.25	1.0
+math	grade5	fact	4.5 plus 0.25	4.75
+math	grade5	fact	4.5 minus 0.25	4.25
+math	grade5	fact	4.5 plus 0.5	5.0
+math	grade5	fact	4.5 minus 0.5	4.0
+math	grade5	fact	4.5 plus 1.0	5.5
+math	grade5	fact	4.5 minus 1.0	3.5
+math	grade5	fact	4.5 plus 1.5	6.0
+math	grade5	fact	4.5 minus 1.5	3.0
+math	grade5	fact	4.5 plus 2.25	6.75
+math	grade5	fact	4.5 minus 2.25	2.25
+math	grade5	fact	5.75 plus 0.25	6.0
+math	grade5	fact	5.75 minus 0.25	5.5
+math	grade5	fact	5.75 plus 0.5	6.25
+math	grade5	fact	5.75 minus 0.5	5.25
+math	grade5	fact	5.75 plus 1.0	6.75
+math	grade5	fact	5.75 minus 1.0	4.75
+math	grade5	fact	5.75 plus 1.5	7.25
+math	grade5	fact	5.75 minus 1.5	4.25
+math	grade5	fact	5.75 plus 2.25	8.0
+math	grade5	fact	5.75 minus 2.25	3.5
+math	grade5	fact	10.1 plus 0.25	10.35
+math	grade5	fact	10.1 minus 0.25	9.85
+math	grade5	fact	10.1 plus 0.5	10.6
+math	grade5	fact	10.1 minus 0.5	9.6
+math	grade5	fact	10.1 plus 1.0	11.1
+math	grade5	fact	10.1 minus 1.0	9.1
+math	grade5	fact	10.1 plus 1.5	11.6
+math	grade5	fact	10.1 minus 1.5	8.6
+math	grade5	fact	10.1 plus 2.25	12.35
+math	grade5	fact	10.1 minus 2.25	7.85
+math	grade5	fact	12.25 plus 0.25	12.5
+math	grade5	fact	12.25 minus 0.25	12.0
+math	grade5	fact	12.25 plus 0.5	12.75
+math	grade5	fact	12.25 minus 0.5	11.75
+math	grade5	fact	12.25 plus 1.0	13.25
+math	grade5	fact	12.25 minus 1.0	11.25
+math	grade5	fact	12.25 plus 1.5	13.75
+math	grade5	fact	12.25 minus 1.5	10.75
+math	grade5	fact	12.25 plus 2.25	14.5
+math	grade5	fact	12.25 minus 2.25	10.0
+math	grade5	fact	2 times 2 long	4
+math	grade5	fact	2 divided by 2 long	1
+math	grade5	fact	2 times 3 long	6
+math	grade5	fact	2 times 4 long	8
+math	grade5	fact	2 times 5 long	10
+math	grade5	fact	2 times 10 long	20
+math	grade5	fact	3 times 2 long	6
+math	grade5	fact	3 times 3 long	9
+math	grade5	fact	3 divided by 3 long	1
+math	grade5	fact	3 times 4 long	12
+math	grade5	fact	3 times 5 long	15
+math	grade5	fact	3 times 10 long	30
+math	grade5	fact	4 times 2 long	8
+math	grade5	fact	4 divided by 2 long	2
+math	grade5	fact	4 times 3 long	12
+math	grade5	fact	4 times 4 long	16
+math	grade5	fact	4 divided by 4 long	1
+math	grade5	fact	4 times 5 long	20
+math	grade5	fact	4 times 10 long	40
+math	grade5	fact	5 times 2 long	10
+math	grade5	fact	5 times 3 long	15
+math	grade5	fact	5 times 4 long	20
+math	grade5	fact	5 times 5 long	25
+math	grade5	fact	5 divided by 5 long	1
+math	grade5	fact	5 times 10 long	50
+math	grade5	fact	6 times 2 long	12
+math	grade5	fact	6 divided by 2 long	3
+math	grade5	fact	6 times 3 long	18
+math	grade5	fact	6 divided by 3 long	2
+math	grade5	fact	6 times 4 long	24
+math	grade5	fact	6 times 5 long	30
+math	grade5	fact	6 times 10 long	60
+math	grade5	fact	7 times 2 long	14
+math	grade5	fact	7 times 3 long	21
+math	grade5	fact	7 times 4 long	28
+math	grade5	fact	7 times 5 long	35
+math	grade5	fact	7 times 10 long	70
+math	grade5	fact	8 times 2 long	16
+math	grade5	fact	8 divided by 2 long	4
+math	grade5	fact	8 times 3 long	24
+math	grade5	fact	8 times 4 long	32
+math	grade5	fact	8 divided by 4 long	2
+math	grade5	fact	8 times 5 long	40
+math	grade5	fact	8 times 10 long	80
+math	grade5	fact	9 times 2 long	18
+math	grade5	fact	9 times 3 long	27
+math	grade5	fact	9 divided by 3 long	3
+math	grade5	fact	9 times 4 long	36
+math	grade5	fact	9 times 5 long	45
+math	grade5	fact	9 times 10 long	90
+math	grade5	fact	10 times 2 long	20
+math	grade5	fact	10 divided by 2 long	5
+math	grade5	fact	10 times 3 long	30
+math	grade5	fact	10 times 4 long	40
+math	grade5	fact	10 times 5 long	50
+math	grade5	fact	10 divided by 5 long	2
+math	grade5	fact	10 times 10 long	100
+math	grade5	fact	10 divided by 10 long	1
+math	grade5	fact	12 times 2 long	24
+math	grade5	fact	12 divided by 2 long	6
+math	grade5	fact	12 times 3 long	36
+math	grade5	fact	12 divided by 3 long	4
+math	grade5	fact	12 times 4 long	48
+math	grade5	fact	12 divided by 4 long	3
+math	grade5	fact	12 times 5 long	60
+math	grade5	fact	12 times 10 long	120
+math	grade5	fact	15 times 2 long	30
+math	grade5	fact	15 times 3 long	45
+math	grade5	fact	15 divided by 3 long	5
+math	grade5	fact	15 times 4 long	60
+math	grade5	fact	15 times 5 long	75
+math	grade5	fact	15 divided by 5 long	3
+math	grade5	fact	15 times 10 long	150
+math	grade5	fact	20 times 2 long	40
+math	grade5	fact	20 divided by 2 long	10
+math	grade5	fact	20 times 3 long	60
+math	grade5	fact	20 times 4 long	80
+math	grade5	fact	20 divided by 4 long	5
+math	grade5	fact	20 times 5 long	100
+math	grade5	fact	20 divided by 5 long	4
+math	grade5	fact	20 times 10 long	200
+math	grade5	fact	20 divided by 10 long	2
+math	grade3	fact	area 2 by 3	6
+math	grade3	fact	perimeter 2 by 3	10
+math	grade3	fact	area 4 by 5	20
+math	grade3	fact	perimeter 4 by 5	18
+math	grade3	fact	area 6 by 7	42
+math	grade3	fact	perimeter 6 by 7	26
+math	grade3	fact	area 10 by 10	100
+math	grade3	fact	perimeter 10 by 10	40
+math	grade6	fact	ratio 1 to 2	1:2
+math	grade6	fact	1 out of 2 as percent	50
+math	grade6	fact	ratio 2 to 3	2:3
+math	grade6	fact	2 out of 3 as percent	66
+math	grade6	fact	ratio 3 to 4	3:4
+math	grade6	fact	3 out of 4 as percent	75
+math	grade6	fact	ratio 1 to 4	1:4
+math	grade6	fact	1 out of 4 as percent	25
+math	grade6	fact	ratio 5 to 10	5:10
+math	grade6	fact	5 out of 10 as percent	50
+math	grade6	fact	integer -5 plus -5	-10
+math	grade6	fact	integer -5 minus -5	0
+math	grade6	fact	integer -5 plus -4	-9
+math	grade6	fact	integer -5 minus -4	-1
+math	grade6	fact	integer -5 plus -3	-8
+math	grade6	fact	integer -5 minus -3	-2
+math	grade6	fact	integer -5 plus -2	-7
+math	grade6	fact	integer -5 minus -2	-3
+math	grade6	fact	integer -5 plus -1	-6
+math	grade6	fact	integer -5 minus -1	-4
+math	grade6	fact	integer -5 plus 0	-5
+math	grade6	fact	integer -5 minus 0	-5
+math	grade6	fact	integer -5 plus 1	-4
+math	grade6	fact	integer -5 minus 1	-6
+math	grade6	fact	integer -5 plus 2	-3
+math	grade6	fact	integer -5 minus 2	-7
+math	grade6	fact	integer -5 plus 3	-2
+math	grade6	fact	integer -5 minus 3	-8
+math	grade6	fact	integer -5 plus 4	-1
+math	grade6	fact	integer -5 minus 4	-9
+math	grade6	fact	integer -5 plus 5	0
+math	grade6	fact	integer -5 minus 5	-10
+math	grade6	fact	integer -4 plus -5	-9
+math	grade6	fact	integer -4 minus -5	1
+math	grade6	fact	integer -4 plus -4	-8
+math	grade6	fact	integer -4 minus -4	0
+math	grade6	fact	integer -4 plus -3	-7
+math	grade6	fact	integer -4 minus -3	-1
+math	grade6	fact	integer -4 plus -2	-6
+math	grade6	fact	integer -4 minus -2	-2
+math	grade6	fact	integer -4 plus -1	-5
+math	grade6	fact	integer -4 minus -1	-3
+math	grade6	fact	integer -4 plus 0	-4
+math	grade6	fact	integer -4 minus 0	-4
+math	grade6	fact	integer -4 plus 1	-3
+math	grade6	fact	integer -4 minus 1	-5
+math	grade6	fact	integer -4 plus 2	-2
+math	grade6	fact	integer -4 minus 2	-6
+math	grade6	fact	integer -4 plus 3	-1
+math	grade6	fact	integer -4 minus 3	-7
+math	grade6	fact	integer -4 plus 4	0
+math	grade6	fact	integer -4 minus 4	-8
+math	grade6	fact	integer -4 plus 5	1
+math	grade6	fact	integer -4 minus 5	-9
+math	grade6	fact	integer -3 plus -5	-8
+math	grade6	fact	integer -3 minus -5	2
+math	grade6	fact	integer -3 plus -4	-7
+math	grade6	fact	integer -3 minus -4	1
+math	grade6	fact	integer -3 plus -3	-6
+math	grade6	fact	integer -3 minus -3	0
+math	grade6	fact	integer -3 plus -2	-5
+math	grade6	fact	integer -3 minus -2	-1
+math	grade6	fact	integer -3 plus -1	-4
+math	grade6	fact	integer -3 minus -1	-2
+math	grade6	fact	integer -3 plus 0	-3
+math	grade6	fact	integer -3 minus 0	-3
+math	grade6	fact	integer -3 plus 1	-2
+math	grade6	fact	integer -3 minus 1	-4
+math	grade6	fact	integer -3 plus 2	-1
+math	grade6	fact	integer -3 minus 2	-5
+math	grade6	fact	integer -3 plus 3	0
+math	grade6	fact	integer -3 minus 3	-6
+math	grade6	fact	integer -3 plus 4	1
+math	grade6	fact	integer -3 minus 4	-7
+math	grade6	fact	integer -3 plus 5	2
+math	grade6	fact	integer -3 minus 5	-8
+math	grade6	fact	integer -2 plus -5	-7
+math	grade6	fact	integer -2 minus -5	3
+math	grade6	fact	integer -2 plus -4	-6
+math	grade6	fact	integer -2 minus -4	2
+math	grade6	fact	integer -2 plus -3	-5
+math	grade6	fact	integer -2 minus -3	1
+math	grade6	fact	integer -2 plus -2	-4
+math	grade6	fact	integer -2 minus -2	0
+math	grade6	fact	integer -2 plus -1	-3
+math	grade6	fact	integer -2 minus -1	-1
+math	grade6	fact	integer -2 plus 0	-2
+math	grade6	fact	integer -2 minus 0	-2
+math	grade6	fact	integer -2 plus 1	-1
+math	grade6	fact	integer -2 minus 1	-3
+math	grade6	fact	integer -2 plus 2	0
+math	grade6	fact	integer -2 minus 2	-4
+math	grade6	fact	integer -2 plus 3	1
+math	grade6	fact	integer -2 minus 3	-5
+math	grade6	fact	integer -2 plus 4	2
+math	grade6	fact	integer -2 minus 4	-6
+math	grade6	fact	integer -2 plus 5	3
+math	grade6	fact	integer -2 minus 5	-7
+math	grade6	fact	integer -1 plus -5	-6
+math	grade6	fact	integer -1 minus -5	4
+math	grade6	fact	integer -1 plus -4	-5
+math	grade6	fact	integer -1 minus -4	3
+math	grade6	fact	integer -1 plus -3	-4
+math	grade6	fact	integer -1 minus -3	2
+math	grade6	fact	integer -1 plus -2	-3
+math	grade6	fact	integer -1 minus -2	1
+math	grade6	fact	integer -1 plus -1	-2
+math	grade6	fact	integer -1 minus -1	0
+math	grade6	fact	integer -1 plus 0	-1
+math	grade6	fact	integer -1 minus 0	-1
+math	grade6	fact	integer -1 plus 1	0
+math	grade6	fact	integer -1 minus 1	-2
+math	grade6	fact	integer -1 plus 2	1
+math	grade6	fact	integer -1 minus 2	-3
+math	grade6	fact	integer -1 plus 3	2
+math	grade6	fact	integer -1 minus 3	-4
+math	grade6	fact	integer -1 plus 4	3
+math	grade6	fact	integer -1 minus 4	-5
+math	grade6	fact	integer -1 plus 5	4
+math	grade6	fact	integer -1 minus 5	-6
+math	grade6	fact	integer 0 plus -5	-5
+math	grade6	fact	integer 0 minus -5	5
+math	grade6	fact	integer 0 plus -4	-4
+math	grade6	fact	integer 0 minus -4	4
+math	grade6	fact	integer 0 plus -3	-3
+math	grade6	fact	integer 0 minus -3	3
+math	grade6	fact	integer 0 plus -2	-2
+math	grade6	fact	integer 0 minus -2	2
+math	grade6	fact	integer 0 plus -1	-1
+math	grade6	fact	integer 0 minus -1	1
+math	grade6	fact	integer 0 plus 0	0
+math	grade6	fact	integer 0 minus 0	0
+math	grade6	fact	integer 0 plus 1	1
+math	grade6	fact	integer 0 minus 1	-1
+math	grade6	fact	integer 0 plus 2	2
+math	grade6	fact	integer 0 minus 2	-2
+math	grade6	fact	integer 0 plus 3	3
+math	grade6	fact	integer 0 minus 3	-3
+math	grade6	fact	integer 0 plus 4	4
+math	grade6	fact	integer 0 minus 4	-4
+math	grade6	fact	integer 0 plus 5	5
+math	grade6	fact	integer 0 minus 5	-5
+math	grade6	fact	integer 1 plus -5	-4
+math	grade6	fact	integer 1 minus -5	6
+math	grade6	fact	integer 1 plus -4	-3
+math	grade6	fact	integer 1 minus -4	5
+math	grade6	fact	integer 1 plus -3	-2
+math	grade6	fact	integer 1 minus -3	4
+math	grade6	fact	integer 1 plus -2	-1
+math	grade6	fact	integer 1 minus -2	3
+math	grade6	fact	integer 1 plus -1	0
+math	grade6	fact	integer 1 minus -1	2
+math	grade6	fact	integer 1 plus 0	1
+math	grade6	fact	integer 1 minus 0	1
+math	grade6	fact	integer 1 plus 1	2
+math	grade6	fact	integer 1 minus 1	0
+math	grade6	fact	integer 1 plus 2	3
+math	grade6	fact	integer 1 minus 2	-1
+math	grade6	fact	integer 1 plus 3	4
+math	grade6	fact	integer 1 minus 3	-2
+math	grade6	fact	integer 1 plus 4	5
+math	grade6	fact	integer 1 minus 4	-3
+math	grade6	fact	integer 1 plus 5	6
+math	grade6	fact	integer 1 minus 5	-4
+math	grade6	fact	integer 2 plus -5	-3
+math	grade6	fact	integer 2 minus -5	7
+math	grade6	fact	integer 2 plus -4	-2
+math	grade6	fact	integer 2 minus -4	6
+math	grade6	fact	integer 2 plus -3	-1
+math	grade6	fact	integer 2 minus -3	5
+math	grade6	fact	integer 2 plus -2	0
+math	grade6	fact	integer 2 minus -2	4
+math	grade6	fact	integer 2 plus -1	1
+math	grade6	fact	integer 2 minus -1	3
+math	grade6	fact	integer 2 plus 0	2
+math	grade6	fact	integer 2 minus 0	2
+math	grade6	fact	integer 2 plus 1	3
+math	grade6	fact	integer 2 minus 1	1
+math	grade6	fact	integer 2 plus 2	4
+math	grade6	fact	integer 2 minus 2	0
+math	grade6	fact	integer 2 plus 3	5
+math	grade6	fact	integer 2 minus 3	-1
+math	grade6	fact	integer 2 plus 4	6
+math	grade6	fact	integer 2 minus 4	-2
+math	grade6	fact	integer 2 plus 5	7
+math	grade6	fact	integer 2 minus 5	-3
+math	grade6	fact	integer 3 plus -5	-2
+math	grade6	fact	integer 3 minus -5	8
+math	grade6	fact	integer 3 plus -4	-1
+math	grade6	fact	integer 3 minus -4	7
+math	grade6	fact	integer 3 plus -3	0
+math	grade6	fact	integer 3 minus -3	6
+math	grade6	fact	integer 3 plus -2	1
+math	grade6	fact	integer 3 minus -2	5
+math	grade6	fact	integer 3 plus -1	2
+math	grade6	fact	integer 3 minus -1	4
+math	grade6	fact	integer 3 plus 0	3
+math	grade6	fact	integer 3 minus 0	3
+math	grade6	fact	integer 3 plus 1	4
+math	grade6	fact	integer 3 minus 1	2
+math	grade6	fact	integer 3 plus 2	5
+math	grade6	fact	integer 3 minus 2	1
+math	grade6	fact	integer 3 plus 3	6
+math	grade6	fact	integer 3 minus 3	0
+math	grade6	fact	integer 3 plus 4	7
+math	grade6	fact	integer 3 minus 4	-1
+math	grade6	fact	integer 3 plus 5	8
+math	grade6	fact	integer 3 minus 5	-2
+math	grade6	fact	integer 4 plus -5	-1
+math	grade6	fact	integer 4 minus -5	9
+math	grade6	fact	integer 4 plus -4	0
+math	grade6	fact	integer 4 minus -4	8
+math	grade6	fact	integer 4 plus -3	1
+math	grade6	fact	integer 4 minus -3	7
+math	grade6	fact	integer 4 plus -2	2
+math	grade6	fact	integer 4 minus -2	6
+math	grade6	fact	integer 4 plus -1	3
+math	grade6	fact	integer 4 minus -1	5
+math	grade6	fact	integer 4 plus 0	4
+math	grade6	fact	integer 4 minus 0	4
+math	grade6	fact	integer 4 plus 1	5
+math	grade6	fact	integer 4 minus 1	3
+math	grade6	fact	integer 4 plus 2	6
+math	grade6	fact	integer 4 minus 2	2
+math	grade6	fact	integer 4 plus 3	7
+math	grade6	fact	integer 4 minus 3	1
+math	grade6	fact	integer 4 plus 4	8
+math	grade6	fact	integer 4 minus 4	0
+math	grade6	fact	integer 4 plus 5	9
+math	grade6	fact	integer 4 minus 5	-1
+math	grade6	fact	integer 5 plus -5	0
+math	grade6	fact	integer 5 minus -5	10
+math	grade6	fact	integer 5 plus -4	1
+math	grade6	fact	integer 5 minus -4	9
+math	grade6	fact	integer 5 plus -3	2
+math	grade6	fact	integer 5 minus -3	8
+math	grade6	fact	integer 5 plus -2	3
+math	grade6	fact	integer 5 minus -2	7
+math	grade6	fact	integer 5 plus -1	4
+math	grade6	fact	integer 5 minus -1	6
+math	grade6	fact	integer 5 plus 0	5
+math	grade6	fact	integer 5 minus 0	5
+math	grade6	fact	integer 5 plus 1	6
+math	grade6	fact	integer 5 minus 1	4
+math	grade6	fact	integer 5 plus 2	7
+math	grade6	fact	integer 5 minus 2	3
+math	grade6	fact	integer 5 plus 3	8
+math	grade6	fact	integer 5 minus 3	2
+math	grade6	fact	integer 5 plus 4	9
+math	grade6	fact	integer 5 minus 4	1
+math	grade6	fact	integer 5 plus 5	10
+math	grade6	fact	integer 5 minus 5	0
+math	grade6	fact	evaluate 2+3*4	14
+math	grade6	problem	compute 2+3*4	14
+math	grade6	fact	evaluate 10-2*3	4
+math	grade6	problem	compute 10-2*3	4
+math	grade6	fact	evaluate (2+3)*4	20
+math	grade6	problem	compute (2+3)*4	20
+math	grade6	fact	evaluate 12/3+2	6
+math	grade6	problem	compute 12/3+2	6
+math	grade6	fact	evaluate 5*2-4	6
+math	grade6	problem	compute 5*2-4	6
+math	grade7	fact	proportion 1/1 = 2/x x is	2
+math	grade7	fact	proportion 1/1 = 4/x x is	4
+math	grade7	fact	proportion 1/1 = 6/x x is	6
+math	grade7	fact	proportion 1/1 = 8/x x is	8
+math	grade7	fact	proportion 1/1 = 10/x x is	10
+math	grade7	fact	proportion 1/1 = 12/x x is	12
+math	grade7	fact	proportion 1/2 = 2/x x is	4
+math	grade7	fact	proportion 1/2 = 4/x x is	8
+math	grade7	fact	proportion 1/2 = 6/x x is	12
+math	grade7	fact	proportion 1/2 = 8/x x is	16
+math	grade7	fact	proportion 1/2 = 10/x x is	20
+math	grade7	fact	proportion 1/2 = 12/x x is	24
+math	grade7	fact	proportion 1/3 = 2/x x is	6
+math	grade7	fact	proportion 1/3 = 4/x x is	12
+math	grade7	fact	proportion 1/3 = 6/x x is	18
+math	grade7	fact	proportion 1/3 = 8/x x is	24
+math	grade7	fact	proportion 1/3 = 10/x x is	30
+math	grade7	fact	proportion 1/3 = 12/x x is	36
+math	grade7	fact	proportion 1/4 = 2/x x is	8
+math	grade7	fact	proportion 1/4 = 4/x x is	16
+math	grade7	fact	proportion 1/4 = 6/x x is	24
+math	grade7	fact	proportion 1/4 = 8/x x is	32
+math	grade7	fact	proportion 1/4 = 10/x x is	40
+math	grade7	fact	proportion 1/4 = 12/x x is	48
+math	grade7	fact	proportion 1/5 = 2/x x is	10
+math	grade7	fact	proportion 1/5 = 4/x x is	20
+math	grade7	fact	proportion 1/5 = 6/x x is	30
+math	grade7	fact	proportion 1/5 = 8/x x is	40
+math	grade7	fact	proportion 1/5 = 10/x x is	50
+math	grade7	fact	proportion 1/5 = 12/x x is	60
+math	grade7	fact	proportion 1/6 = 2/x x is	12
+math	grade7	fact	proportion 1/6 = 4/x x is	24
+math	grade7	fact	proportion 1/6 = 6/x x is	36
+math	grade7	fact	proportion 1/6 = 8/x x is	48
+math	grade7	fact	proportion 1/6 = 10/x x is	60
+math	grade7	fact	proportion 1/6 = 12/x x is	72
+math	grade7	fact	proportion 1/7 = 2/x x is	14
+math	grade7	fact	proportion 1/7 = 4/x x is	28
+math	grade7	fact	proportion 1/7 = 6/x x is	42
+math	grade7	fact	proportion 1/7 = 8/x x is	56
+math	grade7	fact	proportion 1/7 = 10/x x is	70
+math	grade7	fact	proportion 1/7 = 12/x x is	84
+math	grade7	fact	proportion 1/8 = 2/x x is	16
+math	grade7	fact	proportion 1/8 = 4/x x is	32
+math	grade7	fact	proportion 1/8 = 6/x x is	48
+math	grade7	fact	proportion 1/8 = 8/x x is	64
+math	grade7	fact	proportion 1/8 = 10/x x is	80
+math	grade7	fact	proportion 1/8 = 12/x x is	96
+math	grade7	fact	proportion 2/1 = 2/x x is	1
+math	grade7	fact	proportion 2/1 = 4/x x is	2
+math	grade7	fact	proportion 2/1 = 6/x x is	3
+math	grade7	fact	proportion 2/1 = 8/x x is	4
+math	grade7	fact	proportion 2/1 = 10/x x is	5
+math	grade7	fact	proportion 2/1 = 12/x x is	6
+math	grade7	fact	proportion 2/2 = 2/x x is	2
+math	grade7	fact	proportion 2/2 = 4/x x is	4
+math	grade7	fact	proportion 2/2 = 6/x x is	6
+math	grade7	fact	proportion 2/2 = 8/x x is	8
+math	grade7	fact	proportion 2/2 = 10/x x is	10
+math	grade7	fact	proportion 2/2 = 12/x x is	12
+math	grade7	fact	proportion 2/3 = 2/x x is	3
+math	grade7	fact	proportion 2/3 = 4/x x is	6
+math	grade7	fact	proportion 2/3 = 6/x x is	9
+math	grade7	fact	proportion 2/3 = 8/x x is	12
+math	grade7	fact	proportion 2/3 = 10/x x is	15
+math	grade7	fact	proportion 2/3 = 12/x x is	18
+math	grade7	fact	proportion 2/4 = 2/x x is	4
+math	grade7	fact	proportion 2/4 = 4/x x is	8
+math	grade7	fact	proportion 2/4 = 6/x x is	12
+math	grade7	fact	proportion 2/4 = 8/x x is	16
+math	grade7	fact	proportion 2/4 = 10/x x is	20
+math	grade7	fact	proportion 2/4 = 12/x x is	24
+math	grade7	fact	proportion 2/5 = 2/x x is	5
+math	grade7	fact	proportion 2/5 = 4/x x is	10
+math	grade7	fact	proportion 2/5 = 6/x x is	15
+math	grade7	fact	proportion 2/5 = 8/x x is	20
+math	grade7	fact	proportion 2/5 = 10/x x is	25
+math	grade7	fact	proportion 2/5 = 12/x x is	30
+math	grade7	fact	proportion 2/6 = 2/x x is	6
+math	grade7	fact	proportion 2/6 = 4/x x is	12
+math	grade7	fact	proportion 2/6 = 6/x x is	18
+math	grade7	fact	proportion 2/6 = 8/x x is	24
+math	grade7	fact	proportion 2/6 = 10/x x is	30
+math	grade7	fact	proportion 2/6 = 12/x x is	36
+math	grade7	fact	proportion 2/7 = 2/x x is	7
+math	grade7	fact	proportion 2/7 = 4/x x is	14
+math	grade7	fact	proportion 2/7 = 6/x x is	21
+math	grade7	fact	proportion 2/7 = 8/x x is	28
+math	grade7	fact	proportion 2/7 = 10/x x is	35
+math	grade7	fact	proportion 2/7 = 12/x x is	42
+math	grade7	fact	proportion 2/8 = 2/x x is	8
+math	grade7	fact	proportion 2/8 = 4/x x is	16
+math	grade7	fact	proportion 2/8 = 6/x x is	24
+math	grade7	fact	proportion 2/8 = 8/x x is	32
+math	grade7	fact	proportion 2/8 = 10/x x is	40
+math	grade7	fact	proportion 2/8 = 12/x x is	48
+math	grade7	fact	proportion 3/1 = 6/x x is	2
+math	grade7	fact	proportion 3/1 = 12/x x is	4
+math	grade7	fact	proportion 3/2 = 6/x x is	4
+math	grade7	fact	proportion 3/2 = 12/x x is	8
+math	grade7	fact	proportion 3/3 = 2/x x is	2
+math	grade7	fact	proportion 3/3 = 4/x x is	4
+math	grade7	fact	proportion 3/3 = 6/x x is	6
+math	grade7	fact	proportion 3/3 = 8/x x is	8
+math	grade7	fact	proportion 3/3 = 10/x x is	10
+math	grade7	fact	proportion 3/3 = 12/x x is	12
+math	grade7	fact	proportion 3/4 = 6/x x is	8
+math	grade7	fact	proportion 3/4 = 12/x x is	16
+math	grade7	fact	proportion 3/5 = 6/x x is	10
+math	grade7	fact	proportion 3/5 = 12/x x is	20
+math	grade7	fact	proportion 3/6 = 2/x x is	4
+math	grade7	fact	proportion 3/6 = 4/x x is	8
+math	grade7	fact	proportion 3/6 = 6/x x is	12
+math	grade7	fact	proportion 3/6 = 8/x x is	16
+math	grade7	fact	proportion 3/6 = 10/x x is	20
+math	grade7	fact	proportion 3/6 = 12/x x is	24
+math	grade7	fact	proportion 3/7 = 6/x x is	14
+math	grade7	fact	proportion 3/7 = 12/x x is	28
+math	grade7	fact	proportion 3/8 = 6/x x is	16
+math	grade7	fact	proportion 3/8 = 12/x x is	32
+math	grade7	fact	proportion 4/1 = 4/x x is	1
+math	grade7	fact	proportion 4/1 = 8/x x is	2
+math	grade7	fact	proportion 4/1 = 12/x x is	3
+math	grade7	fact	proportion 4/2 = 2/x x is	1
+math	grade7	fact	proportion 4/2 = 4/x x is	2
+math	grade7	fact	proportion 4/2 = 6/x x is	3
+math	grade7	fact	proportion 4/2 = 8/x x is	4
+math	grade7	fact	proportion 4/2 = 10/x x is	5
+math	grade7	fact	proportion 4/2 = 12/x x is	6
+math	grade7	fact	proportion 4/3 = 4/x x is	3
+math	grade7	fact	proportion 4/3 = 8/x x is	6
+math	grade7	fact	proportion 4/3 = 12/x x is	9
+math	grade7	fact	proportion 4/4 = 2/x x is	2
+math	grade7	fact	proportion 4/4 = 4/x x is	4
+math	grade7	fact	proportion 4/4 = 6/x x is	6
+math	grade7	fact	proportion 4/4 = 8/x x is	8
+math	grade7	fact	proportion 4/4 = 10/x x is	10
+math	grade7	fact	proportion 4/4 = 12/x x is	12
+math	grade7	fact	proportion 4/5 = 4/x x is	5
+math	grade7	fact	proportion 4/5 = 8/x x is	10
+math	grade7	fact	proportion 4/5 = 12/x x is	15
+math	grade7	fact	proportion 4/6 = 2/x x is	3
+math	grade7	fact	proportion 4/6 = 4/x x is	6
+math	grade7	fact	proportion 4/6 = 6/x x is	9
+math	grade7	fact	proportion 4/6 = 8/x x is	12
+math	grade7	fact	proportion 4/6 = 10/x x is	15
+math	grade7	fact	proportion 4/6 = 12/x x is	18
+math	grade7	fact	proportion 4/7 = 4/x x is	7
+math	grade7	fact	proportion 4/7 = 8/x x is	14
+math	grade7	fact	proportion 4/7 = 12/x x is	21
+math	grade7	fact	proportion 4/8 = 2/x x is	4
+math	grade7	fact	proportion 4/8 = 4/x x is	8
+math	grade7	fact	proportion 4/8 = 6/x x is	12
+math	grade7	fact	proportion 4/8 = 8/x x is	16
+math	grade7	fact	proportion 4/8 = 10/x x is	20
+math	grade7	fact	proportion 4/8 = 12/x x is	24
+math	grade7	fact	proportion 5/1 = 10/x x is	2
+math	grade7	fact	proportion 5/2 = 10/x x is	4
+math	grade7	fact	proportion 5/3 = 10/x x is	6
+math	grade7	fact	proportion 5/4 = 10/x x is	8
+math	grade7	fact	proportion 5/5 = 2/x x is	2
+math	grade7	fact	proportion 5/5 = 4/x x is	4
+math	grade7	fact	proportion 5/5 = 6/x x is	6
+math	grade7	fact	proportion 5/5 = 8/x x is	8
+math	grade7	fact	proportion 5/5 = 10/x x is	10
+math	grade7	fact	proportion 5/5 = 12/x x is	12
+math	grade7	fact	proportion 5/6 = 10/x x is	12
+math	grade7	fact	proportion 5/7 = 10/x x is	14
+math	grade7	fact	proportion 5/8 = 10/x x is	16
+math	grade7	fact	proportion 6/1 = 6/x x is	1
+math	grade7	fact	proportion 6/1 = 12/x x is	2
+math	grade7	fact	proportion 6/2 = 6/x x is	2
+math	grade7	fact	proportion 6/2 = 12/x x is	4
+math	grade7	fact	proportion 6/3 = 2/x x is	1
+math	grade7	fact	proportion 6/3 = 4/x x is	2
+math	grade7	fact	proportion 6/3 = 6/x x is	3
+math	grade7	fact	proportion 6/3 = 8/x x is	4
+math	grade7	fact	proportion 6/3 = 10/x x is	5
+math	grade7	fact	proportion 6/3 = 12/x x is	6
+math	grade7	fact	proportion 6/4 = 6/x x is	4
+math	grade7	fact	proportion 6/4 = 12/x x is	8
+math	grade7	fact	proportion 6/5 = 6/x x is	5
+math	grade7	fact	proportion 6/5 = 12/x x is	10
+math	grade7	fact	proportion 6/6 = 2/x x is	2
+math	grade7	fact	proportion 6/6 = 4/x x is	4
+math	grade7	fact	proportion 6/6 = 6/x x is	6
+math	grade7	fact	proportion 6/6 = 8/x x is	8
+math	grade7	fact	proportion 6/6 = 10/x x is	10
+math	grade7	fact	proportion 6/6 = 12/x x is	12
+math	grade7	fact	proportion 6/7 = 6/x x is	7
+math	grade7	fact	proportion 6/7 = 12/x x is	14
+math	grade7	fact	proportion 6/8 = 6/x x is	8
+math	grade7	fact	proportion 6/8 = 12/x x is	16
+math	grade7	fact	proportion 7/7 = 2/x x is	2
+math	grade7	fact	proportion 7/7 = 4/x x is	4
+math	grade7	fact	proportion 7/7 = 6/x x is	6
+math	grade7	fact	proportion 7/7 = 8/x x is	8
+math	grade7	fact	proportion 7/7 = 10/x x is	10
+math	grade7	fact	proportion 7/7 = 12/x x is	12
+math	grade7	fact	proportion 8/1 = 8/x x is	1
+math	grade7	fact	proportion 8/2 = 4/x x is	1
+math	grade7	fact	proportion 8/2 = 8/x x is	2
+math	grade7	fact	proportion 8/2 = 12/x x is	3
+math	grade7	fact	proportion 8/3 = 8/x x is	3
+math	grade7	fact	proportion 8/4 = 2/x x is	1
+math	grade7	fact	proportion 8/4 = 4/x x is	2
+math	grade7	fact	proportion 8/4 = 6/x x is	3
+math	grade7	fact	proportion 8/4 = 8/x x is	4
+math	grade7	fact	proportion 8/4 = 10/x x is	5
+math	grade7	fact	proportion 8/4 = 12/x x is	6
+math	grade7	fact	proportion 8/5 = 8/x x is	5
+math	grade7	fact	proportion 8/6 = 4/x x is	3
+math	grade7	fact	proportion 8/6 = 8/x x is	6
+math	grade7	fact	proportion 8/6 = 12/x x is	9
+math	grade7	fact	proportion 8/7 = 8/x x is	7
+math	grade7	fact	proportion 8/8 = 2/x x is	2
+math	grade7	fact	proportion 8/8 = 4/x x is	4
+math	grade7	fact	proportion 8/8 = 6/x x is	6
+math	grade7	fact	proportion 8/8 = 8/x x is	8
+math	grade7	fact	proportion 8/8 = 10/x x is	10
+math	grade7	fact	proportion 8/8 = 12/x x is	12
+math	grade7	fact	linear -4*x+-3 at x=0	-3
+math	grade7	fact	linear -4*x+-2 at x=0	-2
+math	grade7	fact	linear -4*x+-1 at x=0	-1
+math	grade7	fact	linear -4*x+0 at x=0	0
+math	grade7	fact	linear -4*x+1 at x=0	1
+math	grade7	fact	linear -4*x+2 at x=0	2
+math	grade7	fact	linear -4*x+3 at x=0	3
+math	grade7	fact	linear -4*x+-3 at x=1	-7
+math	grade7	fact	linear -4*x+-2 at x=1	-6
+math	grade7	fact	linear -4*x+-1 at x=1	-5
+math	grade7	fact	linear -4*x+0 at x=1	-4
+math	grade7	fact	linear -4*x+1 at x=1	-3
+math	grade7	fact	linear -4*x+2 at x=1	-2
+math	grade7	fact	linear -4*x+3 at x=1	-1
+math	grade7	fact	linear -4*x+-3 at x=2	-11
+math	grade7	fact	linear -4*x+-2 at x=2	-10
+math	grade7	fact	linear -4*x+-1 at x=2	-9
+math	grade7	fact	linear -4*x+0 at x=2	-8
+math	grade7	fact	linear -4*x+1 at x=2	-7
+math	grade7	fact	linear -4*x+2 at x=2	-6
+math	grade7	fact	linear -4*x+3 at x=2	-5
+math	grade7	fact	linear -4*x+-3 at x=3	-15
+math	grade7	fact	linear -4*x+-2 at x=3	-14
+math	grade7	fact	linear -4*x+-1 at x=3	-13
+math	grade7	fact	linear -4*x+0 at x=3	-12
+math	grade7	fact	linear -4*x+1 at x=3	-11
+math	grade7	fact	linear -4*x+2 at x=3	-10
+math	grade7	fact	linear -4*x+3 at x=3	-9
+math	grade7	fact	linear -4*x+-3 at x=4	-19
+math	grade7	fact	linear -4*x+-2 at x=4	-18
+math	grade7	fact	linear -4*x+-1 at x=4	-17
+math	grade7	fact	linear -4*x+0 at x=4	-16
+math	grade7	fact	linear -4*x+1 at x=4	-15
+math	grade7	fact	linear -4*x+2 at x=4	-14
+math	grade7	fact	linear -4*x+3 at x=4	-13
+math	grade7	fact	linear -4*x+-3 at x=5	-23
+math	grade7	fact	linear -4*x+-2 at x=5	-22
+math	grade7	fact	linear -4*x+-1 at x=5	-21
+math	grade7	fact	linear -4*x+0 at x=5	-20
+math	grade7	fact	linear -4*x+1 at x=5	-19
+math	grade7	fact	linear -4*x+2 at x=5	-18
+math	grade7	fact	linear -4*x+3 at x=5	-17
+math	grade7	fact	linear -4*x+-3 at x=6	-27
+math	grade7	fact	linear -4*x+-2 at x=6	-26
+math	grade7	fact	linear -4*x+-1 at x=6	-25
+math	grade7	fact	linear -4*x+0 at x=6	-24
+math	grade7	fact	linear -4*x+1 at x=6	-23
+math	grade7	fact	linear -4*x+2 at x=6	-22
+math	grade7	fact	linear -4*x+3 at x=6	-21
+math	grade7	fact	linear -4*x+-3 at x=7	-31
+math	grade7	fact	linear -4*x+-2 at x=7	-30
+math	grade7	fact	linear -4*x+-1 at x=7	-29
+math	grade7	fact	linear -4*x+0 at x=7	-28
+math	grade7	fact	linear -4*x+1 at x=7	-27
+math	grade7	fact	linear -4*x+2 at x=7	-26
+math	grade7	fact	linear -4*x+3 at x=7	-25
+math	grade7	fact	linear -3*x+-3 at x=0	-3
+math	grade7	fact	linear -3*x+-2 at x=0	-2
+math	grade7	fact	linear -3*x+-1 at x=0	-1
+math	grade7	fact	linear -3*x+0 at x=0	0
+math	grade7	fact	linear -3*x+1 at x=0	1
+math	grade7	fact	linear -3*x+2 at x=0	2
+math	grade7	fact	linear -3*x+3 at x=0	3
+math	grade7	fact	linear -3*x+-3 at x=1	-6
+math	grade7	fact	linear -3*x+-2 at x=1	-5
+math	grade7	fact	linear -3*x+-1 at x=1	-4
+math	grade7	fact	linear -3*x+0 at x=1	-3
+math	grade7	fact	linear -3*x+1 at x=1	-2
+math	grade7	fact	linear -3*x+2 at x=1	-1
+math	grade7	fact	linear -3*x+3 at x=1	0
+math	grade7	fact	linear -3*x+-3 at x=2	-9
+math	grade7	fact	linear -3*x+-2 at x=2	-8
+math	grade7	fact	linear -3*x+-1 at x=2	-7
+math	grade7	fact	linear -3*x+0 at x=2	-6
+math	grade7	fact	linear -3*x+1 at x=2	-5
+math	grade7	fact	linear -3*x+2 at x=2	-4
+math	grade7	fact	linear -3*x+3 at x=2	-3
+math	grade7	fact	linear -3*x+-3 at x=3	-12
+math	grade7	fact	linear -3*x+-2 at x=3	-11
+math	grade7	fact	linear -3*x+-1 at x=3	-10
+math	grade7	fact	linear -3*x+0 at x=3	-9
+math	grade7	fact	linear -3*x+1 at x=3	-8
+math	grade7	fact	linear -3*x+2 at x=3	-7
+math	grade7	fact	linear -3*x+3 at x=3	-6
+math	grade7	fact	linear -3*x+-3 at x=4	-15
+math	grade7	fact	linear -3*x+-2 at x=4	-14
+math	grade7	fact	linear -3*x+-1 at x=4	-13
+math	grade7	fact	linear -3*x+0 at x=4	-12
+math	grade7	fact	linear -3*x+1 at x=4	-11
+math	grade7	fact	linear -3*x+2 at x=4	-10
+math	grade7	fact	linear -3*x+3 at x=4	-9
+math	grade7	fact	linear -3*x+-3 at x=5	-18
+math	grade7	fact	linear -3*x+-2 at x=5	-17
+math	grade7	fact	linear -3*x+-1 at x=5	-16
+math	grade7	fact	linear -3*x+0 at x=5	-15
+math	grade7	fact	linear -3*x+1 at x=5	-14
+math	grade7	fact	linear -3*x+2 at x=5	-13
+math	grade7	fact	linear -3*x+3 at x=5	-12
+math	grade7	fact	linear -3*x+-3 at x=6	-21
+math	grade7	fact	linear -3*x+-2 at x=6	-20
+math	grade7	fact	linear -3*x+-1 at x=6	-19
+math	grade7	fact	linear -3*x+0 at x=6	-18
+math	grade7	fact	linear -3*x+1 at x=6	-17
+math	grade7	fact	linear -3*x+2 at x=6	-16
+math	grade7	fact	linear -3*x+3 at x=6	-15
+math	grade7	fact	linear -3*x+-3 at x=7	-24
+math	grade7	fact	linear -3*x+-2 at x=7	-23
+math	grade7	fact	linear -3*x+-1 at x=7	-22
+math	grade7	fact	linear -3*x+0 at x=7	-21
+math	grade7	fact	linear -3*x+1 at x=7	-20
+math	grade7	fact	linear -3*x+2 at x=7	-19
+math	grade7	fact	linear -3*x+3 at x=7	-18
+math	grade7	fact	linear -2*x+-3 at x=0	-3
+math	grade7	fact	linear -2*x+-2 at x=0	-2
+math	grade7	fact	linear -2*x+-1 at x=0	-1
+math	grade7	fact	linear -2*x+0 at x=0	0
+math	grade7	fact	linear -2*x+1 at x=0	1
+math	grade7	fact	linear -2*x+2 at x=0	2
+math	grade7	fact	linear -2*x+3 at x=0	3
+math	grade7	fact	linear -2*x+-3 at x=1	-5
+math	grade7	fact	linear -2*x+-2 at x=1	-4
+math	grade7	fact	linear -2*x+-1 at x=1	-3
+math	grade7	fact	linear -2*x+0 at x=1	-2
+math	grade7	fact	linear -2*x+1 at x=1	-1
+math	grade7	fact	linear -2*x+2 at x=1	0
+math	grade7	fact	linear -2*x+3 at x=1	1
+math	grade7	fact	linear -2*x+-3 at x=2	-7
+math	grade7	fact	linear -2*x+-2 at x=2	-6
+math	grade7	fact	linear -2*x+-1 at x=2	-5
+math	grade7	fact	linear -2*x+0 at x=2	-4
+math	grade7	fact	linear -2*x+1 at x=2	-3
+math	grade7	fact	linear -2*x+2 at x=2	-2
+math	grade7	fact	linear -2*x+3 at x=2	-1
+math	grade7	fact	linear -2*x+-3 at x=3	-9
+math	grade7	fact	linear -2*x+-2 at x=3	-8
+math	grade7	fact	linear -2*x+-1 at x=3	-7
+math	grade7	fact	linear -2*x+0 at x=3	-6
+math	grade7	fact	linear -2*x+1 at x=3	-5
+math	grade7	fact	linear -2*x+2 at x=3	-4
+math	grade7	fact	linear -2*x+3 at x=3	-3
+math	grade7	fact	linear -2*x+-3 at x=4	-11
+math	grade7	fact	linear -2*x+-2 at x=4	-10
+math	grade7	fact	linear -2*x+-1 at x=4	-9
+math	grade7	fact	linear -2*x+0 at x=4	-8
+math	grade7	fact	linear -2*x+1 at x=4	-7
+math	grade7	fact	linear -2*x+2 at x=4	-6
+math	grade7	fact	linear -2*x+3 at x=4	-5
+math	grade7	fact	linear -2*x+-3 at x=5	-13
+math	grade7	fact	linear -2*x+-2 at x=5	-12
+math	grade7	fact	linear -2*x+-1 at x=5	-11
+math	grade7	fact	linear -2*x+0 at x=5	-10
+math	grade7	fact	linear -2*x+1 at x=5	-9
+math	grade7	fact	linear -2*x+2 at x=5	-8
+math	grade7	fact	linear -2*x+3 at x=5	-7
+math	grade7	fact	linear -2*x+-3 at x=6	-15
+math	grade7	fact	linear -2*x+-2 at x=6	-14
+math	grade7	fact	linear -2*x+-1 at x=6	-13
+math	grade7	fact	linear -2*x+0 at x=6	-12
+math	grade7	fact	linear -2*x+1 at x=6	-11
+math	grade7	fact	linear -2*x+2 at x=6	-10
+math	grade7	fact	linear -2*x+3 at x=6	-9
+math	grade7	fact	linear -2*x+-3 at x=7	-17
+math	grade7	fact	linear -2*x+-2 at x=7	-16
+math	grade7	fact	linear -2*x+-1 at x=7	-15
+math	grade7	fact	linear -2*x+0 at x=7	-14
+math	grade7	fact	linear -2*x+1 at x=7	-13
+math	grade7	fact	linear -2*x+2 at x=7	-12
+math	grade7	fact	linear -2*x+3 at x=7	-11
+math	grade7	fact	linear -1*x+-3 at x=0	-3
+math	grade7	fact	linear -1*x+-2 at x=0	-2
+math	grade7	fact	linear -1*x+-1 at x=0	-1
+math	grade7	fact	linear -1*x+0 at x=0	0
+math	grade7	fact	linear -1*x+1 at x=0	1
+math	grade7	fact	linear -1*x+2 at x=0	2
+math	grade7	fact	linear -1*x+3 at x=0	3
+math	grade7	fact	linear -1*x+-3 at x=1	-4
+math	grade7	fact	linear -1*x+-2 at x=1	-3
+math	grade7	fact	linear -1*x+-1 at x=1	-2
+math	grade7	fact	linear -1*x+0 at x=1	-1
+math	grade7	fact	linear -1*x+1 at x=1	0
+math	grade7	fact	linear -1*x+2 at x=1	1
+math	grade7	fact	linear -1*x+3 at x=1	2
+math	grade7	fact	linear -1*x+-3 at x=2	-5
+math	grade7	fact	linear -1*x+-2 at x=2	-4
+math	grade7	fact	linear -1*x+-1 at x=2	-3
+math	grade7	fact	linear -1*x+0 at x=2	-2
+math	grade7	fact	linear -1*x+1 at x=2	-1
+math	grade7	fact	linear -1*x+2 at x=2	0
+math	grade7	fact	linear -1*x+3 at x=2	1
+math	grade7	fact	linear -1*x+-3 at x=3	-6
+math	grade7	fact	linear -1*x+-2 at x=3	-5
+math	grade7	fact	linear -1*x+-1 at x=3	-4
+math	grade7	fact	linear -1*x+0 at x=3	-3
+math	grade7	fact	linear -1*x+1 at x=3	-2
+math	grade7	fact	linear -1*x+2 at x=3	-1
+math	grade7	fact	linear -1*x+3 at x=3	0
+math	grade7	fact	linear -1*x+-3 at x=4	-7
+math	grade7	fact	linear -1*x+-2 at x=4	-6
+math	grade7	fact	linear -1*x+-1 at x=4	-5
+math	grade7	fact	linear -1*x+0 at x=4	-4
+math	grade7	fact	linear -1*x+1 at x=4	-3
+math	grade7	fact	linear -1*x+2 at x=4	-2
+math	grade7	fact	linear -1*x+3 at x=4	-1
+math	grade7	fact	linear -1*x+-3 at x=5	-8
+math	grade7	fact	linear -1*x+-2 at x=5	-7
+math	grade7	fact	linear -1*x+-1 at x=5	-6
+math	grade7	fact	linear -1*x+0 at x=5	-5
+math	grade7	fact	linear -1*x+1 at x=5	-4
+math	grade7	fact	linear -1*x+2 at x=5	-3
+math	grade7	fact	linear -1*x+3 at x=5	-2
+math	grade7	fact	linear -1*x+-3 at x=6	-9
+math	grade7	fact	linear -1*x+-2 at x=6	-8
+math	grade7	fact	linear -1*x+-1 at x=6	-7
+math	grade7	fact	linear -1*x+0 at x=6	-6
+math	grade7	fact	linear -1*x+1 at x=6	-5
+math	grade7	fact	linear -1*x+2 at x=6	-4
+math	grade7	fact	linear -1*x+3 at x=6	-3
+math	grade7	fact	linear -1*x+-3 at x=7	-10
+math	grade7	fact	linear -1*x+-2 at x=7	-9
+math	grade7	fact	linear -1*x+-1 at x=7	-8
+math	grade7	fact	linear -1*x+0 at x=7	-7
+math	grade7	fact	linear -1*x+1 at x=7	-6
+math	grade7	fact	linear -1*x+2 at x=7	-5
+math	grade7	fact	linear -1*x+3 at x=7	-4
+math	grade7	fact	linear 0*x+-3 at x=0	-3
+math	grade7	fact	linear 0*x+-2 at x=0	-2
+math	grade7	fact	linear 0*x+-1 at x=0	-1
+math	grade7	fact	linear 0*x+0 at x=0	0
+math	grade7	fact	linear 0*x+1 at x=0	1
+math	grade7	fact	linear 0*x+2 at x=0	2
+math	grade7	fact	linear 0*x+3 at x=0	3
+math	grade7	fact	linear 0*x+-3 at x=1	-3
+math	grade7	fact	linear 0*x+-2 at x=1	-2
+math	grade7	fact	linear 0*x+-1 at x=1	-1
+math	grade7	fact	linear 0*x+0 at x=1	0
+math	grade7	fact	linear 0*x+1 at x=1	1
+math	grade7	fact	linear 0*x+2 at x=1	2
+math	grade7	fact	linear 0*x+3 at x=1	3
+math	grade7	fact	linear 0*x+-3 at x=2	-3
+math	grade7	fact	linear 0*x+-2 at x=2	-2
+math	grade7	fact	linear 0*x+-1 at x=2	-1
+math	grade7	fact	linear 0*x+0 at x=2	0
+math	grade7	fact	linear 0*x+1 at x=2	1
+math	grade7	fact	linear 0*x+2 at x=2	2
+math	grade7	fact	linear 0*x+3 at x=2	3
+math	grade7	fact	linear 0*x+-3 at x=3	-3
+math	grade7	fact	linear 0*x+-2 at x=3	-2
+math	grade7	fact	linear 0*x+-1 at x=3	-1
+math	grade7	fact	linear 0*x+0 at x=3	0
+math	grade7	fact	linear 0*x+1 at x=3	1
+math	grade7	fact	linear 0*x+2 at x=3	2
+math	grade7	fact	linear 0*x+3 at x=3	3
+math	grade7	fact	linear 0*x+-3 at x=4	-3
+math	grade7	fact	linear 0*x+-2 at x=4	-2
+math	grade7	fact	linear 0*x+-1 at x=4	-1
+math	grade7	fact	linear 0*x+0 at x=4	0
+math	grade7	fact	linear 0*x+1 at x=4	1
+math	grade7	fact	linear 0*x+2 at x=4	2
+math	grade7	fact	linear 0*x+3 at x=4	3
+math	grade7	fact	linear 0*x+-3 at x=5	-3
+math	grade7	fact	linear 0*x+-2 at x=5	-2
+math	grade7	fact	linear 0*x+-1 at x=5	-1
+math	grade7	fact	linear 0*x+0 at x=5	0
+math	grade7	fact	linear 0*x+1 at x=5	1
+math	grade7	fact	linear 0*x+2 at x=5	2
+math	grade7	fact	linear 0*x+3 at x=5	3
+math	grade7	fact	linear 0*x+-3 at x=6	-3
+math	grade7	fact	linear 0*x+-2 at x=6	-2
+math	grade7	fact	linear 0*x+-1 at x=6	-1
+math	grade7	fact	linear 0*x+0 at x=6	0
+math	grade7	fact	linear 0*x+1 at x=6	1
+math	grade7	fact	linear 0*x+2 at x=6	2
+math	grade7	fact	linear 0*x+3 at x=6	3
+math	grade7	fact	linear 0*x+-3 at x=7	-3
+math	grade7	fact	linear 0*x+-2 at x=7	-2
+math	grade7	fact	linear 0*x+-1 at x=7	-1
+math	grade7	fact	linear 0*x+0 at x=7	0
+math	grade7	fact	linear 0*x+1 at x=7	1
+math	grade7	fact	linear 0*x+2 at x=7	2
+math	grade7	fact	linear 0*x+3 at x=7	3
+math	grade7	fact	linear 1*x+-3 at x=0	-3
+math	grade7	fact	linear 1*x+-2 at x=0	-2
+math	grade7	fact	linear 1*x+-1 at x=0	-1
+math	grade7	fact	linear 1*x+0 at x=0	0
+math	grade7	fact	linear 1*x+1 at x=0	1
+math	grade7	fact	linear 1*x+2 at x=0	2
+math	grade7	fact	linear 1*x+3 at x=0	3
+math	grade7	fact	linear 1*x+-3 at x=1	-2
+math	grade7	fact	linear 1*x+-2 at x=1	-1
+math	grade7	fact	linear 1*x+-1 at x=1	0
+math	grade7	fact	linear 1*x+0 at x=1	1
+math	grade7	fact	linear 1*x+1 at x=1	2
+math	grade7	fact	linear 1*x+2 at x=1	3
+math	grade7	fact	linear 1*x+3 at x=1	4
+math	grade7	fact	linear 1*x+-3 at x=2	-1
+math	grade7	fact	linear 1*x+-2 at x=2	0
+math	grade7	fact	linear 1*x+-1 at x=2	1
+math	grade7	fact	linear 1*x+0 at x=2	2
+math	grade7	fact	linear 1*x+1 at x=2	3
+math	grade7	fact	linear 1*x+2 at x=2	4
+math	grade7	fact	linear 1*x+3 at x=2	5
+math	grade7	fact	linear 1*x+-3 at x=3	0
+math	grade7	fact	linear 1*x+-2 at x=3	1
+math	grade7	fact	linear 1*x+-1 at x=3	2
+math	grade7	fact	linear 1*x+0 at x=3	3
+math	grade7	fact	linear 1*x+1 at x=3	4
+math	grade7	fact	linear 1*x+2 at x=3	5
+math	grade7	fact	linear 1*x+3 at x=3	6
+math	grade7	fact	linear 1*x+-3 at x=4	1
+math	grade7	fact	linear 1*x+-2 at x=4	2
+math	grade7	fact	linear 1*x+-1 at x=4	3
+math	grade7	fact	linear 1*x+0 at x=4	4
+math	grade7	fact	linear 1*x+1 at x=4	5
+math	grade7	fact	linear 1*x+2 at x=4	6
+math	grade7	fact	linear 1*x+3 at x=4	7
+math	grade7	fact	linear 1*x+-3 at x=5	2
+math	grade7	fact	linear 1*x+-2 at x=5	3
+math	grade7	fact	linear 1*x+-1 at x=5	4
+math	grade7	fact	linear 1*x+0 at x=5	5
+math	grade7	fact	linear 1*x+1 at x=5	6
+math	grade7	fact	linear 1*x+2 at x=5	7
+math	grade7	fact	linear 1*x+3 at x=5	8
+math	grade7	fact	linear 1*x+-3 at x=6	3
+math	grade7	fact	linear 1*x+-2 at x=6	4
+math	grade7	fact	linear 1*x+-1 at x=6	5
+math	grade7	fact	linear 1*x+0 at x=6	6
+math	grade7	fact	linear 1*x+1 at x=6	7
+math	grade7	fact	linear 1*x+2 at x=6	8
+math	grade7	fact	linear 1*x+3 at x=6	9
+math	grade7	fact	linear 1*x+-3 at x=7	4
+math	grade7	fact	linear 1*x+-2 at x=7	5
+math	grade7	fact	linear 1*x+-1 at x=7	6
+math	grade7	fact	linear 1*x+0 at x=7	7
+math	grade7	fact	linear 1*x+1 at x=7	8
+math	grade7	fact	linear 1*x+2 at x=7	9
+math	grade7	fact	linear 1*x+3 at x=7	10
+math	grade7	fact	linear 2*x+-3 at x=0	-3
+math	grade7	fact	linear 2*x+-2 at x=0	-2
+math	grade7	fact	linear 2*x+-1 at x=0	-1
+math	grade7	fact	linear 2*x+0 at x=0	0
+math	grade7	fact	linear 2*x+1 at x=0	1
+math	grade7	fact	linear 2*x+2 at x=0	2
+math	grade7	fact	linear 2*x+3 at x=0	3
+math	grade7	fact	linear 2*x+-3 at x=1	-1
+math	grade7	fact	linear 2*x+-2 at x=1	0
+math	grade7	fact	linear 2*x+-1 at x=1	1
+math	grade7	fact	linear 2*x+0 at x=1	2
+math	grade7	fact	linear 2*x+1 at x=1	3
+math	grade7	fact	linear 2*x+2 at x=1	4
+math	grade7	fact	linear 2*x+3 at x=1	5
+math	grade7	fact	linear 2*x+-3 at x=2	1
+math	grade7	fact	linear 2*x+-2 at x=2	2
+math	grade7	fact	linear 2*x+-1 at x=2	3
+math	grade7	fact	linear 2*x+0 at x=2	4
+math	grade7	fact	linear 2*x+1 at x=2	5
+math	grade7	fact	linear 2*x+2 at x=2	6
+math	grade7	fact	linear 2*x+3 at x=2	7
+math	grade7	fact	linear 2*x+-3 at x=3	3
+math	grade7	fact	linear 2*x+-2 at x=3	4
+math	grade7	fact	linear 2*x+-1 at x=3	5
+math	grade7	fact	linear 2*x+0 at x=3	6
+math	grade7	fact	linear 2*x+1 at x=3	7
+math	grade7	fact	linear 2*x+2 at x=3	8
+math	grade7	fact	linear 2*x+3 at x=3	9
+math	grade7	fact	linear 2*x+-3 at x=4	5
+math	grade7	fact	linear 2*x+-2 at x=4	6
+math	grade7	fact	linear 2*x+-1 at x=4	7
+math	grade7	fact	linear 2*x+0 at x=4	8
+math	grade7	fact	linear 2*x+1 at x=4	9
+math	grade7	fact	linear 2*x+2 at x=4	10
+math	grade7	fact	linear 2*x+3 at x=4	11
+math	grade7	fact	linear 2*x+-3 at x=5	7
+math	grade7	fact	linear 2*x+-2 at x=5	8
+math	grade7	fact	linear 2*x+-1 at x=5	9
+math	grade7	fact	linear 2*x+0 at x=5	10
+math	grade7	fact	linear 2*x+1 at x=5	11
+math	grade7	fact	linear 2*x+2 at x=5	12
+math	grade7	fact	linear 2*x+3 at x=5	13
+math	grade7	fact	linear 2*x+-3 at x=6	9
+math	grade7	fact	linear 2*x+-2 at x=6	10
+math	grade7	fact	linear 2*x+-1 at x=6	11
+math	grade7	fact	linear 2*x+0 at x=6	12
+math	grade7	fact	linear 2*x+1 at x=6	13
+math	grade7	fact	linear 2*x+2 at x=6	14
+math	grade7	fact	linear 2*x+3 at x=6	15
+math	grade7	fact	linear 2*x+-3 at x=7	11
+math	grade7	fact	linear 2*x+-2 at x=7	12
+math	grade7	fact	linear 2*x+-1 at x=7	13
+math	grade7	fact	linear 2*x+0 at x=7	14
+math	grade7	fact	linear 2*x+1 at x=7	15
+math	grade7	fact	linear 2*x+2 at x=7	16
+math	grade7	fact	linear 2*x+3 at x=7	17
+math	grade7	fact	linear 3*x+-3 at x=0	-3
+math	grade7	fact	linear 3*x+-2 at x=0	-2
+math	grade7	fact	linear 3*x+-1 at x=0	-1
+math	grade7	fact	linear 3*x+0 at x=0	0
+math	grade7	fact	linear 3*x+1 at x=0	1
+math	grade7	fact	linear 3*x+2 at x=0	2
+math	grade7	fact	linear 3*x+3 at x=0	3
+math	grade7	fact	linear 3*x+-3 at x=1	0
+math	grade7	fact	linear 3*x+-2 at x=1	1
+math	grade7	fact	linear 3*x+-1 at x=1	2
+math	grade7	fact	linear 3*x+0 at x=1	3
+math	grade7	fact	linear 3*x+1 at x=1	4
+math	grade7	fact	linear 3*x+2 at x=1	5
+math	grade7	fact	linear 3*x+3 at x=1	6
+math	grade7	fact	linear 3*x+-3 at x=2	3
+math	grade7	fact	linear 3*x+-2 at x=2	4
+math	grade7	fact	linear 3*x+-1 at x=2	5
+math	grade7	fact	linear 3*x+0 at x=2	6
+math	grade7	fact	linear 3*x+1 at x=2	7
+math	grade7	fact	linear 3*x+2 at x=2	8
+math	grade7	fact	linear 3*x+3 at x=2	9
+math	grade7	fact	linear 3*x+-3 at x=3	6
+math	grade7	fact	linear 3*x+-2 at x=3	7
+math	grade7	fact	linear 3*x+-1 at x=3	8
+math	grade7	fact	linear 3*x+0 at x=3	9
+math	grade7	fact	linear 3*x+1 at x=3	10
+math	grade7	fact	linear 3*x+2 at x=3	11
+math	grade7	fact	linear 3*x+3 at x=3	12
+math	grade7	fact	linear 3*x+-3 at x=4	9
+math	grade7	fact	linear 3*x+-2 at x=4	10
+math	grade7	fact	linear 3*x+-1 at x=4	11
+math	grade7	fact	linear 3*x+0 at x=4	12
+math	grade7	fact	linear 3*x+1 at x=4	13
+math	grade7	fact	linear 3*x+2 at x=4	14
+math	grade7	fact	linear 3*x+3 at x=4	15
+math	grade7	fact	linear 3*x+-3 at x=5	12
+math	grade7	fact	linear 3*x+-2 at x=5	13
+math	grade7	fact	linear 3*x+-1 at x=5	14
+math	grade7	fact	linear 3*x+0 at x=5	15
+math	grade7	fact	linear 3*x+1 at x=5	16
+math	grade7	fact	linear 3*x+2 at x=5	17
+math	grade7	fact	linear 3*x+3 at x=5	18
+math	grade7	fact	linear 3*x+-3 at x=6	15
+math	grade7	fact	linear 3*x+-2 at x=6	16
+math	grade7	fact	linear 3*x+-1 at x=6	17
+math	grade7	fact	linear 3*x+0 at x=6	18
+math	grade7	fact	linear 3*x+1 at x=6	19
+math	grade7	fact	linear 3*x+2 at x=6	20
+math	grade7	fact	linear 3*x+3 at x=6	21
+math	grade7	fact	linear 3*x+-3 at x=7	18
+math	grade7	fact	linear 3*x+-2 at x=7	19
+math	grade7	fact	linear 3*x+-1 at x=7	20
+math	grade7	fact	linear 3*x+0 at x=7	21
+math	grade7	fact	linear 3*x+1 at x=7	22
+math	grade7	fact	linear 3*x+2 at x=7	23
+math	grade7	fact	linear 3*x+3 at x=7	24
+math	grade7	fact	linear 4*x+-3 at x=0	-3
+math	grade7	fact	linear 4*x+-2 at x=0	-2
+math	grade7	fact	linear 4*x+-1 at x=0	-1
+math	grade7	fact	linear 4*x+0 at x=0	0
+math	grade7	fact	linear 4*x+1 at x=0	1
+math	grade7	fact	linear 4*x+2 at x=0	2
+math	grade7	fact	linear 4*x+3 at x=0	3
+math	grade7	fact	linear 4*x+-3 at x=1	1
+math	grade7	fact	linear 4*x+-2 at x=1	2
+math	grade7	fact	linear 4*x+-1 at x=1	3
+math	grade7	fact	linear 4*x+0 at x=1	4
+math	grade7	fact	linear 4*x+1 at x=1	5
+math	grade7	fact	linear 4*x+2 at x=1	6
+math	grade7	fact	linear 4*x+3 at x=1	7
+math	grade7	fact	linear 4*x+-3 at x=2	5
+math	grade7	fact	linear 4*x+-2 at x=2	6
+math	grade7	fact	linear 4*x+-1 at x=2	7
+math	grade7	fact	linear 4*x+0 at x=2	8
+math	grade7	fact	linear 4*x+1 at x=2	9
+math	grade7	fact	linear 4*x+2 at x=2	10
+math	grade7	fact	linear 4*x+3 at x=2	11
+math	grade7	fact	linear 4*x+-3 at x=3	9
+math	grade7	fact	linear 4*x+-2 at x=3	10
+math	grade7	fact	linear 4*x+-1 at x=3	11
+math	grade7	fact	linear 4*x+0 at x=3	12
+math	grade7	fact	linear 4*x+1 at x=3	13
+math	grade7	fact	linear 4*x+2 at x=3	14
+math	grade7	fact	linear 4*x+3 at x=3	15
+math	grade7	fact	linear 4*x+-3 at x=4	13
+math	grade7	fact	linear 4*x+-2 at x=4	14
+math	grade7	fact	linear 4*x+-1 at x=4	15
+math	grade7	fact	linear 4*x+0 at x=4	16
+math	grade7	fact	linear 4*x+1 at x=4	17
+math	grade7	fact	linear 4*x+2 at x=4	18
+math	grade7	fact	linear 4*x+3 at x=4	19
+math	grade7	fact	linear 4*x+-3 at x=5	17
+math	grade7	fact	linear 4*x+-2 at x=5	18
+math	grade7	fact	linear 4*x+-1 at x=5	19
+math	grade7	fact	linear 4*x+0 at x=5	20
+math	grade7	fact	linear 4*x+1 at x=5	21
+math	grade7	fact	linear 4*x+2 at x=5	22
+math	grade7	fact	linear 4*x+3 at x=5	23
+math	grade7	fact	linear 4*x+-3 at x=6	21
+math	grade7	fact	linear 4*x+-2 at x=6	22
+math	grade7	fact	linear 4*x+-1 at x=6	23
+math	grade7	fact	linear 4*x+0 at x=6	24
+math	grade7	fact	linear 4*x+1 at x=6	25
+math	grade7	fact	linear 4*x+2 at x=6	26
+math	grade7	fact	linear 4*x+3 at x=6	27
+math	grade7	fact	linear 4*x+-3 at x=7	25
+math	grade7	fact	linear 4*x+-2 at x=7	26
+math	grade7	fact	linear 4*x+-1 at x=7	27
+math	grade7	fact	linear 4*x+0 at x=7	28
+math	grade7	fact	linear 4*x+1 at x=7	29
+math	grade7	fact	linear 4*x+2 at x=7	30
+math	grade7	fact	linear 4*x+3 at x=7	31
+math	grade7	fact	linear 5*x+-3 at x=0	-3
+math	grade7	fact	linear 5*x+-2 at x=0	-2
+math	grade7	fact	linear 5*x+-1 at x=0	-1
+math	grade7	fact	linear 5*x+0 at x=0	0
+math	grade7	fact	linear 5*x+1 at x=0	1
+math	grade7	fact	linear 5*x+2 at x=0	2
+math	grade7	fact	linear 5*x+3 at x=0	3
+math	grade7	fact	linear 5*x+-3 at x=1	2
+math	grade7	fact	linear 5*x+-2 at x=1	3
+math	grade7	fact	linear 5*x+-1 at x=1	4
+math	grade7	fact	linear 5*x+0 at x=1	5
+math	grade7	fact	linear 5*x+1 at x=1	6
+math	grade7	fact	linear 5*x+2 at x=1	7
+math	grade7	fact	linear 5*x+3 at x=1	8
+math	grade7	fact	linear 5*x+-3 at x=2	7
+math	grade7	fact	linear 5*x+-2 at x=2	8
+math	grade7	fact	linear 5*x+-1 at x=2	9
+math	grade7	fact	linear 5*x+0 at x=2	10
+math	grade7	fact	linear 5*x+1 at x=2	11
+math	grade7	fact	linear 5*x+2 at x=2	12
+math	grade7	fact	linear 5*x+3 at x=2	13
+math	grade7	fact	linear 5*x+-3 at x=3	12
+math	grade7	fact	linear 5*x+-2 at x=3	13
+math	grade7	fact	linear 5*x+-1 at x=3	14
+math	grade7	fact	linear 5*x+0 at x=3	15
+math	grade7	fact	linear 5*x+1 at x=3	16
+math	grade7	fact	linear 5*x+2 at x=3	17
+math	grade7	fact	linear 5*x+3 at x=3	18
+math	grade7	fact	linear 5*x+-3 at x=4	17
+math	grade7	fact	linear 5*x+-2 at x=4	18
+math	grade7	fact	linear 5*x+-1 at x=4	19
+math	grade7	fact	linear 5*x+0 at x=4	20
+math	grade7	fact	linear 5*x+1 at x=4	21
+math	grade7	fact	linear 5*x+2 at x=4	22
+math	grade7	fact	linear 5*x+3 at x=4	23
+math	grade7	fact	linear 5*x+-3 at x=5	22
+math	grade7	fact	linear 5*x+-2 at x=5	23
+math	grade7	fact	linear 5*x+-1 at x=5	24
+math	grade7	fact	linear 5*x+0 at x=5	25
+math	grade7	fact	linear 5*x+1 at x=5	26
+math	grade7	fact	linear 5*x+2 at x=5	27
+math	grade7	fact	linear 5*x+3 at x=5	28
+math	grade7	fact	linear 5*x+-3 at x=6	27
+math	grade7	fact	linear 5*x+-2 at x=6	28
+math	grade7	fact	linear 5*x+-1 at x=6	29
+math	grade7	fact	linear 5*x+0 at x=6	30
+math	grade7	fact	linear 5*x+1 at x=6	31
+math	grade7	fact	linear 5*x+2 at x=6	32
+math	grade7	fact	linear 5*x+3 at x=6	33
+math	grade7	fact	linear 5*x+-3 at x=7	32
+math	grade7	fact	linear 5*x+-2 at x=7	33
+math	grade7	fact	linear 5*x+-1 at x=7	34
+math	grade7	fact	linear 5*x+0 at x=7	35
+math	grade7	fact	linear 5*x+1 at x=7	36
+math	grade7	fact	linear 5*x+2 at x=7	37
+math	grade7	fact	linear 5*x+3 at x=7	38
+math	grade7	fact	angle 90 is	right
+math	grade7	fact	angle 180 is	straight
+math	grade7	fact	angle 45 is	acute
+math	grade7	fact	angle 120 is	obtuse
+math	grade7	fact	angle 30 is	acute
+math	grade7	fact	angle 60 is	acute
+math	grade7	fact	angle 150 is	obtuse
+math	grade7	fact	angle 0 is	zero
+math	grade7	fact	10 percent of 50	5
+math	grade7	fact	25 percent of 80	20
+math	grade7	fact	50 percent of 40	20
+math	grade7	fact	20 percent of 100	20
+math	grade7	fact	5 percent of 200	10
+math	grade7	fact	75 percent of 40	30
+math	grade8	fact	slope from (0,0) to (1,1)	1
+math	grade8	fact	slope from (0,0) to (2,4)	2
+math	grade8	fact	slope from (0,0) to (3,6)	2
+math	grade8	fact	slope from (0,0) to (4,2)	0.5
+math	grade8	fact	slope from (0,0) to (5,10)	2
+math	grade8	fact	slope from (0,0) to (2,1)	0.5
+math	grade8	fact	slope from (0,1) to (1,2)	1
+math	grade8	fact	slope from (0,1) to (2,5)	2
+math	grade8	fact	slope from (0,1) to (3,7)	2
+math	grade8	fact	slope from (0,1) to (4,3)	0.5
+math	grade8	fact	slope from (0,1) to (5,11)	2
+math	grade8	fact	slope from (0,1) to (2,2)	0.5
+math	grade8	fact	slope from (0,2) to (1,3)	1
+math	grade8	fact	slope from (0,2) to (2,6)	2
+math	grade8	fact	slope from (0,2) to (3,8)	2
+math	grade8	fact	slope from (0,2) to (4,4)	0.5
+math	grade8	fact	slope from (0,2) to (5,12)	2
+math	grade8	fact	slope from (0,2) to (2,3)	0.5
+math	grade8	fact	slope from (0,3) to (1,4)	1
+math	grade8	fact	slope from (0,3) to (2,7)	2
+math	grade8	fact	slope from (0,3) to (3,9)	2
+math	grade8	fact	slope from (0,3) to (4,5)	0.5
+math	grade8	fact	slope from (0,3) to (5,13)	2
+math	grade8	fact	slope from (0,3) to (2,4)	0.5
+math	grade8	fact	slope from (0,4) to (1,5)	1
+math	grade8	fact	slope from (0,4) to (2,8)	2
+math	grade8	fact	slope from (0,4) to (3,10)	2
+math	grade8	fact	slope from (0,4) to (4,6)	0.5
+math	grade8	fact	slope from (0,4) to (5,14)	2
+math	grade8	fact	slope from (0,4) to (2,5)	0.5
+math	grade8	fact	slope from (1,0) to (2,1)	1
+math	grade8	fact	slope from (1,0) to (3,4)	2
+math	grade8	fact	slope from (1,0) to (4,6)	2
+math	grade8	fact	slope from (1,0) to (5,2)	0.5
+math	grade8	fact	slope from (1,0) to (6,10)	2
+math	grade8	fact	slope from (1,0) to (3,1)	0.5
+math	grade8	fact	slope from (1,1) to (2,2)	1
+math	grade8	fact	slope from (1,1) to (3,5)	2
+math	grade8	fact	slope from (1,1) to (4,7)	2
+math	grade8	fact	slope from (1,1) to (5,3)	0.5
+math	grade8	fact	slope from (1,1) to (6,11)	2
+math	grade8	fact	slope from (1,1) to (3,2)	0.5
+math	grade8	fact	slope from (1,2) to (2,3)	1
+math	grade8	fact	slope from (1,2) to (3,6)	2
+math	grade8	fact	slope from (1,2) to (4,8)	2
+math	grade8	fact	slope from (1,2) to (5,4)	0.5
+math	grade8	fact	slope from (1,2) to (6,12)	2
+math	grade8	fact	slope from (1,2) to (3,3)	0.5
+math	grade8	fact	slope from (1,3) to (2,4)	1
+math	grade8	fact	slope from (1,3) to (3,7)	2
+math	grade8	fact	slope from (1,3) to (4,9)	2
+math	grade8	fact	slope from (1,3) to (5,5)	0.5
+math	grade8	fact	slope from (1,3) to (6,13)	2
+math	grade8	fact	slope from (1,3) to (3,4)	0.5
+math	grade8	fact	slope from (1,4) to (2,5)	1
+math	grade8	fact	slope from (1,4) to (3,8)	2
+math	grade8	fact	slope from (1,4) to (4,10)	2
+math	grade8	fact	slope from (1,4) to (5,6)	0.5
+math	grade8	fact	slope from (1,4) to (6,14)	2
+math	grade8	fact	slope from (1,4) to (3,5)	0.5
+math	grade8	fact	slope from (2,0) to (3,1)	1
+math	grade8	fact	slope from (2,0) to (4,4)	2
+math	grade8	fact	slope from (2,0) to (5,6)	2
+math	grade8	fact	slope from (2,0) to (6,2)	0.5
+math	grade8	fact	slope from (2,0) to (7,10)	2
+math	grade8	fact	slope from (2,0) to (4,1)	0.5
+math	grade8	fact	slope from (2,1) to (3,2)	1
+math	grade8	fact	slope from (2,1) to (4,5)	2
+math	grade8	fact	slope from (2,1) to (5,7)	2
+math	grade8	fact	slope from (2,1) to (6,3)	0.5
+math	grade8	fact	slope from (2,1) to (7,11)	2
+math	grade8	fact	slope from (2,1) to (4,2)	0.5
+math	grade8	fact	slope from (2,2) to (3,3)	1
+math	grade8	fact	slope from (2,2) to (4,6)	2
+math	grade8	fact	slope from (2,2) to (5,8)	2
+math	grade8	fact	slope from (2,2) to (6,4)	0.5
+math	grade8	fact	slope from (2,2) to (7,12)	2
+math	grade8	fact	slope from (2,2) to (4,3)	0.5
+math	grade8	fact	slope from (2,3) to (3,4)	1
+math	grade8	fact	slope from (2,3) to (4,7)	2
+math	grade8	fact	slope from (2,3) to (5,9)	2
+math	grade8	fact	slope from (2,3) to (6,5)	0.5
+math	grade8	fact	slope from (2,3) to (7,13)	2
+math	grade8	fact	slope from (2,3) to (4,4)	0.5
+math	grade8	fact	slope from (2,4) to (3,5)	1
+math	grade8	fact	slope from (2,4) to (4,8)	2
+math	grade8	fact	slope from (2,4) to (5,10)	2
+math	grade8	fact	slope from (2,4) to (6,6)	0.5
+math	grade8	fact	slope from (2,4) to (7,14)	2
+math	grade8	fact	slope from (2,4) to (4,5)	0.5
+math	grade8	fact	slope from (3,0) to (4,1)	1
+math	grade8	fact	slope from (3,0) to (5,4)	2
+math	grade8	fact	slope from (3,0) to (6,6)	2
+math	grade8	fact	slope from (3,0) to (7,2)	0.5
+math	grade8	fact	slope from (3,0) to (8,10)	2
+math	grade8	fact	slope from (3,0) to (5,1)	0.5
+math	grade8	fact	slope from (3,1) to (4,2)	1
+math	grade8	fact	slope from (3,1) to (5,5)	2
+math	grade8	fact	slope from (3,1) to (6,7)	2
+math	grade8	fact	slope from (3,1) to (7,3)	0.5
+math	grade8	fact	slope from (3,1) to (8,11)	2
+math	grade8	fact	slope from (3,1) to (5,2)	0.5
+math	grade8	fact	slope from (3,2) to (4,3)	1
+math	grade8	fact	slope from (3,2) to (5,6)	2
+math	grade8	fact	slope from (3,2) to (6,8)	2
+math	grade8	fact	slope from (3,2) to (7,4)	0.5
+math	grade8	fact	slope from (3,2) to (8,12)	2
+math	grade8	fact	slope from (3,2) to (5,3)	0.5
+math	grade8	fact	slope from (3,3) to (4,4)	1
+math	grade8	fact	slope from (3,3) to (5,7)	2
+math	grade8	fact	slope from (3,3) to (6,9)	2
+math	grade8	fact	slope from (3,3) to (7,5)	0.5
+math	grade8	fact	slope from (3,3) to (8,13)	2
+math	grade8	fact	slope from (3,3) to (5,4)	0.5
+math	grade8	fact	slope from (3,4) to (4,5)	1
+math	grade8	fact	slope from (3,4) to (5,8)	2
+math	grade8	fact	slope from (3,4) to (6,10)	2
+math	grade8	fact	slope from (3,4) to (7,6)	0.5
+math	grade8	fact	slope from (3,4) to (8,14)	2
+math	grade8	fact	slope from (3,4) to (5,5)	0.5
+math	grade8	fact	slope from (4,0) to (5,1)	1
+math	grade8	fact	slope from (4,0) to (6,4)	2
+math	grade8	fact	slope from (4,0) to (7,6)	2
+math	grade8	fact	slope from (4,0) to (8,2)	0.5
+math	grade8	fact	slope from (4,0) to (9,10)	2
+math	grade8	fact	slope from (4,0) to (6,1)	0.5
+math	grade8	fact	slope from (4,1) to (5,2)	1
+math	grade8	fact	slope from (4,1) to (6,5)	2
+math	grade8	fact	slope from (4,1) to (7,7)	2
+math	grade8	fact	slope from (4,1) to (8,3)	0.5
+math	grade8	fact	slope from (4,1) to (9,11)	2
+math	grade8	fact	slope from (4,1) to (6,2)	0.5
+math	grade8	fact	slope from (4,2) to (5,3)	1
+math	grade8	fact	slope from (4,2) to (6,6)	2
+math	grade8	fact	slope from (4,2) to (7,8)	2
+math	grade8	fact	slope from (4,2) to (8,4)	0.5
+math	grade8	fact	slope from (4,2) to (9,12)	2
+math	grade8	fact	slope from (4,2) to (6,3)	0.5
+math	grade8	fact	slope from (4,3) to (5,4)	1
+math	grade8	fact	slope from (4,3) to (6,7)	2
+math	grade8	fact	slope from (4,3) to (7,9)	2
+math	grade8	fact	slope from (4,3) to (8,5)	0.5
+math	grade8	fact	slope from (4,3) to (9,13)	2
+math	grade8	fact	slope from (4,3) to (6,4)	0.5
+math	grade8	fact	slope from (4,4) to (5,5)	1
+math	grade8	fact	slope from (4,4) to (6,8)	2
+math	grade8	fact	slope from (4,4) to (7,10)	2
+math	grade8	fact	slope from (4,4) to (8,6)	0.5
+math	grade8	fact	slope from (4,4) to (9,14)	2
+math	grade8	fact	slope from (4,4) to (6,5)	0.5
+math	grade8	fact	pythagorean 3 4 hyp	5
+math	grade8	problem	3^2+4^2	25
+math	grade8	fact	pythagorean 5 12 hyp	13
+math	grade8	problem	5^2+12^2	169
+math	grade8	fact	pythagorean 6 8 hyp	10
+math	grade8	problem	6^2+8^2	100
+math	grade8	fact	pythagorean 9 12 hyp	15
+math	grade8	problem	9^2+12^2	225
+math	grade8	fact	pythagorean 8 15 hyp	17
+math	grade8	problem	8^2+15^2	289
+math	grade8	fact	pythagorean 7 24 hyp	25
+math	grade8	problem	7^2+24^2	625
+math	grade8	fact	powers of ten 1	0
+math	grade8	problem	10^0	1
+math	grade8	fact	powers of ten 10	1
+math	grade8	problem	10^1	10
+math	grade8	fact	powers of ten 100	2
+math	grade8	problem	10^2	100
+math	grade8	fact	powers of ten 1000	3
+math	grade8	problem	10^3	1000
+math	grade8	fact	powers of ten 10000	4
+math	grade8	problem	10^4	10000
+math	grade8	fact	powers of ten 100000	5
+math	grade8	problem	10^5	100000
+math	grade8	fact	powers of ten 1000000	6
+math	grade8	problem	10^6	1000000
+math	grade8	fact	powers of ten 10000000	7
+math	grade8	problem	10^7	10000000
+math	grade8	fact	powers of ten 100000000	8
+math	grade8	problem	10^8	100000000
+math	grade8	fact	function 1x+1 at 0	1
+math	grade8	fact	function 1x+1 at 1	2
+math	grade8	fact	function 1x+1 at 2	3
+math	grade8	fact	function 1x+1 at 3	4
+math	grade8	fact	function 1x+1 at 4	5
+math	grade8	fact	function 1x+1 at 5	6
+math	grade8	fact	function 1x+1 at 6	7
+math	grade8	fact	function 1x+1 at 7	8
+math	grade8	fact	function 1x+1 at 8	9
+math	grade8	fact	function 1x+1 at 9	10
+math	grade8	fact	function 2x+1 at 0	1
+math	grade8	fact	function 2x+1 at 1	3
+math	grade8	fact	function 2x+1 at 2	5
+math	grade8	fact	function 2x+1 at 3	7
+math	grade8	fact	function 2x+1 at 4	9
+math	grade8	fact	function 2x+1 at 5	11
+math	grade8	fact	function 2x+1 at 6	13
+math	grade8	fact	function 2x+1 at 7	15
+math	grade8	fact	function 2x+1 at 8	17
+math	grade8	fact	function 2x+1 at 9	19
+math	grade8	fact	function 3x+1 at 0	1
+math	grade8	fact	function 3x+1 at 1	4
+math	grade8	fact	function 3x+1 at 2	7
+math	grade8	fact	function 3x+1 at 3	10
+math	grade8	fact	function 3x+1 at 4	13
+math	grade8	fact	function 3x+1 at 5	16
+math	grade8	fact	function 3x+1 at 6	19
+math	grade8	fact	function 3x+1 at 7	22
+math	grade8	fact	function 3x+1 at 8	25
+math	grade8	fact	function 3x+1 at 9	28
+math	grade8	fact	function 4x+1 at 0	1
+math	grade8	fact	function 4x+1 at 1	5
+math	grade8	fact	function 4x+1 at 2	9
+math	grade8	fact	function 4x+1 at 3	13
+math	grade8	fact	function 4x+1 at 4	17
+math	grade8	fact	function 4x+1 at 5	21
+math	grade8	fact	function 4x+1 at 6	25
+math	grade8	fact	function 4x+1 at 7	29
+math	grade8	fact	function 4x+1 at 8	33
+math	grade8	fact	function 4x+1 at 9	37
+math	grade8	fact	function 5x+1 at 0	1
+math	grade8	fact	function 5x+1 at 1	6
+math	grade8	fact	function 5x+1 at 2	11
+math	grade8	fact	function 5x+1 at 3	16
+math	grade8	fact	function 5x+1 at 4	21
+math	grade8	fact	function 5x+1 at 5	26
+math	grade8	fact	function 5x+1 at 6	31
+math	grade8	fact	function 5x+1 at 7	36
+math	grade8	fact	function 5x+1 at 8	41
+math	grade8	fact	function 5x+1 at 9	46
+math	grade8	fact	sci not 3 x 10^4	30000
+math	grade8	fact	sci not 2 x 10^5	200000
+math	grade8	fact	sci not 7 x 10^3	7000
+math	grade8	fact	sci not 1.5 x 10^2	150.0
+math	grade8	fact	sci not 4 x 10^6	4000000
+math	grade8	fact	sci not 9 x 10^1	90
+math	grade1	fact	add means	together
+math	grade1	fact	subtract means	take
+math	grade3	fact	multiply means	groups
+math	grade3	fact	divide means	split
+math	grade6	fact	ratio compares	quantities
+math	grade8	fact	slope measures	steepness
+literacy	preschool	fact	letter starts apple	a
+literacy	preschool	fact	what starts apple	a
+literacy	preschool	fact	sound of a	ah
+literacy	preschool	fact	letter starts ball	b
+literacy	preschool	fact	what starts ball	b
+literacy	preschool	fact	sound of b	buh
+literacy	preschool	fact	letter starts cat	c
+literacy	preschool	fact	what starts cat	c
+literacy	preschool	fact	sound of c	kuh
+literacy	preschool	fact	letter starts dog	d
+literacy	preschool	fact	what starts dog	d
+literacy	preschool	fact	sound of d	duh
+literacy	preschool	fact	letter starts egg	e
+literacy	preschool	fact	what starts egg	e
+literacy	preschool	fact	sound of e	eh
+literacy	preschool	fact	letter starts fish	f
+literacy	preschool	fact	what starts fish	f
+literacy	preschool	fact	sound of f	fuh
+literacy	preschool	fact	letter starts goat	g
+literacy	preschool	fact	what starts goat	g
+literacy	preschool	fact	sound of g	guh
+literacy	preschool	fact	letter starts hat	h
+literacy	preschool	fact	what starts hat	h
+literacy	preschool	fact	sound of h	huh
+literacy	preschool	fact	letter starts igloo	i
+literacy	preschool	fact	what starts igloo	i
+literacy	preschool	fact	sound of i	ih
+literacy	preschool	fact	letter starts jam	j
+literacy	preschool	fact	what starts jam	j
+literacy	preschool	fact	sound of j	juh
+literacy	preschool	fact	letter starts kite	k
+literacy	preschool	fact	what starts kite	k
+literacy	preschool	fact	sound of k	kuh
+literacy	preschool	fact	letter starts leaf	l
+literacy	preschool	fact	what starts leaf	l
+literacy	preschool	fact	sound of l	luh
+literacy	preschool	fact	letter starts moon	m
+literacy	preschool	fact	what starts moon	m
+literacy	preschool	fact	sound of m	muh
+literacy	kindergarten	fact	letter starts nest	n
+literacy	kindergarten	fact	what starts nest	n
+literacy	kindergarten	fact	sound of n	nuh
+literacy	kindergarten	fact	letter starts octopus	o
+literacy	kindergarten	fact	what starts octopus	o
+literacy	kindergarten	fact	sound of o	oh
+literacy	kindergarten	fact	letter starts pig	p
+literacy	kindergarten	fact	what starts pig	p
+literacy	kindergarten	fact	sound of p	puh
+literacy	kindergarten	fact	letter starts queen	q
+literacy	kindergarten	fact	what starts queen	q
+literacy	kindergarten	fact	sound of q	kwuh
+literacy	kindergarten	fact	letter starts rain	r
+literacy	kindergarten	fact	what starts rain	r
+literacy	kindergarten	fact	sound of r	ruh
+literacy	kindergarten	fact	letter starts sun	s
+literacy	kindergarten	fact	what starts sun	s
+literacy	kindergarten	fact	sound of s	sss
+literacy	kindergarten	fact	letter starts tree	t
+literacy	kindergarten	fact	what starts tree	t
+literacy	kindergarten	fact	sound of t	tuh
+literacy	kindergarten	fact	letter starts umbrella	u
+literacy	kindergarten	fact	what starts umbrella	u
+literacy	kindergarten	fact	sound of u	uh
+literacy	kindergarten	fact	letter starts van	v
+literacy	kindergarten	fact	what starts van	v
+literacy	kindergarten	fact	sound of v	vuh
+literacy	kindergarten	fact	letter starts water	w
+literacy	kindergarten	fact	what starts water	w
+literacy	kindergarten	fact	sound of w	wuh
+literacy	kindergarten	fact	letter starts xray	x
+literacy	kindergarten	fact	what starts xray	x
+literacy	kindergarten	fact	sound of x	ks
+literacy	kindergarten	fact	letter starts yarn	y
+literacy	kindergarten	fact	what starts yarn	y
+literacy	kindergarten	fact	sound of y	yuh
+literacy	kindergarten	fact	letter starts zoo	z
+literacy	kindergarten	fact	what starts zoo	z
+literacy	kindergarten	fact	sound of z	zzz
+literacy	preschool	fact	sight word a	a
+literacy	preschool	fact	read a	a
+literacy	preschool	fact	sight word and	and
+literacy	preschool	fact	read and	and
+literacy	preschool	fact	sight word away	away
+literacy	preschool	fact	read away	away
+literacy	preschool	fact	sight word big	big
+literacy	preschool	fact	read big	big
+literacy	preschool	fact	sight word blue	blue
+literacy	preschool	fact	read blue	blue
+literacy	preschool	fact	sight word can	can
+literacy	preschool	fact	read can	can
+literacy	preschool	fact	sight word come	come
+literacy	preschool	fact	read come	come
+literacy	preschool	fact	sight word down	down
+literacy	preschool	fact	read down	down
+literacy	preschool	fact	sight word find	find
+literacy	preschool	fact	read find	find
+literacy	preschool	fact	sight word for	for
+literacy	preschool	fact	read for	for
+literacy	preschool	fact	sight word funny	funny
+literacy	preschool	fact	read funny	funny
+literacy	preschool	fact	sight word go	go
+literacy	preschool	fact	read go	go
+literacy	preschool	fact	sight word help	help
+literacy	preschool	fact	read help	help
+literacy	preschool	fact	sight word here	here
+literacy	preschool	fact	read here	here
+literacy	preschool	fact	sight word i	i
+literacy	preschool	fact	read i	i
+literacy	preschool	fact	sight word in	in
+literacy	preschool	fact	read in	in
+literacy	preschool	fact	sight word is	is
+literacy	preschool	fact	read is	is
+literacy	preschool	fact	sight word it	it
+literacy	preschool	fact	read it	it
+literacy	preschool	fact	sight word jump	jump
+literacy	preschool	fact	read jump	jump
+literacy	preschool	fact	sight word little	little
+literacy	preschool	fact	read little	little
+literacy	preschool	fact	sight word look	look
+literacy	preschool	fact	read look	look
+literacy	preschool	fact	sight word make	make
+literacy	preschool	fact	read make	make
+literacy	preschool	fact	sight word me	me
+literacy	preschool	fact	read me	me
+literacy	preschool	fact	sight word my	my
+literacy	preschool	fact	read my	my
+literacy	preschool	fact	sight word not	not
+literacy	preschool	fact	read not	not
+literacy	preschool	fact	sight word one	one
+literacy	preschool	fact	read one	one
+literacy	preschool	fact	sight word play	play
+literacy	preschool	fact	read play	play
+literacy	preschool	fact	sight word red	red
+literacy	preschool	fact	read red	red
+literacy	preschool	fact	sight word run	run
+literacy	preschool	fact	read run	run
+literacy	preschool	fact	sight word said	said
+literacy	preschool	fact	read said	said
+literacy	preschool	fact	sight word see	see
+literacy	preschool	fact	read see	see
+literacy	preschool	fact	sight word the	the
+literacy	preschool	fact	read the	the
+literacy	preschool	fact	sight word three	three
+literacy	preschool	fact	read three	three
+literacy	preschool	fact	sight word to	to
+literacy	preschool	fact	read to	to
+literacy	preschool	fact	sight word two	two
+literacy	preschool	fact	read two	two
+literacy	preschool	fact	sight word up	up
+literacy	preschool	fact	read up	up
+literacy	preschool	fact	sight word we	we
+literacy	preschool	fact	read we	we
+literacy	preschool	fact	sight word where	where
+literacy	preschool	fact	read where	where
+literacy	preschool	fact	sight word yellow	yellow
+literacy	preschool	fact	read yellow	yellow
+literacy	preschool	fact	sight word you	you
+literacy	preschool	fact	read you	you
+literacy	kindergarten	fact	sight word all	all
+literacy	kindergarten	fact	read all	all
+literacy	kindergarten	fact	sight word am	am
+literacy	kindergarten	fact	read am	am
+literacy	kindergarten	fact	sight word are	are
+literacy	kindergarten	fact	read are	are
+literacy	kindergarten	fact	sight word at	at
+literacy	kindergarten	fact	read at	at
+literacy	kindergarten	fact	sight word ate	ate
+literacy	kindergarten	fact	read ate	ate
+literacy	kindergarten	fact	sight word be	be
+literacy	kindergarten	fact	read be	be
+literacy	kindergarten	fact	sight word black	black
+literacy	kindergarten	fact	read black	black
+literacy	kindergarten	fact	sight word brown	brown
+literacy	kindergarten	fact	read brown	brown
+literacy	kindergarten	fact	sight word but	but
+literacy	kindergarten	fact	read but	but
+literacy	kindergarten	fact	sight word came	came
+literacy	kindergarten	fact	read came	came
+literacy	kindergarten	fact	sight word did	did
+literacy	kindergarten	fact	read did	did
+literacy	kindergarten	fact	sight word do	do
+literacy	kindergarten	fact	read do	do
+literacy	kindergarten	fact	sight word eat	eat
+literacy	kindergarten	fact	read eat	eat
+literacy	kindergarten	fact	sight word four	four
+literacy	kindergarten	fact	read four	four
+literacy	kindergarten	fact	sight word get	get
+literacy	kindergarten	fact	read get	get
+literacy	kindergarten	fact	sight word good	good
+literacy	kindergarten	fact	read good	good
+literacy	kindergarten	fact	sight word have	have
+literacy	kindergarten	fact	read have	have
+literacy	kindergarten	fact	sight word he	he
+literacy	kindergarten	fact	read he	he
+literacy	kindergarten	fact	sight word into	into
+literacy	kindergarten	fact	read into	into
+literacy	kindergarten	fact	sight word like	like
+literacy	kindergarten	fact	read like	like
+literacy	kindergarten	fact	sight word must	must
+literacy	kindergarten	fact	read must	must
+literacy	kindergarten	fact	sight word new	new
+literacy	kindergarten	fact	read new	new
+literacy	kindergarten	fact	sight word no	no
+literacy	kindergarten	fact	read no	no
+literacy	kindergarten	fact	sight word now	now
+literacy	kindergarten	fact	read now	now
+literacy	kindergarten	fact	sight word on	on
+literacy	kindergarten	fact	read on	on
+literacy	kindergarten	fact	sight word our	our
+literacy	kindergarten	fact	read our	our
+literacy	kindergarten	fact	sight word out	out
+literacy	kindergarten	fact	read out	out
+literacy	kindergarten	fact	sight word please	please
+literacy	kindergarten	fact	read please	please
+literacy	kindergarten	fact	sight word pretty	pretty
+literacy	kindergarten	fact	read pretty	pretty
+literacy	kindergarten	fact	sight word ran	ran
+literacy	kindergarten	fact	read ran	ran
+literacy	kindergarten	fact	sight word ride	ride
+literacy	kindergarten	fact	read ride	ride
+literacy	kindergarten	fact	sight word saw	saw
+literacy	kindergarten	fact	read saw	saw
+literacy	kindergarten	fact	sight word say	say
+literacy	kindergarten	fact	read say	say
+literacy	kindergarten	fact	sight word she	she
+literacy	kindergarten	fact	read she	she
+literacy	kindergarten	fact	sight word so	so
+literacy	kindergarten	fact	read so	so
+literacy	kindergarten	fact	sight word soon	soon
+literacy	kindergarten	fact	read soon	soon
+literacy	kindergarten	fact	sight word that	that
+literacy	kindergarten	fact	read that	that
+literacy	kindergarten	fact	sight word there	there
+literacy	kindergarten	fact	read there	there
+literacy	kindergarten	fact	sight word they	they
+literacy	kindergarten	fact	read they	they
+literacy	kindergarten	fact	sight word this	this
+literacy	kindergarten	fact	read this	this
+literacy	kindergarten	fact	sight word too	too
+literacy	kindergarten	fact	read too	too
+literacy	kindergarten	fact	sight word under	under
+literacy	kindergarten	fact	read under	under
+literacy	kindergarten	fact	sight word want	want
+literacy	kindergarten	fact	read want	want
+literacy	kindergarten	fact	sight word was	was
+literacy	kindergarten	fact	read was	was
+literacy	kindergarten	fact	sight word well	well
+literacy	kindergarten	fact	read well	well
+literacy	kindergarten	fact	sight word went	went
+literacy	kindergarten	fact	read went	went
+literacy	kindergarten	fact	sight word what	what
+literacy	kindergarten	fact	read what	what
+literacy	kindergarten	fact	sight word white	white
+literacy	kindergarten	fact	read white	white
+literacy	kindergarten	fact	sight word who	who
+literacy	kindergarten	fact	read who	who
+literacy	kindergarten	fact	sight word will	will
+literacy	kindergarten	fact	read will	will
+literacy	kindergarten	fact	sight word with	with
+literacy	kindergarten	fact	read with	with
+literacy	kindergarten	fact	sight word yes	yes
+literacy	kindergarten	fact	read yes	yes
+literacy	grade1	fact	sight word after	after
+literacy	grade1	fact	read after	after
+literacy	grade1	fact	sight word again	again
+literacy	grade1	fact	read again	again
+literacy	grade1	fact	sight word an	an
+literacy	grade1	fact	read an	an
+literacy	grade1	fact	sight word any	any
+literacy	grade1	fact	read any	any
+literacy	grade1	fact	sight word as	as
+literacy	grade1	fact	read as	as
+literacy	grade1	fact	sight word ask	ask
+literacy	grade1	fact	read ask	ask
+literacy	grade1	fact	sight word by	by
+literacy	grade1	fact	read by	by
+literacy	grade1	fact	sight word could	could
+literacy	grade1	fact	read could	could
+literacy	grade1	fact	sight word every	every
+literacy	grade1	fact	read every	every
+literacy	grade1	fact	sight word fly	fly
+literacy	grade1	fact	read fly	fly
+literacy	grade1	fact	sight word from	from
+literacy	grade1	fact	read from	from
+literacy	grade1	fact	sight word give	give
+literacy	grade1	fact	read give	give
+literacy	grade1	fact	sight word giving	giving
+literacy	grade1	fact	read giving	giving
+literacy	grade1	fact	sight word had	had
+literacy	grade1	fact	read had	had
+literacy	grade1	fact	sight word has	has
+literacy	grade1	fact	read has	has
+literacy	grade1	fact	sight word her	her
+literacy	grade1	fact	read her	her
+literacy	grade1	fact	sight word him	him
+literacy	grade1	fact	read him	him
+literacy	grade1	fact	sight word his	his
+literacy	grade1	fact	read his	his
+literacy	grade1	fact	sight word how	how
+literacy	grade1	fact	read how	how
+literacy	grade1	fact	sight word just	just
+literacy	grade1	fact	read just	just
+literacy	grade1	fact	sight word know	know
+literacy	grade1	fact	read know	know
+literacy	grade1	fact	sight word let	let
+literacy	grade1	fact	read let	let
+literacy	grade1	fact	sight word live	live
+literacy	grade1	fact	read live	live
+literacy	grade1	fact	sight word may	may
+literacy	grade1	fact	read may	may
+literacy	grade1	fact	sight word of	of
+literacy	grade1	fact	read of	of
+literacy	grade1	fact	sight word old	old
+literacy	grade1	fact	read old	old
+literacy	grade1	fact	sight word once	once
+literacy	grade1	fact	read once	once
+literacy	grade1	fact	sight word open	open
+literacy	grade1	fact	read open	open
+literacy	grade1	fact	sight word over	over
+literacy	grade1	fact	read over	over
+literacy	grade1	fact	sight word put	put
+literacy	grade1	fact	read put	put
+literacy	grade1	fact	sight word round	round
+literacy	grade1	fact	read round	round
+literacy	grade1	fact	sight word some	some
+literacy	grade1	fact	read some	some
+literacy	grade1	fact	sight word stop	stop
+literacy	grade1	fact	read stop	stop
+literacy	grade1	fact	sight word take	take
+literacy	grade1	fact	read take	take
+literacy	grade1	fact	sight word thank	thank
+literacy	grade1	fact	read thank	thank
+literacy	grade1	fact	sight word them	them
+literacy	grade1	fact	read them	them
+literacy	grade1	fact	sight word then	then
+literacy	grade1	fact	read then	then
+literacy	grade1	fact	sight word think	think
+literacy	grade1	fact	read think	think
+literacy	grade1	fact	sight word walk	walk
+literacy	grade1	fact	read walk	walk
+literacy	grade1	fact	sight word were	were
+literacy	grade1	fact	read were	were
+literacy	grade1	fact	sight word when	when
+literacy	grade1	fact	read when	when
+literacy	grade2	fact	fry word the	the
+literacy	grade2	fact	fry word of	of
+literacy	grade2	fact	fry word and	and
+literacy	grade2	fact	fry word a	a
+literacy	grade2	fact	fry word to	to
+literacy	grade2	fact	fry word in	in
+literacy	grade2	fact	fry word is	is
+literacy	grade2	fact	fry word you	you
+literacy	grade2	fact	fry word that	that
+literacy	grade2	fact	fry word it	it
+literacy	grade2	fact	fry word he	he
+literacy	grade2	fact	fry word was	was
+literacy	grade2	fact	fry word for	for
+literacy	grade2	fact	fry word on	on
+literacy	grade2	fact	fry word are	are
+literacy	grade2	fact	fry word as	as
+literacy	grade2	fact	fry word with	with
+literacy	grade2	fact	fry word his	his
+literacy	grade2	fact	fry word they	they
+literacy	grade2	fact	fry word i	i
+literacy	grade2	fact	fry word at	at
+literacy	grade2	fact	fry word be	be
+literacy	grade2	fact	fry word this	this
+literacy	grade2	fact	fry word have	have
+literacy	grade2	fact	fry word from	from
+literacy	grade2	fact	fry word or	or
+literacy	grade2	fact	fry word one	one
+literacy	grade2	fact	fry word had	had
+literacy	grade2	fact	fry word by	by
+literacy	grade2	fact	fry word word	word
+literacy	grade2	fact	fry word but	but
+literacy	grade2	fact	fry word not	not
+literacy	grade2	fact	fry word what	what
+literacy	grade2	fact	fry word all	all
+literacy	grade2	fact	fry word were	were
+literacy	grade2	fact	fry word we	we
+literacy	grade2	fact	fry word when	when
+literacy	grade2	fact	fry word your	your
+literacy	grade2	fact	fry word can	can
+literacy	grade2	fact	fry word said	said
+literacy	grade3	fact	fry word there	there
+literacy	grade3	fact	fry word use	use
+literacy	grade3	fact	fry word an	an
+literacy	grade3	fact	fry word each	each
+literacy	grade3	fact	fry word which	which
+literacy	grade3	fact	fry word she	she
+literacy	grade3	fact	fry word do	do
+literacy	grade3	fact	fry word how	how
+literacy	grade3	fact	fry word their	their
+literacy	grade3	fact	fry word if	if
+literacy	grade3	fact	fry word will	will
+literacy	grade3	fact	fry word up	up
+literacy	grade3	fact	fry word other	other
+literacy	grade3	fact	fry word about	about
+literacy	grade3	fact	fry word out	out
+literacy	grade3	fact	fry word many	many
+literacy	grade3	fact	fry word then	then
+literacy	grade3	fact	fry word them	them
+literacy	grade3	fact	fry word these	these
+literacy	grade3	fact	fry word so	so
+literacy	grade3	fact	fry word some	some
+literacy	grade3	fact	fry word her	her
+literacy	grade3	fact	fry word would	would
+literacy	grade3	fact	fry word make	make
+literacy	grade3	fact	fry word like	like
+literacy	grade3	fact	fry word him	him
+literacy	grade3	fact	fry word into	into
+literacy	grade3	fact	fry word time	time
+literacy	grade3	fact	fry word has	has
+literacy	grade3	fact	fry word look	look
+literacy	grade4	fact	fry word two	two
+literacy	grade4	fact	fry word more	more
+literacy	grade4	fact	fry word write	write
+literacy	grade4	fact	fry word go	go
+literacy	grade4	fact	fry word see	see
+literacy	grade4	fact	fry word number	number
+literacy	grade4	fact	fry word no	no
+literacy	grade4	fact	fry word way	way
+literacy	grade4	fact	fry word could	could
+literacy	grade4	fact	fry word people	people
+literacy	grade4	fact	fry word my	my
+literacy	grade4	fact	fry word than	than
+literacy	grade4	fact	fry word first	first
+literacy	grade4	fact	fry word water	water
+literacy	grade4	fact	fry word been	been
+literacy	grade4	fact	fry word call	call
+literacy	grade4	fact	fry word who	who
+literacy	grade4	fact	fry word oil	oil
+literacy	grade4	fact	fry word its	its
+literacy	grade4	fact	fry word now	now
+literacy	grade4	fact	fry word find	find
+literacy	grade4	fact	fry word long	long
+literacy	grade4	fact	fry word down	down
+literacy	grade4	fact	fry word day	day
+literacy	grade4	fact	fry word did	did
+literacy	grade4	fact	fry word get	get
+literacy	grade4	fact	fry word come	come
+literacy	grade4	fact	fry word made	made
+literacy	grade4	fact	fry word may	may
+literacy	grade4	fact	fry word part	part
+literacy	grade5	fact	academic word analyze	analyze
+literacy	grade5	fact	define skill analyze	analyze
+literacy	grade5	fact	academic word compare	compare
+literacy	grade5	fact	define skill compare	compare
+literacy	grade5	fact	academic word contrast	contrast
+literacy	grade5	fact	define skill contrast	contrast
+literacy	grade5	fact	academic word describe	describe
+literacy	grade5	fact	define skill describe	describe
+literacy	grade5	fact	academic word explain	explain
+literacy	grade5	fact	define skill explain	explain
+literacy	grade5	fact	academic word summarize	summarize
+literacy	grade5	fact	define skill summarize	summarize
+literacy	grade5	fact	academic word infer	infer
+literacy	grade5	fact	define skill infer	infer
+literacy	grade5	fact	academic word predict	predict
+literacy	grade5	fact	define skill predict	predict
+literacy	grade6	fact	academic word evaluate	evaluate
+literacy	grade6	fact	define skill evaluate	evaluate
+literacy	grade6	fact	academic word justify	justify
+literacy	grade6	fact	define skill justify	justify
+literacy	grade6	fact	academic word interpret	interpret
+literacy	grade6	fact	define skill interpret	interpret
+literacy	grade6	fact	academic word synthesize	synthesize
+literacy	grade6	fact	define skill synthesize	synthesize
+literacy	grade6	fact	academic word classify	classify
+literacy	grade6	fact	define skill classify	classify
+literacy	grade6	fact	academic word hypothesize	hypothesize
+literacy	grade6	fact	define skill hypothesize	hypothesize
+literacy	grade6	fact	academic word cite	cite
+literacy	grade6	fact	define skill cite	cite
+literacy	grade6	fact	academic word paraphrase	paraphrase
+literacy	grade6	fact	define skill paraphrase	paraphrase
+literacy	grade7	fact	academic word critique	critique
+literacy	grade7	fact	define skill critique	critique
+literacy	grade7	fact	academic word refute	refute
+literacy	grade7	fact	define skill refute	refute
+literacy	grade7	fact	academic word corroborate	corroborate
+literacy	grade7	fact	define skill corroborate	corroborate
+literacy	grade7	fact	academic word delineate	delineate
+literacy	grade7	fact	define skill delineate	delineate
+literacy	grade7	fact	academic word elaborate	elaborate
+literacy	grade7	fact	define skill elaborate	elaborate
+literacy	grade7	fact	academic word imply	imply
+literacy	grade7	fact	define skill imply	imply
+literacy	grade7	fact	academic word convey	convey
+literacy	grade7	fact	define skill convey	convey
+literacy	grade7	fact	academic word articulate	articulate
+literacy	grade7	fact	define skill articulate	articulate
+literacy	grade8	fact	academic word nuance	nuance
+literacy	grade8	fact	define skill nuance	nuance
+literacy	grade8	fact	academic word paradox	paradox
+literacy	grade8	fact	define skill paradox	paradox
+literacy	grade8	fact	academic word ambiguity	ambiguity
+literacy	grade8	fact	define skill ambiguity	ambiguity
+literacy	grade8	fact	academic word rhetoric	rhetoric
+literacy	grade8	fact	define skill rhetoric	rhetoric
+literacy	grade8	fact	academic word style	style
+literacy	grade8	fact	define skill style	style
+literacy	grade8	fact	academic word diction	diction
+literacy	grade8	fact	define skill diction	diction
+literacy	grade8	fact	academic word syntax	syntax
+literacy	grade8	fact	define skill syntax	syntax
+literacy	grade8	fact	academic word cohesion	cohesion
+literacy	grade8	fact	define skill cohesion	cohesion
+literacy	grade1	fact	sentence starts	capital
+literacy	grade1	fact	sentence ends	period
+literacy	grade1	fact	question ends	mark
+literacy	grade2	fact	noun is	person
+literacy	grade2	fact	verb is	action
+literacy	grade2	fact	adjective describes	noun
+literacy	grade2	fact	pronoun replaces	noun
+literacy	grade2	fact	comma can separate	items
+literacy	grade3	fact	plural adds	s
+literacy	grade3	fact	past tense often ends	ed
+literacy	grade3	fact	subject does the	action
+literacy	grade3	fact	predicate tells	action
+literacy	grade3	fact	synonym means	same
+literacy	grade3	fact	antonym means	opposite
+literacy	grade4	fact	paragraph has	topic
+literacy	grade4	fact	dictionary finds	meaning
+literacy	grade4	fact	prefix un means	not
+literacy	grade4	fact	suffix er means	one
+literacy	grade4	fact	main idea is	point
+literacy	grade5	fact	metaphor compares without	like
+literacy	grade5	fact	simile uses	like
+literacy	grade5	fact	idiom meaning is	figurative
+literacy	grade5	fact	personification gives	human
+literacy	grade5	fact	plot is the	events
+literacy	grade5	fact	setting is	where
+literacy	grade5	fact	character is a	person
+literacy	grade5	fact	summary retells	main
+literacy	grade6	fact	thesis states	claim
+literacy	grade6	fact	evidence supports	claim
+literacy	grade6	fact	conclusion wraps	ideas
+literacy	grade6	fact	transition connects	ideas
+literacy	grade6	fact	audience is the	reader
+literacy	grade6	fact	tone is the	attitude
+literacy	grade6	fact	mood is the	feeling
+literacy	grade6	fact	context clues help	meaning
+literacy	grade7	fact	citation gives	source
+literacy	grade7	fact	argument has	claim
+literacy	grade7	fact	counterargument opposes	claim
+literacy	grade7	fact	rhetoric aims to	persuade
+literacy	grade7	fact	connotation is	feeling
+literacy	grade7	fact	denotation is	dictionary
+literacy	grade7	fact	allusion refers to	known
+literacy	grade7	fact	irony contrasts	expectation
+literacy	grade8	fact	theme is	message
+literacy	grade8	fact	bias favors	side
+literacy	grade8	fact	rhetoric ethos is	credibility
+literacy	grade8	fact	rhetoric pathos is	emotion
+literacy	grade8	fact	rhetoric logos is	logic
+literacy	grade8	fact	structure is how	organized
+literacy	grade8	fact	syntax is	sentence
+literacy	grade8	fact	parallelism repeats	structure
+literacy	grade8	fact	fallacy is a	error
+science	preschool	fact	sky color	blue
+science	preschool	fact	color of sky	blue
+science	preschool	fact	grass color	green
+science	preschool	fact	color of grass	green
+science	preschool	fact	sun when	day
+science	preschool	fact	when is sun out	day
+science	preschool	fact	moon when	night
+science	preschool	fact	when is moon out	night
+science	preschool	fact	see with	eyes
+science	preschool	fact	what sees	eyes
+science	preschool	fact	hear with	ears
+science	preschool	fact	what hears	ears
+science	preschool	fact	dog is	animal
+science	preschool	fact	is dog animal	animal
+science	preschool	fact	we drink	water
+science	preschool	fact	what do we drink	water
+science	kindergarten	fact	plants need	sun
+science	kindergarten	fact	what plants need	sun
+science	kindergarten	fact	plants drink	water
+science	kindergarten	fact	plants water	water
+science	kindergarten	fact	people need	water
+science	kindergarten	fact	what people need	water
+science	kindergarten	fact	red light	stop
+science	kindergarten	fact	red light do	stop
+science	kindergarten	fact	winter is	cold
+science	kindergarten	fact	is winter cold	cold
+science	kindergarten	fact	summer is	hot
+science	kindergarten	fact	is summer hot	hot
+science	grade1	fact	we live on	earth
+science	grade1	fact	home planet	earth
+science	grade1	fact	shows places	map
+science	grade1	fact	find places tool	map
+science	grade1	fact	living need	water
+science	grade1	fact	living things need	water
+science	grade1	fact	ice is	solid
+science	grade1	fact	ice form	solid
+science	grade1	fact	seed grows	plant
+science	grade1	fact	seed becomes	plant
+science	grade1	fact	days in week	seven
+science	grade1	fact	how many days week	seven
+science	grade2	fact	solid keeps	shape
+science	grade2	fact	solid property	shape
+science	grade2	fact	liquid takes	shape
+science	grade2	fact	liquid property	shape
+science	grade2	fact	habitat is	home
+science	grade2	fact	what is habitat	home
+science	grade2	fact	push can	move
+science	grade2	fact	what push does	move
+science	grade2	fact	pull can	move
+science	grade2	fact	what pull does	move
+science	grade2	fact	roots take	water
+science	grade2	fact	what roots do	water
+science	grade2	fact	weather is	air
+science	grade2	fact	what is weather	air
+science	grade3	fact	force is	push
+science	grade3	fact	what is force	push
+science	grade3	fact	magnet attracts	iron
+science	grade3	fact	what magnets attract	iron
+science	grade3	fact	butterfly cycle	stages
+science	grade3	fact	butterfly life	stages
+science	grade3	fact	plants grow in	soil
+science	grade3	fact	where plants grow	soil
+science	grade3	fact	sun energy	energy
+science	grade3	fact	sun is source of	energy
+science	grade3	fact	rain part of	cycle
+science	grade3	fact	rain belongs to	cycle
+science	grade4	fact	matter has	mass
+science	grade4	fact	what matter has	mass
+science	grade4	fact	energy makes	happen
+science	grade4	fact	what energy does	happen
+science	grade4	fact	ecosystem has	living
+science	grade4	fact	ecosystem includes	living
+science	grade4	fact	earthquake does	shake
+science	grade4	fact	what earthquake does	shake
+science	grade4	fact	fossils are	remains
+science	grade4	fact	what fossils are	remains
+science	grade4	fact	closed circuit lets	flow
+science	grade4	fact	circuit allows	flow
+science	grade5	fact	gravity pulls	earth
+science	grade5	fact	gravity toward	earth
+science	grade5	fact	plants make food with	sunlight
+science	grade5	fact	photosynthesis needs	sunlight
+science	grade5	fact	molecules made of	atoms
+science	grade5	fact	molecule parts	atoms
+science	grade5	fact	earth orbits	sun
+science	grade5	fact	earth goes around	sun
+science	grade5	fact	food chain shows	eats
+science	grade5	fact	food chain is	eats
+science	grade5	fact	volume measures	space
+science	grade5	fact	what volume measures	space
+science	grade6	fact	basic unit of life	cell
+science	grade6	fact	life unit	cell
+science	grade6	fact	basic unit of matter	atom
+science	grade6	fact	matter unit	atom
+science	grade6	fact	ratio compares	quantities
+science	grade6	fact	what ratio does	quantities
+science	grade6	fact	variable is	symbol
+science	grade6	fact	what is variable	symbol
+science	grade6	fact	crust made of	plates
+science	grade6	fact	earth crust	plates
+science	grade6	fact	kinetic energy is	motion
+science	grade6	fact	kinetic means	motion
+science	grade7	fact	potential energy is	stored
+science	grade7	fact	potential means	stored
+science	grade7	fact	element is	pure
+science	grade7	fact	what is element	pure
+science	grade7	fact	genes carry	information
+science	grade7	fact	what genes carry	information
+science	grade7	fact	density is	mass
+science	grade7	fact	density formula start	mass
+science	grade7	fact	energy flows through	ecosystems
+science	grade7	fact	energy path	ecosystems
+science	grade7	fact	force can change	motion
+science	grade7	fact	force effect	motion
+science	grade8	fact	slope measures	steepness
+science	grade8	fact	what slope measures	steepness
+science	grade8	fact	function maps	input
+science	grade8	fact	function does	input
+science	grade8	fact	right triangle theorem	pythagorean
+science	grade8	fact	a2 plus b2	pythagorean
+science	grade8	fact	scientific notation uses	powers
+science	grade8	fact	sci notation	powers
+science	grade8	fact	waves transfer	energy
+science	grade8	fact	what waves transfer	energy
+science	grade8	fact	natural selection helps	evolution
+science	grade8	fact	selection explains	evolution
+science	grade5	fact	mixture keeps	properties
+science	grade5	fact	mixture property	properties
+science	grade5	fact	solution looks	same
+science	grade5	fact	solution is	same
+science	grade5	fact	phase change needs	heat
+science	grade5	fact	phase needs	heat
+science	grade6	fact	mass is amount of	matter
+science	grade6	fact	what mass is	matter
+science	grade6	fact	volume is	space
+science	grade6	fact	what volume is	space
+science	grade6	fact	hypothesis is	prediction
+science	grade6	fact	what hypothesis is	prediction
+science	grade6	fact	control is	standard
+science	grade6	fact	experiment control	standard
+science	grade7	fact	compound has	elements
+science	grade7	fact	compound is	elements
+science	grade7	fact	reaction forms	substances
+science	grade7	fact	reaction makes	substances
+science	grade7	fact	velocity includes	direction
+science	grade7	fact	velocity is	direction
+science	grade7	fact	acceleration is change in	velocity
+science	grade7	fact	what acceleration is	velocity
+science	grade8	fact	isotopes differ in	neutrons
+science	grade8	fact	isotope difference	neutrons
+science	grade8	fact	periodic table organizes	elements
+science	grade8	fact	periodic table	elements
+science	grade8	fact	dna carries	instructions
+science	grade8	fact	dna does	instructions
+science	grade8	fact	climate is	long-term
+science	grade8	fact	what climate is	long-term
+science	preschool	rel	sun out_in	day
+science	preschool	rel	moon out_in	night
+science	preschool	rel	see uses	eyes
+science	preschool	rel	dog is_a	animal
+science	kindergarten	rel	plant needs	sun
+science	kindergarten	rel	people needs	water
+science	kindergarten	rel	red_light means	stop
+science	grade1	rel	earth is_a	planet
+science	grade1	rel	living needs	water
+science	grade1	rel	ice is_rel	solid
+science	grade2	rel	solid keeps_rel	shape
+science	grade2	rel	habitat is_rel	home
+science	grade3	rel	force is_rel	push
+science	grade3	rel	magnet attracts_rel	iron
+science	grade4	rel	matter has_rel	mass
+science	grade4	rel	ecosystem has_rel	living
+science	grade5	rel	gravity pulls_rel	earth
+science	grade5	rel	earth orbits_rel	sun
+science	grade6	rel	cell is_rel	life
+science	grade6	rel	cell is	life
+science	grade6	rel	atom is_rel	matter
+science	grade6	rel	atom is	matter
+science	grade7	rel	potential is_rel	stored
+science	grade7	rel	potential is	stored
+science	grade7	rel	force changes_rel	motion
+science	grade7	rel	force changes	motion
+science	grade8	rel	slope measures_rel	steepness
+science	grade8	rel	waves transfer_rel	energy
+vision	kindergarten	fact	digit 0 name	zero
+vision	kindergarten	fact	name of digit 0	zero
+vision	grade2	fact	digit 0 name	zero
+vision	grade3	fact	digit 0 name	zero
+vision	grade4	fact	digit 0 name	zero
+vision	grade5	fact	digit 0 name	zero
+vision	grade6	fact	digit 0 name	zero
+vision	grade7	fact	digit 0 name	zero
+vision	grade8	fact	digit 0 name	zero
+vision	kindergarten	fact	digit 1 name	one
+vision	kindergarten	fact	name of digit 1	one
+vision	grade2	fact	digit 1 name	one
+vision	grade3	fact	digit 1 name	one
+vision	grade4	fact	digit 1 name	one
+vision	grade5	fact	digit 1 name	one
+vision	grade6	fact	digit 1 name	one
+vision	grade7	fact	digit 1 name	one
+vision	grade8	fact	digit 1 name	one
+vision	kindergarten	fact	digit 2 name	two
+vision	kindergarten	fact	name of digit 2	two
+vision	grade2	fact	digit 2 name	two
+vision	grade3	fact	digit 2 name	two
+vision	grade4	fact	digit 2 name	two
+vision	grade5	fact	digit 2 name	two
+vision	grade6	fact	digit 2 name	two
+vision	grade7	fact	digit 2 name	two
+vision	grade8	fact	digit 2 name	two
+vision	kindergarten	fact	digit 3 name	three
+vision	kindergarten	fact	name of digit 3	three
+vision	grade2	fact	digit 3 name	three
+vision	grade3	fact	digit 3 name	three
+vision	grade4	fact	digit 3 name	three
+vision	grade5	fact	digit 3 name	three
+vision	grade6	fact	digit 3 name	three
+vision	grade7	fact	digit 3 name	three
+vision	grade8	fact	digit 3 name	three
+vision	kindergarten	fact	digit 4 name	four
+vision	kindergarten	fact	name of digit 4	four
+vision	grade2	fact	digit 4 name	four
+vision	grade3	fact	digit 4 name	four
+vision	grade4	fact	digit 4 name	four
+vision	grade5	fact	digit 4 name	four
+vision	grade6	fact	digit 4 name	four
+vision	grade7	fact	digit 4 name	four
+vision	grade8	fact	digit 4 name	four
+vision	kindergarten	fact	digit 5 name	five
+vision	kindergarten	fact	name of digit 5	five
+vision	grade2	fact	digit 5 name	five
+vision	grade3	fact	digit 5 name	five
+vision	grade4	fact	digit 5 name	five
+vision	grade5	fact	digit 5 name	five
+vision	grade6	fact	digit 5 name	five
+vision	grade7	fact	digit 5 name	five
+vision	grade8	fact	digit 5 name	five
+vision	grade1	fact	digit 6 name	six
+vision	grade1	fact	name of digit 6	six
+vision	grade2	fact	digit 6 name	six
+vision	grade3	fact	digit 6 name	six
+vision	grade4	fact	digit 6 name	six
+vision	grade5	fact	digit 6 name	six
+vision	grade6	fact	digit 6 name	six
+vision	grade7	fact	digit 6 name	six
+vision	grade8	fact	digit 6 name	six
+vision	grade1	fact	digit 7 name	seven
+vision	grade1	fact	name of digit 7	seven
+vision	grade2	fact	digit 7 name	seven
+vision	grade3	fact	digit 7 name	seven
+vision	grade4	fact	digit 7 name	seven
+vision	grade5	fact	digit 7 name	seven
+vision	grade6	fact	digit 7 name	seven
+vision	grade7	fact	digit 7 name	seven
+vision	grade8	fact	digit 7 name	seven
+vision	grade1	fact	digit 8 name	eight
+vision	grade1	fact	name of digit 8	eight
+vision	grade2	fact	digit 8 name	eight
+vision	grade3	fact	digit 8 name	eight
+vision	grade4	fact	digit 8 name	eight
+vision	grade5	fact	digit 8 name	eight
+vision	grade6	fact	digit 8 name	eight
+vision	grade7	fact	digit 8 name	eight
+vision	grade8	fact	digit 8 name	eight
+vision	grade1	fact	digit 9 name	nine
+vision	grade1	fact	name of digit 9	nine
+vision	grade2	fact	digit 9 name	nine
+vision	grade3	fact	digit 9 name	nine
+vision	grade4	fact	digit 9 name	nine
+vision	grade5	fact	digit 9 name	nine
+vision	grade6	fact	digit 9 name	nine
+vision	grade7	fact	digit 9 name	nine
+vision	grade8	fact	digit 9 name	nine
