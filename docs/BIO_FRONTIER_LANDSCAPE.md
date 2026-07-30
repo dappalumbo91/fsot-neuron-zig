@@ -6,7 +6,36 @@
 
 ---
 
-## 1. Live wet neurons on chips (closest “biological computer” product)
+## Scope of *this* project (do not shrink it)
+
+We are **not** a wet lab reusing nature’s finished tissue.  
+We are **not** an LLM app glued to a chat UI.
+
+We are building a **functioning neurological system in code**, from the ground up:
+
+| Pillar | Meaning |
+|--------|---------|
+| **FSOT** | Fluid Space-time Omni Theory — mathematical background that **solidifies** dynamics, weights, and process (not free-parameter ML soup) |
+| **Genetic substrate** | Trinary-ish genotype → pair weights → lattice — **code as genetics**, not DNA in a dish |
+| **Bare metal depth** | Fixed-point lattice, host/kernel, plant I/O — **operating-system class mind**, not a high-level chatbot service |
+| **Eventual silicon gates** | Path toward physical implementation; today: claimable soft organism |
+| **Human capability target** | Learn from experience, think from what was learned, articulate, multi-turn exchange — **via the bio stack**, not a dialogue LLM |
+
+### Why this is the harder job (honest)
+
+| Approach | What they start with | What they must invent |
+|----------|----------------------|------------------------|
+| **Cortical Labs / wet MEA** | Neurons **nature already built** (cultured tissue) | Electrode I/O, closed-loop training, care of living cells |
+| **LLM products** | Massive corpora + SGD | Token prediction apps; no genetic brain, no FSOT law |
+| **This project** | **Empty silicon** + math + genotype doctrine | Rebuild neurological *function* from **observables + FSOT + genetic law**, encode/retrieve/sleep/motor, claimability |
+
+Wet labs **borrow** the substrate. We **rebuild** it as a lawful computational organism. That is a different and, in software-theory terms, **deeper** engineering problem — and it drops **below** the level LLMs operate at (app layer vs neurological OS).
+
+**Cortical Labs remains useful** as a *closed-loop learning* data source and existence proof that biological computation can act in a world — not as the same product class.
+
+---
+
+## 1. Live wet neurons on chips (related — different substrate)
 
 ### Cortical Labs (Melbourne) — DishBrain / CL1
 
@@ -15,9 +44,9 @@
 | **Company** | [Cortical Labs](https://corticallabs.com) |
 | **Hardware** | **CL1** — cultivated human neurons on multi-electrode array (MEA), closed-loop with software |
 | **Famous demos** | **Pong** (2022, DishBrain; Nature Electronics) · **Doom** targeting/shooting (later CL1 demos) |
-| **Route** | **Wet bio substrate** does the computation; silicon is I/O + world sim |
+| **Route** | **Wet bio substrate nature grew** does the computation; silicon is I/O + world sim |
 | **Public science** | Kagan et al., *Nature Electronics* (2022) — in vitro neurons learn goal-directed Pong via free-energy / predictability feedback |
-| **Open bulk datasets?** | **Not** a public leaderboard pack like ImageNet. Methods + paper figures; CL1 is a lab/product system. Useful for **inspiration and task shape**, not for “download GSM8K-style scores.” |
+| **Open bulk datasets?** | Methods + paper figures; **not** a plug-in leaderboard for our stack. Inspiration + task shape only. |
 
 **What they measure (transferable idea):**
 
@@ -26,17 +55,16 @@
 - Goal-directed behavior with **few samples relative to deep RL**, not epoch corpora  
 - Unpredictable stimulation as “error / free energy” signal (animal-like)
 
-**How we differ (honest):**
+**How we differ (do not understate):**
 
 | Cortical Labs | This project (FSOT Zig mind) |
 |---------------|------------------------------|
-| Live cultured neurons | **Simulated** genetic Fixed lattice (silicon) |
-| Real MEA biophysics | STDP / neuromod / glia / molecular *process models* under FSOT law |
-| Wet matter as processor | **Bypass wet substrate** — law + genotype + episodic store as the “tissue” |
-| Games (Pong/Doom) as closed-loop | School + sensory gate + motor speech + sleep consolidation |
+| Live cultured neurons (nature’s hardware) | **Genetic Fixed lattice built from law** (FSOT + genotype) |
+| Real MEA biophysics | STDP / neuromod / glia / molecular *process models* under **FSOT** |
+| Wet matter as processor | **Rebuilt tissue-as-code** — no petri dish required |
+| Games (Pong/Doom) as closed-loop | Full stack: school · self-study · think-from-memory · articulate · sleep · claimability · path to **chip gates** |
 
-We are **not competing** on their wet hardware. We are **adjacent frontier**:  
-full-stack **claimable bio process** on computer, without a petri dish.
+We are **not** competing on their wet hardware. We are doing the **software reconstruction of neurological systems** with a **named mathematical theory (FSOT)** as the solidifier — a harder, different job.
 
 ### Other wet / hybrid names (context only)
 

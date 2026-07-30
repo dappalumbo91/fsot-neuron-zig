@@ -14,9 +14,10 @@ Honest inventory of the **Zig neurological mind**. School knowledge **encodes in
 
 | Mode | Result |
 |------|--------|
-| `bio-suite` | **architecture-native battery** — all green |
-| `bio-learn` | one-shot 8/8 · interf 8/8 · transfer 6/6 · sleep kept · MNIST **95.1%** sensory |
-| `self-study` | materials 44 · quiz/prove **44/44** after study→try→re-read→sleep (no SGD epochs) |
+| `bio-suite` | learn + self-study + converse + MNIST |
+| `bio-converse` | multi-turn **think-from-memory** → articulate · **8/8** ans · context 8/8 · motor/self each turn · `not_llm` |
+| `bio-learn` | one-shot 8/8 · interf 8/8 · transfer 6/6 · sleep · MNIST **95.1%** |
+| `self-study` | materials 44 · prove **44/44** (no SGD epochs) |
 | `bio-articulate` | retrieve/motor/self **10/10** |
 | `brain-learn` | practice 42/42 · prove 20/20 · retrieve prove · `bio=true` |
 

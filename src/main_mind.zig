@@ -101,6 +101,7 @@ const language_depth_fixed = @import("language_depth_fixed.zig");
 const bio_articulate_fixed = @import("bio_articulate_fixed.zig");
 const bio_learn_eval_fixed = @import("bio_learn_eval_fixed.zig");
 const self_study_fixed = @import("self_study_fixed.zig");
+const bio_converse_fixed = @import("bio_converse_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -793,10 +794,50 @@ fn runSelfStudy() void {
     }
 }
 
+fn runBioConverse(do_tts: bool) void {
+    std.debug.print("=== FSOT BIO CONVERSE (multi-turn think-from-memory → articulate) ===\n", .{});
+    std.debug.print("doctrine: human exchange via retrieve+engram+motor — NOT an LLM chat layer\n", .{});
+    std.debug.print("scope: FSOT genetic bare-metal mind; not wet tissue, not app-tier LLM\n", .{});
+    const r = bio_converse_fixed.runBioConverse(do_tts);
+    std.debug.print(
+        "BIO_CONVERSE studied={d} turns={d} ans={d}/{d} acc={e} context={d}/{d} cacc={e} motor={d} self={d} encoded={d} eps={d} engrams={d} bio={} not_llm={}\n",
+        .{
+            r.n_studied,
+            r.n_turns,
+            r.n_answer_ok,
+            r.n_turns,
+            r.answer_acc,
+            r.n_context_ok,
+            r.n_turns,
+            r.context_acc,
+            r.n_motor,
+            r.n_self_hear,
+            r.n_turns_encoded,
+            r.n_episodes,
+            r.n_engrams,
+            r.bio_path,
+            r.not_llm_chat,
+        },
+    );
+    if (r.last_phrase_n > 0) {
+        std.debug.print("last_said=\"{s}\"\n", .{r.last_phrase[0..r.last_phrase_n]});
+    }
+    if (r.ok) {
+        std.debug.print("FSOT_BIO_CONVERSE PASS\n", .{});
+        std.debug.print("FSOT_THINK_FROM_MEMORY_OK\n", .{});
+        std.debug.print("FSOT_MULTI_TURN_BIO_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_BIO_CONVERSE FAIL\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runBioSuite() void {
-    std.debug.print("=== FSOT BIO SUITE (learn + self-study + sensory — architecture-native) ===\n", .{});
+    std.debug.print("=== FSOT BIO SUITE (learn + self-study + converse + sensory) ===\n", .{});
+    std.debug.print("scope: rebuild neurological function from FSOT+genetics — harder than wet MEA borrow\n", .{});
     runBioLearnEval();
     runSelfStudy();
+    runBioConverse(false);
     runMnistAccuracy();
     std.debug.print("FSOT_BIO_SUITE PASS\n", .{});
 }
@@ -2270,6 +2311,10 @@ pub fn main() !void {
         runSelfStudy();
     } else if (std.mem.eql(u8, mode, "bio-suite") or std.mem.eql(u8, mode, "bio_suite") or std.mem.eql(u8, mode, "frontier-eval")) {
         runBioSuite();
+    } else if (std.mem.eql(u8, mode, "bio-converse") or std.mem.eql(u8, mode, "bio_converse") or std.mem.eql(u8, mode, "converse") or std.mem.eql(u8, mode, "think-speak") or std.mem.eql(u8, mode, "multi-turn")) {
+        runBioConverse(false);
+    } else if (std.mem.eql(u8, mode, "bio-converse-speak") or std.mem.eql(u8, mode, "converse-speak")) {
+        runBioConverse(true);
     } else if (std.mem.eql(u8, mode, "bio-articulate") or std.mem.eql(u8, mode, "bio_articulate") or std.mem.eql(u8, mode, "articulate") or std.mem.eql(u8, mode, "say-fact") or std.mem.eql(u8, mode, "engram-speak")) {
         // Pure bio path: teach fact → episodic retrieve → motor speak → self-hear (NO chat module)
         runBioArticulate(false);
@@ -2515,8 +2560,10 @@ pub fn main() !void {
         std.debug.print("  practice       = utter → TTS → self-hear → encode\n", .{});
         std.debug.print("  bio-learn      = animal/human learning eval (NOT GSM8K/LLM benches)\n", .{});
         std.debug.print("  self-study     = read materials → try → re-read → sleep → prove\n", .{});
-        std.debug.print("  bio-suite      = bio-learn + self-study + MNIST sensory\n", .{});
-        std.debug.print("  bio-articulate = teach→retrieve→motor→self-hear (NOT chat layer)\n", .{});
+        std.debug.print("  bio-suite      = learn + self-study + converse + MNIST\n", .{});
+        std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
+        std.debug.print("  converse       = same (NOT LLM chat — bio retrieve path)\n", .{});
+        std.debug.print("  bio-articulate = teach→retrieve→motor→self-hear\n", .{});
         std.debug.print("  mnist          = classic NN sensory discrimination gate\n", .{});
         std.debug.print("  speakers       = formant/DAC smoke only (NOT English)\n", .{});
         std.debug.print("  body           = plant smoke only (senses loop)\n", .{});

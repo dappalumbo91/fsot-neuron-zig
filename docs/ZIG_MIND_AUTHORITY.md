@@ -1,5 +1,19 @@
 # Zig mind authority — where the neuron lives
 
+## Project scope (do not shrink)
+
+This is **not** a wet-lab MEA (Cortical Labs borrows nature’s tissue).  
+This is **not** an LLM chat app.
+
+This is a **neurological operating system** reconstructed in code:
+
+- **FSOT** (Fluid Space-time Omni Theory) as the mathematical solidifier  
+- **Genetic code** (trinary genotype → pair weights → lattice) as substrate  
+- **Bare-metal Fixed** authority → path to **physical chip gates**  
+- Human targets: **learn · think from memory · multi-turn articulate** — via bio stack, not next-token
+
+Rebuilding neurological function from law is the **harder job** relative to culturing tissue or shipping token apps. See [`BIO_FRONTIER_LANDSCAPE.md`](BIO_FRONTIER_LANDSCAPE.md).
+
 ## Genetic folding doctrine
 
 Trinary is not a coding gimmick. The **64-codon PRIMARY map** (A,G=+1; C,T=−1)
