@@ -19,6 +19,7 @@ const curiosity_f = @import("curiosity_fixed.zig");
 const eeg = @import("eeg_gate_anchors_fixed.zig");
 const query_tool = @import("query_tool_fixed.zig");
 const lit = @import("literature_ingest_fixed.zig");
+const capacity = @import("capacity_tier_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Fact = struct {
@@ -206,8 +207,12 @@ fn copyTo(dst: []u8, src: []const u8) usize {
     return n;
 }
 
+/// Soft cap from capacity tier (set each run).
+var grown_cap_runtime: usize = MAX_GROWN;
+
 fn addGrown(cue: []const u8, ans: []const u8, utter: []const u8) bool {
-    if (cue.len < 2 or n_grown >= MAX_GROWN) return false;
+    const cap = @min(grown_cap_runtime, MAX_GROWN);
+    if (cue.len < 2 or n_grown >= cap) return false;
     const ch = memory_f.hashToken(cue);
     var i: usize = 0;
     while (i < n_grown) : (i += 1) {
@@ -654,6 +659,8 @@ pub const ThinkConfig = struct {
     log_path: ?[]const u8 = null,
     allow_live_query: bool = false,
     lit_cards: usize = 120,
+    /// Runtime grown bank soft-cap from capacity tier (≤ MAX_GROWN)
+    grown_cap: usize = MAX_GROWN,
 };
 
 fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) void {
@@ -670,6 +677,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     var rep: ThinkReport = .{};
     rep.eeg_encode_drive = fixed.toF64(eeg.encodeDriveFromTheta());
     grownClear();
+    grown_cap_runtime = @min(cfg.grown_cap, MAX_GROWN);
 
     const gpa = std.heap.page_allocator;
     const org = gpa.create(organism_f.OrganismF) catch {
@@ -694,7 +702,19 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     openPendingLog();
     defer closePendingLog();
 
+    const cap = capacity.probe();
     hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 live_query={} pending_log={s}\n", .{ cfg.allow_live_query, PENDING_PATH });
+    hbPrint(log_ptr, "THINK_BODY tier={s} ram_gb={d} gpu_organ={} lit_cards={d} grown_cap={d}\n", .{
+        switch (cap.tier) {
+            .min => "min",
+            .desktop => "desktop",
+            .workstation => "workstation",
+        },
+        cap.ram_gb,
+        cap.gpu_organ,
+        cfg.lit_cards,
+        grown_cap_runtime,
+    });
 
     // ── BOOT: seed world ──────────────────────────────────────────────
     for (SEED_WORLD) |f| {
@@ -841,32 +861,44 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
 }
 
 pub fn runThinkProbe() ThinkReport {
-    return runInternalThink(.{ .duration_ms = 0, .quiet = false, .heartbeat_ms = 0, .lit_cards = 40 });
+    const cap = capacity.probe();
+    return runInternalThink(.{
+        .duration_ms = 0,
+        .quiet = false,
+        .heartbeat_ms = 0,
+        .lit_cards = @min(cap.lit_cards, 40),
+        .grown_cap = cap.grown_cap,
+        .sleep_every = cap.sleep_every,
+    });
 }
 
 pub fn runThinkMinutes(minutes: u32) ThinkReport {
+    const cap = capacity.probe();
     const ms: u64 = @as(u64, minutes) * 60_000;
     return runInternalThink(.{
         .duration_ms = if (ms == 0) 60_000 else ms,
         .heartbeat_ms = 5_000,
-        .sleep_every = 8,
+        .sleep_every = cap.sleep_every,
         .quiet = false,
         .log_path = "data/results/THINK_LIVE.log",
-        .allow_live_query = false, // local archive/wiki; use think-hour-live for Wikipedia
-        .lit_cards = 160,
+        .allow_live_query = false,
+        .lit_cards = cap.lit_cards,
+        .grown_cap = cap.grown_cap,
     });
 }
 
 pub fn runThinkMinutesLive(minutes: u32) ThinkReport {
+    const cap = capacity.probe();
     const ms: u64 = @as(u64, minutes) * 60_000;
     return runInternalThink(.{
         .duration_ms = if (ms == 0) 60_000 else ms,
         .heartbeat_ms = 5_000,
-        .sleep_every = 8,
+        .sleep_every = cap.sleep_every,
         .quiet = false,
         .log_path = "data/results/THINK_LIVE.log",
         .allow_live_query = true,
-        .lit_cards = 160,
+        .lit_cards = cap.lit_cards,
+        .grown_cap = cap.grown_cap,
     });
 }
 

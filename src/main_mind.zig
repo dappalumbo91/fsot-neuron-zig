@@ -105,6 +105,7 @@ const bio_converse_fixed = @import("bio_converse_fixed.zig");
 const internal_think_fixed = @import("internal_think_fixed.zig");
 const know_query_fixed = @import("know_query_fixed.zig");
 const query_tool_fixed = @import("query_tool_fixed.zig");
+const capacity_tier_fixed = @import("capacity_tier_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -2446,6 +2447,14 @@ pub fn main() !void {
         runBioArticulate(false);
     } else if (std.mem.eql(u8, mode, "bio-articulate-speak") or std.mem.eql(u8, mode, "articulate-speak") or std.mem.eql(u8, mode, "say-fact-speak")) {
         runBioArticulate(true);
+    } else if (std.mem.eql(u8, mode, "capacity") or std.mem.eql(u8, mode, "silicon-body") or std.mem.eql(u8, mode, "tier") or std.mem.eql(u8, mode, "body-capacity")) {
+        // Silicon body: min stack vs Omen growth host (not plant "body" daemon)
+        if (!capacity_tier_fixed.selfTest()) {
+            std.debug.print("FSOT_CAPACITY FAIL\n", .{});
+            std.process.exit(1);
+        }
+        const cap = capacity_tier_fixed.probe();
+        capacity_tier_fixed.printReport(cap);
     } else if (std.mem.eql(u8, mode, "know-query") or std.mem.eql(u8, mode, "know_query") or std.mem.eql(u8, mode, "study-tool") or std.mem.eql(u8, mode, "lookup-learn") or std.mem.eql(u8, mode, "i-dont-know")) {
         // Human: unknown concept → query archive/API → retain engram
         runKnowQuery(false);
@@ -2720,6 +2729,7 @@ pub fn main() !void {
         std.debug.print("  self-study     = read materials → try → re-read → sleep → prove\n", .{});
         std.debug.print("  bio-suite      = learn + self-study + converse + MNIST\n", .{});
         std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
+        std.debug.print("  capacity       = silicon body tier (RAM/GPU) + growth budgets\n", .{});
         std.debug.print("  know-query     = I-don't-know → query tool → retain (archive/wiki)\n", .{});
         std.debug.print("  know-query-live= same + live Wikipedia REST when local miss\n", .{});
         std.debug.print("  think          = internal retrace/cross-check/brainstorm/self-correct\n", .{});

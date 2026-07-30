@@ -5,11 +5,12 @@
 This is **not** a wet-lab MEA (Cortical Labs borrows nature’s tissue).  
 This is **not** an LLM chat app.
 
-This is a **neurological operating system** reconstructed in code:
+This is a **neurological operating system** reconstructed in code — silicon as **body**, OS layers as **anatomy**:
 
 - **FSOT** (Fluid Space-time Omni Theory) as the mathematical solidifier  
 - **Genetic code** (trinary genotype → pair weights → lattice) as substrate  
-- **Bare-metal Fixed** authority → path to **physical chip gates**  
+- **Bare-metal Fixed** authority → QEMU sim → flash image (Mac Mini body) → later gates  
+- **Minimum stack** floor + **capacity tiers** (Omen 32GB/GPU growth host) — see [`MINIMUM_STACK.md`](MINIMUM_STACK.md), [`SILICON_BODY_ARCHITECTURE.md`](SILICON_BODY_ARCHITECTURE.md)  
 - Human targets: **learn · think from memory · multi-turn articulate** — via bio stack, not next-token
 
 Rebuilding neurological function from law is the **harder job** relative to culturing tissue or shipping token apps. See [`BIO_FRONTIER_LANDSCAPE.md`](BIO_FRONTIER_LANDSCAPE.md).
