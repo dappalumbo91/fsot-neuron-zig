@@ -110,6 +110,7 @@ const gpu_organ_fixed = @import("gpu_organ_fixed.zig");
 const gpu_batch_fixed = @import("gpu_batch_fixed.zig");
 const gpu_vram_fixed = @import("gpu_vram_fixed.zig");
 const skill_organ_fixed = @import("skill_organ_fixed.zig");
+const scalpel_rate_fixed = @import("scalpel_rate_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -471,6 +472,14 @@ fn runFixed() void {
     }
     std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match lock ≤2% ISI)\n", .{});
     std.debug.print("FSOT_ALLEN_ISI_RESIDUAL_CLOSED\n", .{});
+
+    // Class-rate scalpel (archive wetlab T1–T2: Pyr/PV/SST/VIP ≤2%)
+    const sc = scalpel_rate_fixed.runScalpel(28);
+    scalpel_rate_fixed.printReport(sc);
+    if (!sc.ok) {
+        std.debug.print("FSOT_FIXED_BIO FAIL (Allen class rates residual open)\n", .{});
+        std.process.exit(1);
+    }
 
     // structure class vs f64 brain authority (+ synapse density band)
     var bf64 = brain.Brain.initSeeded(42, false);
@@ -2496,6 +2505,14 @@ pub fn main() !void {
             std.process.exit(1);
         }
         gpu_batch_fixed.printVramProbe();
+    } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
+        // Archive wetlab T1–T2: per-class FI rates ≤2%
+        if (!scalpel_rate_fixed.selfTest()) {
+            std.debug.print("FSOT_SCALPEL selftest weak — running full scalpel\n", .{});
+        }
+        const sc = scalpel_rate_fixed.runScalpel(28);
+        scalpel_rate_fixed.printReport(sc);
+        if (!sc.ok) std.process.exit(1);
     } else if (std.mem.eql(u8, mode, "skill") or std.mem.eql(u8, mode, "skill-organ") or std.mem.eql(u8, mode, "skill_organ") or std.mem.eql(u8, mode, "python-skill")) {
         // Python skill organ — interpreter sandbox (not mind authority)
         skill_organ_fixed.printProbe();
@@ -2792,6 +2809,7 @@ pub fn main() !void {
         std.debug.print("  gpu-organ      = FSOT-GPU bridge (parity + native kernels)\n", .{});
         std.debug.print("  gpu-batch      = batch cosine/trit sleep replay (Fixed + FSOT-GPU)\n", .{});
         std.debug.print("  gpu-vram       = full VRAM offload → FSOT consensus kernels + top-K\n", .{});
+        std.debug.print("  scalpel        = Allen class rates Pyr/PV/SST/VIP ≤2%\n", .{});
         std.debug.print("  skill          = Python skill organ probe\n", .{});
         std.debug.print("  skill-run NAME = run skill (e.g. skill-run add)\n", .{});
         std.debug.print("  know-query     = I-don't-know → query tool → retain (archive/wiki)\n", .{});
