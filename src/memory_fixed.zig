@@ -1,12 +1,17 @@
 //! Episodic fingerprint memory on fixed lattice.
+//!
+//! MAX_EPISODES is the **STM hot window** (RAM), not a knowledge ceiling.
+//! When the ring is full, the cold slot is spilled to disk LTM before overwrite
+//! (see ltm_disk_fixed — hippocampus → cortex analogue).
 
 const fixed = @import("fixed.zig");
 const brain_f = @import("brain_fixed.zig");
+const ltm = @import("ltm_disk_fixed.zig");
 const Fixed = fixed.Fixed;
 
 pub const FP_DIM: usize = brain_f.N_TOTAL * 2;
-/// Episodic capacity for real school (not a 32-slot toy that forces hash-bank cheats).
-pub const MAX_EPISODES: usize = 192;
+/// STM hot window for episodes (RAM). Growth continues via disk LTM spill.
+pub const MAX_EPISODES: usize = 384;
 pub const ENCODE_STEPS: usize = 16;
 
 pub const EpisodeF = struct {
@@ -91,7 +96,13 @@ pub const StoreF = struct {
             self.n += 1;
             self.ring_i = self.n % MAX_EPISODES;
         } else {
-            // O(1) ring overwrite — old path memmoved ~192 episodes every encode and stalled/crashed long runs
+            // STM full → page cold episode to disk LTM, then O(1) ring overwrite.
+            // Knowledge is not discarded; only the hot working set rotates.
+            const cold = &self.episodes[self.ring_i];
+            if (cold.valid) {
+                _ = ltm.spillEpisode(cold.id, cold.slot_mask, &cold.tokens, cold.fp[0..]);
+                ltm.noteSpillEvent();
+            }
             self.episodes[self.ring_i] = ep;
             self.ring_i = (self.ring_i + 1) % MAX_EPISODES;
         }
@@ -162,7 +173,8 @@ pub const StoreF = struct {
     }
 };
 
-fn cosine(a: *const [FP_DIM]Fixed, b: *const [FP_DIM]Fixed) Fixed {
+/// Public cosine on fingerprint vectors (used by retrieve + GPU-batch organ).
+pub fn cosineFp(a: *const [FP_DIM]Fixed, b: *const [FP_DIM]Fixed) Fixed {
     var dot: Fixed = 0;
     var na: Fixed = 0;
     var nb: Fixed = 0;
@@ -175,6 +187,10 @@ fn cosine(a: *const [FP_DIM]Fixed, b: *const [FP_DIM]Fixed) Fixed {
     if (fixed.lt(na, fixed.fromDecimalStr("0.000000000001")) or fixed.lt(nb, fixed.fromDecimalStr("0.000000000001"))) return 0;
     const denom = fixed.mul(fixed.sqrt(na), fixed.sqrt(nb));
     return fixed.div(dot, denom);
+}
+
+fn cosine(a: *const [FP_DIM]Fixed, b: *const [FP_DIM]Fixed) Fixed {
+    return cosineFp(a, b);
 }
 
 pub fn hashToken(bytes: []const u8) u32 {

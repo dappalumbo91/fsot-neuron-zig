@@ -191,8 +191,14 @@ fn queryWikiFiles(term: []const u8, hit: *QueryHit) bool {
             const blank = (i + 1 < n and buf[i] == '\n' and buf[i + 1] == '\n');
             const at_end = i + 1 >= n;
             if (blank or at_end) {
-                var art = buf[start..if (at_end) n else i];
-                start = i + 2;
+                const end_idx: usize = if (at_end) n else i;
+                // Guard: empty/inverted slice after prior blank (start advanced past remaining bytes)
+                if (start >= end_idx or start >= n) {
+                    start = if (i + 2 < n) i + 2 else n;
+                    continue;
+                }
+                var art = buf[start..end_idx];
+                start = if (i + 2 < n) i + 2 else n;
                 var nl: usize = 0;
                 while (nl < art.len and art[nl] != '\n') : (nl += 1) {}
                 if (nl < 1) continue;

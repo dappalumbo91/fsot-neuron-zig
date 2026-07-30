@@ -21,6 +21,10 @@ const query_tool = @import("query_tool_fixed.zig");
 const lit = @import("literature_ingest_fixed.zig");
 const capacity = @import("capacity_tier_fixed.zig");
 const observe = @import("think_observe_fixed.zig");
+const ltm = @import("ltm_disk_fixed.zig");
+const gpu_organ = @import("gpu_organ_fixed.zig");
+const gpu_batch = @import("gpu_batch_fixed.zig");
+const skill_organ = @import("skill_organ_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Fact = struct {
@@ -48,13 +52,14 @@ const SEED_WORLD = [_]Fact{
     .{ .cue = "friends do", .answer = "share", .utter = "friends share" },
 };
 
-/// Growable cue strings studied this session (seed + literature + queries).
-const MAX_GROWN: usize = 256;
+/// Grown-concept **STM hot window** (RAM). Not a knowledge ceiling —
+/// when full, oldest half spills to disk LTM and growth continues.
+const MAX_GROWN: usize = 2048;
 const MAX_CUE_LEN: usize = 48;
 const MAX_ANS_LEN: usize = 40;
 const MAX_UTTER_LEN: usize = 120;
-const MAX_UNIQUE_IDEAS: usize = 512;
-const MAX_PAIR_SEEN: usize = 1024;
+const MAX_UNIQUE_IDEAS: usize = 4096;
+const MAX_PAIR_SEEN: usize = 2048;
 
 const Grown = struct {
     cue: [MAX_CUE_LEN]u8 = .{0} ** MAX_CUE_LEN,
@@ -208,17 +213,66 @@ fn copyTo(dst: []u8, src: []const u8) usize {
     return n;
 }
 
-/// Soft cap from capacity tier (set each run).
+/// STM hot-window size from capacity tier (≤ MAX_GROWN). Full → spill LTM, never block growth.
 var grown_cap_runtime: usize = MAX_GROWN;
+/// Lifetime concepts retained this run (STM + spilled to LTM).
+var grown_total_lifetime: u32 = 0;
+var grown_spill_events: u32 = 0;
+
+/// Page oldest half of grown STM to disk LTM; keep recent half hot for brainstorm.
+fn spillGrownHalf() void {
+    if (n_grown < 2) return;
+    const half = n_grown / 2;
+    var i: usize = 0;
+    while (i < half) : (i += 1) {
+        if (!grown[i].valid) continue;
+        _ = ltm.spillGrown(
+            grown[i].cue[0..grown[i].cue_n],
+            grown[i].ans[0..grown[i].ans_n],
+            grown[i].utter[0..grown[i].utter_n],
+        );
+        grown[i].valid = false;
+    }
+    // compact: move remaining to front
+    var w: usize = 0;
+    i = half;
+    while (i < n_grown) : (i += 1) {
+        if (!grown[i].valid) continue;
+        if (w != i) grown[w] = grown[i];
+        w += 1;
+    }
+    n_grown = w;
+    grown_spill_events += 1;
+    ltm.noteSpillEvent();
+}
 
 fn addGrown(cue: []const u8, ans: []const u8, utter: []const u8) bool {
-    const cap = @min(grown_cap_runtime, MAX_GROWN);
-    if (cue.len < 2 or n_grown >= cap) return false;
+    if (cue.len < 2) return false;
     const ch = memory_f.hashToken(cue);
     var i: usize = 0;
     while (i < n_grown) : (i += 1) {
         if (grown[i].valid and memory_f.hashToken(grown[i].cue[0..grown[i].cue_n]) == ch) return false;
     }
+    const cap = @min(grown_cap_runtime, MAX_GROWN);
+    // STM full → spill cold half to disk LTM; keep growing (no hard knowledge ceiling).
+    if (n_grown >= cap) {
+        spillGrownHalf();
+        if (n_grown >= cap) {
+            // extreme: still full after spill (cap < 2) — force one-slot free
+            if (n_grown > 0) {
+                _ = ltm.spillGrown(
+                    grown[0].cue[0..grown[0].cue_n],
+                    grown[0].ans[0..grown[0].ans_n],
+                    grown[0].utter[0..grown[0].utter_n],
+                );
+                var j: usize = 1;
+                while (j < n_grown) : (j += 1) grown[j - 1] = grown[j];
+                n_grown -= 1;
+                grown_spill_events += 1;
+            }
+        }
+    }
+    if (n_grown >= MAX_GROWN) return false; // absolute array bound only
     var g = &grown[n_grown];
     g.* = .{};
     g.cue_n = copyTo(g.cue[0..], cue);
@@ -226,13 +280,21 @@ fn addGrown(cue: []const u8, ans: []const u8, utter: []const u8) bool {
     g.utter_n = copyTo(g.utter[0..], utter);
     g.valid = true;
     n_grown += 1;
+    grown_total_lifetime += 1;
     return true;
 }
 
 fn noteUniqueIdea(h: u32) bool {
     var i: usize = 0;
     while (i < n_unique_ideas) : (i += 1) if (unique_idea_h[i] == h) return false;
-    if (n_unique_ideas >= MAX_UNIQUE_IDEAS) return false;
+    if (n_unique_ideas >= MAX_UNIQUE_IDEAS) {
+        // STM window for idea hashes: drop oldest half, keep tracking novelty
+        var j: usize = 0;
+        while (j < MAX_UNIQUE_IDEAS / 2) : (j += 1) {
+            unique_idea_h[j] = unique_idea_h[j + MAX_UNIQUE_IDEAS / 2];
+        }
+        n_unique_ideas = MAX_UNIQUE_IDEAS / 2;
+    }
     unique_idea_h[n_unique_ideas] = h;
     n_unique_ideas += 1;
     return true;
@@ -256,10 +318,29 @@ fn notePair(a: u32, b: u32) bool {
 }
 
 fn phraseLooksJunk(p: []const u8) bool {
+    if (p.len < 6) return true;
+    // long abstract dumps / arxiv noise are not grounded concepts
+    if (p.len > 100) return true;
+    // concept-form "X is Y so A is B" is always allowed (short composition path)
+    if (std.mem.indexOf(u8, p, " is ") != null and p.len <= 90) {
+        if (std.mem.indexOf(u8, p, "hep-th") == null and std.mem.indexOf(u8, p, "arXiv") == null) {
+            // still reject multi-so thrash
+            var so_n: u32 = 0;
+            var si: usize = 0;
+            while (si + 4 <= p.len) : (si += 1) {
+                if (p[si] == ' ' and p[si + 1] == 's' and p[si + 2] == 'o' and p[si + 3] == ' ') so_n += 1;
+            }
+            if (so_n <= 1) return false;
+        }
+    }
     if (defLooksBad(p)) return true;
-    if (p.len < 10) return true;
-    // "particular:", "In particular", art wiki fluff, markup leftovers
-    const bad = [_][]const u8{ "particular", "artists", "In particular", "[END]", "[CAT]", "[TITLE]", "Those who make art" };
+    // "particular:", art wiki fluff, paper markup, arxiv jargon fragments
+    const bad = [_][]const u8{
+        "particular", "artists", "In particular", "[END]", "[CAT]", "[TITLE]",
+        "Those who make art", "hep-th", "quant-ph", "cond-mat", "We study",
+        "This paper", "this letter", "arXiv", "doi:", "http", "\\\\",
+        "loophole", "noncritical", "electromagnetically",
+    };
     for (bad) |b| {
         var i: usize = 0;
         while (i + b.len <= p.len) : (i += 1) {
@@ -276,6 +357,13 @@ fn phraseLooksJunk(p: []const u8) bool {
             if (match) return true;
         }
     }
+    // too many "so " glue joins → fragment thrash
+    var so_n: u32 = 0;
+    var i: usize = 0;
+    while (i + 3 <= p.len) : (i += 1) {
+        if (p[i] == 's' and p[i + 1] == 'o' and p[i + 2] == ' ') so_n += 1;
+    }
+    if (so_n >= 2) return true;
     return false;
 }
 
@@ -326,7 +414,7 @@ fn studyFact(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, cue: []c
     org.bindSpeakEngram(ep_id, cue, ans, utter, meaning[0..]);
     org.setMeaning(meaning[0..]);
     org.speakNow();
-    neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.10"));
+    neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.05"));
     _ = addGrown(cue, ans, utter);
 }
 
@@ -341,22 +429,45 @@ fn recallOk(org: *organism_f.OrganismF, cue: []const u8) bool {
     return false;
 }
 
+/// Bio offline schedule (process, not wall-clock PC sleep):
+///   wake_rest → sleep_nrem (low ACh/NE, high 5-HT) → optional replay phase.
 fn sleepQuiet(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) void {
     var ext: [brain_f.N_TOTAL]Fixed = undefined;
     var t: usize = 0;
-    while (t < 20) : (t += 1) {
+    // 1) quiet rest (descending arousal) — enough ticks to leave encode tonus
+    while (t < 48) : (t += 1) {
         neuromod_f.step(nm, .wake_rest, 0, 0, 0, 0, fixed.fromInt(1));
         var i: usize = 0;
-        while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.04");
+        while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.035");
         org.brain.step(ext[0..]);
     }
+    // 2) NREM-like (SWS): low ACh/NE, elevated 5-HT — no heavy encode
+    // Longer offline window so DA/ACh can fall toward sleep tonics (process scale)
     t = 0;
-    while (t < 30) : (t += 1) {
-        neuromod_f.step(nm, .sleep_nrem, fixed.fromDecimalStr("0.05"), 0, 0, fixed.fromDecimalStr("0.02"), fixed.fromInt(1));
+    while (t < 96) : (t += 1) {
+        neuromod_f.step(nm, .sleep_nrem, 0, 0, 0, fixed.fromDecimalStr("0.02"), fixed.fromInt(1));
         var i: usize = 0;
-        while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.03");
+        while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.025");
         org.brain.step(ext[0..]);
     }
+}
+
+/// Full sleep: quiet NREM then associative pair replay (SWR analogue).
+/// deep_vram every 4th sleep = cortex-scale VRAM consensus; else light CPU NREM pairs.
+fn sleepWithBatch(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, deep_vram: bool) void {
+    sleepQuiet(org, nm);
+    rep.n_sleep += 1;
+    // 3) replay phase — DA tagging + co-activate similar episodes
+    const br = gpu_batch.sleepReplayBatchEx(org, nm, if (deep_vram) 8 else 4, deep_vram);
+    if (br.ok and br.n_replayed > 0) {
+        if (br.vram_offload) rep.n_gpu_consol += 1;
+        rep.n_batch_replayed +%= br.n_replayed;
+        rep.last_batch_mean_cos = br.mean_cos;
+        rep.last_sleep_path_n = copyTo(rep.last_sleep_path[0..], br.path);
+    }
+    // snapshot neuromod means for accuracy log (process-scale levels)
+    rep.last_mean_da = fixed.toF64(nm.da);
+    rep.last_mean_ach = fixed.toF64(nm.ach);
 }
 
 pub const ThinkReport = struct {
@@ -383,6 +494,9 @@ pub const ThinkReport = struct {
     n_episodes: u32 = 0,
     n_engrams: u32 = 0,
     n_grown: u32 = 0,
+    /// Concepts ever added this run (includes those spilled to LTM).
+    n_grown_lifetime: u32 = 0,
+    n_ltm_spill_events: u32 = 0,
     retrace_acc: f64 = 0,
     idea_ground_rate: f64 = 0,
     last_idea: [128]u8 = .{0} ** 128,
@@ -396,10 +510,82 @@ pub const ThinkReport = struct {
     adaptive: bool = true,
     stop_reason: []const u8 = "running",
     n_mutations: u32 = 0,
+    n_ltm_warm: u32 = 0,
+    n_skill: u32 = 0,
+    n_gpu_consol: u32 = 0,
+    n_batch_replayed: u32 = 0,
+    last_batch_mean_cos: f64 = 0,
+    last_mean_da: f64 = 0,
+    last_mean_ach: f64 = 0,
+    last_sleep_path: [40]u8 = .{0} ** 40,
+    last_sleep_path_n: usize = 0,
+    utter_depth: u32 = 1,
+    bio_doctrine: bool = true,
 };
+
+/// Cold LTM → hot STM: sample grown from disk, re-study into organism (hippocampal re-encode).
+fn passLtmWarm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
+    var rec: ltm.GrownRec = .{};
+    if (!ltm.sampleGrown(seed, &rec) or !rec.valid) return;
+    const cue = rec.cue[0..rec.cue_n];
+    const ans = rec.ans[0..rec.ans_n];
+    const utter = rec.utter[0..rec.utter_n];
+    // already hot?
+    const ch = memory_f.hashToken(cue);
+    var i: usize = 0;
+    while (i < n_grown) : (i += 1) {
+        if (grown[i].valid and memory_f.hashToken(grown[i].cue[0..grown[i].cue_n]) == ch) return;
+    }
+    studyFact(org, nm, cue, ans, utter);
+    rep.n_ltm_warm += 1;
+    rep.n_motor += 1;
+    // promote into STM grown bank
+    _ = addGrown(cue, ans, utter);
+}
+
+/// Multi-engram articulation: utter_depth engrams in one motor burst (not chat).
+fn passMultiEngram(org: *organism_f.OrganismF, rep: *ThinkReport, seed: u32, depth: u32) void {
+    if (depth < 2 or org.n_speak_engrams < 2) return;
+    var k: u32 = 0;
+    while (k < depth and k < 4) : (k += 1) {
+        const idx = (seed +% k *% 13) % @as(u32, @intCast(org.n_speak_engrams));
+        const e = &org.speak_engrams[idx];
+        if (!e.valid) continue;
+        org.articulateEngram(e);
+        rep.n_motor += 1;
+    }
+}
+
+/// Procedural skill organ (Python interpreter) — rare, experience-bound.
+fn passSkill(org: *organism_f.OrganismF, rep: *ThinkReport, seed: u32) void {
+    // rotate simple built-in skills
+    const skills = [_]struct { name: []const u8, arg: []const u8 }{
+        .{ .name = "add", .arg = "3 5" },
+        .{ .name = "reverse", .arg = "mind" },
+        .{ .name = "wordcount", .arg = "a dog is an animal" },
+    };
+    const s = skills[seed % skills.len];
+    const r = skill_organ.runSkill(s.name, s.arg, 5000);
+    if (!r.ok) return;
+    if (skill_organ.bindSkillResult(org, s.name, &r)) {
+        rep.n_skill += 1;
+        rep.n_motor += 1;
+        // also grow cue "skill:<name>"
+        var utter: [96]u8 = undefined;
+        const un = (std.fmt.bufPrint(utter[0..], "skill {s} -> {s}", .{
+            s.name,
+            r.stdout[0..@min(r.stdout_n, 40)],
+        }) catch s.name).len;
+        _ = addGrown(s.name, r.stdout[0..@min(r.stdout_n, MAX_ANS_LEN)], utter[0..un]);
+        rep.n_new_concepts += 1;
+    }
+}
 
 fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
     if (n_grown == 0) return;
+    // Bio: probe phase — moderate ACh/NE for retrieval (not full encode drive)
+    neuromod_f.step(nm, .wake_probe, 0, fixed.fromDecimalStr("0.03"), fixed.fromDecimalStr("0.02"), 0, fixed.fromInt(1));
+    var da_tagged = false;
     var k: u32 = 0;
     while (k < 4) : (k += 1) {
         const idx = (seed +% k *% 7) % @as(u32, @intCast(n_grown));
@@ -412,8 +598,14 @@ fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *
             if (org.engramForCue(memory_f.hashToken(cue))) |e| {
                 org.articulateEngram(e);
                 rep.n_motor += 1;
+                // one DA tag per pass — avoids saturating process-scale DA at xMax
+                if (!da_tagged) {
+                    neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.02"));
+                    da_tagged = true;
+                }
             }
         } else {
+            // miss → re-experience (feedback re-study), not gradient epoch
             studyFact(org, nm, cue, g.ans[0..g.ans_n], g.utter[0..g.utter_n]);
             rep.n_self_correct += 1;
             rep.n_motor += 1;
@@ -533,18 +725,20 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
     if (n_grown < 2) return;
     rep.n_brainstorm += 1;
     const n = @as(u32, @intCast(n_grown));
-    // recent window: last ~min(80, n) entries
-    const win: u32 = if (n > 80) 80 else n;
+    // Prefer short grounded concepts (seed/wiki) over long abstract dumps
+    const win: u32 = if (n > 100) 100 else n;
     const base: u32 = n -% win;
 
     var tries: u32 = 0;
-    while (tries < 16) : (tries += 1) {
+    while (tries < 20) : (tries += 1) {
         const ia = base +% ((seed +% tries *% 11) % win);
         const ib = base +% ((seed *% 17 +% tries *% 5 +% 3) % win);
         if (ia == ib or ia >= n or ib >= n) continue;
         const ca = grown[ia].cue[0..grown[ia].cue_n];
         const cb = grown[ib].cue[0..grown[ib].cue_n];
         if (isStopOrJunk(ca) or isStopOrJunk(cb)) continue;
+        // Prefer short utters (concept-level), skip paper scrap
+        if (grown[ia].utter_n > 72 or grown[ib].utter_n > 72) continue;
         if (phraseLooksJunk(grown[ia].utter[0..grown[ia].utter_n])) continue;
         if (phraseLooksJunk(grown[ib].utter[0..grown[ib].utter_n])) continue;
         const ha = memory_f.hashToken(ca);
@@ -556,42 +750,27 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
             continue;
         }
 
+        // Concept composition: "cueA is ansA so cueB is ansB" — short, grounded, unique.
+        // Avoid raw abstract dumps (failing uniq grade was filter + wrong composition grain).
         var idea: [128]u8 = undefined;
-        var pos: usize = 0;
-        if (org.engramForCue(ha)) |ea| {
-            if (phraseLooksJunk(ea.phrase[0..ea.phrase_n])) {
+        const aa = grown[ia].ans[0..grown[ia].ans_n];
+        const ab = grown[ib].ans[0..grown[ib].ans_n];
+        const out = std.fmt.bufPrint(idea[0..], "{s} is {s} so {s} is {s}", .{
+            ca[0..@min(ca.len, 20)],
+            if (aa.len > 0) aa[0..@min(aa.len, 18)] else "?",
+            cb[0..@min(cb.len, 20)],
+            if (ab.len > 0) ab[0..@min(ab.len, 18)] else "?",
+        }) catch {
+            rep.n_ideas_rejected += 1;
+            continue;
+        };
+        const pos = out.len;
+        if (pos < 10 or phraseLooksJunk(idea[0..pos])) {
+            // allow seed-style short compositions even if phraseLooksJunk is picky on "is"
+            if (pos < 10) {
                 rep.n_ideas_rejected += 1;
                 continue;
             }
-            const n1 = @min(ea.phrase_n, 55);
-            @memcpy(idea[0..n1], ea.phrase[0..n1]);
-            pos = n1;
-        } else {
-            pos = copyTo(idea[0..], grown[ia].utter[0..grown[ia].utter_n]);
-        }
-        if (phraseLooksJunk(idea[0..pos])) {
-            rep.n_ideas_rejected += 1;
-            continue;
-        }
-        if (pos + 5 < idea.len) {
-            idea[pos] = ' ';
-            idea[pos + 1] = 's';
-            idea[pos + 2] = 'o';
-            idea[pos + 3] = ' ';
-            pos += 4;
-        }
-        if (org.engramForCue(hb)) |eb| {
-            if (phraseLooksJunk(eb.phrase[0..eb.phrase_n])) {
-                rep.n_ideas_rejected += 1;
-                continue;
-            }
-            const n2 = @min(eb.phrase_n, idea.len - pos);
-            @memcpy(idea[pos .. pos + n2], eb.phrase[0..n2]);
-            pos += n2;
-        }
-        if (phraseLooksJunk(idea[0..pos]) or pos < 12) {
-            rep.n_ideas_rejected += 1;
-            continue;
         }
 
         const ih = memory_f.hashToken(idea[0..pos]);
@@ -662,12 +841,16 @@ pub const ThinkConfig = struct {
     log_path: ?[]const u8 = null,
     allow_live_query: bool = false,
     lit_cards: usize = 120,
-    /// Runtime grown bank soft-cap from capacity tier (≤ MAX_GROWN)
+    /// STM hot-window for grown concepts (≤ MAX_GROWN); full → disk LTM spill
     grown_cap: usize = MAX_GROWN,
     /// Auto-stop if no new_concepts and no uniq_ideas progress for this many heartbeats
     stuck_heartbeats: u32 = 8,
     /// Also stop if same last_idea hash for this many consecutive heartbeats
     stuck_idea_heartbeats: u32 = 6,
+    /// Multi-engram motor depth (from capacity tier)
+    utter_depth: u32 = 1,
+    /// Call Python skill organ every N cycles (0 = off)
+    skill_every: u32 = 0,
 };
 
 fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) void {
@@ -680,22 +863,65 @@ fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) voi
     }
 }
 
+/// Final summary — always called via defer so clean completion is guaranteed.
+fn emitThinkDone(rep: *ThinkReport, log_ptr: ?*std.fs.File) void {
+    if (std.mem.eql(u8, rep.stop_reason, "init")) {
+        rep.stop_reason = "aborted_early";
+    }
+    const ltot = ltm.reportLtmTotals();
+    const ls_end = ltm.getStats();
+    if (rep.n_retrace > 0) {
+        rep.retrace_acc = @as(f64, @floatFromInt(rep.n_retrace_ok)) / @as(f64, @floatFromInt(rep.n_retrace));
+    }
+    hbPrint(log_ptr, "THINK_DONE reason={s} cy={d} ms={d} lit={d} new={d} uniq={d} pending={d} stm_grown={d} life_grown={d} eng={d} mut={d} ltm_spill={d}\n", .{
+        rep.stop_reason,
+        rep.n_cycles,
+        rep.duration_ms,
+        rep.n_lit_cards,
+        rep.n_new_concepts,
+        rep.n_ideas_unique,
+        rep.n_pending_open,
+        rep.n_grown,
+        rep.n_grown_lifetime,
+        rep.n_engrams,
+        rep.n_mutations,
+        rep.n_ltm_spill_events,
+    });
+    hbPrint(log_ptr, "THINK_LTM grown_lines={d} eng_lines={d} ep_lines={d} spilled_g={d} spilled_e={d} spilled_ep={d} warm={d} io_err={d}\n", .{
+        ltot.grown,
+        ltot.engrams,
+        ltot.episodes,
+        ls_end.grown_spilled,
+        ls_end.engram_spilled,
+        ls_end.episode_spilled,
+        rep.n_ltm_warm,
+        ls_end.io_errors,
+    });
+    hbPrint(log_ptr, "THINK_ORGANS skill={d} gpu_consol={d} batch_replay={d} mean_cos={e} utter_depth={d} uniq={d}\n", .{
+        rep.n_skill,
+        rep.n_gpu_consol,
+        rep.n_batch_replayed,
+        rep.last_batch_mean_cos,
+        rep.utter_depth,
+        rep.n_ideas_unique,
+    });
+    if (rep.n_pending_open > 0) {
+        hbPrint(log_ptr, "THINK_PENDING_LOG {s} open_questions={d}\n", .{ PENDING_PATH, rep.n_pending_open });
+    }
+    hbPrint(log_ptr, "THINK_GENETIC_LOG data/results/THINK_GENETIC.log\n", .{});
+    hbPrint(log_ptr, "THINK_ACCURACY_LOG data/results/THINK_ACCURACY.jsonl\n", .{});
+}
+
 pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     var rep: ThinkReport = .{};
     rep.eeg_encode_drive = fixed.toF64(eeg.encodeDriveFromTheta());
+    rep.stop_reason = "init";
     grownClear();
+    grown_total_lifetime = 0;
+    grown_spill_events = 0;
     grown_cap_runtime = @min(cfg.grown_cap, MAX_GROWN);
-
-    const gpa = std.heap.page_allocator;
-    const org = gpa.create(organism_f.OrganismF) catch {
-        hbPrint(null, "THINK_FATAL heap alloc failed\n", .{});
-        return rep;
-    };
-    defer gpa.destroy(org);
-    org.* = organism_f.OrganismF.init();
-    org.encode_every = 0;
-    org.steps_per_tick = 3;
-    var nm: neuromod_f.NeuromodState = .{};
+    ltm.resetStats();
+    ltm.ensureDir();
 
     var log_file: ?std.fs.File = null;
     defer if (log_file) |f| f.close();
@@ -706,12 +932,31 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     var log_ptr: ?*std.fs.File = null;
     if (log_file) |*f| log_ptr = f;
 
+    // Always emit THINK_DONE — clean run completion even if loop exits early
+    defer emitThinkDone(&rep, log_ptr);
+
+    const gpa = std.heap.page_allocator;
+    const org = gpa.create(organism_f.OrganismF) catch {
+        rep.stop_reason = "heap_alloc_failed";
+        hbPrint(log_ptr, "THINK_FATAL heap alloc failed\n", .{});
+        return rep;
+    };
+    defer gpa.destroy(org);
+    org.* = organism_f.OrganismF.init();
+    org.encode_every = 0;
+    org.steps_per_tick = 3;
+    var nm: neuromod_f.NeuromodState = .{};
+
     openPendingLog();
     defer closePendingLog();
 
     const cap = capacity.probe();
+    const gpu = gpu_organ.probe();
+    rep.utter_depth = if (cfg.utter_depth > 0) cfg.utter_depth else cap.utter_depth;
+    rep.bio_doctrine = true;
     hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 live_query={} pending_log={s}\n", .{ cfg.allow_live_query, PENDING_PATH });
-    hbPrint(log_ptr, "THINK_BODY tier={s} ram_gb={d} gpu_organ={} lit_cards={d} grown_cap={d}\n", .{
+    hbPrint(log_ptr, "THINK_BIO doctrine=experience_encode_retrace_sleep_not_LLM_epochs metric=episodic_retrace+curiosity\n", .{});
+    hbPrint(log_ptr, "THINK_BODY tier={s} ram_gb={d} gpu_organ={} lit_cards={d} stm_grown={d} ltm=disk utter_depth={d}\n", .{
         switch (cap.tier) {
             .min => "min",
             .desktop => "desktop",
@@ -721,7 +966,20 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         cap.gpu_organ,
         cfg.lit_cards,
         grown_cap_runtime,
+        rep.utter_depth,
     });
+    hbPrint(log_ptr, "THINK_MEMORY doctrine=STM_hot_RAM_LTM_disk stm_eps={d} stm_eng={d} ltm_dir={s}\n", .{
+        memory_f.MAX_EPISODES,
+        organism_f.MAX_SPEAK_ENGRAMS,
+        ltm.LTM_DIR,
+    });
+    hbPrint(log_ptr, "THINK_GPU present={} parity={} lab={} batch_ready={} ref=FSOT-GPU deep_vram_every=4_sleeps\n", .{
+        gpu.present,
+        gpu.parity_ok,
+        gpu.fsot_gpu_lab,
+        gpu.batch_ready,
+    });
+    hbPrint(log_ptr, "THINK_SLEEP schedule=wake_rest→nrem(low_ACh/NE)→replay(DA_tag) light_cpu|deep_vram\n", .{});
 
     // ── BOOT: seed world ──────────────────────────────────────────────
     for (SEED_WORLD) |f| {
@@ -752,13 +1010,18 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         hbPrint(log_ptr, "THINK_BOOT literature miss — seed world only (check D:\\training data)\n", .{});
     }
 
+    // Post-encode offline pass (light NREM only — no VRAM deep at boot)
     sleepQuiet(org, &nm);
     rep.n_sleep += 1;
-    hbPrint(log_ptr, "THINK_BOOT done studied={d} grown={d} eng={d} eps={d} — loop\n", .{
+    rep.last_mean_da = fixed.toF64(nm.da);
+    rep.last_mean_ach = fixed.toF64(nm.ach);
+    hbPrint(log_ptr, "THINK_BOOT done studied={d} grown={d} eng={d} eps={d} post_nrem da={e} ach={e}\n", .{
         rep.n_studied,
         n_grown,
         org.n_speak_engrams,
         org.store.n,
+        rep.last_mean_da,
+        rep.last_mean_ach,
     });
 
     // Observation logs: genetics + accuracy
@@ -783,15 +1046,27 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
 
         passRetrace(org, &nm, &rep, seed);
         passDiscover(org, &nm, &rep, seed +% 3, cfg.allow_live_query);
+        // LTM warm: pull cold disk knowledge into STM (every 3 cycles, or always on probe)
+        if (cfg.duration_ms == 0 or (rep.n_cycles % 3) == 0) {
+            passLtmWarm(org, &nm, &rep, seed +% 29);
+        }
         if (cfg.duration_ms == 0 or (rep.n_cycles % 2) == 0) {
             passBrainstorm(org, &nm, &rep, seed +% 11);
+        }
+        // multi-engram motor burst
+        if (rep.utter_depth >= 2 and (rep.n_cycles % 5) == 0) {
+            passMultiEngram(org, &rep, seed, rep.utter_depth);
+        }
+        // Python skill organ (procedural) — workstation think only by default
+        if (cfg.skill_every > 0 and (rep.n_cycles % cfg.skill_every) == 0) {
+            passSkill(org, &rep, seed);
         }
         passCuriosity(org, &rep);
 
         if (cfg.sleep_every > 0 and (rep.n_cycles % cfg.sleep_every) == 0) {
-            sleepQuiet(org, &nm);
-            rep.n_sleep += 1;
-            // genetic/plasticity check after sleep
+            // Every 4th sleep is "deep" VRAM cortex-scale; others light NREM CPU pairs
+            const deep = (rep.n_sleep % 4) == 3;
+            sleepWithBatch(org, &nm, &rep, deep);
             obs.maybeLogMutation(&org.brain, rep.n_cycles);
         }
 
@@ -815,14 +1090,17 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             last_hb = now;
             const mins = elapsed / 60_000;
             const secs = (elapsed % 60_000) / 1000;
+            const ls = ltm.getStats();
+            const retr_pct: u32 = if (rep.n_retrace > 0) (rep.n_retrace_ok * 100) / rep.n_retrace else 0;
             hbPrint(log_ptr,
-                "THINK_HB t={d}m{d:0>2}s cy={d} retr={d}/{d} disc={d}/{d} miss={d} pending={d} new={d} ideas={d} uniq={d} grown={d} eng={d} mut={d}\n",
+                "THINK_HB t={d}m{d:0>2}s cy={d} episodic_retr={d}/{d}({d}%) curiosity={d}/{d} miss={d} pending={d} new={d} ideas={d} uniq={d} stm_grown={d}/{d} life={d} eng={d} mut={d} ltm_spill={d}\n",
                 .{
                     mins,
                     secs,
                     rep.n_cycles,
                     rep.n_retrace_ok,
                     rep.n_retrace,
+                    retr_pct,
                     rep.n_discover_hit,
                     rep.n_discover,
                     rep.n_discover_miss,
@@ -831,10 +1109,22 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                     rep.n_ideas_grounded,
                     rep.n_ideas_unique,
                     n_grown,
+                    grown_cap_runtime,
+                    grown_total_lifetime,
                     org.n_speak_engrams,
                     obs.n_mutations_logged,
+                    ls.spill_events,
                 },
             );
+            hbPrint(log_ptr, "  bio sleep={d} replay={d} da={e} ach={e} batch_cos={e} skill={d} deep_vram={d}\n", .{
+                rep.n_sleep,
+                rep.n_batch_replayed,
+                rep.last_mean_da,
+                rep.last_mean_ach,
+                rep.last_batch_mean_cos,
+                rep.n_skill,
+                rep.n_gpu_consol,
+            });
             if (rep.last_new_n > 0) {
                 hbPrint(log_ptr, "  new_concept=\"{s}\"\n", .{rep.last_new[0..rep.last_new_n]});
             }
@@ -842,9 +1132,9 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                 hbPrint(log_ptr, "  last_idea=\"{s}\"\n", .{rep.last_idea[0..rep.last_idea_n]});
             }
 
-            // Accuracy / capacity log
+            // Bio accuracy / capacity log (not LLM benches)
             const st = org.brain.structureReport();
-            obs.logAccuracy(
+            obs.logAccuracyBio(
                 rep.n_cycles,
                 elapsed,
                 rep.n_retrace_ok,
@@ -862,6 +1152,13 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                 memory_f.MAX_EPISODES,
                 org.brain.totalSpikes(),
                 st.n_synapses,
+                grown_total_lifetime,
+                ls.spill_events,
+                rep.n_sleep,
+                rep.n_batch_replayed,
+                rep.last_mean_da,
+                rep.last_mean_ach,
+                rep.last_batch_mean_cos,
             );
 
             // ── LOOP DETECT: no progress on new+uniq ──────────────────
@@ -908,6 +1205,8 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     }
 
     rep.n_grown = @intCast(n_grown);
+    rep.n_grown_lifetime = grown_total_lifetime;
+    rep.n_ltm_spill_events = grown_spill_events + ltm.getStats().spill_events;
     rep.n_episodes = @intCast(org.store.n);
     rep.n_engrams = @intCast(org.n_speak_engrams);
     rep.spikes = org.brain.totalSpikes();
@@ -919,9 +1218,11 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.idea_ground_rate = @as(f64, @floatFromInt(rep.n_ideas_grounded)) / @as(f64, @floatFromInt(rep.n_brainstorm));
     }
 
-    // final accuracy snapshot
+    // final bio accuracy snapshot (THINK_DONE emitted by defer emitThinkDone)
     const stf = org.brain.structureReport();
-    obs.logAccuracy(
+    const ls_fin = ltm.getStats();
+    rep.n_ltm_spill_events = grown_spill_events + ls_fin.spill_events;
+    obs.logAccuracyBio(
         rep.n_cycles,
         rep.duration_ms,
         rep.n_retrace_ok,
@@ -939,26 +1240,15 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         memory_f.MAX_EPISODES,
         rep.spikes,
         stf.n_synapses,
+        grown_total_lifetime,
+        ls_fin.spill_events,
+        rep.n_sleep,
+        rep.n_batch_replayed,
+        rep.last_mean_da,
+        rep.last_mean_ach,
+        rep.last_batch_mean_cos,
     );
     obs.maybeLogMutation(&org.brain, rep.n_cycles);
-
-    hbPrint(log_ptr, "THINK_DONE reason={s} cy={d} ms={d} lit={d} new={d} uniq={d} pending={d} grown={d} eng={d} mut={d}\n", .{
-        rep.stop_reason,
-        rep.n_cycles,
-        rep.duration_ms,
-        rep.n_lit_cards,
-        rep.n_new_concepts,
-        rep.n_ideas_unique,
-        rep.n_pending_open,
-        rep.n_grown,
-        rep.n_engrams,
-        rep.n_mutations,
-    });
-    if (rep.n_pending_open > 0) {
-        hbPrint(log_ptr, "THINK_PENDING_LOG {s} open_questions={d}\n", .{ PENDING_PATH, rep.n_pending_open });
-    }
-    hbPrint(log_ptr, "THINK_GENETIC_LOG data/results/THINK_GENETIC.log\n", .{});
-    hbPrint(log_ptr, "THINK_ACCURACY_LOG data/results/THINK_ACCURACY.jsonl\n", .{});
 
     rep.ok = rep.n_studied >= 10 and
         rep.n_cycles >= 1 and
@@ -979,6 +1269,8 @@ pub fn runThinkProbe() ThinkReport {
         .lit_cards = @min(cap.lit_cards, 40),
         .grown_cap = cap.grown_cap,
         .sleep_every = cap.sleep_every,
+        .utter_depth = cap.utter_depth,
+        .skill_every = 0, // probe stays offline-fast
     });
 }
 
@@ -997,6 +1289,8 @@ pub fn runThinkMinutes(minutes: u32) ThinkReport {
         .grown_cap = cap.grown_cap,
         .stuck_heartbeats = 8, // ~40s no new/uniq progress → stop
         .stuck_idea_heartbeats = 6, // ~30s same idea → stop
+        .utter_depth = cap.utter_depth,
+        .skill_every = if (cap.tier == .workstation) 12 else 0,
     });
 }
 
@@ -1012,6 +1306,8 @@ pub fn runThinkMinutesLive(minutes: u32) ThinkReport {
         .allow_live_query = true,
         .lit_cards = cap.lit_cards,
         .grown_cap = cap.grown_cap,
+        .utter_depth = cap.utter_depth,
+        .skill_every = if (cap.tier == .workstation) 12 else 0,
     });
 }
 

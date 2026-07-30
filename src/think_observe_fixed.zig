@@ -122,7 +122,8 @@ pub const Observe = struct {
         }
     }
 
-    /// Capacity to learn vs accuracy (JSONL).
+    /// Bio metrics JSONL — episodic recall, curiosity hits, STM/LTM, sleep, neuromod.
+    /// NOT LLM benchmarks (no GSM8K / next-token).
     pub fn logAccuracy(
         self: *Observe,
         cycle: u32,
@@ -143,30 +144,72 @@ pub const Observe = struct {
         spikes: u32,
         n_syn: u32,
     ) void {
+        logAccuracyBio(self, cycle, elapsed_ms, retrace_ok, retrace_n, disc_hit, disc_n, pending, new_concepts, uniq_ideas, grown, grown_cap, eng, eng_cap, eps, eps_cap, spikes, n_syn, 0, 0, 0, 0, 0, 0, 0);
+    }
+
+    pub fn logAccuracyBio(
+        self: *Observe,
+        cycle: u32,
+        elapsed_ms: u64,
+        retrace_ok: u32,
+        retrace_n: u32,
+        disc_hit: u32,
+        disc_n: u32,
+        pending: u32,
+        new_concepts: u32,
+        uniq_ideas: u32,
+        stm_grown: u32,
+        stm_grown_cap: u32,
+        eng: u32,
+        eng_cap: u32,
+        eps: u32,
+        eps_cap: u32,
+        spikes: u32,
+        n_syn: u32,
+        life_grown: u32,
+        ltm_spill: u32,
+        n_sleep: u32,
+        batch_replay: u32,
+        mean_da: f64,
+        mean_ach: f64,
+        mean_batch_cos: f64,
+    ) void {
         const f = self.accuracy orelse return;
-        const retr_acc: f64 = if (retrace_n > 0) @as(f64, @floatFromInt(retrace_ok)) / @as(f64, @floatFromInt(retrace_n)) else 0;
-        const disc_acc: f64 = if (disc_n > 0) @as(f64, @floatFromInt(disc_hit)) / @as(f64, @floatFromInt(disc_n)) else 0;
-        const grow_fill: f64 = if (grown_cap > 0) @as(f64, @floatFromInt(grown)) / @as(f64, @floatFromInt(grown_cap)) else 0;
-        var buf: [512]u8 = undefined;
+        // episodic_retrace = encode→retrieve fidelity (not chat accuracy)
+        const episodic_retrace: f64 = if (retrace_n > 0) @as(f64, @floatFromInt(retrace_ok)) / @as(f64, @floatFromInt(retrace_n)) else 0;
+        // curiosity_hit = unknown-word lookup that retained (discover organ)
+        const curiosity_hit: f64 = if (disc_n > 0) @as(f64, @floatFromInt(disc_hit)) / @as(f64, @floatFromInt(disc_n)) else 0;
+        const stm_fill: f64 = if (stm_grown_cap > 0) @as(f64, @floatFromInt(stm_grown)) / @as(f64, @floatFromInt(stm_grown_cap)) else 0;
+        var buf: [768]u8 = undefined;
         const line = std.fmt.bufPrint(buf[0..],
-            "{{\"cycle\":{d},\"ms\":{d},\"retrace_acc\":{e},\"discover_acc\":{e},\"pending\":{d},\"new_concepts\":{d},\"uniq_ideas\":{d},\"grown\":{d},\"grown_cap\":{d},\"grown_fill\":{e},\"eng\":{d},\"eng_cap\":{d},\"eps\":{d},\"eps_cap\":{d},\"spikes\":{d},\"n_syn\":{d}}}\n",
+            "{{\"cycle\":{d},\"ms\":{d},\"metric_kind\":\"bio_episodic_not_llm\",\"episodic_retrace\":{e},\"curiosity_hit\":{e},\"pending_open\":{d},\"new_concepts\":{d},\"uniq_ideas\":{d},\"stm_grown\":{d},\"stm_grown_cap\":{d},\"stm_fill\":{e},\"life_grown\":{d},\"ltm_spill\":{d},\"eng\":{d},\"eng_cap\":{d},\"eps\":{d},\"eps_cap\":{d},\"spikes\":{d},\"n_syn\":{d},\"n_sleep\":{d},\"batch_replay\":{d},\"mean_da\":{e},\"mean_ach\":{e},\"mean_batch_cos\":{e},\"retrace_acc\":{e},\"discover_acc\":{e}}}\n",
             .{
                 cycle,
                 elapsed_ms,
-                retr_acc,
-                disc_acc,
+                episodic_retrace,
+                curiosity_hit,
                 pending,
                 new_concepts,
                 uniq_ideas,
-                grown,
-                grown_cap,
-                grow_fill,
+                stm_grown,
+                stm_grown_cap,
+                stm_fill,
+                life_grown,
+                ltm_spill,
                 eng,
                 eng_cap,
                 eps,
                 eps_cap,
                 spikes,
                 n_syn,
+                n_sleep,
+                batch_replay,
+                mean_da,
+                mean_ach,
+                mean_batch_cos,
+                // aliases for older readers
+                episodic_retrace,
+                curiosity_hit,
             },
         ) catch return;
         f.writeAll(line) catch {};

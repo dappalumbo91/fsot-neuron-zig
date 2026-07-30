@@ -26,17 +26,19 @@ fsot_mind speech / practice
 # QEMU: run_qemu.ps1 when available
 ```
 
-### Floor pool budgets (runtime soft + compile max)
+### Floor pool budgets — **STM hot windows only** (not knowledge ceilings)
 
-| Pool | Floor | Workstation (Omen 32 GB) |
-|------|------:|-------------------------:|
-| Literature cards at think boot | 40 | 160 |
-| Grown concept bank | 64 | 256 |
-| Discover attempts / cycle | 1 | 2 |
-| Episode store (compile max) | 192 ring | 192 ring (page later) |
-| Speak engrams (compile max) | 160 | 160 |
+| Pool | Floor STM | Workstation STM (Omen 32 GB) | Beyond STM |
+|------|----------:|-----------------------------:|------------|
+| Literature cards at think boot | 40 | 160 | (session load) |
+| Grown concept bank | 256 | 1536 | **disk LTM spill** |
+| Discover attempts / cycle | 1 | 2 | — |
+| Episode store | 384 ring | 384 ring | **disk LTM spill** |
+| Speak engrams | 512 | 512 | **disk LTM spill** |
 
-Compile-time arrays stay at max; **runtime tier caps** how hard we fill them on small bodies.
+**Doctrine:** RAM = short-term / working set. Disk (`data/ltm/`) = long-term.  
+CPU (+ GPU later) = thought processes. **No hard-coded knowledge ceiling** — full STM → page cold → keep growing.  
+Compile-time arrays bound the STM window for stack safety; growth continues on disk.
 
 ---
 

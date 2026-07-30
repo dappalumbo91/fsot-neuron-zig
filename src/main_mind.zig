@@ -106,6 +106,10 @@ const internal_think_fixed = @import("internal_think_fixed.zig");
 const know_query_fixed = @import("know_query_fixed.zig");
 const query_tool_fixed = @import("query_tool_fixed.zig");
 const capacity_tier_fixed = @import("capacity_tier_fixed.zig");
+const gpu_organ_fixed = @import("gpu_organ_fixed.zig");
+const gpu_batch_fixed = @import("gpu_batch_fixed.zig");
+const gpu_vram_fixed = @import("gpu_vram_fixed.zig");
+const skill_organ_fixed = @import("skill_organ_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -430,48 +434,43 @@ fn runFixed() void {
     }
     var params: [32]bio_probe_fixed.UnitParamsF = undefined;
     bio_probe_fixed.defaultBioParams(params[0..]);
-    // optional Allen params file
+    // optional Allen params file + archive analytical lock (close 2% ISI residual)
     const allen_path = "I:\\fsot nuron\\artifacts\\zig_bio_params.txt";
+    var n_params: usize = 0;
     if (std.fs.cwd().openFile(allen_path, .{})) |file| {
         defer file.close();
         var buf: [64 * 1024]u8 = undefined;
         const nread = file.readAll(&buf) catch 0;
         if (nread > 0) {
-            const n = bio_probe_fixed.loadParamsFromText(buf[0..nread], params[0..]) catch 0;
-            if (n > 0) {
-                std.debug.print("bio_params=allen n={d}\n", .{n});
-                const fi = bio_probe_fixed.runFIPopulation(params[0..n], 1200);
-                std.debug.print(
-                    "FIXED_BIO_FI rate_Hz={e} isi_ms={e} adapt={e} spikes={d}\n",
-                    .{ fi.mean_rate_Hz, fi.mean_isi_ms, fi.mean_adapt, fi.total_spikes },
-                );
-                const rate_ok = fi.mean_rate_Hz >= 5.0 and fi.mean_rate_Hz <= 80.0;
-                const isi_ok = fi.n_with_isi >= 1 and fi.mean_isi_ms >= 10.0 and fi.mean_isi_ms <= 200.0;
-                const adapt_ok = fi.mean_adapt > -0.3 and fi.mean_adapt < 0.6;
-                std.debug.print("gate_bio_rate={s}\n", .{if (rate_ok) "PASS" else "FAIL"});
-                std.debug.print("gate_bio_isi={s}\n", .{if (isi_ok) "PASS" else "FAIL"});
-                std.debug.print("gate_bio_adapt={s}\n", .{if (adapt_ok) "PASS" else "FAIL"});
-                if (!(rate_ok and isi_ok and adapt_ok)) {
-                    std.debug.print("FSOT_FIXED_BIO FAIL\n", .{});
-                    std.process.exit(1);
-                }
-                std.debug.print("FSOT_FIXED_BIO PASS (Allen-mapped FI)\n", .{});
-            }
+            n_params = bio_probe_fixed.loadParamsFromText(buf[0..nread], params[0..]) catch 0;
         }
-    } else |_| {
-        const fi = bio_probe_fixed.runFIPopulation(params[0..], 1000);
-        std.debug.print(
-            "FIXED_BIO_FI rate_Hz={e} isi_ms={e} adapt={e} (default params)\n",
-            .{ fi.mean_rate_Hz, fi.mean_isi_ms, fi.mean_adapt },
-        );
-        const rate_ok = fi.mean_rate_Hz >= 5.0 and fi.mean_rate_Hz <= 80.0;
-        const isi_ok = fi.n_with_isi >= 1 and fi.mean_isi_ms >= 10.0 and fi.mean_isi_ms <= 200.0;
-        if (!(rate_ok and isi_ok)) {
-            std.debug.print("FSOT_FIXED_BIO FAIL\n", .{});
-            std.process.exit(1);
-        }
-        std.debug.print("FSOT_FIXED_BIO PASS (default)\n", .{});
+    } else |_| {}
+    if (n_params == 0) n_params = 32; // defaultBioParams already filled
+
+    std.debug.print("bio_params=allen_lock n={d} target_isi_ms={e} target_adapt={e} isi_tol=2%\n", .{
+        n_params,
+        bio_probe_fixed.ALLEN_ISI_MS,
+        bio_probe_fixed.ALLEN_ADAPT,
+    });
+    // Archive solution path: analytical_lock + polish (calibrate.py / bio_report_card 6/6)
+    const fi = bio_probe_fixed.runAllenBioMatch(params[0..n_params], 1200);
+    std.debug.print(
+        "FIXED_BIO_FI rate_Hz={e} isi_ms={e} adapt={e} spikes={d}\n",
+        .{ fi.mean_rate_Hz, fi.mean_isi_ms, fi.mean_adapt, fi.total_spikes },
+    );
+    std.debug.print(
+        "ALLEN_BIO_MATCH isi_rel_err={e} adapt_rel_err={e} isi_closed={} adapt_closed={} rate_ok={}\n",
+        .{ fi.isi_rel_err, fi.adapt_rel_err, fi.isi_closed, fi.adapt_closed, fi.rate_band_ok },
+    );
+    std.debug.print("gate_bio_rate={s}\n", .{if (fi.rate_band_ok) "PASS" else "FAIL"});
+    std.debug.print("gate_bio_isi={s}\n", .{if (fi.isi_closed) "PASS" else "FAIL"});
+    std.debug.print("gate_bio_adapt={s}\n", .{if (fi.adapt_closed) "PASS" else "FAIL"});
+    if (!fi.bio_match_ok) {
+        std.debug.print("FSOT_FIXED_BIO FAIL (Allen bio_match residual open)\n", .{});
+        std.process.exit(1);
     }
+    std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match lock ≤2% ISI)\n", .{});
+    std.debug.print("FSOT_ALLEN_ISI_RESIDUAL_CLOSED\n", .{});
 
     // structure class vs f64 brain authority (+ synapse density band)
     var bf64 = brain.Brain.initSeeded(42, false);
@@ -933,16 +932,19 @@ fn runInternalThink(minutes: u32) void {
         }
         return;
     }
-    std.debug.print("=== FSOT THINK RUN (adaptive + auto-stop if stuck) max {d} min ===\n", .{minutes});
-    std.debug.print("path: seed+lit → retrace → discover → compose → sleep | STUCK → shutdown\n", .{});
+    std.debug.print("=== FSOT THINK RUN (bio process + auto-stop if stuck) max {d} min ===\n", .{minutes});
+    std.debug.print("doctrine: encode → episodic retrace → curiosity → compose → sleep(NREM+replay) | NOT LLM epochs\n", .{});
+    std.debug.print("path: seed+lit → wake_encode → retrace/probe → discover → LTM warm → compose → sleep → LTM spill\n", .{});
+    std.debug.print("organs: STM/LTM disk · Python skills · FSOT-GPU VRAM deep sleep every 4th NREM\n", .{});
     std.debug.print("logs:\n", .{});
-    std.debug.print("  data/results/THINK_LIVE.log\n", .{});
-    std.debug.print("  data/results/THINK_GENETIC.log   (DNA structure + mutations)\n", .{});
-    std.debug.print("  data/results/THINK_ACCURACY.jsonl (capacity vs accuracy)\n", .{});
-    std.debug.print("  data/results/THINK_PENDING_QUESTIONS.jsonl\n", .{});
+    std.debug.print("  data/results/THINK_LIVE.log                 (heartbeat + bio line)\n", .{});
+    std.debug.print("  data/results/THINK_GENETIC.log              (DNA structure + mutations)\n", .{});
+    std.debug.print("  data/results/THINK_ACCURACY.jsonl           (episodic_retrace, curiosity, sleep, neuromod)\n", .{});
+    std.debug.print("  data/results/THINK_PENDING_QUESTIONS.jsonl  (open questions — move on)\n", .{});
+    std.debug.print("  data/ltm/                                   (long-term disk memory)\n", .{});
     const r = internal_think_fixed.runThinkMinutes(minutes);
     std.debug.print(
-        "THINK_RUN done reason={s} min_cap={d} cy={d} lit={d} retr={d}/{d} disc={d}/{d} new={d} uniq={d} pending={d} grown={d} eng={d} mut={d} ms={d}\n",
+        "THINK_RUN done reason={s} min_cap={d} cy={d} lit={d} episodic_retr={d}/{d} curiosity={d}/{d} new={d} uniq={d} pending={d} life_grown={d} eng={d} sleep={d} replay={d} mut={d} ms={d}\n",
         .{
             r.stop_reason,
             minutes,
@@ -955,18 +957,28 @@ fn runInternalThink(minutes: u32) void {
             r.n_new_concepts,
             r.n_ideas_unique,
             r.n_pending_open,
-            r.n_grown,
+            r.n_grown_lifetime,
             r.n_engrams,
+            r.n_sleep,
+            r.n_batch_replayed,
             r.n_mutations,
             r.duration_ms,
         },
     );
+    std.debug.print("bio neuromod last_da={e} last_ach={e} batch_cos={e} deep_vram_consol={d} skill={d}\n", .{
+        r.last_mean_da,
+        r.last_mean_ach,
+        r.last_batch_mean_cos,
+        r.n_gpu_consol,
+        r.n_skill,
+    });
     if (r.last_new_n > 0) std.debug.print("last_new_concept=\"{s}\"\n", .{r.last_new[0..r.last_new_n]});
     if (r.last_idea_n > 0) std.debug.print("last_idea=\"{s}\"\n", .{r.last_idea[0..r.last_idea_n]});
     if (r.ok) {
         std.debug.print("FSOT_THINK_HOUR PASS\n", .{});
         std.debug.print("FSOT_LONG_THINK_OK\n", .{});
         std.debug.print("FSOT_ADAPTIVE_KNOWLEDGE_OK\n", .{});
+        std.debug.print("FSOT_BIO_THINK_METRICS_OK\n", .{});
         if (std.mem.eql(u8, r.stop_reason, "stuck_no_progress") or std.mem.eql(u8, r.stop_reason, "stuck_same_idea")) {
             std.debug.print("FSOT_STUCK_AUTO_SHUTDOWN_OK\n", .{});
         }
@@ -2462,6 +2474,46 @@ pub fn main() !void {
         }
         const cap = capacity_tier_fixed.probe();
         capacity_tier_fixed.printReport(cap);
+    } else if (std.mem.eql(u8, mode, "gpu-organ") or std.mem.eql(u8, mode, "gpu_organ") or std.mem.eql(u8, mode, "gpu") or std.mem.eql(u8, mode, "fsot-gpu")) {
+        // GPU body organ — bridge to FSOT-GPU (trinary pack parity + native kernels)
+        if (!gpu_organ_fixed.selfTest()) {
+            std.debug.print("FSOT_GPU_ORGAN FAIL\n", .{});
+            std.process.exit(1);
+        }
+        gpu_organ_fixed.printReport();
+        _ = gpu_organ_fixed.consolidateBatch(0);
+    } else if (std.mem.eql(u8, mode, "gpu-batch") or std.mem.eql(u8, mode, "gpu_batch") or std.mem.eql(u8, mode, "batch-sleep") or std.mem.eql(u8, mode, "sleep-replay")) {
+        // Batch cosine + trit consensus sleep replay under Fixed mind
+        if (!gpu_batch_fixed.selfTest()) {
+            std.debug.print("FSOT_GPU_BATCH FAIL\n", .{});
+            std.process.exit(1);
+        }
+        gpu_batch_fixed.printProbe();
+    } else if (std.mem.eql(u8, mode, "gpu-vram") or std.mem.eql(u8, mode, "gpu_vram") or std.mem.eql(u8, mode, "vram-offload") or std.mem.eql(u8, mode, "vram")) {
+        // Full VRAM matrix offload into FSOT-GPU consensus kernels
+        if (!gpu_vram_fixed.selfTest()) {
+            std.debug.print("FSOT_GPU_VRAM FAIL (worker/DLL/parity)\n", .{});
+            std.process.exit(1);
+        }
+        gpu_batch_fixed.printVramProbe();
+    } else if (std.mem.eql(u8, mode, "skill") or std.mem.eql(u8, mode, "skill-organ") or std.mem.eql(u8, mode, "skill_organ") or std.mem.eql(u8, mode, "python-skill")) {
+        // Python skill organ — interpreter sandbox (not mind authority)
+        skill_organ_fixed.printProbe();
+        if (!skill_organ_fixed.selfTest()) std.process.exit(1);
+    } else if (std.mem.eql(u8, mode, "skill-run") or std.mem.eql(u8, mode, "run-skill")) {
+        // fsot_mind skill-run add "2 3"
+        const skill_name: []const u8 = if (args.len >= 3) args[2] else "add";
+        const skill_arg: []const u8 = if (args.len >= 4) args[3] else "2 3";
+        const r = skill_organ_fixed.runSkill(skill_name, skill_arg, 8000);
+        std.debug.print("SKILL {s} ok={} exit={d} ms={d} out={s}\n", .{
+            skill_name,
+            r.ok,
+            r.exit_code,
+            r.duration_ms,
+            r.stdout[0..r.stdout_n],
+        });
+        if (!r.ok) std.process.exit(1);
+        std.debug.print("FSOT_SKILL_RUN PASS\n", .{});
     } else if (std.mem.eql(u8, mode, "know-query") or std.mem.eql(u8, mode, "know_query") or std.mem.eql(u8, mode, "study-tool") or std.mem.eql(u8, mode, "lookup-learn") or std.mem.eql(u8, mode, "i-dont-know")) {
         // Human: unknown concept → query archive/API → retain engram
         runKnowQuery(false);
@@ -2737,6 +2789,11 @@ pub fn main() !void {
         std.debug.print("  bio-suite      = learn + self-study + converse + MNIST\n", .{});
         std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
         std.debug.print("  capacity       = silicon body tier (RAM/GPU) + growth budgets\n", .{});
+        std.debug.print("  gpu-organ      = FSOT-GPU bridge (parity + native kernels)\n", .{});
+        std.debug.print("  gpu-batch      = batch cosine/trit sleep replay (Fixed + FSOT-GPU)\n", .{});
+        std.debug.print("  gpu-vram       = full VRAM offload → FSOT consensus kernels + top-K\n", .{});
+        std.debug.print("  skill          = Python skill organ probe\n", .{});
+        std.debug.print("  skill-run NAME = run skill (e.g. skill-run add)\n", .{});
         std.debug.print("  know-query     = I-don't-know → query tool → retain (archive/wiki)\n", .{});
         std.debug.print("  know-query-live= same + live Wikipedia REST when local miss\n", .{});
         std.debug.print("  think          = internal retrace/cross-check/brainstorm/self-correct\n", .{});

@@ -8,11 +8,13 @@ const modulate_f = @import("modulate_fixed.zig");
 const sensory_f = @import("sensory_fixed.zig");
 const pathways_f = @import("pathways_fixed.zig");
 const speech_f = @import("speech_organ_fixed.zig");
+const ltm = @import("ltm_disk_fixed.zig");
 const Fixed = fixed.Fixed;
 
 /// Bound utterable fact for one episode (motor memory, not dialogue manager).
-/// Motor engrams for taught facts (experience → sayable); sized for school curriculum.
-pub const MAX_SPEAK_ENGRAMS: usize = 160;
+/// MAX_SPEAK_ENGRAMS = STM hot window for motor memory (RAM), not a knowledge ceiling.
+/// Cold engrams spill to disk LTM before overwrite.
+pub const MAX_SPEAK_ENGRAMS: usize = 512;
 pub const SpeakEngram = struct {
     ep_id: u32 = 0,
     cue_h: u32 = 0,
@@ -159,8 +161,13 @@ pub const OrganismF = struct {
             }
         }
         if (self.n_speak_engrams >= MAX_SPEAK_ENGRAMS) {
-            // O(1) overwrite middle slot by cue-ish index — avoid O(N) memmove thrash on long runs
+            // STM full → spill cold engram to disk LTM, then O(1) slot overwrite.
             const slot = @as(usize, @intCast(ch % @as(u32, @intCast(MAX_SPEAK_ENGRAMS))));
+            const cold = &self.speak_engrams[slot];
+            if (cold.valid) {
+                _ = ltm.spillEngram(cold.ep_id, cold.cue_h, cold.ans_h, cold.phrase[0..cold.phrase_n]);
+                ltm.noteSpillEvent();
+            }
             self.writeEngram(slot, ep_id, ch, answer, phrase, meaning);
             return;
         }

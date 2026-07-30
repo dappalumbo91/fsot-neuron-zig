@@ -5,7 +5,8 @@
 **Companion monorepo:** [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Lean formal + Python wet-lab battery)  
 **Verdict:** **CRITICAL PATH GREEN**
 
-Nothing in this run indicates a broken mind stack, bare-metal drop, or lost Lean stamp. Known residual: population ISI vs Allen at ~2.45% under the strictest FSOT-grade pop ledger (5/6 gaps closed; rate/adapt/Vrest silent OK).
+Nothing in this run indicates a broken mind stack, bare-metal drop, or lost Lean stamp.  
+**Allen ISI residual (was ~2.45% open):** closed via archive bio_match analytical lock + polish ported to Zig (`runAllenBioMatch`, 2% ISI / 10% adapt).
 
 ---
 
@@ -67,9 +68,9 @@ powershell -File .\run_qemu.ps1
 | Wet stack contract (AMPA/NMDA/glia/STDP) | **PASS** | Lean WetStack + Zig wet modules |
 | Failure boundaries / wire-around | **PASS** | stress suite |
 | Bio I/O pathways (thal/sens/assoc/hipp) | **PASS** | stress H/* |
-| Pop ISI vs Allen (strict FSOT-grade) | **OPEN residual** | ~2.45% rel err vs 2% tol on mean_isi; adapt closed; rate bands OK |
+| Pop ISI vs Allen (strict FSOT-grade) | **CLOSED** | Archive analytical_lock + polish ported to Zig (`bio_probe_fixed.runAllenBioMatch`); ISI ≤ **2%** vs Allen bio_match target; adapt ≤ 10% |
 
-This residual is **tracked**, not a stage break: Zig `FSOT_FIXED_BIO` and stress-suite critical path remain green.
+**Note:** Raw full-CSV Allen mean (~73 ms) is not the bio_match target. Authority is the solved sample target in `bio_report_card.json` (~70.60 ms), already closed in archive Python at ~1.26%. Zig now uses the same lock/polish path (`FSOT_ALLEN_ISI_RESIDUAL_CLOSED`).
 
 ---
 

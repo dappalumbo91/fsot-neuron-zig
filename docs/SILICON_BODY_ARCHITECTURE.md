@@ -78,10 +78,19 @@ Scaling **does not** mean free-parameter nets or LLM context stuffing.
 |---------|----------------|
 | Plasticity | STDP / neuromod / re-encode |
 | Limited neurogenesis | Grow `n_active` ≤ N_MAX under policy |
-| Hippocampus → cortex | Hot episodes → disk page (warm LTM) |
+| Working memory (STM) | Hot pools in **RAM** (grown bank, episodes, engrams) |
+| Hippocampus → cortex (LTM) | Full STM → **disk spill** under `data/ltm/` (unbounded growth) |
+| Parallel / serial thought | **CPU** (+ **GPU organ** later) — compute, not knowledge caps |
 | Sensory organs | Mic, display, GPU vision later |
 | Library / tools | know-query, archive APIs, arxiv/wiki |
 | Sleep | Quiet + NREM ticks; GPU replay later |
+
+### STM vs LTM (non-negotiable)
+
+- Compile-time `MAX_*` and tier `grown_cap` are **STM hot windows**, not knowledge ceilings.
+- When STM is full the mind **pages cold items to disk LTM** and keeps learning.
+- A think run must **never** stop solely because “memory is full.”
+- LTM paths: `data/ltm/grown.jsonl`, `engrams.jsonl`, `episodes.jsonl`.
 
 Responses stay: **retrieve · ground · articulate · self-correct · pending if unknown**.
 
@@ -90,11 +99,13 @@ Responses stay: **retrieve · ground · articulate · self-correct · pending if
 ## Growth path (order)
 
 1. **Minimum stack green** on QEMU + host mind modes  
-2. **Tiered pools** on Omen (this doc + `capacity_tier_fixed`)  
-3. **Multi-engram articulation** (depth of speech)  
-4. **Disk hippocampus** (page cold episodes)  
-5. **GPU organ** (batch consolidation / vision) under kernel  
-6. **Flash image → Mac Mini** as dedicated body  
+2. **Tiered STM pools** on Omen (`capacity_tier_fixed` — hot windows only)  
+3. **Disk LTM** — spill grown / engrams / episodes (`ltm_disk_fixed`) — **shipped**  
+4. **Multi-engram articulation** (depth of speech)  
+5. **LTM retrieve** into STM on demand — `passLtmWarm` / `ltm_disk_fixed`  
+6. **GPU organ** — bridge to **[FSOT-GPU](https://github.com/dappalumbo91/FSOT-GPU)** (trinary pack, consensus, native CUDA); see [`FSOT_GPU_ORGAN.md`](FSOT_GPU_ORGAN.md)  
+7. **Python skill organ** — interpreter sandbox under Fixed mind (`skills/python/`)  
+8. **Flash image → Mac Mini** as dedicated body  
 
 ---
 

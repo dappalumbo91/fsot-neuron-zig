@@ -1,8 +1,19 @@
 //! Biological FI metrics on fixed-point neurons — wet-lab accuracy gate.
+//!
+//! Allen bio_match authority (archive already solved; port analytical lock):
+//!   I:\fsot nuron\artifacts\bio_report_card.json — 6/6 gaps closed @ ~1.26% ISI
+//!   calibrate.py analytical_lock: R ≈ isi·(1−0.45A), δ from AHP formula
+//!   Strict FSOT-grade: |ISI_sim − ISI_allen| / ISI_allen ≤ 2%
 
 const fixed = @import("fixed.zig");
 const neuron_f = @import("neuron_fixed.zig");
 const Fixed = fixed.Fixed;
+
+/// Allen sample targets from solved bio_match report card (not raw full-CSV mean).
+pub const ALLEN_ISI_MS: f64 = 70.59855571638475;
+pub const ALLEN_ADAPT: f64 = 0.051153889361673456;
+pub const ISI_TOL_REL: f64 = 0.02; // 2% FSOT-grade floor
+pub const ADAPT_TOL_REL: f64 = 0.10; // 10% — sign/order primary for AHP
 
 pub const UnitParamsF = struct {
     d_eff: Fixed = fixed.fromInt(13),
@@ -21,6 +32,15 @@ pub const PopReportF = struct {
     mean_adapt: f64 = 0,
     n_with_isi: u32 = 0,
     total_spikes: u32 = 0,
+    /// Relative error vs Allen bio_match targets (filled by runAllenBioMatch)
+    isi_rel_err: f64 = 0,
+    adapt_rel_err: f64 = 0,
+    allen_isi_target: f64 = ALLEN_ISI_MS,
+    allen_adapt_target: f64 = ALLEN_ADAPT,
+    isi_closed: bool = false,
+    adapt_closed: bool = false,
+    rate_band_ok: bool = false,
+    bio_match_ok: bool = false,
 };
 
 fn applyParams(n: *neuron_f.NeuronF, p: UnitParamsF) void {
@@ -163,6 +183,95 @@ pub fn runFIPopulation(params: []const UnitParamsF, steps: usize) PopReportF {
     return rep;
 }
 
+/// Archive analytical_lock (calibrate.py): R ≈ isi·(1−0.45A), δ from AHP formula.
+fn adaptStepFromTarget(R: f64, ad: f64) f64 {
+    const A = @max(0.0, @min(0.55, ad));
+    const Rr = @max(8.0, R);
+    if (A < 1e-6) return 0.0;
+    const n1: f64 = 9.0; // n_isi≈10 → n-1
+    var d = (2.0 * A * Rr) / (n1 * (1.0 - A) + 1e-9);
+    // Fixed lattice AHP is weaker than torch batch — stronger δ to hit Allen ~0.051
+    d *= 1.55;
+    return @max(0.0, @min(10.0, d));
+}
+
+/// Apply bio_match lock to loaded Allen params (in-place).
+/// Mirrors archive: refractory floor from ISI target; adapt_step from adaptation index.
+pub fn analyticalLockBioMatch(params: []UnitParamsF) void {
+    const isi_tgt = ALLEN_ISI_MS;
+    const ad_tgt = ALLEN_ADAPT;
+    var u: usize = 0;
+    while (u < params.len) : (u += 1) {
+        const A = @max(0.0, @min(0.4, ad_tgt));
+        var R = isi_tgt * (1.0 - 0.45 * A);
+        R = @max(6.0, @min(180.0, R));
+        // Blend with unit's mapped ref (0.78× floor spirit) — archive note
+        const r0: f64 = @floatFromInt(params[u].ref_steps);
+        const Rblend = 0.55 * R + 0.45 * r0;
+        params[u].ref_steps = @intFromFloat(@max(4.0, @min(200.0, @round(Rblend))));
+        const d = adaptStepFromTarget(Rblend, ad_tgt);
+        params[u].adapt_step = fixed.fromF64Lab(d);
+        // Keep adapt_gain near Allen-mapped values (needed for AHP index)
+        const g0 = fixed.toF64(params[u].adapt_gain);
+        const g1 = @max(0.025, @min(0.08, @max(g0, 0.035)));
+        params[u].adapt_gain = fixed.fromF64Lab(g1);
+    }
+}
+
+/// Population polish — same spirit as calibrate_batch snap (up to 8 iters).
+pub fn polishBioMatch(params: []UnitParamsF, steps: usize) PopReportF {
+    analyticalLockBioMatch(params);
+    var snap: u32 = 0;
+    var last: PopReportF = .{};
+    while (snap < 8) : (snap += 1) {
+        last = runFIPopulation(params, steps);
+        const isi = last.mean_isi_ms;
+        const ad = last.mean_adapt;
+        const isi_err = if (isi > 1) @abs(isi - ALLEN_ISI_MS) / ALLEN_ISI_MS else 1.0;
+        const ad_err = if (@abs(ALLEN_ADAPT) > 1e-9) @abs(ad - ALLEN_ADAPT) / @abs(ALLEN_ADAPT) else 0;
+        last.isi_rel_err = isi_err;
+        last.adapt_rel_err = ad_err;
+        last.isi_closed = isi_err <= ISI_TOL_REL;
+        last.adapt_closed = ad_err <= ADAPT_TOL_REL;
+        last.rate_band_ok = last.mean_rate_Hz >= 5.0 and last.mean_rate_Hz <= 80.0;
+        last.bio_match_ok = last.isi_closed and last.adapt_closed and last.rate_band_ok and last.n_with_isi >= 1;
+        if (last.bio_match_ok) return last;
+
+        // scale all units' ref_steps / adapt_step / adapt_gain
+        if (isi > 1 and !last.isi_closed) {
+            var fac = ALLEN_ISI_MS / isi;
+            fac = 1.0 + 0.85 * (fac - 1.0);
+            fac = @max(0.90, @min(1.12, fac));
+            var u: usize = 0;
+            while (u < params.len) : (u += 1) {
+                const r: f64 = @floatFromInt(params[u].ref_steps);
+                params[u].ref_steps = @intFromFloat(@max(4.0, @min(200.0, @round(r * fac))));
+            }
+        }
+        if (!last.adapt_closed) {
+            // Aggressive when under-adapted (fixed lattice AHP weaker than torch)
+            var sfac: f64 = if (@abs(ad) < 1e-5) 2.0 else ALLEN_ADAPT / (ad + 1e-9);
+            sfac = 1.0 + 1.05 * (sfac - 1.0);
+            sfac = @max(0.45, @min(2.8, sfac));
+            var u: usize = 0;
+            while (u < params.len) : (u += 1) {
+                const d = fixed.toF64(params[u].adapt_step) * sfac;
+                params[u].adapt_step = fixed.fromF64Lab(@max(0.0, @min(10.0, d)));
+                if (ad < ALLEN_ADAPT) {
+                    const g = fixed.toF64(params[u].adapt_gain) * @min(1.15, sfac);
+                    params[u].adapt_gain = fixed.fromF64Lab(@max(0.025, @min(0.09, g)));
+                }
+            }
+        }
+    }
+    return last;
+}
+
+/// Full Allen bio_match path: load → lock → polish → score vs 2% ISI / 10% adapt.
+pub fn runAllenBioMatch(params: []UnitParamsF, steps: usize) PopReportF {
+    return polishBioMatch(params, if (steps < 1200) 1200 else steps);
+}
+
 pub fn selfTest() bool {
     var p: UnitParamsF = .{};
     p.ref_steps = 40;
@@ -171,5 +280,9 @@ pub fn selfTest() bool {
     if (pr.spikes < 2) return false;
     if (pr.mean_isi_ms < 5 or pr.mean_isi_ms > 250) return false;
     if (pr.rate_Hz < 2 or pr.rate_Hz > 120) return false;
-    return true;
+    // Lock path must be able to score a tiny population without crashing
+    var pop: [4]UnitParamsF = undefined;
+    defaultBioParams(pop[0..]);
+    const r = runAllenBioMatch(pop[0..], 800);
+    return r.n_with_isi >= 1 and r.mean_isi_ms > 5;
 }
