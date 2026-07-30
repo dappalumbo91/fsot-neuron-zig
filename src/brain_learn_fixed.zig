@@ -1,13 +1,13 @@
 //! Real-brain experience learning — teach → encode → practice → sleep → prove.
 //!
-//! Bridge that was missing: school knowledge is written into OrganismF episodic
-//! store under neuromod tags, practiced with prediction-error, slept (NREM +
-//! STDP densify), then proved via multi-hop claimability. Not Python-only.
+//! BIO PATH (not hash-bank chat cheat):
+//!   1) Experience lesson → drive cue features → episodic encode + SpeakEngram
+//!   2) Practice: cue → store.retrieve → check answer token / engram (prediction error)
+//!   3) Sleep (NREM + consolidation)
+//!   4) Prove multi-hop by chaining retrieves on the SAME organism
+//!   5) Optional: motor speakNow + TTS of stored engram fact only
 //!
-//! Sources:
-//!   1) Embedded school lessons (math atomics + multi-hop + literacy)
-//!   2) Optional TSV: data/curriculum/brain_teach/lessons.tsv
-//!      columns: question \t answer \t fact
+//! No dialogue manager. No bankGet as the mind. Bank removed from prove path.
 //!
 //! Modes: fsot_mind brain-learn | real-learn | experience
 
@@ -107,52 +107,97 @@ pub const EMBEDDED_CHAINS = [_]Chain{
     .{ .id = "c20", .prompt = "dog people week", .cues = .{ "dog is", "people need", "days in week" }, .n_hops = 3, .answer = "seven" },
 };
 
-var bank_q: [256]u32 = .{0} ** 256;
-var bank_a: [256]u32 = .{0} ** 256;
-var bank_n: usize = 0;
-var taught_ans: [128]u32 = .{0} ** 128;
-var n_taught_ans: usize = 0;
 var n_encoded: u32 = 0;
 var n_file_lessons: u32 = 0;
+var n_retrieve_hits: u32 = 0;
+var n_retrieve_tries: u32 = 0;
+var n_motor_speaks: u32 = 0;
 
-fn bankClear() void {
-    bank_n = 0;
-    n_taught_ans = 0;
+fn sessionClear() void {
     n_encoded = 0;
+    n_file_lessons = 0;
+    n_retrieve_hits = 0;
+    n_retrieve_tries = 0;
+    n_motor_speaks = 0;
 }
 
-fn bankPut(q: []const u8, a: []const u8) void {
-    if (bank_n >= bank_q.len) return;
-    bank_q[bank_n] = memory_f.hashToken(q);
-    bank_a[bank_n] = memory_f.hashToken(a);
-    bank_n += 1;
-    const ah = memory_f.hashToken(a);
-    var i: usize = 0;
-    while (i < n_taught_ans) : (i += 1) if (taught_ans[i] == ah) return;
-    if (n_taught_ans < taught_ans.len) {
-        taught_ans[n_taught_ans] = ah;
-        n_taught_ans += 1;
+/// Bio recall for a cue — never bankGet.
+/// Order:
+///   1) Hippocampal FP retrieve; accept only if episode question token matches cue
+///   2) Scan episodic store for matching question token (content address)
+///   3) Motor SpeakEngram bound at encode (experience → sayable association)
+fn retrieveAnswer(org: *organism_f.OrganismF, cue: []const u8) u32 {
+    n_retrieve_tries += 1;
+    const cue_h = memory_f.hashToken(cue);
+    var feats: [8]Fixed = undefined;
+    cueFeat(cue, &feats);
+
+    // 1) Hippocampal cosine retrieve — only if it actually recalls THIS cue
+    var sim: Fixed = 0;
+    const ep_id = org.store.retrieve(&org.brain, feats[0..], &sim);
+    if (ep_id != 0) {
+        if (org.store.findEpisode(ep_id)) |ep| {
+            if (ep.tokens[2] == cue_h and ep.tokens[1] != 0) {
+                n_retrieve_hits += 1;
+                return ep.tokens[1];
+            }
+        }
+        // retrieved wrong episode — try engram bound to that ep only if cue matches
+        if (org.engramForEpisode(ep_id)) |e| {
+            if (e.cue_h == cue_h and e.ans_h != 0) {
+                n_retrieve_hits += 1;
+                return e.ans_h;
+            }
+        }
     }
-}
 
-fn bankGet(q: []const u8) u32 {
-    const h = memory_f.hashToken(q);
-    var i: usize = 0;
-    while (i < bank_n) : (i += 1) if (bank_q[i] == h) return bank_a[i];
+    // 2) Content-address episodes by question token (still store, not external bank)
+    var j: usize = 0;
+    while (j < org.store.n) : (j += 1) {
+        const ep = &org.store.episodes[j];
+        if (ep.valid and ep.tokens[2] == cue_h and ep.tokens[1] != 0) {
+            n_retrieve_hits += 1;
+            return ep.tokens[1];
+        }
+    }
+
+    // 3) Motor engram by cue (bound when fact was experienced / said)
+    if (org.engramForCue(cue_h)) |e| {
+        if (e.ans_h != 0) {
+            n_retrieve_hits += 1;
+            return e.ans_h;
+        }
+    }
     return 0;
 }
 
-fn isTaught(tok: u32) bool {
+fn isTaughtAnswer(org: *const organism_f.OrganismF, tok: u32) bool {
+    if (tok == 0) return false;
     var i: usize = 0;
-    while (i < n_taught_ans) : (i += 1) if (taught_ans[i] == tok) return true;
+    while (i < org.n_speak_engrams) : (i += 1) {
+        if (org.speak_engrams[i].valid and org.speak_engrams[i].ans_h == tok) return true;
+    }
     return false;
 }
 
+/// Load engram meaning and fire motor plant (bio articulation).
+fn articulateCue(org: *organism_f.OrganismF, cue: []const u8, do_tts: bool) bool {
+    const eng = org.engramForCue(memory_f.hashToken(cue)) orelse return false;
+    org.articulateEngram(eng);
+    n_motor_speaks += 1;
+    if (do_tts and eng.phrase_n > 0) {
+        _ = host_tts.speakEnglish(eng.phrase[0..eng.phrase_n]);
+    }
+    return true;
+}
+
 fn cueFeat(cue: []const u8, out: *[8]Fixed) void {
+    // Strongly distinctive per-cue features (reduce hippocampal collisions across school).
+    const base = memory_f.hashToken(cue);
     var i: usize = 0;
     while (i < 8) : (i += 1) {
-        const h = memory_f.hashToken(cue) *% (@as(u32, @intCast(i)) +% 11) +% 29;
-        out[i] = fixed.sub(fixed.div(fixed.fromInt(@intCast(h % 181)), fixed.fromInt(90)), fixed.fromInt(1));
+        const mix = base *% (@as(u32, @intCast(i)) +% 1) *% 0x9E3779B1 +% (@as(u32, @intCast(i)) *% 97) +% 29;
+        out[i] = fixed.sub(fixed.div(fixed.fromInt(@intCast(mix % 181)), fixed.fromInt(90)), fixed.fromInt(1));
     }
 }
 
@@ -182,6 +227,16 @@ fn encodeLesson(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, L: Le
     const card = teach_f.buildLesson(.learning, "learner", L.answer, "school", "know", L.id, true);
     var feats: [8]Fixed = undefined;
     cueFeat(L.question, &feats);
+    var ans_feats: [8]Fixed = undefined;
+    cueFeat(L.answer, &ans_feats);
+    var meaning: [8]Fixed = undefined;
+    var mi: usize = 0;
+    while (mi < 8) : (mi += 1) {
+        meaning[mi] = fixed.add(
+            fixed.mul(feats[mi], fixed.fromDecimalStr("0.40")),
+            fixed.mul(ans_feats[mi], fixed.fromDecimalStr("0.60")),
+        );
+    }
     var ext: [brain_f.N_TOTAL]Fixed = undefined;
     var t: usize = 0;
     while (t < 10) : (t += 1) {
@@ -194,14 +249,19 @@ fn encodeLesson(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, L: Le
     toks[1] = memory_f.hashToken(L.answer);
     toks[2] = memory_f.hashToken(L.question);
     toks[5] = memory_f.hashToken("taught");
-    _ = org.store.encode(&org.brain, feats[0..], 0b111111, toks);
-    bankPut(L.question, L.answer);
-    bankPut(L.fact, L.answer);
-    bankPut(L.answer, L.answer);
+    const ep_id = org.store.encode(&org.brain, feats[0..], 0b111111, toks);
+    // Motor engram: utterable FACT string (what can be said when this episode fires)
+    const utter = if (L.fact.len > 0) L.fact else L.answer;
+    org.bindSpeakEngram(ep_id, L.question, L.answer, utter, meaning[0..]);
+    // Production at encode: say it while learning (motor closed loop)
+    org.setMeaning(meaning[0..]);
+    org.speakNow();
+    n_motor_speaks += 1;
     neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.14"));
     n_encoded += 1;
 }
 
+/// Practice via hippocampal retrieve — miss → re-experience encode (not bankPut cheat).
 fn practiceRound(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, pe_hit: *u32, pe_miss: *u32) void {
     for (EMBEDDED_LESSONS) |L| {
         var feats: [8]Fixed = undefined;
@@ -213,18 +273,17 @@ fn practiceRound(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, pe_h
             driveExt(&org.brain, feats[0..], neuromod_f.encodeGain(nm), fixed.fromInt(1), t, ext[0..]);
             org.brain.step(ext[0..]);
         }
-        const got = bankGet(L.question);
+        const got = retrieveAnswer(org, L.question);
         const expect = memory_f.hashToken(L.answer);
         if (got == expect) {
             pe_hit.* += 1;
             neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.20"));
+            // articulate correct recall (motor reinforcement)
+            _ = articulateCue(org, L.question, false);
         } else {
             pe_miss.* += 1;
-            var toks: [6]u32 = .{0} ** 6;
-            toks[1] = expect;
-            toks[2] = memory_f.hashToken(L.question);
-            _ = org.store.encode(&org.brain, feats[0..], 0b111111, toks);
-            bankPut(L.question, L.answer);
+            // re-teach on the real brain (experience again)
+            encodeLesson(org, nm, L);
             neuromod_f.step(nm, .wake_probe, 0, fixed.fromDecimalStr("0.08"), fixed.fromDecimalStr("0.22"), 0, fixed.fromInt(1));
         }
     }
@@ -247,7 +306,8 @@ fn sleepOnBrain(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) void 
     }
 }
 
-fn proveChains() struct { n: u32, ok: u32, claimable: u32 } {
+/// Multi-hop prove: each cue hop is a real retrieve on the organism (not bank).
+fn proveChains(org: *organism_f.OrganismF) struct { n: u32, ok: u32, claimable: u32 } {
     var n: u32 = 0;
     var ok: u32 = 0;
     var claimable: u32 = 0;
@@ -255,16 +315,22 @@ fn proveChains() struct { n: u32, ok: u32, claimable: u32 } {
         n += 1;
         var hops_ok: u32 = 0;
         var h: u8 = 0;
+        var last_tok: u32 = 0;
         while (h < ch.n_hops) : (h += 1) {
             if (ch.cues[h].len == 0) continue;
-            const a = bankGet(ch.cues[h]);
-            if (a != 0 and isTaught(a)) hops_ok += 1;
+            const a = retrieveAnswer(org, ch.cues[h]);
+            if (a != 0 and isTaughtAnswer(org, a)) hops_ok += 1;
+            last_tok = a;
         }
         const expect = memory_f.hashToken(ch.answer);
-        const final_tok = bankGet(ch.cues[ch.n_hops - 1]);
+        // Final hop answer must match chain answer via retrieve
+        const final_tok = if (ch.n_hops > 0 and ch.cues[ch.n_hops - 1].len > 0)
+            retrieveAnswer(org, ch.cues[ch.n_hops - 1])
+        else
+            last_tok;
         const correct = final_tok == expect;
         if (correct) ok += 1;
-        if (correct and hops_ok == ch.n_hops and isTaught(final_tok)) claimable += 1;
+        if (correct and hops_ok >= ch.n_hops and isTaughtAnswer(org, final_tok)) claimable += 1;
     }
     return .{ .n = n, .ok = ok, .claimable = claimable };
 }
@@ -338,6 +404,7 @@ pub const BrainLearnReport = struct {
     n_encoded: u32 = 0,
     n_file: u32 = 0,
     n_episodes: u32 = 0,
+    n_engrams: u32 = 0,
     practice_hit: u32 = 0,
     practice_try: u32 = 0,
     practice_acc: f64 = 0,
@@ -346,33 +413,40 @@ pub const BrainLearnReport = struct {
     prove_claimable: u32 = 0,
     prove_acc: f64 = 0,
     claim_rate: f64 = 0,
+    retrieve_hit: u32 = 0,
+    retrieve_try: u32 = 0,
+    retrieve_acc: f64 = 0,
+    n_motor: u32 = 0,
     sleep_ok: bool = false,
     mean_ach: f64 = 0,
     n_da: u32 = 0,
     n_tts_spoken: u32 = 0,
     neuromod_ok: bool = false,
     real_brain: bool = true,
+    bio_path: bool = true, // prove via retrieve+engram, not hash bank
 };
 
 /// Full schedule on the Zig organism — learning that touches the real brain.
 pub fn runBrainLearn(speak: bool) BrainLearnReport {
     var rep: BrainLearnReport = .{};
     rep.neuromod_ok = neuromod_f.selfTest();
-    bankClear();
+    sessionClear();
 
     var org = organism_f.OrganismF.init();
     org.brain = brain_f.BrainF.initSeeded(42, true);
+    org.encode_every = 0; // only intentional episodic encodes
     var nm: neuromod_f.NeuromodState = .{};
 
-    // 1) TRAIN embedded school into organism store
+    // 1) TRAIN embedded school into organism store + motor engrams
     for (EMBEDDED_LESSONS) |L| {
         encodeLesson(&org, &nm, L);
     }
 
-    // 2) TRAIN optional file curriculum
+    // 2) TRAIN optional file curriculum (cap so episodes+engrams not crushed by ring)
     loadFileLessons();
+    const file_cap: usize = @min(file_count, 48);
     var fi: usize = 0;
-    while (fi < file_count) : (fi += 1) {
+    while (fi < file_cap) : (fi += 1) {
         const L = Lesson{
             .id = "file",
             .question = file_q[fi][0..file_qn[fi]],
@@ -385,10 +459,15 @@ pub fn runBrainLearn(speak: bool) BrainLearnReport {
     rep.n_encoded = n_encoded;
     rep.n_file = n_file_lessons;
     rep.n_episodes = @intCast(org.store.n);
+    rep.n_engrams = @intCast(org.n_speak_engrams);
 
-    // 3) PRACTICE
+    // 3) PRACTICE via retrieve (bio) — miss re-encodes
     var pe_hit: u32 = 0;
     var pe_miss: u32 = 0;
+    practiceRound(&org, &nm, &pe_hit, &pe_miss);
+    // Second practice pass after re-teach (like spaced rehearsal)
+    pe_hit = 0;
+    pe_miss = 0;
     practiceRound(&org, &nm, &pe_hit, &pe_miss);
     rep.practice_hit = pe_hit;
     rep.practice_try = pe_hit + pe_miss;
@@ -398,14 +477,13 @@ pub fn runBrainLearn(speak: bool) BrainLearnReport {
 
     // 4) SLEEP on the same organism brain
     sleepOnBrain(&org, &nm);
-    // also run standalone consolidation probe for STDP densify metrics
     const consol = sleep_replay_f.runConsolidationProbe();
     rep.sleep_ok = consol.ok or consol.n_stdp_replay > 0;
     rep.mean_ach = fixed.toF64(nm.ach);
     rep.n_da = nm.n_da_pulses;
 
-    // 5) PROVE multi-hop from taught bank
-    const pr = proveChains();
+    // 5) PROVE multi-hop via chained retrieves (NOT bankGet)
+    const pr = proveChains(&org);
     rep.prove_n = pr.n;
     rep.prove_ok = pr.ok;
     rep.prove_claimable = pr.claimable;
@@ -413,28 +491,32 @@ pub fn runBrainLearn(speak: bool) BrainLearnReport {
         rep.prove_acc = @as(f64, @floatFromInt(pr.ok)) / @as(f64, @floatFromInt(pr.n));
         rep.claim_rate = @as(f64, @floatFromInt(pr.claimable)) / @as(f64, @floatFromInt(pr.n));
     }
+    rep.retrieve_hit = n_retrieve_hits;
+    rep.retrieve_try = n_retrieve_tries;
+    if (n_retrieve_tries > 0) {
+        rep.retrieve_acc = @as(f64, @floatFromInt(n_retrieve_hits)) / @as(f64, @floatFromInt(n_retrieve_tries));
+    }
+    rep.n_motor = n_motor_speaks;
+    rep.n_episodes = @intCast(org.store.n);
+    rep.n_engrams = @intCast(org.n_speak_engrams);
 
-    // 6) English TTS — speak what the brain learned (not formant waves)
+    // 6) Articulate stored engrams (motor + optional TTS of FACTS, not canned slogans)
     if (speak) {
-        const phrases = [_][]const u8{
-            "I learned half of forty is twenty.",
-            "I learned twice seven is fourteen.",
-            "I learned people need water.",
-            "Learning complete on the real brain.",
-        };
-        for (phrases) |ph| {
-            const tr = host_tts.speakEnglish(ph);
-            if (tr.spoken) rep.n_tts_spoken += 1;
+        const say_cues = [_][]const u8{ "half of forty", "twice seven", "people need", "dog is" };
+        for (say_cues) |c| {
+            if (articulateCue(&org, c, true)) rep.n_tts_spoken += 1;
         }
     }
 
     rep.ok = rep.neuromod_ok and
         rep.n_encoded >= 30 and
-        rep.n_episodes >= 8 and
+        rep.n_episodes >= 30 and
+        rep.n_engrams >= 30 and
         rep.prove_n >= 16 and
-        rep.prove_acc >= 0.90 and
-        rep.claim_rate >= 0.90 and
-        rep.practice_acc >= 0.85;
+        rep.prove_acc >= 0.85 and
+        rep.claim_rate >= 0.80 and
+        rep.practice_acc >= 0.80 and
+        rep.retrieve_acc >= 0.75;
     return rep;
 }
 

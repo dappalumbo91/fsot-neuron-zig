@@ -236,7 +236,30 @@ fn probeOne(
     }
 }
 
-/// Full bio articulation session: teach → cue → retrieve → motor → self-hear.
+fn sleepQuiet(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) void {
+    var ext: [brain_f.N_TOTAL]Fixed = undefined;
+    var t: usize = 0;
+    while (t < 30) : (t += 1) {
+        neuromod_f.step(nm, .wake_rest, 0, 0, 0, 0, fixed.fromInt(1));
+        var i: usize = 0;
+        while (i < org.brain.n) : (i += 1) {
+            ext[i] = fixed.fromDecimalStr("0.04");
+        }
+        org.brain.step(ext[0..]);
+    }
+    t = 0;
+    while (t < 50) : (t += 1) {
+        neuromod_f.step(nm, .sleep_nrem, fixed.fromDecimalStr("0.05"), 0, 0, fixed.fromDecimalStr("0.02"), fixed.fromInt(1));
+        var i: usize = 0;
+        while (i < org.brain.n) : (i += 1) {
+            ext[i] = fixed.fromDecimalStr("0.03");
+        }
+        org.brain.step(ext[0..]);
+    }
+}
+
+/// Full bio articulation session: teach → sleep → cue → retrieve → motor → self-hear.
+/// Multi-epoch: second teach pass + probe after sleep (consolidation, not chat).
 pub fn runBioArticulate(do_tts: bool) ArticulateReport {
     _ = lexicon_en.tryLoadDefaultRoles();
 
@@ -251,10 +274,29 @@ pub fn runBioArticulate(do_tts: bool) ArticulateReport {
         teachFact(&org, &nm, f);
         rep.n_taught += 1;
     }
+
+    // 2) SLEEP (consolidate) — still pure organism dynamics
+    sleepQuiet(&org, &nm);
+
+    // 3) Second epoch: re-experience weaker cues (spaced) then sleep again
+    for (FACTS) |f| {
+        var cue_f: [8]Fixed = undefined;
+        cueFeat(f.cue, &cue_f);
+        drive(&org, &nm, &cue_f, 6);
+        // re-bind motor if retrieve weak
+        var sim: Fixed = 0;
+        const ep = org.store.retrieve(&org.brain, cue_f[0..], &sim);
+        if (ep == 0 or org.engramForEpisode(ep) == null) {
+            teachFact(&org, &nm, f);
+            rep.n_taught += 1;
+        }
+    }
+    sleepQuiet(&org, &nm);
+
     rep.n_episodes = @intCast(org.store.n);
     rep.n_engrams = @intCast(org.n_speak_engrams);
 
-    // 2) PROBE: novel order (reverse) — hear cue, articulate from memory
+    // 4) PROBE: novel order (reverse) — hear cue, articulate from memory only
     var i: isize = @as(isize, @intCast(FACTS.len)) - 1;
     while (i >= 0) : (i -= 1) {
         probeOne(&org, &nm, FACTS[@intCast(i)], &rep, do_tts);

@@ -5,7 +5,8 @@ const brain_f = @import("brain_fixed.zig");
 const Fixed = fixed.Fixed;
 
 pub const FP_DIM: usize = brain_f.N_TOTAL * 2;
-pub const MAX_EPISODES: usize = 32;
+/// Episodic capacity for real school (not a 32-slot toy that forces hash-bank cheats).
+pub const MAX_EPISODES: usize = 192;
 pub const ENCODE_STEPS: usize = 16;
 
 pub const EpisodeF = struct {

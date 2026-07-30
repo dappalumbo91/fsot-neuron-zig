@@ -11,7 +11,8 @@ const speech_f = @import("speech_organ_fixed.zig");
 const Fixed = fixed.Fixed;
 
 /// Bound utterable fact for one episode (motor memory, not dialogue manager).
-pub const MAX_SPEAK_ENGRAMS: usize = 24;
+/// Motor engrams for taught facts (experience → sayable); sized for school curriculum.
+pub const MAX_SPEAK_ENGRAMS: usize = 160;
 pub const SpeakEngram = struct {
     ep_id: u32 = 0,
     cue_h: u32 = 0,

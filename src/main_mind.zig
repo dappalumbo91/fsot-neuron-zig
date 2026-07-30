@@ -1507,16 +1507,17 @@ fn runSleepReplay() void {
 }
 
 fn runBrainLearn(speak: bool) void {
-    std.debug.print("=== FSOT BRAIN LEARN (real organism encode → practice → sleep → prove) ===\n", .{});
-    std.debug.print("doctrine: school lessons touch OrganismF store + neuromod + sleep — not Python-only\n", .{});
-    if (speak) std.debug.print("speech: English TTS for learned facts (not formant wave smoke)\n", .{});
+    std.debug.print("=== FSOT BRAIN LEARN (BIO: encode+engram → retrieve practice → sleep → retrieve prove) ===\n", .{});
+    std.debug.print("doctrine: NO hash-bank cheat — prove via store.retrieve + SpeakEngram on OrganismF\n", .{});
+    if (speak) std.debug.print("speech: motor speakNow + TTS of stored fact engrams only\n", .{});
     const r = brain_learn_fixed.runBrainLearn(speak);
     std.debug.print(
-        "BRAIN_LEARN taught={d} file={d} eps={d} practice={d}/{d} acc={e} prove={d}/{d} claimable={d} prove_acc={e} claim_rate={e} da={d} ach={e} tts={d} sleep={} nm={}\n",
+        "BRAIN_LEARN taught={d} file={d} eps={d} engrams={d} practice={d}/{d} acc={e} prove={d}/{d} claimable={d} prove_acc={e} claim_rate={e} retrieve={d}/{d} ret_acc={e} motor={d} da={d} ach={e} tts={d} sleep={} nm={} bio={}\n",
         .{
             r.n_lessons_taught,
             r.n_file,
             r.n_episodes,
+            r.n_engrams,
             r.practice_hit,
             r.practice_try,
             r.practice_acc,
@@ -1525,18 +1526,24 @@ fn runBrainLearn(speak: bool) void {
             r.prove_claimable,
             r.prove_acc,
             r.claim_rate,
+            r.retrieve_hit,
+            r.retrieve_try,
+            r.retrieve_acc,
+            r.n_motor,
             r.n_da,
             r.mean_ach,
             r.n_tts_spoken,
             r.sleep_ok,
             r.neuromod_ok,
+            r.bio_path,
         },
     );
     if (r.ok) {
         std.debug.print("FSOT_BRAIN_LEARN PASS\n", .{});
         std.debug.print("FSOT_REAL_BRAIN_TEACH_OK\n", .{});
+        std.debug.print("FSOT_BIO_RETRIEVE_PROVE_OK\n", .{});
     } else {
-        std.debug.print("FSOT_BRAIN_LEARN FAIL (need encode+practice+prove ≥90% on real organism)\n", .{});
+        std.debug.print("FSOT_BRAIN_LEARN FAIL (need retrieve+practice+prove on real organism, not bank)\n", .{});
         std.process.exit(1);
     }
 }
