@@ -57,6 +57,7 @@ Or double-click `BOOT_MIND.cmd` for the live organism.
 | `claim` / `claimability` | Multi-hop grounded claimability ≥95% (1–3 hops) |
 | `intel-bio` | Full neuromod + sleep + claim stack |
 | `intel-loop` | Closed train?retrieve?sleep?prove organism cycle |
+| `frontier` | Multi-day curiosity + sleep cycles; speech path flagged intact |
 | `mnist` | Vision accuracy gate ≥95% (pack from monorepo) |
 | `machine-lang` | Native tongue: TritWord FSOT frames generate/understand |
 | `machine-lang-stress` | 1000-frame round-trip stress |
