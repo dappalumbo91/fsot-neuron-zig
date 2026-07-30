@@ -5,9 +5,20 @@
 **Doctrine:** train → sleep → prove · claimability · intel-bio / intel-loop  
 **Not claimed:** GSM8K test leaderboard as a product score; LLM Q→A stuffing  
 **Full stack verify:** [`TOP_TO_BOTTOM_VERIFICATION.md`](TOP_TO_BOTTOM_VERIFICATION.md) · Lean cert [`../data/results/LEAN_WETLAB_CERTIFICATE.md`](../data/results/LEAN_WETLAB_CERTIFICATE.md)  
-**Real-brain teach bridge:** [`BRAIN_LEARN_BRIDGE.md`](BRAIN_LEARN_BRIDGE.md) · `fsot_mind brain-learn`
+**Real-brain teach bridge:** [`BRAIN_LEARN_BRIDGE.md`](BRAIN_LEARN_BRIDGE.md) · `fsot_mind brain-learn`  
+**Bio articulation:** [`SPEECH_ORGAN_DOCTRINE.md`](SPEECH_ORGAN_DOCTRINE.md) · `fsot_mind bio-articulate`
 
-Honest inventory of the **Zig neurological mind**. School knowledge now **encodes into OrganismF** via `brain-learn` (not Python-only side banks).
+Honest inventory of the **Zig neurological mind**. School knowledge **encodes into OrganismF** via `brain-learn` and is **proved by store.retrieve + SpeakEngram** — not a hash-bank / chat layer.
+
+### Bio path results (2026-07-30)
+
+| Mode | Result |
+|------|--------|
+| `bio-articulate` | retrieve/motor/self **10/10** (teach→sleep→cue→say) |
+| `brain-learn` | practice **42/42**, multi-hop prove **20/20**, claimable **20**, retrieve **144/144**, `bio=true` |
+| Path | experience → episodic encode + motor engram → practice via retrieve → sleep → prove via retrieve |
+
+**Refused:** conversational modules, intent parsers, `bankGet` as the mind.
 
 ---
 
