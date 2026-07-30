@@ -933,14 +933,18 @@ fn runInternalThink(minutes: u32) void {
         }
         return;
     }
-    std.debug.print("=== FSOT THINK HOUR (adaptive: lit + discover + compose) {d} min ===\n", .{minutes});
-    std.debug.print("path: seed+arxiv/wiki → retrace → discover(query) → novel brainstorm → sleep\n", .{});
-    std.debug.print("heartbeat 5s; live log: data/results/THINK_LIVE.log\n", .{});
-    std.debug.print("watch: new= / uniq= / grown= rising over the hour (knowledge emergence)\n", .{});
+    std.debug.print("=== FSOT THINK RUN (adaptive + auto-stop if stuck) max {d} min ===\n", .{minutes});
+    std.debug.print("path: seed+lit → retrace → discover → compose → sleep | STUCK → shutdown\n", .{});
+    std.debug.print("logs:\n", .{});
+    std.debug.print("  data/results/THINK_LIVE.log\n", .{});
+    std.debug.print("  data/results/THINK_GENETIC.log   (DNA structure + mutations)\n", .{});
+    std.debug.print("  data/results/THINK_ACCURACY.jsonl (capacity vs accuracy)\n", .{});
+    std.debug.print("  data/results/THINK_PENDING_QUESTIONS.jsonl\n", .{});
     const r = internal_think_fixed.runThinkMinutes(minutes);
     std.debug.print(
-        "THINK_HOUR done min={d} cy={d} lit={d} retr={d}/{d} disc={d}/{d} new={d} ideas={d} uniq={d} grown={d} eng={d} eps={d} ms={d}\n",
+        "THINK_RUN done reason={s} min_cap={d} cy={d} lit={d} retr={d}/{d} disc={d}/{d} new={d} uniq={d} pending={d} grown={d} eng={d} mut={d} ms={d}\n",
         .{
+            r.stop_reason,
             minutes,
             r.n_cycles,
             r.n_lit_cards,
@@ -949,11 +953,11 @@ fn runInternalThink(minutes: u32) void {
             r.n_discover_hit,
             r.n_discover,
             r.n_new_concepts,
-            r.n_ideas_grounded,
             r.n_ideas_unique,
+            r.n_pending_open,
             r.n_grown,
             r.n_engrams,
-            r.n_episodes,
+            r.n_mutations,
             r.duration_ms,
         },
     );
@@ -963,6 +967,9 @@ fn runInternalThink(minutes: u32) void {
         std.debug.print("FSOT_THINK_HOUR PASS\n", .{});
         std.debug.print("FSOT_LONG_THINK_OK\n", .{});
         std.debug.print("FSOT_ADAPTIVE_KNOWLEDGE_OK\n", .{});
+        if (std.mem.eql(u8, r.stop_reason, "stuck_no_progress") or std.mem.eql(u8, r.stop_reason, "stuck_same_idea")) {
+            std.debug.print("FSOT_STUCK_AUTO_SHUTDOWN_OK\n", .{});
+        }
     } else {
         std.debug.print("FSOT_THINK_HOUR FAIL\n", .{});
         std.process.exit(1);

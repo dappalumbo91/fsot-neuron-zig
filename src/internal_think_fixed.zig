@@ -20,6 +20,7 @@ const eeg = @import("eeg_gate_anchors_fixed.zig");
 const query_tool = @import("query_tool_fixed.zig");
 const lit = @import("literature_ingest_fixed.zig");
 const capacity = @import("capacity_tier_fixed.zig");
+const observe = @import("think_observe_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Fact = struct {
@@ -393,6 +394,8 @@ pub const ThinkReport = struct {
     bio_path: bool = true,
     not_llm: bool = true,
     adaptive: bool = true,
+    stop_reason: []const u8 = "running",
+    n_mutations: u32 = 0,
 };
 
 fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
@@ -661,6 +664,10 @@ pub const ThinkConfig = struct {
     lit_cards: usize = 120,
     /// Runtime grown bank soft-cap from capacity tier (≤ MAX_GROWN)
     grown_cap: usize = MAX_GROWN,
+    /// Auto-stop if no new_concepts and no uniq_ideas progress for this many heartbeats
+    stuck_heartbeats: u32 = 8,
+    /// Also stop if same last_idea hash for this many consecutive heartbeats
+    stuck_idea_heartbeats: u32 = 6,
 };
 
 fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) void {
@@ -754,16 +761,27 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         org.store.n,
     });
 
+    // Observation logs: genetics + accuracy
+    var obs = observe.Observe.open();
+    defer obs.close();
+    obs.logGenomeBoot(&org.brain);
+    hbPrint(log_ptr, "THINK_LOGS genetic=data/results/THINK_GENETIC.log accuracy=data/results/THINK_ACCURACY.jsonl pending={s}\n", .{PENDING_PATH});
+
     const t0 = std.time.milliTimestamp();
     var last_hb: i64 = 0;
     var seed: u32 = 1;
+    var stuck_prog: u32 = 0;
+    var stuck_idea: u32 = 0;
+    var last_new_snap: u32 = 0;
+    var last_uniq_snap: u32 = 0;
+    var last_idea_h: u32 = 0;
+    rep.stop_reason = "completed";
 
     while (true) {
         rep.n_cycles += 1;
         seed +%= 19;
 
         passRetrace(org, &nm, &rep, seed);
-        // discover unknowns every cycle on long runs — this is knowledge growth
         passDiscover(org, &nm, &rep, seed +% 3, cfg.allow_live_query);
         if (cfg.duration_ms == 0 or (rep.n_cycles % 2) == 0) {
             passBrainstorm(org, &nm, &rep, seed +% 11);
@@ -773,11 +791,17 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         if (cfg.sleep_every > 0 and (rep.n_cycles % cfg.sleep_every) == 0) {
             sleepQuiet(org, &nm);
             rep.n_sleep += 1;
+            // genetic/plasticity check after sleep
+            obs.maybeLogMutation(&org.brain, rep.n_cycles);
         }
 
-        const idle_n: u32 = if (cfg.duration_ms >= 60_000) 2 else 4;
+        const idle_n: u32 = if (cfg.duration_ms >= 30_000) 2 else 4;
         var t: u32 = 0;
         while (t < idle_n) : (t += 1) _ = org.tickOnce();
+        // weight fingerprint occasionally (every 20 cycles)
+        if ((rep.n_cycles % 20) == 0) {
+            obs.maybeLogMutation(&org.brain, rep.n_cycles);
+        }
 
         const now = std.time.milliTimestamp();
         const elapsed: u64 = if (now >= t0) @as(u64, @intCast(now - t0)) else 0;
@@ -792,7 +816,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             const mins = elapsed / 60_000;
             const secs = (elapsed % 60_000) / 1000;
             hbPrint(log_ptr,
-                "THINK_HB t={d}m{d:0>2}s cy={d} retr={d}/{d} disc={d}/{d} miss={d} pending={d} new={d} ideas={d} uniq={d} grown={d} eng={d}\n",
+                "THINK_HB t={d}m{d:0>2}s cy={d} retr={d}/{d} disc={d}/{d} miss={d} pending={d} new={d} ideas={d} uniq={d} grown={d} eng={d} mut={d}\n",
                 .{
                     mins,
                     secs,
@@ -808,6 +832,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                     rep.n_ideas_unique,
                     n_grown,
                     org.n_speak_engrams,
+                    obs.n_mutations_logged,
                 },
             );
             if (rep.last_new_n > 0) {
@@ -816,10 +841,67 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             if (rep.last_idea_n > 0) {
                 hbPrint(log_ptr, "  last_idea=\"{s}\"\n", .{rep.last_idea[0..rep.last_idea_n]});
             }
+
+            // Accuracy / capacity log
+            const st = org.brain.structureReport();
+            obs.logAccuracy(
+                rep.n_cycles,
+                elapsed,
+                rep.n_retrace_ok,
+                rep.n_retrace,
+                rep.n_discover_hit,
+                rep.n_discover,
+                rep.n_pending_open,
+                rep.n_new_concepts,
+                rep.n_ideas_unique,
+                @intCast(n_grown),
+                @intCast(grown_cap_runtime),
+                @intCast(org.n_speak_engrams),
+                organism_f.MAX_SPEAK_ENGRAMS,
+                @intCast(org.store.n),
+                memory_f.MAX_EPISODES,
+                org.brain.totalSpikes(),
+                st.n_synapses,
+            );
+
+            // ── LOOP DETECT: no progress on new+uniq ──────────────────
+            if (cfg.duration_ms > 0 and rep.n_cycles > 20) {
+                const prog = (rep.n_new_concepts > last_new_snap) or (rep.n_ideas_unique > last_uniq_snap);
+                if (prog) {
+                    stuck_prog = 0;
+                    last_new_snap = rep.n_new_concepts;
+                    last_uniq_snap = rep.n_ideas_unique;
+                } else {
+                    stuck_prog += 1;
+                }
+                const ih: u32 = if (rep.last_idea_n > 0) memory_f.hashToken(rep.last_idea[0..rep.last_idea_n]) else 0;
+                if (ih != 0 and ih == last_idea_h) {
+                    stuck_idea += 1;
+                } else {
+                    stuck_idea = 0;
+                    last_idea_h = ih;
+                }
+                if (stuck_prog >= cfg.stuck_heartbeats) {
+                    hbPrint(log_ptr, "THINK_STUCK no progress new/uniq for {d} heartbeats — shutting down\n", .{stuck_prog});
+                    rep.stop_reason = "stuck_no_progress";
+                    break;
+                }
+                if (stuck_idea >= cfg.stuck_idea_heartbeats) {
+                    hbPrint(log_ptr, "THINK_STUCK same last_idea for {d} heartbeats — shutting down\n", .{stuck_idea});
+                    rep.stop_reason = "stuck_same_idea";
+                    break;
+                }
+            }
         }
 
-        if (cfg.duration_ms == 0) break;
-        if (elapsed >= cfg.duration_ms) break;
+        if (cfg.duration_ms == 0) {
+            rep.stop_reason = "probe";
+            break;
+        }
+        if (elapsed >= cfg.duration_ms) {
+            rep.stop_reason = "time_limit";
+            break;
+        }
         if (cfg.duration_ms >= 10_000) {
             std.Thread.sleep(80 * std.time.ns_per_ms);
         }
@@ -829,6 +911,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     rep.n_episodes = @intCast(org.store.n);
     rep.n_engrams = @intCast(org.n_speak_engrams);
     rep.spikes = org.brain.totalSpikes();
+    rep.n_mutations = obs.n_mutations_logged;
     if (rep.n_retrace > 0) {
         rep.retrace_acc = @as(f64, @floatFromInt(rep.n_retrace_ok)) / @as(f64, @floatFromInt(rep.n_retrace));
     }
@@ -836,7 +919,31 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.idea_ground_rate = @as(f64, @floatFromInt(rep.n_ideas_grounded)) / @as(f64, @floatFromInt(rep.n_brainstorm));
     }
 
-    hbPrint(log_ptr, "THINK_DONE cy={d} ms={d} lit={d} new={d} uniq={d} pending={d} grown={d} eng={d}\n", .{
+    // final accuracy snapshot
+    const stf = org.brain.structureReport();
+    obs.logAccuracy(
+        rep.n_cycles,
+        rep.duration_ms,
+        rep.n_retrace_ok,
+        rep.n_retrace,
+        rep.n_discover_hit,
+        rep.n_discover,
+        rep.n_pending_open,
+        rep.n_new_concepts,
+        rep.n_ideas_unique,
+        @intCast(n_grown),
+        @intCast(grown_cap_runtime),
+        @intCast(org.n_speak_engrams),
+        organism_f.MAX_SPEAK_ENGRAMS,
+        @intCast(org.store.n),
+        memory_f.MAX_EPISODES,
+        rep.spikes,
+        stf.n_synapses,
+    );
+    obs.maybeLogMutation(&org.brain, rep.n_cycles);
+
+    hbPrint(log_ptr, "THINK_DONE reason={s} cy={d} ms={d} lit={d} new={d} uniq={d} pending={d} grown={d} eng={d} mut={d}\n", .{
+        rep.stop_reason,
         rep.n_cycles,
         rep.duration_ms,
         rep.n_lit_cards,
@@ -845,10 +952,13 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.n_pending_open,
         rep.n_grown,
         rep.n_engrams,
+        rep.n_mutations,
     });
     if (rep.n_pending_open > 0) {
-        hbPrint(log_ptr, "THINK_PENDING_LOG {s} open_questions={d} (review later / clarify)\n", .{ PENDING_PATH, rep.n_pending_open });
+        hbPrint(log_ptr, "THINK_PENDING_LOG {s} open_questions={d}\n", .{ PENDING_PATH, rep.n_pending_open });
     }
+    hbPrint(log_ptr, "THINK_GENETIC_LOG data/results/THINK_GENETIC.log\n", .{});
+    hbPrint(log_ptr, "THINK_ACCURACY_LOG data/results/THINK_ACCURACY.jsonl\n", .{});
 
     rep.ok = rep.n_studied >= 10 and
         rep.n_cycles >= 1 and
@@ -874,9 +984,10 @@ pub fn runThinkProbe() ThinkReport {
 
 pub fn runThinkMinutes(minutes: u32) ThinkReport {
     const cap = capacity.probe();
-    const ms: u64 = @as(u64, minutes) * 60_000;
+    // Hard cap still applies; loop-detect may stop earlier
+    const ms: u64 = @as(u64, if (minutes == 0) 45 else minutes) * 60_000;
     return runInternalThink(.{
-        .duration_ms = if (ms == 0) 60_000 else ms,
+        .duration_ms = ms,
         .heartbeat_ms = 5_000,
         .sleep_every = cap.sleep_every,
         .quiet = false,
@@ -884,6 +995,8 @@ pub fn runThinkMinutes(minutes: u32) ThinkReport {
         .allow_live_query = false,
         .lit_cards = cap.lit_cards,
         .grown_cap = cap.grown_cap,
+        .stuck_heartbeats = 8, // ~40s no new/uniq progress → stop
+        .stuck_idea_heartbeats = 6, // ~30s same idea → stop
     });
 }
 
