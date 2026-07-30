@@ -16,8 +16,9 @@ Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). Th
 | **License** | Apache-2.0 |
 | **Learned capacity** | [`docs/LEARNED_CAPACITY.md`](docs/LEARNED_CAPACITY.md) — Zig intel stack + companion multi-hop snapshot |
 | **Top-to-bottom verify** | [`docs/TOP_TO_BOTTOM_VERIFICATION.md`](docs/TOP_TO_BOTTOM_VERIFICATION.md) — stress · QEMU · Lean stamp · bio |
+| **Real-brain school** | [`docs/BRAIN_LEARN_BRIDGE.md`](docs/BRAIN_LEARN_BRIDGE.md) — `fsot_mind brain-learn` teaches **OrganismF** |
 | **Lean × wet-lab cert** | [`data/results/LEAN_WETLAB_CERTIFICATE.md`](data/results/LEAN_WETLAB_CERTIFICATE.md) |
-| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Python organism / Lean sources / experience school) |
+| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Lean sources / export_brain_teach_bank) |
 
 ## Quick start
 
@@ -59,7 +60,11 @@ Or double-click `BOOT_MIND.cmd` for the live organism.
 | `sleep` / `consolidate` | Offline sleep-like replay + STDP consolidation |
 | `claim` / `claimability` | Multi-hop grounded claimability ≥95% (1–3 hops) |
 | `intel-bio` | Full neuromod + sleep + claim stack |
-| `intel-loop` | Closed train?retrieve?sleep?prove organism cycle |
+| `intel-loop` | Closed train→retrieve→sleep→prove organism cycle |
+| `brain-learn` | **Real-brain school** — encode lessons into OrganismF + sleep + multi-hop prove |
+| `brain-learn-speak` | Same + English TTS of what was learned (not formant waves) |
+| `english` / `practice` | Lexicon + Windows TTS; self-hear language loop |
+| `speakers` | Formant/DAC smoke only — **not** English product path |
 | `frontier` | Multi-day curiosity + sleep cycles; speech path flagged intact |
 | `mnist` | Vision accuracy gate ≥95% (pack from monorepo) |
 | `machine-lang` | Native tongue: TritWord FSOT frames generate/understand |

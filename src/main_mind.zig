@@ -96,6 +96,7 @@ const sleep_replay_fixed = @import("sleep_replay_fixed.zig");
 const claimability_fixed = @import("claimability_fixed.zig");
 const intel_loop_fixed = @import("intel_loop_fixed.zig");
 const intel_frontier_fixed = @import("intel_frontier_fixed.zig");
+const brain_learn_fixed = @import("brain_learn_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -1384,6 +1385,41 @@ fn runSleepReplay() void {
     }
 }
 
+fn runBrainLearn(speak: bool) void {
+    std.debug.print("=== FSOT BRAIN LEARN (real organism encode → practice → sleep → prove) ===\n", .{});
+    std.debug.print("doctrine: school lessons touch OrganismF store + neuromod + sleep — not Python-only\n", .{});
+    if (speak) std.debug.print("speech: English TTS for learned facts (not formant wave smoke)\n", .{});
+    const r = brain_learn_fixed.runBrainLearn(speak);
+    std.debug.print(
+        "BRAIN_LEARN taught={d} file={d} eps={d} practice={d}/{d} acc={e} prove={d}/{d} claimable={d} prove_acc={e} claim_rate={e} da={d} ach={e} tts={d} sleep={} nm={}\n",
+        .{
+            r.n_lessons_taught,
+            r.n_file,
+            r.n_episodes,
+            r.practice_hit,
+            r.practice_try,
+            r.practice_acc,
+            r.prove_ok,
+            r.prove_n,
+            r.prove_claimable,
+            r.prove_acc,
+            r.claim_rate,
+            r.n_da,
+            r.mean_ach,
+            r.n_tts_spoken,
+            r.sleep_ok,
+            r.neuromod_ok,
+        },
+    );
+    if (r.ok) {
+        std.debug.print("FSOT_BRAIN_LEARN PASS\n", .{});
+        std.debug.print("FSOT_REAL_BRAIN_TEACH_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_BRAIN_LEARN FAIL (need encode+practice+prove ≥90% on real organism)\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runClaimability() void {
     std.debug.print("=== FSOT CLAIMABILITY (multi-hop grounded intelligence) ===\n", .{});
     std.debug.print("doctrine: every hop bank-grounded; 1–3 hop chains; neuromod encode tags\n", .{});
@@ -2049,6 +2085,11 @@ pub fn main() !void {
         runGradeBand(.grade8);
     } else if (std.mem.eql(u8, mode, "reason") or std.mem.eql(u8, mode, "open-reason") or std.mem.eql(u8, mode, "think") or std.mem.eql(u8, mode, "multi-hop")) {
         runReasonPractice();
+    } else if (std.mem.eql(u8, mode, "brain-learn") or std.mem.eql(u8, mode, "brain_learn") or std.mem.eql(u8, mode, "real-learn") or std.mem.eql(u8, mode, "experience") or std.mem.eql(u8, mode, "school")) {
+        // REAL brain: encode school into OrganismF + sleep + prove (not Python-only)
+        runBrainLearn(false);
+    } else if (std.mem.eql(u8, mode, "brain-learn-speak") or std.mem.eql(u8, mode, "real-learn-speak") or std.mem.eql(u8, mode, "school-speak")) {
+        runBrainLearn(true);
     } else if (std.mem.eql(u8, mode, "novel") or std.mem.eql(u8, mode, "inquiry") or std.mem.eql(u8, mode, "synthesize") or std.mem.eql(u8, mode, "idea")) {
         runNovelInquiry();
     } else if (std.mem.eql(u8, mode, "checkpoint") or std.mem.eql(u8, mode, "savegame") or std.mem.eql(u8, mode, "save-load")) {
@@ -2213,16 +2254,24 @@ pub fn main() !void {
         runOrganism();
         runIntel();
         runGenetic();
+        // Real-brain school: encode → practice → sleep → prove (closes Python disconnect)
+        runBrainLearn(false);
         std.debug.print("FSOT_MIND_HOST_OK\n", .{});
         std.debug.print("FSOT_FIXED_AUTHORITY_OK\n", .{});
         std.debug.print("FSOT_NO_PYTHON_CORE_OK\n", .{});
         std.debug.print("FSOT_INTEL_HOST_OK\n", .{});
         std.debug.print("NOTE: suite is gates only. Live intelligence → BOOT_MIND.cmd or mode 'mind'\n", .{});
+        std.debug.print("NOTE: brain-learn / real-learn = school on OrganismF (not Python-only)\n", .{});
     } else {
-        std.debug.print("usage: fsot_mind mind|body|stress|suite|host-senses|…\n", .{});
-        std.debug.print("  mind  = FULL connected organism (brain+memory+senses+speech)\n", .{});
-        std.debug.print("  body  = plant smoke only (senses loop)\n", .{});
-        std.debug.print("  suite = unit-test gates (not live intelligence)\n", .{});
+        std.debug.print("usage: fsot_mind mind|body|stress|suite|brain-learn|english|…\n", .{});
+        std.debug.print("  mind           = FULL connected organism (brain+memory+senses+speech)\n", .{});
+        std.debug.print("  brain-learn    = REAL brain teach→practice→sleep→prove\n", .{});
+        std.debug.print("  brain-learn-speak = same + English TTS of learned facts\n", .{});
+        std.debug.print("  english        = lexicon + Windows TTS (real words, not formants)\n", .{});
+        std.debug.print("  practice       = utter → TTS → self-hear → encode\n", .{});
+        std.debug.print("  speakers       = formant/DAC smoke only (NOT English)\n", .{});
+        std.debug.print("  body           = plant smoke only (senses loop)\n", .{});
+        std.debug.print("  suite          = unit-test gates\n", .{});
         std.process.exit(2);
     }
 }

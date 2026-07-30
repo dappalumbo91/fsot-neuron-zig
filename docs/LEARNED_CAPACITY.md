@@ -4,9 +4,10 @@
 **Repo:** [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig)  
 **Doctrine:** train → sleep → prove · claimability · intel-bio / intel-loop  
 **Not claimed:** GSM8K test leaderboard as a product score; LLM Q→A stuffing  
-**Full stack verify:** [`TOP_TO_BOTTOM_VERIFICATION.md`](TOP_TO_BOTTOM_VERIFICATION.md) · Lean cert [`../data/results/LEAN_WETLAB_CERTIFICATE.md`](../data/results/LEAN_WETLAB_CERTIFICATE.md)
+**Full stack verify:** [`TOP_TO_BOTTOM_VERIFICATION.md`](TOP_TO_BOTTOM_VERIFICATION.md) · Lean cert [`../data/results/LEAN_WETLAB_CERTIFICATE.md`](../data/results/LEAN_WETLAB_CERTIFICATE.md)  
+**Real-brain teach bridge:** [`BRAIN_LEARN_BRIDGE.md`](BRAIN_LEARN_BRIDGE.md) · `fsot_mind brain-learn`
 
-Honest inventory of the **Zig neurological mind** and companion multi-hop capacity taught from experience.
+Honest inventory of the **Zig neurological mind**. School knowledge now **encodes into OrganismF** via `brain-learn` (not Python-only side banks).
 
 ---
 
