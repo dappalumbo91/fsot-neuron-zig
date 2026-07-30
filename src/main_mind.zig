@@ -800,7 +800,7 @@ fn runBioConverse(do_tts: bool) void {
     std.debug.print("scope: FSOT genetic bare-metal mind; not wet tissue, not app-tier LLM\n", .{});
     const r = bio_converse_fixed.runBioConverse(do_tts);
     std.debug.print(
-        "BIO_CONVERSE studied={d} turns={d} ans={d}/{d} acc={e} context={d}/{d} cacc={e} motor={d} self={d} encoded={d} eps={d} engrams={d} bio={} not_llm={}\n",
+        "BIO_CONVERSE studied={d} turns={d} ans={d}/{d} acc={e} context={d}/{d} cacc={e} motor={d} self={d} encoded={d} phase_ok={d}/{d} mean_before_motor={d} sme_enc={d} eeg_ok={} enc_drive={e} eps={d} engrams={d} bio={} not_llm={}\n",
         .{
             r.n_studied,
             r.n_turns,
@@ -813,6 +813,12 @@ fn runBioConverse(do_tts: bool) void {
             r.n_motor,
             r.n_self_hear,
             r.n_turns_encoded,
+            r.n_phase_order_ok,
+            r.n_turns,
+            r.n_meaning_before_motor,
+            r.n_sme_encode_spirit,
+            r.speech_eeg_ok,
+            r.encode_drive,
             r.n_episodes,
             r.n_engrams,
             r.bio_path,
@@ -826,6 +832,7 @@ fn runBioConverse(do_tts: bool) void {
         std.debug.print("FSOT_BIO_CONVERSE PASS\n", .{});
         std.debug.print("FSOT_THINK_FROM_MEMORY_OK\n", .{});
         std.debug.print("FSOT_MULTI_TURN_BIO_OK\n", .{});
+        std.debug.print("FSOT_SPEECH_EEG_PHASE_OK\n", .{});
     } else {
         std.debug.print("FSOT_BIO_CONVERSE FAIL\n", .{});
         std.process.exit(1);

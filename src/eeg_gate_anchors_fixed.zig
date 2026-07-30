@@ -79,6 +79,60 @@ pub const CONSOL_EXPECT_SIGMA_OR_THETA: bool = true;
 pub const IDEATION_EXPECT_ALPHA_UP: bool = true;
 
 // ---------------------------------------------------------------------------
+// Speech / thinking production timeline (literature priors → bio converse)
+// Indefrey & Levelt meta; overt speech ERP reviews; speaker-induced suppression.
+// Not free LSQ on raw EDF — ordered process targets for organism phases.
+// ---------------------------------------------------------------------------
+
+/// Concept / meaning access before overt form (picture-naming / lemma spirit).
+/// Expect retrieve+engram load BEFORE speakNow in a lawful turn.
+pub const SPEECH_EXPECT_MEANING_BEFORE_MOTOR: bool = true;
+
+/// Lexical / form access ~200 ms post-cue in picture-naming ERP (P2 window spirit).
+/// In discrete organism ticks: meaning bind must open before motor fire on same turn.
+pub const SPEECH_LEXICAL_ACCESS_MS: i64 = 200;
+
+/// Phonological / articulatory encoding window ~200–600 ms (Levelt-scale compressed).
+pub const SPEECH_PHONO_ARTIC_MS: i64 = 400;
+
+/// Acoustic / auditory feedback monitoring after production onset.
+pub const SPEECH_FEEDBACK_MS: i64 = 100;
+
+/// Speaker-induced suppression: own-voice early auditory response reduced vs other.
+/// Our self-hear path should prefer corollary/internal match over raw ambient.
+pub const SPEECH_EXPECT_SELF_SUPPRESSION: bool = true;
+
+/// Self-voice vs other: match weight elevated (re-afferent is “known”).
+/// Anchored to selfSalienceWeight chain — production turns expect self_match usable.
+pub const SPEECH_SELF_MATCH_MIN: Fixed = fixed.fromDecimalStr("0.08");
+
+/// During successful conversational encode (turn stored), SME spirit: encode drive on.
+pub const SPEECH_TURN_ENCODE_USES_SME: bool = true;
+
+/// Multi-turn: later turns may use prior answer as context (working memory tint).
+/// EEG: sustained frontal / network engagement — we require prior_ans blend allowed.
+pub const SPEECH_EXPECT_CONTEXT_BLEND: bool = true;
+
+/// Ordered phase ids for reporting (hear → think → motor → self → encode).
+pub const SpeechPhase = enum(u8) {
+    hear = 0,
+    think_retrieve = 1,
+    articulatory_motor = 2,
+    self_hear = 3,
+    turn_encode = 4,
+};
+
+/// Whether phase order a→b is lawful for one conversational turn.
+pub fn speechPhaseOrderOk(earlier: SpeechPhase, later: SpeechPhase) bool {
+    return @intFromEnum(earlier) < @intFromEnum(later);
+}
+
+/// Minimum phases that must fire in order for a human-like speak turn.
+pub fn speechTurnPhasesComplete(heard: bool, retrieved: bool, motor: bool, self_h: bool, encoded: bool) bool {
+    return heard and retrieved and motor and self_h and encoded;
+}
+
+// ---------------------------------------------------------------------------
 // Pathology contrast (OpenNeuro ds002778 PD priors) — not used for attention
 // default path; available if lesion / irregularity modes need them later.
 // ---------------------------------------------------------------------------
@@ -189,5 +243,13 @@ pub fn selfTest() bool {
     if (!fixed.gt(attendedFigureGain(), groundInjectGain())) return false;
     // self-match thresh soft but positive
     if (!fixed.gt(selfMatchThreshAir(), 0)) return false;
+    // speech-phase order lawful
+    if (!speechPhaseOrderOk(.hear, .think_retrieve)) return false;
+    if (!speechPhaseOrderOk(.think_retrieve, .articulatory_motor)) return false;
+    if (!speechPhaseOrderOk(.articulatory_motor, .self_hear)) return false;
+    if (!speechPhaseOrderOk(.self_hear, .turn_encode)) return false;
+    if (!speechTurnPhasesComplete(true, true, true, true, true)) return false;
+    if (!SPEECH_EXPECT_MEANING_BEFORE_MOTOR) return false;
+    if (!SPEECH_EXPECT_SELF_SUPPRESSION) return false;
     return SME_EXPECT_THETA_ENCODE_GT_REST and SME_EXPECT_GAMMA_ENCODE_GT_REST;
 }

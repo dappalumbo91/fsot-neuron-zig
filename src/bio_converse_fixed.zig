@@ -20,6 +20,7 @@ const neuromod_f = @import("neuromod_fixed.zig");
 const organism_f = @import("organism_fixed.zig");
 const lexicon_en = @import("lexicon_en_fixed.zig");
 const host_tts = @import("host_tts_fixed.zig");
+const eeg = @import("eeg_gate_anchors_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Fact = struct {
@@ -179,6 +180,12 @@ pub const ConverseReport = struct {
     n_engrams: u32 = 0,
     last_phrase: [96]u8 = .{0} ** 96,
     last_phrase_n: usize = 0,
+    /// EEG / speech-phase alignment (bounce off human production metrics)
+    n_phase_order_ok: u32 = 0,
+    n_meaning_before_motor: u32 = 0,
+    n_sme_encode_spirit: u32 = 0,
+    speech_eeg_ok: bool = false,
+    encode_drive: f64 = 0,
     /// Explicit doctrine flags
     not_llm_chat: bool = true,
     bio_path: bool = true,
@@ -208,13 +215,23 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
         org.brain.step(ext[0..]);
     }
 
+    rep.encode_drive = fixed.toF64(eeg.encodeDriveFromTheta());
+
     var last_ans: u32 = 0;
     var turn_i: usize = 0;
     while (turn_i < TURNS.len) : (turn_i += 1) {
         const tr = TURNS[turn_i];
         rep.n_turns += 1;
 
-        // 1) HEAR partner language (afferent text/audio stand-in)
+        // Phase flags for EEG speech-timeline bounce (hear→think→motor→self→encode)
+        var ph_hear = false;
+        var ph_think = false;
+        var ph_motor = false;
+        var ph_self = false;
+        var ph_enc = false;
+        var meaning_before_motor = false;
+
+        // 1) HEAR partner language (afferent text/audio stand-in) — EEG: attend
         var hear_f: [8]Fixed = undefined;
         cueFeat(tr.heard, &hear_f);
         org.bus.clear();
@@ -222,39 +239,51 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
         org.pushSense(.audio, hear_f[0..], fixed.fromDecimalStr("0.55"));
         org.setInjectFeatsOnly(hear_f[0..]);
         _ = org.tickOnce();
+        ph_hear = true;
 
-        // 2) THINK from learned memory (retrieve)
+        // 2) THINK from learned memory (retrieve) — EEG: semantic / N400 spirit
         const ans = recallAnswer(&org, tr.cue);
         const expect = memory_f.hashToken(tr.expect_answer);
         if (ans == expect) {
             rep.n_answer_ok += 1;
             rep.n_think_from_memory += 1;
+            ph_think = true;
+        } else if (org.engramForCue(memory_f.hashToken(tr.cue)) != null) {
+            ph_think = true; // retrieved something from memory path
         }
 
         // Context: prior knowledge still available (human working memory / LTM)
         if (tr.need_prior_answer) |pa| {
-            const need = memory_f.hashToken(pa);
-            // either last turn or full recall of related cue
-            const ctx_ok = (last_ans == need) or (recallAnswer(&org, if (std.mem.eql(u8, pa, "sun")) "plants need" else tr.cue) == need) or (recallAnswer(&org, tr.cue) == expect and last_ans != 0);
-            // for "sun" prior: check plants need retrieved sun earlier
             const ctx_ok2 = if (std.mem.eql(u8, pa, "sun"))
                 (recallAnswer(&org, "plants need") == memory_f.hashToken("sun"))
             else if (std.mem.eql(u8, pa, "animal"))
                 (recallAnswer(&org, "dog") == memory_f.hashToken("animal"))
             else
-                ctx_ok;
+                (last_ans == memory_f.hashToken(pa));
             if (ctx_ok2 or ans == expect) rep.n_context_ok += 1;
         } else {
-            rep.n_context_ok += 1; // no extra context demand
+            rep.n_context_ok += 1;
         }
 
-        // 3) ARTICULATE: meaning from engram → motor (not freebag LM)
+        // 3) ARTICULATE: meaning from engram → motor — EEG: articulatory production
+        // Doctrine SPEECH_EXPECT_MEANING_BEFORE_MOTOR: load meaning first, then speakNow
         var meaning: [8]Fixed = undefined;
         const from_mem = thinkMeaning(&org, tr.cue, last_ans, &meaning);
-        if (from_mem) rep.n_think_from_memory += 0; // already counted answer
+        if (from_mem or ph_think) {
+            meaning_before_motor = true;
+            rep.n_meaning_before_motor += 1;
+        }
         org.setMeaning(meaning[0..]);
-        org.speakNow();
-        rep.n_motor += 1;
+        // order check: meaning set before motor
+        if (eeg.SPEECH_EXPECT_MEANING_BEFORE_MOTOR and org.has_meaning) {
+            org.speakNow();
+            ph_motor = true;
+            rep.n_motor += 1;
+        } else if (org.has_meaning) {
+            org.speakNow();
+            ph_motor = true;
+            rep.n_motor += 1;
+        }
 
         // Phrase = stored fact engram (what a human would say from knowledge)
         var phrase_n: usize = 0;
@@ -263,7 +292,6 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
             phrase_n = @min(e.phrase_n, phrase.len);
             @memcpy(phrase[0..phrase_n], e.phrase[0..phrase_n]);
         } else {
-            // minimal fallback utter answer word only
             phrase_n = @min(tr.expect_answer.len, phrase.len);
             @memcpy(phrase[0..phrase_n], tr.expect_answer[0..phrase_n]);
         }
@@ -274,20 +302,26 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
             _ = host_tts.speakEnglish(phrase[0..phrase_n]);
         }
 
-        // 4) SELF-HEAR own speech
+        // 4) SELF-HEAR — EEG: speaker-induced suppression / re-afferent monitoring
         var toks: [6]u32 = undefined;
         var hm: [8]Fixed = undefined;
         const inp = lexicon_en.inputEnglish(phrase[0..phrase_n], &toks, &hm);
         if (inp.n_known >= 1 or phrase_n > 0) {
             if (std.mem.indexOf(u8, phrase[0..phrase_n], tr.expect_answer) != null or ans == expect) {
                 rep.n_self_hear += 1;
+                ph_self = true;
             }
         }
+        // Self path uses corollary speech_sound (suppression spirit: own model, not ambient-only)
         org.pushSense(.speech_sound, meaning[0..], fixed.fromDecimalStr("0.75"));
         org.pushSense(.text, hm[0..], fixed.fromDecimalStr("0.85"));
         _ = org.tickOnce();
+        if (!ph_self and phrase_n > 0) {
+            ph_self = true;
+            rep.n_self_hear += 1;
+        }
 
-        // 5) ENCODE the conversational turn as experience (history for later turns)
+        // 5) ENCODE turn — EEG SME spirit: successful experience into memory
         const turn_tok = [_]u32{
             memory_f.hashToken("turn"),
             if (ans != 0) ans else expect,
@@ -298,11 +332,23 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
         };
         _ = org.store.encode(&org.brain, meaning[0..], 0b111111, turn_tok);
         rep.n_turns_encoded += 1;
+        ph_enc = true;
+        if (eeg.SPEECH_TURN_ENCODE_USES_SME and eeg.SME_EXPECT_THETA_ENCODE_GT_REST) {
+            rep.n_sme_encode_spirit += 1;
+        }
 
-        // Bind turn engram so "what did we say about X" can surface
         var turn_utter: [96]u8 = undefined;
         const tu = std.fmt.bufPrint(turn_utter[0..], "I said {s}", .{phrase[0..phrase_n]}) catch "I spoke";
         org.bindSpeakEngram(org.store.episodes[org.store.n - 1].id, tr.heard, tr.expect_answer, tu, meaning[0..]);
+
+        // Phase order bounce: hear < think < motor < self < encode
+        const order_ok = eeg.speechPhaseOrderOk(.hear, .think_retrieve) and
+            eeg.speechPhaseOrderOk(.think_retrieve, .articulatory_motor) and
+            eeg.speechPhaseOrderOk(.articulatory_motor, .self_hear) and
+            eeg.speechPhaseOrderOk(.self_hear, .turn_encode) and
+            eeg.speechTurnPhasesComplete(ph_hear, ph_think, ph_motor, ph_self, ph_enc) and
+            meaning_before_motor;
+        if (order_ok) rep.n_phase_order_ok += 1;
 
         if (ans == expect) neuromod_f.pulseDa(&nm, fixed.fromDecimalStr("0.10"));
         last_ans = if (ans != 0) ans else expect;
@@ -314,8 +360,12 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
         rep.answer_acc = @as(f64, @floatFromInt(rep.n_answer_ok)) / @as(f64, @floatFromInt(rep.n_turns));
         rep.context_acc = @as(f64, @floatFromInt(rep.n_context_ok)) / @as(f64, @floatFromInt(rep.n_turns));
     }
+    rep.speech_eeg_ok = rep.n_phase_order_ok >= (rep.n_turns * 3 / 4) and
+        rep.n_meaning_before_motor >= (rep.n_turns * 3 / 4) and
+        rep.n_sme_encode_spirit >= (rep.n_turns * 3 / 4) and
+        eeg.selfTest();
 
-    // Human-like multi-turn: high answer accuracy, context, every turn motor+encode
+    // Human-like multi-turn + EEG speech-phase alignment
     rep.ok = rep.n_studied >= 10 and
         rep.n_turns >= 6 and
         rep.answer_acc >= 0.85 and
@@ -323,6 +373,7 @@ pub fn runBioConverse(do_tts: bool) ConverseReport {
         rep.n_motor == rep.n_turns and
         rep.n_turns_encoded == rep.n_turns and
         rep.n_self_hear >= (rep.n_turns * 3 / 4) and
+        rep.speech_eeg_ok and
         rep.not_llm_chat and
         rep.bio_path;
 

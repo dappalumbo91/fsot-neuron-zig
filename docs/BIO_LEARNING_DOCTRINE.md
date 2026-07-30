@@ -31,6 +31,7 @@ Secondary optional reference (honest, not primary): math *experience* transfer m
 | **Motor / closed loop** | RL Gym, self-hear, sensorimotor | Act → sense consequence → adapt | `speakNow`, self-hear, adaptSpeech |
 | **Sleep consolidation** | Wake encode → offline → probe | Replay / NREM benefit | `sleep_replay`, bio-articulate sleep |
 | **Instruction + practice** | Teacher presents; learner tries; error re-study | Human/animal schooling, **not** SGD epochs | teach → probe → miss → re-experience |
+| **Speech / thinking EEG** | OpenNeuro inner/overt speech; ERP timelines; SME | Phase order while speaking & encoding | `eeg_gate_anchors` · `SPEECH_EEG_METRICS.md` |
 
 Classic **CNN/MLP** benches (MNIST accuracy) and **RL** benches (Gym return) are closer in spirit than **LLM** benches. Cognitive / computational-neuroscience probes (encode–retrieve, pattern separation, consolidation) are closer still.
 
