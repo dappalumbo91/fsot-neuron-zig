@@ -3,18 +3,20 @@ REM ============================================================================
 REM FSOT THINK HOUR — biologically accurate long think process
 REM =============================================================================
 REM Process (not LLM epochs):
-REM   seed + literature experience encode (wake_encode + DA tag)
+REM   seed + literature experience encode
+REM     wet cascade: neuromod→step→glia→mol→STDP→consol→prune (CPU Fixed)
 REM   → episodic retrace / probe (wake_probe)
-REM   → curiosity discover + pending questions
+REM   → curiosity discover + pending questions (markup scrubbed)
 REM   → LTM warm (disk → STM)
 REM   → compose unique ideas
-REM   → sleep: wake_rest → NREM (low ACh/NE) → replay (DA tag)
+REM   → sleep: wake_rest → NREM → wet_maint → replay (DA tag)
 REM       light: CPU pair replay | every 4th: VRAM FSOT-GPU consensus
 REM   → LTM spill when STM full (growth unbounded)
-REM   STUCK → auto-stop (no thrash)
+REM   STUCK → auto-stop (no thrash) | always THINK_DONE
 REM
 REM Metrics (bio, not GSM8K):
 REM   episodic_retrace  curiosity_hit  sleep/replay  mean_da/ach  STM/LTM
+REM   wet stdp/consol/releases  mut (W fingerprint plasticity)
 REM =============================================================================
 setlocal
 cd /d "%~dp0"

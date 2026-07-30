@@ -40,11 +40,23 @@ Plenty of room to grow **above** the minimum stack. Minimum stack is the **devel
 |----------|----------------|-----------|
 | BIOS / firmware | Brainstem / life support | Boot, serial, hard safety |
 | Kernel | Core networks | Genetic Fixed step, claimability |
-| Drivers / organs | Sensory-motor organs | Host senses, TTS, GPU batch, disk LTM |
+| Drivers / organs | Sensory-motor organs | Host senses, TTS, GPU batch, disk LTM, wet encode |
 | Userspace | Habits / cognition | bio-learn, think-hour, know-query |
 | Shell | Behavior | Speech, logs, pending questions |
 
 **GPU is an organ**, not a second mind. PyTorch-style side brains must not outvote Fixed authority.
+
+### Think-path organs (current)
+
+| Organ | Substrate | Role |
+|-------|-----------|------|
+| **Wet encode** | **CPU Fixed** lattice | neuromod→step→glia→mol.tagCoactive→STDP→consol→prune on every `studyFact` |
+| **STM** | RAM | grown bank + episodic ring + speak engrams |
+| **LTM** | disk `data/ltm/` | spill when STM full; warm re-encode into hot set |
+| **Deep sleep VRAM** | GPU / FSOT-GPU consensus | every 4th NREM: matrix offload + top-K replay |
+| **Skill organ** | Python interpreter | procedural tools (`skills/python/`) |
+
+Wet channel Markov is intentionally CPU-bound Fixed physiology. GPU is for cortex-scale consensus, not spine ODEs.
 
 ---
 

@@ -25,6 +25,7 @@ const ltm = @import("ltm_disk_fixed.zig");
 const gpu_organ = @import("gpu_organ_fixed.zig");
 const gpu_batch = @import("gpu_batch_fixed.zig");
 const skill_organ = @import("skill_organ_fixed.zig");
+const wet_encode = @import("wet_encode_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Fact = struct {
@@ -85,6 +86,18 @@ var n_attempted: usize = 0;
 var pending_file: ?std.fs.File = null;
 var n_pending_logged: u32 = 0;
 
+/// Session wet stack (STDP/glia/molecular) — heap-owned by runInternalThink.
+/// Null outside a think session; studyFact falls back to drive-only only then.
+var session_wet: ?*wet_encode.WetStack = null;
+/// Cumulative wet encode reports for the current think session.
+var wet_sess_stdp: u32 = 0;
+var wet_sess_consol: u32 = 0;
+var wet_sess_prune: u32 = 0;
+var wet_sess_myelo: u32 = 0;
+var wet_sess_releases: u32 = 0;
+var wet_sess_epochs: u32 = 0;
+var wet_sess_sleep_maint: u32 = 0;
+
 const PENDING_PATH = "data/results/THINK_PENDING_QUESTIONS.jsonl";
 
 fn grownClear() void {
@@ -93,6 +106,22 @@ fn grownClear() void {
     n_pair_seen = 0;
     n_attempted = 0;
     n_pending_logged = 0;
+    wet_sess_stdp = 0;
+    wet_sess_consol = 0;
+    wet_sess_prune = 0;
+    wet_sess_myelo = 0;
+    wet_sess_releases = 0;
+    wet_sess_epochs = 0;
+    wet_sess_sleep_maint = 0;
+}
+
+fn accumulateWet(r: wet_encode.EncodeReport) void {
+    wet_sess_stdp +%= r.n_stdp;
+    wet_sess_consol +%= r.n_consol;
+    wet_sess_prune +%= r.n_prune;
+    wet_sess_myelo +%= r.n_myelo;
+    wet_sess_releases +%= r.n_releases;
+    wet_sess_epochs +%= 1;
 }
 
 fn openPendingLog() void {
@@ -132,17 +161,67 @@ fn notePendingQuestion(term: []const u8, reason: []const u8, context: []const u8
     f.sync() catch {};
 }
 
+/// Pending / log field scrub: drop JSON breakers, wiki/arxiv bracket tags,
+/// and non-printables. B-grade markup hygiene for THINK_PENDING_QUESTIONS.
 fn scrubField(src: []const u8, dst: []u8) usize {
     var o: usize = 0;
-    for (src) |c| {
+    var i: usize = 0;
+    while (i < src.len) : (i += 1) {
         if (o >= dst.len) break;
-        if (c == '"' or c == '\\' or c == '\n' or c == '\r') continue;
+        const c = src[i];
+        // strip [TAG] arxiv/wiki markup (e.g. [END] [CAT] [TITLE] [ABS])
+        if (c == '[') {
+            var j = i + 1;
+            while (j < src.len and src[j] != ']' and (j - i) < 24) : (j += 1) {}
+            if (j < src.len and src[j] == ']') {
+                i = j;
+                continue;
+            }
+        }
+        // strip {{...}} wiki templates (coarse, balanced length cap)
+        if (c == '{' and i + 1 < src.len and src[i + 1] == '{') {
+            var j = i + 2;
+            var depth: u32 = 1;
+            while (j + 1 < src.len and depth > 0 and (j - i) < 80) : (j += 1) {
+                if (src[j] == '{' and src[j + 1] == '{') {
+                    depth += 1;
+                    j += 1;
+                } else if (src[j] == '}' and src[j + 1] == '}') {
+                    depth -= 1;
+                    j += 1;
+                }
+            }
+            if (depth == 0) {
+                i = j;
+                continue;
+            }
+        }
+        if (c == '"' or c == '\\' or c == '\n' or c == '\r' or c == '\t') continue;
+        // strip residual wiki link bars "[[" "]]" already handled by [ skip; drop lone braces
+        if (c == '{' or c == '}') continue;
         if (c >= 32 and c < 127) {
             dst[o] = c;
             o += 1;
         }
     }
-    return o;
+    // collapse runs of spaces
+    var w: usize = 0;
+    var sp = false;
+    var k: usize = 0;
+    while (k < o) : (k += 1) {
+        if (dst[k] == ' ') {
+            if (sp or w == 0) continue;
+            sp = true;
+            dst[w] = ' ';
+            w += 1;
+        } else {
+            sp = false;
+            dst[w] = dst[k];
+            w += 1;
+        }
+    }
+    while (w > 0 and dst[w - 1] == ' ') w -= 1;
+    return w;
 }
 
 fn alreadyAttempted(word: []const u8) bool {
@@ -174,6 +253,8 @@ fn isStopOrJunk(word: []const u8) bool {
         "particular", "artists", "approach", "called", "those", "affect", "emotio",
         "follow", "follo", "procedure", "procedur", "frequency", "freque", "alphabet", "alphabe",
         "object", "almost", "subject", "subjected", "painting", "practical",
+        "october", "worked", "thinking", "earth's", "diphthong", "generation",
+        "intention", "atmosphere", "isocurvature", "teleportation", "special",
     };
     for (junk) |j| {
         if (word.len == j.len) {
@@ -192,13 +273,25 @@ fn isStopOrJunk(word: []const u8) bool {
 }
 
 fn defLooksBad(def: []const u8) bool {
-    // Reject calendar-etymology dead-ends and empty noise
+    // Reject calendar-etymology dead-ends, empty noise, residual markup
     if (def.len < 12) return true;
+    // residual markup that escaped scrub → not usable as concept answer
+    if (std.mem.indexOf(u8, def, "[END]") != null) return true;
+    if (std.mem.indexOf(u8, def, "[CAT]") != null) return true;
+    if (std.mem.indexOf(u8, def, "[TITLE]") != null) return true;
+    if (std.mem.indexOf(u8, def, "[ABS]") != null) return true;
+    if (std.mem.indexOf(u8, def, "{{") != null) return true;
+    if (std.mem.indexOf(u8, def, "}}") != null) return true;
+    // mostly non-letters → junk
+    var letters: usize = 0;
+    for (def) |c| {
+        if ((c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')) letters += 1;
+    }
+    if (letters < 8) return true;
     // lowercase check for "unclear"
     var i: usize = 0;
     while (i + 7 <= def.len) : (i += 1) {
         if ((def[i] == 'u' or def[i] == 'U') and i + 7 <= def.len) {
-            // rough: unclear
             if (def[i + 1] == 'n' or def[i + 1] == 'N') {
                 if (def[i + 2] == 'c' or def[i + 2] == 'C') return true;
             }
@@ -376,6 +469,7 @@ fn cueFeat(cue: []const u8, out: *[8]Fixed) void {
     }
 }
 
+/// Legacy drive-only path (no wet cascade). Kept as fallback when session_wet is null.
 fn drive(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, feats: *const [8]Fixed, steps: usize) void {
     var ext: [brain_f.N_TOTAL]Fixed = undefined;
     var t: usize = 0;
@@ -391,17 +485,37 @@ fn drive(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, feats: *cons
     }
 }
 
+/// Experience encode: wet cascade (neuromod→step→glia→mol→STDP→consolidate→prune)
+/// when session WetStack is live; otherwise drive-only fallback.
+fn encodeExperience(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, feats: []const Fixed, steps: u32) void {
+    if (session_wet) |wet| {
+        const r = wet.encodeEpoch(org, nm, feats, steps, true);
+        accumulateWet(r);
+    } else {
+        // fallback: need fixed 8-feat layout for drive
+        var f8: [8]Fixed = .{0} ** 8;
+        var i: usize = 0;
+        while (i < 8) : (i += 1) {
+            f8[i] = if (feats.len == 0) @as(Fixed, 0) else feats[i % feats.len];
+        }
+        drive(org, nm, &f8, steps);
+    }
+}
+
 fn studyFact(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, cue: []const u8, ans: []const u8, utter: []const u8) void {
     var feats: [8]Fixed = undefined;
     cueFeat(cue, &feats);
     var ans_f: [8]Fixed = undefined;
     cueFeat(ans, &ans_f);
+    // blend cue+ans into meaning; drive wet with blended experience features
     var meaning: [8]Fixed = undefined;
     var i: usize = 0;
     while (i < 8) : (i += 1) {
         meaning[i] = fixed.add(fixed.mul(feats[i], fixed.fromDecimalStr("0.40")), fixed.mul(ans_f[i], fixed.fromDecimalStr("0.60")));
     }
-    drive(org, nm, &feats, 10);
+    // Wet encode on full meaning (cue+answer co-active) — not drive-only.
+    // 12 steps: enough for STDP windows + mol consolidate every 4 + post-epoch prune.
+    encodeExperience(org, nm, meaning[0..], 12);
     const toks = [_]u32{
         memory_f.hashToken("know"),
         memory_f.hashToken(ans),
@@ -430,7 +544,7 @@ fn recallOk(org: *organism_f.OrganismF, cue: []const u8) bool {
 }
 
 /// Bio offline schedule (process, not wall-clock PC sleep):
-///   wake_rest → sleep_nrem (low ACh/NE, high 5-HT) → optional replay phase.
+///   wake_rest → sleep_nrem (low ACh/NE, high 5-HT) → wet maintenance → optional replay.
 fn sleepQuiet(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) void {
     var ext: [brain_f.N_TOTAL]Fixed = undefined;
     var t: usize = 0;
@@ -450,14 +564,20 @@ fn sleepQuiet(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) void {
         while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.025");
         org.brain.step(ext[0..]);
     }
+    // 3) wet sleep maintenance: mol cascade decay + consolidate + microglial prune
+    if (session_wet) |wet| {
+        const r = wet.sleepMaintenance(org, nm, 24);
+        accumulateWet(r);
+        wet_sess_sleep_maint +%= 1;
+    }
 }
 
-/// Full sleep: quiet NREM then associative pair replay (SWR analogue).
+/// Full sleep: quiet NREM + wet maintenance then associative pair replay (SWR analogue).
 /// deep_vram every 4th sleep = cortex-scale VRAM consensus; else light CPU NREM pairs.
 fn sleepWithBatch(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, deep_vram: bool) void {
     sleepQuiet(org, nm);
     rep.n_sleep += 1;
-    // 3) replay phase — DA tagging + co-activate similar episodes
+    // 4) replay phase — DA tagging + co-activate similar episodes
     const br = gpu_batch.sleepReplayBatchEx(org, nm, if (deep_vram) 8 else 4, deep_vram);
     if (br.ok and br.n_replayed > 0) {
         if (br.vram_offload) rep.n_gpu_consol += 1;
@@ -468,6 +588,13 @@ fn sleepWithBatch(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
     // snapshot neuromod means for accuracy log (process-scale levels)
     rep.last_mean_da = fixed.toF64(nm.da);
     rep.last_mean_ach = fixed.toF64(nm.ach);
+    // copy wet session counters into report for heartbeats / DONE
+    rep.n_wet_stdp = wet_sess_stdp;
+    rep.n_wet_consol = wet_sess_consol;
+    rep.n_wet_prune = wet_sess_prune;
+    rep.n_wet_epochs = wet_sess_epochs;
+    rep.n_wet_releases = wet_sess_releases;
+    rep.wet_encode_active = session_wet != null;
 }
 
 pub const ThinkReport = struct {
@@ -521,6 +648,15 @@ pub const ThinkReport = struct {
     last_sleep_path_n: usize = 0,
     utter_depth: u32 = 1,
     bio_doctrine: bool = true,
+    /// Wet cascade (STDP/glia/molecular) active for this session
+    wet_encode_active: bool = false,
+    n_wet_epochs: u32 = 0,
+    n_wet_stdp: u32 = 0,
+    n_wet_consol: u32 = 0,
+    n_wet_prune: u32 = 0,
+    n_wet_myelo: u32 = 0,
+    n_wet_releases: u32 = 0,
+    n_wet_sleep_maint: u32 = 0,
 };
 
 /// Cold LTM → hot STM: sample grown from disk, re-study into organism (hippocampal re-encode).
@@ -719,26 +855,67 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
     }
 }
 
+/// True if grown entry is concept-scale (seed/wiki style), not arxiv abstract scrap.
+fn grownIsConceptScale(g: *const Grown) bool {
+    if (!g.valid) return false;
+    if (g.cue_n < 2 or g.cue_n > 28) return false;
+    if (g.ans_n < 2 or g.ans_n > 28) return false;
+    if (g.utter_n > 80) return false;
+    // reject abstract openers / paper scrap in answer
+    const a = g.ans[0..g.ans_n];
+    if (std.mem.indexOf(u8, a, "We ") != null) return false;
+    if (std.mem.indexOf(u8, a, "we ") != null) return false;
+    if (std.mem.indexOf(u8, a, "review") != null) return false;
+    if (std.mem.indexOf(u8, a, "Review") != null) return false;
+    if (std.mem.indexOf(u8, a, "arXiv") != null) return false;
+    if (std.mem.indexOf(u8, a, "hep-") != null) return false;
+    // multi-space long phrase in ans → not a concept word
+    var spaces: u32 = 0;
+    for (a) |c| {
+        if (c == ' ') spaces += 1;
+    }
+    if (spaces > 3) return false;
+    return true;
+}
+
 /// Brainstorm: sample two distinct grown cues not seen as pair; compose if both recall.
-/// Prefers *recent* grown knowledge (high indices) so we don't stick on early junk.
+/// Dual pool: early seed/concept bank + recent concept-scale grown (not abstract dumps).
 fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
     if (n_grown < 2) return;
     rep.n_brainstorm += 1;
     const n = @as(u32, @intCast(n_grown));
-    // Prefer short grounded concepts (seed/wiki) over long abstract dumps
-    const win: u32 = if (n > 100) 100 else n;
-    const base: u32 = n -% win;
+
+    // Build concept-scale index pool (stack-limited scan)
+    var pool: [256]u32 = undefined;
+    var pool_n: u32 = 0;
+    var gi: u32 = 0;
+    while (gi < n and pool_n < pool.len) : (gi += 1) {
+        if (grownIsConceptScale(&grown[gi])) {
+            pool[pool_n] = gi;
+            pool_n += 1;
+        }
+    }
+    if (pool_n < 2) {
+        // fallback: early grown only (seeds)
+        pool_n = 0;
+        gi = 0;
+        const early = @min(n, 48);
+        while (gi < early and pool_n < pool.len) : (gi += 1) {
+            pool[pool_n] = gi;
+            pool_n += 1;
+        }
+    }
+    if (pool_n < 2) return;
 
     var tries: u32 = 0;
-    while (tries < 20) : (tries += 1) {
-        const ia = base +% ((seed +% tries *% 11) % win);
-        const ib = base +% ((seed *% 17 +% tries *% 5 +% 3) % win);
+    while (tries < 28) : (tries += 1) {
+        const ia = pool[(seed +% tries *% 11) % pool_n];
+        const ib = pool[(seed *% 17 +% tries *% 5 +% 3) % pool_n];
         if (ia == ib or ia >= n or ib >= n) continue;
         const ca = grown[ia].cue[0..grown[ia].cue_n];
         const cb = grown[ib].cue[0..grown[ib].cue_n];
         if (isStopOrJunk(ca) or isStopOrJunk(cb)) continue;
-        // Prefer short utters (concept-level), skip paper scrap
-        if (grown[ia].utter_n > 72 or grown[ib].utter_n > 72) continue;
+        if (!grownIsConceptScale(&grown[ia]) or !grownIsConceptScale(&grown[ib])) continue;
         if (phraseLooksJunk(grown[ia].utter[0..grown[ia].utter_n])) continue;
         if (phraseLooksJunk(grown[ib].utter[0..grown[ib].utter_n])) continue;
         const ha = memory_f.hashToken(ca);
@@ -751,26 +928,36 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
         }
 
         // Concept composition: "cueA is ansA so cueB is ansB" — short, grounded, unique.
-        // Avoid raw abstract dumps (failing uniq grade was filter + wrong composition grain).
         var idea: [128]u8 = undefined;
         const aa = grown[ia].ans[0..grown[ia].ans_n];
         const ab = grown[ib].ans[0..grown[ib].ans_n];
+        // first-token ans only (concept word), not full abstract line
+        var aa1 = aa;
+        var ab1 = ab;
+        if (std.mem.indexOfScalar(u8, aa, ' ')) |sp| aa1 = aa[0..@min(sp, 18)];
+        if (std.mem.indexOfScalar(u8, ab, ' ')) |sp| ab1 = ab[0..@min(sp, 18)];
         const out = std.fmt.bufPrint(idea[0..], "{s} is {s} so {s} is {s}", .{
-            ca[0..@min(ca.len, 20)],
-            if (aa.len > 0) aa[0..@min(aa.len, 18)] else "?",
-            cb[0..@min(cb.len, 20)],
-            if (ab.len > 0) ab[0..@min(ab.len, 18)] else "?",
+            ca[0..@min(ca.len, 18)],
+            aa1[0..@min(aa1.len, 16)],
+            cb[0..@min(cb.len, 18)],
+            ab1[0..@min(ab1.len, 16)],
         }) catch {
             rep.n_ideas_rejected += 1;
             continue;
         };
         const pos = out.len;
-        if (pos < 10 or phraseLooksJunk(idea[0..pos])) {
-            // allow seed-style short compositions even if phraseLooksJunk is picky on "is"
-            if (pos < 10) {
-                rep.n_ideas_rejected += 1;
-                continue;
-            }
+        if (pos < 10 or pos > 90) {
+            rep.n_ideas_rejected += 1;
+            continue;
+        }
+        // reject abstract residue in the composed idea itself
+        if (std.mem.indexOf(u8, idea[0..pos], "review") != null) {
+            rep.n_ideas_rejected += 1;
+            continue;
+        }
+        if (std.mem.indexOf(u8, idea[0..pos], "We ") != null) {
+            rep.n_ideas_rejected += 1;
+            continue;
         }
 
         const ih = memory_f.hashToken(idea[0..pos]);
@@ -905,6 +1092,17 @@ fn emitThinkDone(rep: *ThinkReport, log_ptr: ?*std.fs.File) void {
         rep.utter_depth,
         rep.n_ideas_unique,
     });
+    hbPrint(log_ptr, "THINK_WET active={} epochs={d} stdp={d} consol={d} prune={d} myelo={d} releases={d} sleep_maint={d} mut={d}\n", .{
+        rep.wet_encode_active,
+        rep.n_wet_epochs,
+        rep.n_wet_stdp,
+        rep.n_wet_consol,
+        rep.n_wet_prune,
+        rep.n_wet_myelo,
+        rep.n_wet_releases,
+        rep.n_wet_sleep_maint,
+        rep.n_mutations,
+    });
     if (rep.n_pending_open > 0) {
         hbPrint(log_ptr, "THINK_PENDING_LOG {s} open_questions={d}\n", .{ PENDING_PATH, rep.n_pending_open });
     }
@@ -947,6 +1145,20 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     org.steps_per_tick = 3;
     var nm: neuromod_f.NeuromodState = .{};
 
+    // Heap wet stack (CascadeState is large — spines[MAX_N²]); required for studyFact encode.
+    const wet_ptr = gpa.create(wet_encode.WetStack) catch {
+        rep.stop_reason = "heap_wet_alloc_failed";
+        hbPrint(log_ptr, "THINK_FATAL wet stack heap alloc failed\n", .{});
+        return rep;
+    };
+    defer {
+        session_wet = null;
+        gpa.destroy(wet_ptr);
+    }
+    wet_ptr.* = wet_encode.WetStack.init();
+    session_wet = wet_ptr;
+    rep.wet_encode_active = true;
+
     openPendingLog();
     defer closePendingLog();
 
@@ -954,8 +1166,9 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     const gpu = gpu_organ.probe();
     rep.utter_depth = if (cfg.utter_depth > 0) cfg.utter_depth else cap.utter_depth;
     rep.bio_doctrine = true;
-    hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 live_query={} pending_log={s}\n", .{ cfg.allow_live_query, PENDING_PATH });
+    hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 heap_wet=1 live_query={} pending_log={s}\n", .{ cfg.allow_live_query, PENDING_PATH });
     hbPrint(log_ptr, "THINK_BIO doctrine=experience_encode_retrace_sleep_not_LLM_epochs metric=episodic_retrace+curiosity\n", .{});
+    hbPrint(log_ptr, "THINK_WET_BOOT cascade=neuromod→step→glia→mol.tagCoactive→STDP_mod→consol→prune/myelo sleep=wet_maint plasticity=on\n", .{});
     hbPrint(log_ptr, "THINK_BODY tier={s} ram_gb={d} gpu_organ={} lit_cards={d} stm_grown={d} ltm=disk utter_depth={d}\n", .{
         switch (cap.tier) {
             .min => "min",
@@ -979,7 +1192,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         gpu.fsot_gpu_lab,
         gpu.batch_ready,
     });
-    hbPrint(log_ptr, "THINK_SLEEP schedule=wake_rest→nrem(low_ACh/NE)→replay(DA_tag) light_cpu|deep_vram\n", .{});
+    hbPrint(log_ptr, "THINK_SLEEP schedule=wake_rest→nrem(low_ACh/NE)→wet_maint→replay(DA_tag) light_cpu|deep_vram\n", .{});
 
     // ── BOOT: seed world ──────────────────────────────────────────────
     for (SEED_WORLD) |f| {
@@ -1010,11 +1223,18 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         hbPrint(log_ptr, "THINK_BOOT literature miss — seed world only (check D:\\training data)\n", .{});
     }
 
-    // Post-encode offline pass (light NREM only — no VRAM deep at boot)
+    // Post-encode offline pass (light NREM + wet maintenance — no VRAM deep at boot)
     sleepQuiet(org, &nm);
     rep.n_sleep += 1;
     rep.last_mean_da = fixed.toF64(nm.da);
     rep.last_mean_ach = fixed.toF64(nm.ach);
+    rep.n_wet_epochs = wet_sess_epochs;
+    rep.n_wet_stdp = wet_sess_stdp;
+    rep.n_wet_consol = wet_sess_consol;
+    rep.n_wet_prune = wet_sess_prune;
+    rep.n_wet_myelo = wet_sess_myelo;
+    rep.n_wet_releases = wet_sess_releases;
+    rep.n_wet_sleep_maint = wet_sess_sleep_maint;
     hbPrint(log_ptr, "THINK_BOOT done studied={d} grown={d} eng={d} eps={d} post_nrem da={e} ach={e}\n", .{
         rep.n_studied,
         n_grown,
@@ -1023,11 +1243,33 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.last_mean_da,
         rep.last_mean_ach,
     });
+    hbPrint(log_ptr, "THINK_BOOT_WET epochs={d} stdp={d} consol={d} prune={d} myelo={d} releases={d} sleep_maint={d}\n", .{
+        rep.n_wet_epochs,
+        rep.n_wet_stdp,
+        rep.n_wet_consol,
+        rep.n_wet_prune,
+        rep.n_wet_myelo,
+        rep.n_wet_releases,
+        rep.n_wet_sleep_maint,
+    });
 
     // Observation logs: genetics + accuracy
+    // Genome boot AFTER wet encode so baseline W reflects post-plasticity state? No —
+    // baseline must be post-boot so subsequent mut logs detect further change.
+    // Capture fingerprint AFTER boot study so mut counts mid-run deltas from post-boot W.
     var obs = observe.Observe.open();
     defer obs.close();
     obs.logGenomeBoot(&org.brain);
+    // Force one mutation check: if wet STDP moved W during boot study before genome
+    // fingerprint, logGenomeBoot already took post-boot W as baseline (correct).
+    // Log an explicit plasticity confirmation line when wet activity was non-zero.
+    if (wet_sess_stdp > 0 or wet_sess_consol > 0 or wet_sess_releases > 0) {
+        hbPrint(log_ptr, "THINK_PLASTICITY boot_wet_ok stdp={d} consol={d} releases={d} (W baseline set post-boot)\n", .{
+            wet_sess_stdp,
+            wet_sess_consol,
+            wet_sess_releases,
+        });
+    }
     hbPrint(log_ptr, "THINK_LOGS genetic=data/results/THINK_GENETIC.log accuracy=data/results/THINK_ACCURACY.jsonl pending={s}\n", .{PENDING_PATH});
 
     const t0 = std.time.milliTimestamp();
@@ -1116,6 +1358,14 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                     ls.spill_events,
                 },
             );
+            // refresh wet counters into report for HB / DONE
+            rep.n_wet_epochs = wet_sess_epochs;
+            rep.n_wet_stdp = wet_sess_stdp;
+            rep.n_wet_consol = wet_sess_consol;
+            rep.n_wet_prune = wet_sess_prune;
+            rep.n_wet_myelo = wet_sess_myelo;
+            rep.n_wet_releases = wet_sess_releases;
+            rep.n_wet_sleep_maint = wet_sess_sleep_maint;
             hbPrint(log_ptr, "  bio sleep={d} replay={d} da={e} ach={e} batch_cos={e} skill={d} deep_vram={d}\n", .{
                 rep.n_sleep,
                 rep.n_batch_replayed,
@@ -1124,6 +1374,15 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                 rep.last_batch_mean_cos,
                 rep.n_skill,
                 rep.n_gpu_consol,
+            });
+            hbPrint(log_ptr, "  wet epochs={d} stdp={d} consol={d} prune={d} myelo={d} rel={d} sleep_maint={d}\n", .{
+                rep.n_wet_epochs,
+                rep.n_wet_stdp,
+                rep.n_wet_consol,
+                rep.n_wet_prune,
+                rep.n_wet_myelo,
+                rep.n_wet_releases,
+                rep.n_wet_sleep_maint,
             });
             if (rep.last_new_n > 0) {
                 hbPrint(log_ptr, "  new_concept=\"{s}\"\n", .{rep.last_new[0..rep.last_new_n]});
@@ -1211,6 +1470,14 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     rep.n_engrams = @intCast(org.n_speak_engrams);
     rep.spikes = org.brain.totalSpikes();
     rep.n_mutations = obs.n_mutations_logged;
+    rep.n_wet_epochs = wet_sess_epochs;
+    rep.n_wet_stdp = wet_sess_stdp;
+    rep.n_wet_consol = wet_sess_consol;
+    rep.n_wet_prune = wet_sess_prune;
+    rep.n_wet_myelo = wet_sess_myelo;
+    rep.n_wet_releases = wet_sess_releases;
+    rep.n_wet_sleep_maint = wet_sess_sleep_maint;
+    rep.wet_encode_active = session_wet != null;
     if (rep.n_retrace > 0) {
         rep.retrace_acc = @as(f64, @floatFromInt(rep.n_retrace_ok)) / @as(f64, @floatFromInt(rep.n_retrace));
     }
@@ -1248,14 +1515,19 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.last_mean_ach,
         rep.last_batch_mean_cos,
     );
+    // Final plasticity fingerprint — wet STDP/consol during loop should yield mut≥1
+    // after first post-boot study/sleep (baseline set post-boot study).
     obs.maybeLogMutation(&org.brain, rep.n_cycles);
+    rep.n_mutations = obs.n_mutations_logged;
 
     rep.ok = rep.n_studied >= 10 and
         rep.n_cycles >= 1 and
         rep.retrace_acc >= 0.60 and
         rep.n_grown >= 10 and
         rep.bio_path and
-        rep.not_llm;
+        rep.not_llm and
+        rep.wet_encode_active and
+        (rep.n_wet_stdp > 0 or rep.n_wet_releases > 0);
 
     return rep;
 }

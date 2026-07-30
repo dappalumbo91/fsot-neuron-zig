@@ -26,10 +26,10 @@
 | **Class rates Pyr/PV/SST/VIP ≤2%** | wetlab T2 **closed** | `scalpel_rate_fixed` **ported** | **Closing** | Zig gate |
 | **PV ≫ Pyr order** | wetlab critical | scalpel `pv_faster_than_pyr` | **Ported** | Keep |
 | **bio_match vs efficient modes** | `modes.py` | pop ISI lock = bio_match; efficient not default for mind | **Partial** | optional efficient later |
-| **STDP** | learning paths | `stdp_fixed` | **Zig present** | Wire into think encode more |
-| **Glia process** | limited in Python | `glia_fixed` | **Zig ahead** | → archive note |
-| **Molecular cascade** | limited | `molecular_fixed` | **Zig ahead** | → archive note |
-| **Neuromod 4 species + sleep** | self_modulation / studies | `neuromod_fixed` + think sleep | **Zig mind-coupled** | Keep; deepen mut≠0 |
+| **STDP** | learning paths | `stdp_fixed` + think `wet_encode` | **Wired into studyFact** | Keep |
+| **Glia process** | limited in Python | `glia_fixed` + wet encode/sleep | **Zig ahead (think-coupled)** | → archive note |
+| **Molecular cascade** | limited | `molecular_fixed` + wet encode | **Zig ahead (think-coupled)** | → archive note |
+| **Neuromod 4 species + sleep** | self_modulation / studies | `neuromod_fixed` + think sleep | **Zig mind-coupled** | mut≠0 via wet W change |
 | **Sleep replay + consolidate** | consolidate_study | sleep_replay + VRAM batch | **Both** | Keep |
 | **SME theta/gamma** | learning_eeg_study | `eeg_gate_anchors_fixed` | **Parity direction** | Keep |
 | **Channel stoch AMPA/NMDA** | wet_stack Lean + Python | `channel_stoch_fixed` | **Zig module; not in think tick** | Wire or gate-only |
@@ -46,8 +46,8 @@
 ### A. Archive → Zig (must not be less accurate)
 
 1. ~~Allen pop ISI residual~~ — **done** (`FSOT_ALLEN_ISI_RESIDUAL_CLOSED`)  
-2. **Class-rate scalpel** — **ported** (`scalpel_rate_fixed`, wetlab T2 numbers)  
-3. **Wire wet cascade into organism encode path** — STDP/glia/molecular still module-isolated from long think (depth)  
+2. ~~Class-rate scalpel~~ — **ported** (`scalpel_rate_fixed`, wetlab T2 numbers)  
+3. ~~Wire wet cascade into organism encode path~~ — **done** (`wet_encode_fixed` → `studyFact` / sleep; full neuromod→step→glia→mol→STDP→consol→prune; CPU Fixed lattice; `mut≥1` after boot study)  
 4. **efficient mode** for compute-friendly ISI when not validating  
 
 ### B. Zig → Archive (feed forward)

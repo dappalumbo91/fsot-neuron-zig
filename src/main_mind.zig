@@ -943,13 +943,13 @@ fn runInternalThink(minutes: u32) void {
     }
     std.debug.print("=== FSOT THINK RUN (bio process + auto-stop if stuck) max {d} min ===\n", .{minutes});
     std.debug.print("doctrine: encode → episodic retrace → curiosity → compose → sleep(NREM+replay) | NOT LLM epochs\n", .{});
-    std.debug.print("path: seed+lit → wake_encode → retrace/probe → discover → LTM warm → compose → sleep → LTM spill\n", .{});
-    std.debug.print("organs: STM/LTM disk · Python skills · FSOT-GPU VRAM deep sleep every 4th NREM\n", .{});
+    std.debug.print("path: seed+lit → wet_encode(STDP/glia/mol) → retrace → discover → LTM warm → compose → sleep+wet_maint → LTM spill\n", .{});
+    std.debug.print("organs: STM/LTM disk · wet cascade · Python skills · FSOT-GPU VRAM deep sleep every 4th NREM\n", .{});
     std.debug.print("logs:\n", .{});
-    std.debug.print("  data/results/THINK_LIVE.log                 (heartbeat + bio line)\n", .{});
+    std.debug.print("  data/results/THINK_LIVE.log                 (heartbeat + bio + wet line)\n", .{});
     std.debug.print("  data/results/THINK_GENETIC.log              (DNA structure + mutations)\n", .{});
     std.debug.print("  data/results/THINK_ACCURACY.jsonl           (episodic_retrace, curiosity, sleep, neuromod)\n", .{});
-    std.debug.print("  data/results/THINK_PENDING_QUESTIONS.jsonl  (open questions — move on)\n", .{});
+    std.debug.print("  data/results/THINK_PENDING_QUESTIONS.jsonl  (open questions — markup scrubbed)\n", .{});
     std.debug.print("  data/ltm/                                   (long-term disk memory)\n", .{});
     const r = internal_think_fixed.runThinkMinutes(minutes);
     std.debug.print(
@@ -981,6 +981,16 @@ fn runInternalThink(minutes: u32) void {
         r.n_gpu_consol,
         r.n_skill,
     });
+    std.debug.print("wet active={} epochs={d} stdp={d} consol={d} prune={d} myelo={d} releases={d} sleep_maint={d}\n", .{
+        r.wet_encode_active,
+        r.n_wet_epochs,
+        r.n_wet_stdp,
+        r.n_wet_consol,
+        r.n_wet_prune,
+        r.n_wet_myelo,
+        r.n_wet_releases,
+        r.n_wet_sleep_maint,
+    });
     if (r.last_new_n > 0) std.debug.print("last_new_concept=\"{s}\"\n", .{r.last_new[0..r.last_new_n]});
     if (r.last_idea_n > 0) std.debug.print("last_idea=\"{s}\"\n", .{r.last_idea[0..r.last_idea_n]});
     if (r.ok) {
@@ -988,6 +998,12 @@ fn runInternalThink(minutes: u32) void {
         std.debug.print("FSOT_LONG_THINK_OK\n", .{});
         std.debug.print("FSOT_ADAPTIVE_KNOWLEDGE_OK\n", .{});
         std.debug.print("FSOT_BIO_THINK_METRICS_OK\n", .{});
+        if (r.wet_encode_active and (r.n_wet_stdp > 0 or r.n_wet_releases > 0)) {
+            std.debug.print("FSOT_WET_ENCODE_OK\n", .{});
+        }
+        if (r.n_mutations > 0) {
+            std.debug.print("FSOT_PLASTICITY_MUT_OK mut={d}\n", .{r.n_mutations});
+        }
         if (std.mem.eql(u8, r.stop_reason, "stuck_no_progress") or std.mem.eql(u8, r.stop_reason, "stuck_same_idea")) {
             std.debug.print("FSOT_STUCK_AUTO_SHUTDOWN_OK\n", .{});
         }

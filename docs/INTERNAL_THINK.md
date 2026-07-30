@@ -9,15 +9,21 @@ An **organism-side** loop that processes stored knowledge the way a human
 brainstorms and checks themselves — **not** an LLM chain-of-thought string.
 
 ```text
-BOOT: study world facts → sleep
+BOOT: study world facts (wet encode) → NREM + wet maintenance
 loop:
   RETRACE      re-walk cues → re-retrieve → verify engram match
-  CROSS-CHECK  multi-hop chains (scientific consistency)
+  DISCOVER     unknown words → query tool → wet re-study
+  LTM WARM     cold disk grown → STM re-encode
   BRAINSTORM   compose idea only from two grounded retrieves
   SELF-CORRECT on fail → re-experience truth; reject ungrounded idea
   CURIOSITY    fill open 5W1H slots on recent episode
-  SLEEP        quiet + NREM every N cycles
+  SLEEP        wake_rest → NREM → wet_maint → replay (CPU or VRAM deep)
 ```
+
+**Wet encode** (`src/wet_encode_fixed.zig`): every `studyFact` runs neuromod →
+network step → glia → molecular tagCoactive (stochastic channels) → STDP
+modulated by glia×eligibility → consolidateToW → prune/myelo. CPU Fixed
+lattice; GPU is for deep VRAM consensus, not spine Markov.
 
 ## Scientific method mapping
 

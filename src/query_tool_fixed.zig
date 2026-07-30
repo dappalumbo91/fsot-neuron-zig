@@ -36,7 +36,8 @@ fn setSrc(hit: *QueryHit, s: []const u8) void {
 }
 
 fn copyDef(hit: *QueryHit, s: []const u8) void {
-    // collapse whitespace; drop arxiv markup tags [END] [CAT] [TITLE] [ABS]
+    // collapse whitespace; drop arxiv/wiki markup:
+    //   [END] [CAT] [TITLE] [ABS]  ·  {{templates}}  ·  [[wiki links]]  ·  HTML-ish <tags>
     var o: usize = 0;
     var sp = false;
     var i: usize = 0;
@@ -44,10 +45,69 @@ fn copyDef(hit: *QueryHit, s: []const u8) void {
         if (o >= hit.def.len) break;
         const c = s[i];
         if (c == '[') {
-            // skip [TAG]
+            // skip [TAG] or [[wiki|label]] / [[page]]
             var j = i + 1;
-            while (j < s.len and s[j] != ']') : (j += 1) {}
-            if (j < s.len) {
+            var depth: u32 = 1;
+            while (j < s.len and depth > 0 and (j - i) < 96) : (j += 1) {
+                if (s[j] == '[') depth += 1;
+                if (s[j] == ']') {
+                    depth -= 1;
+                    if (depth == 0) break;
+                }
+            }
+            if (j < s.len and s[j] == ']') {
+                // for [[page|label]] keep the label after last '|'
+                if (i + 1 < s.len and s[i + 1] == '[') {
+                    var bar: ?usize = null;
+                    var k = i + 2;
+                    while (k < j) : (k += 1) {
+                        if (s[k] == '|') bar = k;
+                    }
+                    if (bar) |b| {
+                        var p = b + 1;
+                        while (p < j and o < hit.def.len) : (p += 1) {
+                            const ch = s[p];
+                            if (ch == ' ' or ch == '\t') {
+                                if (o > 0 and !sp) {
+                                    hit.def[o] = ' ';
+                                    o += 1;
+                                    sp = true;
+                                }
+                            } else if (ch >= 32 and ch < 127 and ch != ']') {
+                                hit.def[o] = ch;
+                                o += 1;
+                                sp = false;
+                            }
+                        }
+                    }
+                }
+                i = j;
+                continue;
+            }
+        }
+        if (c == '{' and i + 1 < s.len and s[i + 1] == '{') {
+            // skip {{wiki template}}
+            var j = i + 2;
+            var depth: u32 = 1;
+            while (j + 1 < s.len and depth > 0 and (j - i) < 120) : (j += 1) {
+                if (s[j] == '{' and s[j + 1] == '{') {
+                    depth += 1;
+                    j += 1;
+                } else if (s[j] == '}' and s[j + 1] == '}') {
+                    depth -= 1;
+                    j += 1;
+                }
+            }
+            if (depth == 0) {
+                i = j;
+                continue;
+            }
+        }
+        if (c == '<' ) {
+            // skip simple <tag>...</tag> or <tag/>
+            var j = i + 1;
+            while (j < s.len and s[j] != '>' and (j - i) < 48) : (j += 1) {}
+            if (j < s.len and s[j] == '>') {
                 i = j;
                 continue;
             }
@@ -60,6 +120,7 @@ fn copyDef(hit: *QueryHit, s: []const u8) void {
             }
             continue;
         }
+        if (c == '{' or c == '}') continue;
         if (c >= 32 and c < 127) {
             hit.def[o] = c;
             o += 1;
