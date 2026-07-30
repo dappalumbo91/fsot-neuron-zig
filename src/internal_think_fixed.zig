@@ -164,6 +164,9 @@ fn isStopOrJunk(word: []const u8) bool {
         "month", "year", "years", "days", "named", "comes", "roman", "latin", "greek",
         "title", "abstract", "paper", "between", "every", "always", "often", "never",
         "communities", "important", "properties", "several", "addition", "beginning",
+        "particular", "artists", "approach", "called", "those", "affect", "emotio",
+        "follow", "follo", "procedure", "procedur", "frequency", "freque", "alphabet", "alphabe",
+        "object", "almost", "subject", "subjected", "painting", "practical",
     };
     for (junk) |j| {
         if (word.len == j.len) {
@@ -232,16 +235,42 @@ fn noteUniqueIdea(h: u32) bool {
 fn notePair(a: u32, b: u32) bool {
     const h = a *% 0x9E3779B1 +% b;
     var i: usize = 0;
-    while (i < n_pair_seen) : (i += 1) if (pair_seen_h[i] == h) return false;
+    while (i < @min(n_pair_seen, MAX_PAIR_SEEN)) : (i += 1) if (pair_seen_h[i] == h) return false;
     if (n_pair_seen >= MAX_PAIR_SEEN) {
-        // ring overwrite — still try new combinations
-        pair_seen_h[n_pair_seen % MAX_PAIR_SEEN] = h;
-        n_pair_seen += 1;
-        return true;
+        // clear half of pair memory so new compositions can form (avoid stuck idea)
+        var j: usize = 0;
+        while (j < MAX_PAIR_SEEN / 2) : (j += 1) pair_seen_h[j] = pair_seen_h[j + MAX_PAIR_SEEN / 2];
+        n_pair_seen = MAX_PAIR_SEEN / 2;
     }
-    pair_seen_h[n_pair_seen] = h;
-    n_pair_seen += 1;
+    if (n_pair_seen < MAX_PAIR_SEEN) {
+        pair_seen_h[n_pair_seen] = h;
+        n_pair_seen += 1;
+    }
     return true;
+}
+
+fn phraseLooksJunk(p: []const u8) bool {
+    if (defLooksBad(p)) return true;
+    if (p.len < 10) return true;
+    // "particular:", "In particular", art wiki fluff, markup leftovers
+    const bad = [_][]const u8{ "particular", "artists", "In particular", "[END]", "[CAT]", "[TITLE]", "Those who make art" };
+    for (bad) |b| {
+        var i: usize = 0;
+        while (i + b.len <= p.len) : (i += 1) {
+            var match = true;
+            for (b, 0..) |bc, k| {
+                const c = p[i + k];
+                const x = if (c >= 'A' and c <= 'Z') c + 32 else c;
+                const y = if (bc >= 'A' and bc <= 'Z') bc + 32 else bc;
+                if (x != y) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) return true;
+        }
+    }
+    return false;
 }
 
 fn cueFeat(cue: []const u8, out: *[8]Fixed) void {
@@ -424,9 +453,14 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
                     if ((c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')) break;
                     word = word[0 .. word.len - 1];
                 }
+                // skip last token if phrase is maxed — usually a mid-word cut ("procedur", "alphabe")
+                if (wi == eng.phrase_n and eng.phrase_n >= 90) {
+                    wstart = wi + 1;
+                    continue;
+                }
                 // lowercase copy for stable attempt keys
                 var wbuf: [32]u8 = undefined;
-                if (word.len >= 5 and word.len <= 24 and word.len <= wbuf.len) {
+                if (word.len >= 6 and word.len <= 22 and word.len <= wbuf.len) {
                     var wj: usize = 0;
                     while (wj < word.len) : (wj += 1) {
                         const c = word[wj];
@@ -486,39 +520,38 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
 }
 
 /// Brainstorm: sample two distinct grown cues not seen as pair; compose if both recall.
+/// Prefers *recent* grown knowledge (high indices) so we don't stick on early junk.
 fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
     if (n_grown < 2) return;
     rep.n_brainstorm += 1;
     const n = @as(u32, @intCast(n_grown));
-    var ia = seed % n;
-    var ib = (seed *% 13 +% 7) % n;
-    if (ia == ib) ib = (ib +% 1) % n;
+    // recent window: last ~min(80, n) entries
+    const win: u32 = if (n > 80) 80 else n;
+    const base: u32 = n -% win;
 
-    // try a few pair candidates for novelty
     var tries: u32 = 0;
-    while (tries < 6) : (tries += 1) {
-        ia = (seed +% tries *% 11) % n;
-        ib = (seed *% 17 +% tries *% 5 +% 3) % n;
-        if (ia == ib) continue;
+    while (tries < 16) : (tries += 1) {
+        const ia = base +% ((seed +% tries *% 11) % win);
+        const ib = base +% ((seed *% 17 +% tries *% 5 +% 3) % win);
+        if (ia == ib or ia >= n or ib >= n) continue;
         const ca = grown[ia].cue[0..grown[ia].cue_n];
         const cb = grown[ib].cue[0..grown[ib].cue_n];
-        // skip calendar / junk cues in brainstorm
         if (isStopOrJunk(ca) or isStopOrJunk(cb)) continue;
+        if (phraseLooksJunk(grown[ia].utter[0..grown[ia].utter_n])) continue;
+        if (phraseLooksJunk(grown[ib].utter[0..grown[ib].utter_n])) continue;
         const ha = memory_f.hashToken(ca);
         const hb = memory_f.hashToken(cb);
-        if (!notePair(ha, hb)) continue; // already brainstormed this pair
+        if (!notePair(ha, hb)) continue;
 
         if (!recallOk(org, ca) or !recallOk(org, cb)) {
             rep.n_ideas_rejected += 1;
             continue;
         }
 
-        // compose idea
         var idea: [128]u8 = undefined;
         var pos: usize = 0;
         if (org.engramForCue(ha)) |ea| {
-            // skip stuck unclear phrases
-            if (defLooksBad(ea.phrase[0..ea.phrase_n])) {
+            if (phraseLooksJunk(ea.phrase[0..ea.phrase_n])) {
                 rep.n_ideas_rejected += 1;
                 continue;
             }
@@ -528,7 +561,7 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
         } else {
             pos = copyTo(idea[0..], grown[ia].utter[0..grown[ia].utter_n]);
         }
-        if (defLooksBad(idea[0..pos])) {
+        if (phraseLooksJunk(idea[0..pos])) {
             rep.n_ideas_rejected += 1;
             continue;
         }
@@ -540,15 +573,28 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
             pos += 4;
         }
         if (org.engramForCue(hb)) |eb| {
+            if (phraseLooksJunk(eb.phrase[0..eb.phrase_n])) {
+                rep.n_ideas_rejected += 1;
+                continue;
+            }
             const n2 = @min(eb.phrase_n, idea.len - pos);
             @memcpy(idea[pos .. pos + n2], eb.phrase[0..n2]);
             pos += n2;
         }
+        if (phraseLooksJunk(idea[0..pos]) or pos < 12) {
+            rep.n_ideas_rejected += 1;
+            continue;
+        }
 
         const ih = memory_f.hashToken(idea[0..pos]);
         const is_new = noteUniqueIdea(ih);
+        // only count as grounded idea if unique — no recycling same composition as "progress"
+        if (!is_new) {
+            rep.n_ideas_rejected += 1;
+            continue;
+        }
         rep.n_ideas_grounded += 1;
-        if (is_new) rep.n_ideas_unique += 1;
+        rep.n_ideas_unique += 1;
 
         rep.last_idea_n = @min(pos, rep.last_idea.len);
         @memcpy(rep.last_idea[0..rep.last_idea_n], idea[0..rep.last_idea_n]);

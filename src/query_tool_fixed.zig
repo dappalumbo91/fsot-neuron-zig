@@ -36,11 +36,22 @@ fn setSrc(hit: *QueryHit, s: []const u8) void {
 }
 
 fn copyDef(hit: *QueryHit, s: []const u8) void {
-    // collapse whitespace, ASCII printable
+    // collapse whitespace; drop arxiv markup tags [END] [CAT] [TITLE] [ABS]
     var o: usize = 0;
     var sp = false;
-    for (s) |c| {
+    var i: usize = 0;
+    while (i < s.len) : (i += 1) {
         if (o >= hit.def.len) break;
+        const c = s[i];
+        if (c == '[') {
+            // skip [TAG]
+            var j = i + 1;
+            while (j < s.len and s[j] != ']') : (j += 1) {}
+            if (j < s.len) {
+                i = j;
+                continue;
+            }
+        }
         if (c == ' ' or c == '\t' or c == '\n' or c == '\r') {
             if (o > 0 and !sp) {
                 hit.def[o] = ' ';
@@ -57,7 +68,7 @@ fn copyDef(hit: *QueryHit, s: []const u8) void {
     }
     while (o > 0 and hit.def[o - 1] == ' ') o -= 1;
     hit.def_n = o;
-    hit.found = o >= 3;
+    hit.found = o >= 8;
 }
 
 fn lowerEq(a: []const u8, b: []const u8) bool {
