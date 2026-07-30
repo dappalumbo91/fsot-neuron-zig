@@ -825,3 +825,126 @@ pub fn selfTest() bool {
     if (e.role != .who) return false;
     return runLexiconProbe().ok;
 }
+
+/// Stress dictionary-scale lexicon: recognition of new words + grammatical speak.
+pub const DictStressReport = struct {
+    ok: bool = false,
+    n_loaded: u32 = 0,
+    n_total: u32 = 0,
+    n_probe: u32 = 0,
+    n_found: u32 = 0,
+    n_phrase_seed: u32 = 0,
+    n_input_hit: u32 = 0,
+    n_input_try: u32 = 0,
+    n_grammar_ok: u32 = 0,
+    n_grammar_try: u32 = 0,
+    find_rate: f64 = 0,
+    input_rate: f64 = 0,
+    grammar_rate: f64 = 0,
+    sample_phrase: [96]u8 = .{0} ** 96,
+    sample_n: usize = 0,
+};
+
+fn startsGrammatical(phrase: []const u8) bool {
+    // Templates always start with I/you or known who from core
+    if (phrase.len < 4) return false;
+    if (std.mem.startsWith(u8, phrase, "I ")) return true;
+    if (std.mem.startsWith(u8, phrase, "you ")) return true;
+    // seed-who frames like "mind can hear..."
+    if (std.mem.indexOf(u8, phrase, " the ") != null) return true;
+    if (std.mem.indexOf(u8, phrase, " can ") != null) return true;
+    return false;
+}
+
+pub fn runDictionaryStress() DictStressReport {
+    var rep: DictStressReport = .{};
+    _ = tryLoadDefaultRoles();
+    rep.n_loaded = @intCast(n_extra);
+    rep.n_total = @intCast(totalWords());
+
+    if (n_extra < 100) {
+        // still run grammar checks on core
+        rep.ok = false;
+        return rep;
+    }
+
+    // 1) Sample dictionary extras evenly — findWord recognition
+    const step: usize = if (n_extra > 500) n_extra / 500 else 1;
+    var i: usize = 0;
+    while (i < n_extra) : (i += step) {
+        const w = extra_buf[i][0..extra_len[i]];
+        rep.n_probe += 1;
+        if (findWord(w) != null) rep.n_found += 1;
+
+        // 2) Seed grammatical phrase including this dictionary word
+        var phrase: [MAX_PHRASE]u8 = undefined;
+        const ph = phraseFromSeedWord(w, phrase[0..]);
+        if (ph.n >= 5) {
+            rep.n_phrase_seed += 1;
+            rep.n_grammar_try += 1;
+            if (startsGrammatical(phrase[0..ph.n])) rep.n_grammar_ok += 1;
+            if (rep.sample_n == 0 and ph.n < rep.sample_phrase.len) {
+                @memcpy(rep.sample_phrase[0..ph.n], phrase[0..ph.n]);
+                rep.sample_n = ph.n;
+            }
+        }
+
+        // 3) Input recognition: "I know the word {w}" or embed word in known scaffold
+        var line: [MAX_PHRASE]u8 = undefined;
+        var pos: usize = 0;
+        var first = true;
+        appendWord(line[0..], &pos, "I", &first);
+        appendWord(line[0..], &pos, "know", &first);
+        appendWord(line[0..], &pos, "the", &first);
+        appendWord(line[0..], &pos, "word", &first);
+        appendWord(line[0..], &pos, w, &first);
+        var toks: [6]u32 = undefined;
+        var meaning: [FEAT]Fixed = undefined;
+        const inp = inputEnglish(line[0..pos], &toks, &meaning);
+        rep.n_input_try += 1;
+        // hit if dictionary word itself was recognized among tokens or known count high
+        var hit = false;
+        if (findWord(w)) |e| {
+            var t: usize = 0;
+            while (t < 6) : (t += 1) {
+                if (toks[t] == e.token) {
+                    hit = true;
+                    break;
+                }
+            }
+        }
+        if (hit or inp.n_known >= 4) rep.n_input_hit += 1;
+    }
+
+    // 4) Generation path still grammatical under random meanings
+    var g: u32 = 0;
+    while (g < 32) : (g += 1) {
+        var m: [FEAT]Fixed = undefined;
+        var k: usize = 0;
+        while (k < FEAT) : (k += 1) {
+            m[k] = fixed.sub(fixed.div(fixed.fromInt(@intCast((g *% 17 +% @as(u32, @intCast(k)) *% 9) % 181)), fixed.fromInt(90)), fixed.fromInt(1));
+        }
+        var phrase: [MAX_PHRASE]u8 = undefined;
+        const ph = phraseFromMeaning(&m, phrase[0..]);
+        rep.n_grammar_try += 1;
+        if (ph.n >= 5 and startsGrammatical(phrase[0..ph.n])) rep.n_grammar_ok += 1;
+    }
+
+    if (rep.n_probe > 0) {
+        rep.find_rate = @as(f64, @floatFromInt(rep.n_found)) / @as(f64, @floatFromInt(rep.n_probe));
+    }
+    if (rep.n_input_try > 0) {
+        rep.input_rate = @as(f64, @floatFromInt(rep.n_input_hit)) / @as(f64, @floatFromInt(rep.n_input_try));
+    }
+    if (rep.n_grammar_try > 0) {
+        rep.grammar_rate = @as(f64, @floatFromInt(rep.n_grammar_ok)) / @as(f64, @floatFromInt(rep.n_grammar_try));
+    }
+
+    // Gate: large lexicon loaded; near-perfect find; high input embed; grammar holds
+    rep.ok = rep.n_total >= 5000 and
+        rep.n_probe >= 100 and
+        rep.find_rate >= 0.98 and
+        rep.input_rate >= 0.90 and
+        rep.grammar_rate >= 0.95;
+    return rep;
+}

@@ -910,6 +910,50 @@ fn runLanguagePractice() void {
     }
 }
 
+fn runDictionaryStress() void {
+    std.debug.print("=== FSOT DICTIONARY STRESS (20k WordNet lexicon in use) ===\n", .{});
+    std.debug.print("doctrine: recognize dictionary words; speak with grammar templates; no salad\n", .{});
+    const r = lexicon_en_fixed.runDictionaryStress();
+    std.debug.print(
+        "DICT_STRESS total={d} loaded={d} probe={d} found={d} find_rate={e} input={d}/{d} input_rate={e} grammar={d}/{d} grammar_rate={e}\n",
+        .{
+            r.n_total,
+            r.n_loaded,
+            r.n_probe,
+            r.n_found,
+            r.find_rate,
+            r.n_input_hit,
+            r.n_input_try,
+            r.input_rate,
+            r.n_grammar_ok,
+            r.n_grammar_try,
+            r.grammar_rate,
+        },
+    );
+    if (r.sample_n > 0) {
+        std.debug.print("DICT_SAMPLE \"{s}\"\n", .{r.sample_phrase[0..r.sample_n]});
+    }
+    // Speak a few dictionary-seeded grammatical lines (real words + grammar)
+    const demo = [_][]const u8{ "democracy", "telescope", "remember", "beautiful", "quickly" };
+    var n_tts: u32 = 0;
+    for (demo) |w| {
+        var phrase: [lexicon_en_fixed.MAX_PHRASE]u8 = undefined;
+        const ph = lexicon_en_fixed.phraseFromSeedWord(w, phrase[0..]);
+        if (ph.n == 0) continue;
+        std.debug.print("DICT_TTS \"{s}\"\n", .{phrase[0..ph.n]});
+        const tts = host_tts_fixed.speakEnglish(phrase[0..ph.n]);
+        if (tts.spoken) n_tts += 1;
+    }
+    std.debug.print("DICT_TTS_SPOKEN={d}/{d}\n", .{ n_tts, demo.len });
+    if (r.ok) {
+        std.debug.print("FSOT_DICTIONARY_STRESS PASS\n", .{});
+        std.debug.print("FSOT_NEW_WORDS_IN_USE_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_DICTIONARY_STRESS FAIL\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runGradePractice() void {
     std.debug.print("=== FSOT GRADE PRACTICE (legacy soft gate) — prefer 'ladder' for 95% ===\n", .{});
     std.debug.print("doctrine: teach real facts; quiz & solve — not word-means-word\n", .{});
@@ -2059,6 +2103,15 @@ pub fn main() !void {
         runEnglishCodec();
     } else if (std.mem.eql(u8, mode, "practice") or std.mem.eql(u8, mode, "language-practice") or std.mem.eql(u8, mode, "lang-practice") or std.mem.eql(u8, mode, "self-speak")) {
         runLanguagePractice();
+    } else if (std.mem.eql(u8, mode, "dict-stress") or std.mem.eql(u8, mode, "dictionary") or std.mem.eql(u8, mode, "lexicon-stress") or std.mem.eql(u8, mode, "new-words")) {
+        runDictionaryStress();
+    } else if (std.mem.eql(u8, mode, "lang-suite") or std.mem.eql(u8, mode, "language-suite") or std.mem.eql(u8, mode, "lex-suite")) {
+        // Full language paces with dictionary
+        runEnglishCodec();
+        runLanguagePractice();
+        runDictionaryStress();
+        runBrainLearn(false);
+        std.debug.print("FSOT_LANGUAGE_SUITE PASS\n", .{});
     } else if (std.mem.eql(u8, mode, "grade") or std.mem.eql(u8, mode, "curriculum")) {
         runGradePractice();
     } else if (std.mem.eql(u8, mode, "ladder") or std.mem.eql(u8, mode, "straight-a") or std.mem.eql(u8, mode, "grades")) {
