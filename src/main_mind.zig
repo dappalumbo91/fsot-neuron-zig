@@ -97,6 +97,7 @@ const claimability_fixed = @import("claimability_fixed.zig");
 const intel_loop_fixed = @import("intel_loop_fixed.zig");
 const intel_frontier_fixed = @import("intel_frontier_fixed.zig");
 const brain_learn_fixed = @import("brain_learn_fixed.zig");
+const language_depth_fixed = @import("language_depth_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -906,6 +907,48 @@ fn runLanguagePractice() void {
         std.debug.print("FSOT_SELF_HEAR_LANGUAGE_OK\n", .{});
     } else {
         std.debug.print("FSOT_LANGUAGE_PRACTICE FAIL\n", .{});
+        std.process.exit(1);
+    }
+}
+
+fn runLanguageDepth(speak: bool) void {
+    std.debug.print("=== FSOT LANGUAGE DEPTH (definitions + POS — meaningful use) ===\n", .{});
+    std.debug.print("doctrine: teach dictionary cards on OrganismF; prove with pointed questions\n", .{});
+    std.debug.print("probes: is X a verb? | X is a? | what does X mean? | role of X | hops\n", .{});
+    const r = language_depth_fixed.runLanguageDepth(speak);
+    std.debug.print(
+        "DEPTH taught={d} file={d} eps={d} probes={d} correct={d} acc={e}\n",
+        .{ r.n_taught_cards, r.n_file_cards, r.n_episodes, r.n_probes, r.n_correct, r.acc },
+    );
+    std.debug.print(
+        "DEPTH pos_yesno={e} ({d}/{d}) define={e} ({d}/{d}) role={e} ({d}/{d}) hop={e} ({d}/{d}) tts={d}\n",
+        .{
+            r.pos_acc,
+            r.n_pos_yesno_ok,
+            r.n_pos_yesno,
+            r.define_acc,
+            r.n_define_ok,
+            r.n_define,
+            r.role_acc,
+            r.n_role_ok,
+            r.n_role,
+            r.hop_acc,
+            r.n_hop_ok,
+            r.n_hop,
+            r.n_tts,
+        },
+    );
+    if (r.sample_qn > 0) {
+        std.debug.print(
+            "DEPTH_SAMPLE q=\"{s}\" expect=\"{s}\" {s}\n",
+            .{ r.sample_q[0..r.sample_qn], r.sample_a[0..r.sample_an], r.sample_got[0..r.sample_gn] },
+        );
+    }
+    if (r.ok) {
+        std.debug.print("FSOT_LANGUAGE_DEPTH PASS\n", .{});
+        std.debug.print("FSOT_MEANINGFUL_WORDS_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_LANGUAGE_DEPTH FAIL (need strong POS + definition prove)\n", .{});
         std.process.exit(1);
     }
 }
@@ -2105,11 +2148,16 @@ pub fn main() !void {
         runLanguagePractice();
     } else if (std.mem.eql(u8, mode, "dict-stress") or std.mem.eql(u8, mode, "dictionary") or std.mem.eql(u8, mode, "lexicon-stress") or std.mem.eql(u8, mode, "new-words")) {
         runDictionaryStress();
+    } else if (std.mem.eql(u8, mode, "language-depth") or std.mem.eql(u8, mode, "depth-words") or std.mem.eql(u8, mode, "define") or std.mem.eql(u8, mode, "pos") or std.mem.eql(u8, mode, "think-words") or std.mem.eql(u8, mode, "meaning")) {
+        runLanguageDepth(false);
+    } else if (std.mem.eql(u8, mode, "language-depth-speak") or std.mem.eql(u8, mode, "define-speak") or std.mem.eql(u8, mode, "think-speak")) {
+        runLanguageDepth(true);
     } else if (std.mem.eql(u8, mode, "lang-suite") or std.mem.eql(u8, mode, "language-suite") or std.mem.eql(u8, mode, "lex-suite")) {
-        // Full language paces with dictionary
+        // Full language paces with dictionary + depth
         runEnglishCodec();
         runLanguagePractice();
         runDictionaryStress();
+        runLanguageDepth(false);
         runBrainLearn(false);
         std.debug.print("FSOT_LANGUAGE_SUITE PASS\n", .{});
     } else if (std.mem.eql(u8, mode, "grade") or std.mem.eql(u8, mode, "curriculum")) {
