@@ -3,7 +3,8 @@
 **Date:** 2026-07-30  
 **Repo:** [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig)  
 **Doctrine:** train → sleep → prove · claimability · intel-bio / intel-loop  
-**Not claimed:** GSM8K test leaderboard as a product score; LLM Q→A stuffing
+**Not claimed:** GSM8K test leaderboard as a product score; LLM Q→A stuffing  
+**Full stack verify:** [`TOP_TO_BOTTOM_VERIFICATION.md`](TOP_TO_BOTTOM_VERIFICATION.md) · Lean cert [`../data/results/LEAN_WETLAB_CERTIFICATE.md`](../data/results/LEAN_WETLAB_CERTIFICATE.md)
 
 Honest inventory of the **Zig neurological mind** and companion multi-hop capacity taught from experience.
 

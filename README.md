@@ -15,7 +15,9 @@ Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). Th
 | **Language** | Zig 0.15+ |
 | **License** | Apache-2.0 |
 | **Learned capacity** | [`docs/LEARNED_CAPACITY.md`](docs/LEARNED_CAPACITY.md) — Zig intel stack + companion multi-hop snapshot |
-| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Python organism / experience school) |
+| **Top-to-bottom verify** | [`docs/TOP_TO_BOTTOM_VERIFICATION.md`](docs/TOP_TO_BOTTOM_VERIFICATION.md) — stress · QEMU · Lean stamp · bio |
+| **Lean × wet-lab cert** | [`data/results/LEAN_WETLAB_CERTIFICATE.md`](data/results/LEAN_WETLAB_CERTIFICATE.md) |
+| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Python organism / Lean sources / experience school) |
 
 ## Quick start
 
