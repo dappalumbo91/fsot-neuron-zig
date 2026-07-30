@@ -103,6 +103,8 @@ const bio_learn_eval_fixed = @import("bio_learn_eval_fixed.zig");
 const self_study_fixed = @import("self_study_fixed.zig");
 const bio_converse_fixed = @import("bio_converse_fixed.zig");
 const internal_think_fixed = @import("internal_think_fixed.zig");
+const know_query_fixed = @import("know_query_fixed.zig");
+const query_tool_fixed = @import("query_tool_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -849,6 +851,51 @@ fn runBioSuite() void {
     runInternalThink(0); // probe (not hour)
     runMnistAccuracy();
     std.debug.print("FSOT_BIO_SUITE PASS\n", .{});
+}
+
+fn runKnowQuery(allow_live: bool) void {
+    std.debug.print("=== FSOT KNOW-QUERY (I don't know → tool study → retain) ===\n", .{});
+    std.debug.print("doctrine: human lookup learning; archive + wiki (+ optional live Wikipedia)\n", .{});
+    std.debug.print("sources: dictionary, simple-wiki, arxiv_fsot_core, Physical-Archive openalex/streams\n", .{});
+    if (allow_live) std.debug.print("live: Wikipedia REST summary allowed\n", .{});
+    if (!query_tool_fixed.selfTest()) {
+        std.debug.print("FSOT_QUERY_TOOL FAIL (embedded table lookup)\n", .{});
+        std.process.exit(1);
+    }
+    const r = know_query_fixed.runKnowQuery(allow_live);
+    std.debug.print(
+        "KNOW_QUERY probes={d} known={d} unknown={d} queried={d} hit={d} miss={d} retained={d} reprobe={d}/{d} said_unknown={d} live={} eps={d} eng={d}\n",
+        .{
+            r.n_probes,
+            r.n_already_known,
+            r.n_unknown,
+            r.n_queried,
+            r.n_query_hit,
+            r.n_query_miss,
+            r.n_retained,
+            r.n_reprobe_ok,
+            r.n_retained,
+            r.n_said_unknown,
+            r.allow_live,
+            r.n_episodes,
+            r.n_engrams,
+        },
+    );
+    if (r.last_term_n > 0 and r.last_def_n > 0) {
+        std.debug.print("last: \"{s}\" via {s} → \"{s}\"\n", .{
+            r.last_term[0..r.last_term_n],
+            r.last_via[0..r.last_via_n],
+            r.last_def[0..r.last_def_n],
+        });
+    }
+    if (r.ok) {
+        std.debug.print("FSOT_KNOW_QUERY PASS\n", .{});
+        std.debug.print("FSOT_TOOL_STUDY_OK\n", .{});
+        std.debug.print("FSOT_RETAIN_AFTER_QUERY_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_KNOW_QUERY FAIL\n", .{});
+        std.process.exit(1);
+    }
 }
 
 fn runInternalThink(minutes: u32) void {
@@ -2406,6 +2453,11 @@ pub fn main() !void {
         runBioArticulate(false);
     } else if (std.mem.eql(u8, mode, "bio-articulate-speak") or std.mem.eql(u8, mode, "articulate-speak") or std.mem.eql(u8, mode, "say-fact-speak")) {
         runBioArticulate(true);
+    } else if (std.mem.eql(u8, mode, "know-query") or std.mem.eql(u8, mode, "know_query") or std.mem.eql(u8, mode, "study-tool") or std.mem.eql(u8, mode, "lookup-learn") or std.mem.eql(u8, mode, "i-dont-know")) {
+        // Human: unknown concept → query archive/API → retain engram
+        runKnowQuery(false);
+    } else if (std.mem.eql(u8, mode, "know-query-live") or std.mem.eql(u8, mode, "lookup-live") or std.mem.eql(u8, mode, "study-tool-live")) {
+        runKnowQuery(true);
     } else if (std.mem.eql(u8, mode, "think") or std.mem.eql(u8, mode, "internal-think") or std.mem.eql(u8, mode, "brainstorm") or std.mem.eql(u8, mode, "self-correct")) {
         // Internal loop: retrace → cross-check → brainstorm → self-correct (probe)
         runInternalThink(0);
@@ -2675,6 +2727,8 @@ pub fn main() !void {
         std.debug.print("  self-study     = read materials → try → re-read → sleep → prove\n", .{});
         std.debug.print("  bio-suite      = learn + self-study + converse + MNIST\n", .{});
         std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
+        std.debug.print("  know-query     = I-don't-know → query tool → retain (archive/wiki)\n", .{});
+        std.debug.print("  know-query-live= same + live Wikipedia REST when local miss\n", .{});
         std.debug.print("  think          = internal retrace/cross-check/brainstorm/self-correct\n", .{});
         std.debug.print("  think-hour     = same loop for 60 wall-clock minutes\n", .{});
         std.debug.print("  think-min N    = internal think for N minutes\n", .{});
