@@ -99,6 +99,7 @@ const intel_frontier_fixed = @import("intel_frontier_fixed.zig");
 const brain_learn_fixed = @import("brain_learn_fixed.zig");
 const language_depth_fixed = @import("language_depth_fixed.zig");
 const bio_articulate_fixed = @import("bio_articulate_fixed.zig");
+const bio_learn_eval_fixed = @import("bio_learn_eval_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -707,6 +708,46 @@ fn runSpeechOrgan() void {
         std.debug.print("FSOT_SPEECH PASS\n", .{});
     } else {
         std.debug.print("FSOT_SPEECH FAIL\n", .{});
+        std.process.exit(1);
+    }
+}
+
+fn runBioLearnEval() void {
+    std.debug.print("=== FSOT BIO LEARN EVAL (animal/human learning — NOT LLM benchmarks) ===\n", .{});
+    std.debug.print("doctrine: one-shot · feedback re-study · interference · transfer · sleep · motor\n", .{});
+    std.debug.print("NOT using: GSM8K / MMLU / chat Q→A / epoch SGD corpus training\n", .{});
+    std.debug.print("see: docs/BIO_LEARNING_DOCTRINE.md\n", .{});
+    const r = bio_learn_eval_fixed.runBioLearnEval();
+    std.debug.print(
+        "BIO_LEARN oneshot={d}/{d} acc={e} feedback={d}->{d}/{d} improved={} interf_A={d}/{d} acc={e} transfer={d}/{d} acc={e} sleep={d}->{d} retained={} motor={d} eps={d} engrams={d}\n",
+        .{
+            r.oneshot_hit,
+            r.oneshot_n,
+            r.oneshot_acc,
+            r.feedback_first_hit,
+            r.feedback_second_hit,
+            r.feedback_n,
+            r.feedback_improved,
+            r.interf_a_after_b,
+            r.interf_a_n,
+            r.interf_acc,
+            r.transfer_hit,
+            r.transfer_n,
+            r.transfer_acc,
+            r.pre_sleep_hit,
+            r.post_sleep_hit,
+            r.sleep_retained,
+            r.n_motor,
+            r.n_episodes,
+            r.n_engrams,
+        },
+    );
+    if (r.ok) {
+        std.debug.print("FSOT_BIO_LEARN PASS\n", .{});
+        std.debug.print("FSOT_NOT_LLM_BENCHMARK_OK\n", .{});
+        std.debug.print("FSOT_ANIMAL_LEARN_STYLE_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_BIO_LEARN FAIL\n", .{});
         std.process.exit(1);
     }
 }
@@ -2173,6 +2214,9 @@ pub fn main() !void {
         runShortHorizon();
     } else if (std.mem.eql(u8, mode, "speech") or std.mem.eql(u8, mode, "speech-organ")) {
         runSpeechOrgan();
+    } else if (std.mem.eql(u8, mode, "bio-learn") or std.mem.eql(u8, mode, "bio_learn") or std.mem.eql(u8, mode, "animal-learn") or std.mem.eql(u8, mode, "learn-eval") or std.mem.eql(u8, mode, "self-study")) {
+        // Animal/human learning suite — NOT GSM8K / LLM benchmarks
+        runBioLearnEval();
     } else if (std.mem.eql(u8, mode, "bio-articulate") or std.mem.eql(u8, mode, "bio_articulate") or std.mem.eql(u8, mode, "articulate") or std.mem.eql(u8, mode, "say-fact") or std.mem.eql(u8, mode, "engram-speak")) {
         // Pure bio path: teach fact → episodic retrieve → motor speak → self-hear (NO chat module)
         runBioArticulate(false);
@@ -2416,6 +2460,8 @@ pub fn main() !void {
         std.debug.print("  brain-learn-speak = same + English TTS of learned facts\n", .{});
         std.debug.print("  english        = lexicon + Windows TTS (real words, not formants)\n", .{});
         std.debug.print("  practice       = utter → TTS → self-hear → encode\n", .{});
+        std.debug.print("  bio-learn      = animal/human learning eval (NOT GSM8K/LLM benches)\n", .{});
+        std.debug.print("  animal-learn   = same as bio-learn\n", .{});
         std.debug.print("  bio-articulate = teach→retrieve→motor→self-hear (NOT chat layer)\n", .{});
         std.debug.print("  articulate     = same as bio-articulate\n", .{});
         std.debug.print("  speakers       = formant/DAC smoke only (NOT English)\n", .{});

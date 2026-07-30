@@ -14,11 +14,15 @@ Honest inventory of the **Zig neurological mind**. School knowledge **encodes in
 
 | Mode | Result |
 |------|--------|
+| `bio-learn` | **primary eval** — one-shot 8/8 · feedback improve · interference 8/8 · transfer 6/6 · sleep retained · motor · **NOT LLM benches** |
 | `bio-articulate` | retrieve/motor/self **10/10** (teach→sleep→cue→say) |
 | `brain-learn` | practice **42/42**, multi-hop prove **20/20**, claimable **20**, retrieve **144/144**, `bio=true` |
-| Path | experience → episodic encode + motor engram → practice via retrieve → sleep → prove via retrieve |
+| Path | experience once → try → feedback re-study → sleep → prove (animal/human style) |
 
-**Refused:** conversational modules, intent parsers, `bankGet` as the mind.
+**Primary benchmarks:** bio-learn suite (see [`BIO_LEARNING_DOCTRINE.md`](BIO_LEARNING_DOCTRINE.md)) — sensory/episodic/few-shot/interference/transfer/motor/sleep.  
+**Not primary:** GSM8K / MMLU / chat Q→A (LLM-attuned).  
+
+**Refused:** conversational modules, intent parsers, `bankGet` as the mind, epoch-SGD as the learning story.
 
 ---
 
