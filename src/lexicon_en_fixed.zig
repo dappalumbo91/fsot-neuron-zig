@@ -98,8 +98,9 @@ const WORDS = [_]struct { []const u8, Role }{
 };
 
 pub const N_WORDS: usize = WORDS.len;
-/// Teacher-grown extras loaded from en_roles.tsv (student codec grows without recompile).
-pub const MAX_EXTRA: usize = 2048;
+/// Dictionary/thesaurus extras loaded from en_roles.tsv (recognition + teaching).
+/// Generation/TTS still uses core WORDS + grammar templates (no word-salad).
+pub const MAX_EXTRA: usize = 32768;
 pub const MAX_WORD_LEN: usize = 24;
 
 var extra_buf: [MAX_EXTRA][MAX_WORD_LEN]u8 = undefined;
@@ -175,12 +176,16 @@ fn addExtra(word: []const u8, role: Role) bool {
     return true;
 }
 
-/// Load teacher TSV (word\\trole). Safe to call multiple times (once effective).
+/// Load teacher/dictionary TSV (word\\trole). Heap buffer for multi-MB dictionary files.
 pub fn loadRolesFile(path: []const u8) u32 {
     const file = std.fs.cwd().openFile(path, .{}) catch return 0;
     defer file.close();
-    var buf: [256 * 1024]u8 = undefined;
-    const n = file.readAll(buf[0..]) catch return 0;
+    const stat = file.stat() catch return 0;
+    const size: usize = @intCast(stat.size);
+    if (size == 0 or size > 16 * 1024 * 1024) return 0;
+    const buf = std.heap.page_allocator.alloc(u8, size) catch return 0;
+    defer std.heap.page_allocator.free(buf);
+    const n = file.readAll(buf) catch return 0;
     var added: u32 = 0;
     var start: usize = 0;
     var i: usize = 0;
@@ -190,7 +195,6 @@ pub fn loadRolesFile(path: []const u8) u32 {
             var line = buf[start..i];
             start = i + 1;
             if (line.len > 0 and line[0] == '#') continue;
-            // trim
             while (line.len > 0 and (line[0] == ' ' or line[0] == '\t')) line = line[1..];
             if (line.len == 0) continue;
             var tab: ?usize = null;
@@ -204,16 +208,20 @@ pub fn loadRolesFile(path: []const u8) u32 {
             if (tab == null) continue;
             const w = line[0..tab.?];
             var role_s = line[tab.? + 1 ..];
+            var r_end: usize = 0;
+            while (r_end < role_s.len and role_s[r_end] != '\t' and role_s[r_end] != ' ') : (r_end += 1) {}
+            role_s = role_s[0..r_end];
             while (role_s.len > 0 and (role_s[role_s.len - 1] == ' ' or role_s[role_s.len - 1] == '\t'))
                 role_s = role_s[0 .. role_s.len - 1];
             const role = parseRole(role_s) orelse continue;
             if (addExtra(w, role)) added += 1;
+            if (n_extra >= MAX_EXTRA) break;
         }
     }
     return added;
 }
 
-/// Try common paths for en_roles.tsv (host may run from zig/ or repo root).
+/// Try common paths for en_roles.tsv (dictionary export or teacher bulk).
 pub fn tryLoadDefaultRoles() u32 {
     if (load_attempted) return @intCast(n_extra);
     load_attempted = true;
@@ -221,6 +229,7 @@ pub fn tryLoadDefaultRoles() u32 {
         "data/lexicon/en_roles.tsv",
         "../data/lexicon/en_roles.tsv",
         "../../data/lexicon/en_roles.tsv",
+        "I:/fsot-neuron-zig/data/lexicon/en_roles.tsv",
         "I:/fsot nuron/data/lexicon/en_roles.tsv",
     };
     var total: u32 = 0;
