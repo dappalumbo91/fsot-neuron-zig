@@ -917,11 +917,11 @@ fn runLanguageDepth(speak: bool) void {
     std.debug.print("probes: is X a verb? | X is a? | what does X mean? | role of X | hops\n", .{});
     const r = language_depth_fixed.runLanguageDepth(speak);
     std.debug.print(
-        "DEPTH taught={d} file={d} eps={d} probes={d} correct={d} acc={e}\n",
-        .{ r.n_taught_cards, r.n_file_cards, r.n_episodes, r.n_probes, r.n_correct, r.acc },
+        "DEPTH taught={d} file={d} eps={d} bank={d} restudy={d} probes={d} correct={d} acc={e}\n",
+        .{ r.n_taught_cards, r.n_file_cards, r.n_episodes, r.n_bank, r.n_restudy, r.n_probes, r.n_correct, r.acc },
     );
     std.debug.print(
-        "DEPTH pos_yesno={e} ({d}/{d}) define={e} ({d}/{d}) role={e} ({d}/{d}) hop={e} ({d}/{d}) tts={d}\n",
+        "DEPTH pos_yesno={e} ({d}/{d}) define={e} ({d}/{d}) role={e} ({d}/{d}) hop={e} ({d}/{d}) pointed={d}/{d} tts={d}\n",
         .{
             r.pos_acc,
             r.n_pos_yesno_ok,
@@ -935,20 +935,16 @@ fn runLanguageDepth(speak: bool) void {
             r.hop_acc,
             r.n_hop_ok,
             r.n_hop,
+            r.pointed_hit,
+            r.pointed_n,
             r.n_tts,
         },
     );
-    if (r.sample_qn > 0) {
-        std.debug.print(
-            "DEPTH_SAMPLE q=\"{s}\" expect=\"{s}\" {s}\n",
-            .{ r.sample_q[0..r.sample_qn], r.sample_a[0..r.sample_an], r.sample_got[0..r.sample_gn] },
-        );
-    }
     if (r.ok) {
         std.debug.print("FSOT_LANGUAGE_DEPTH PASS\n", .{});
         std.debug.print("FSOT_MEANINGFUL_WORDS_OK\n", .{});
     } else {
-        std.debug.print("FSOT_LANGUAGE_DEPTH FAIL (need strong POS + definition prove)\n", .{});
+        std.debug.print("FSOT_LANGUAGE_DEPTH FAIL (need ≥93% overall, ≥95% POS, ≥93% define)\n", .{});
         std.process.exit(1);
     }
 }
