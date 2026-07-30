@@ -2,7 +2,7 @@
 
 ## Status
 
-**Implemented** as a host-side classical MD lab (`embodiment/zig/src/allatom_md.zig`):
+**Implemented** as a host-side classical MD lab (`src/allatom_md.zig` in this product; monorepo path `embodiment/zig/src/allatom_md.zig`):
 
 | Piece | What it is |
 |-------|------------|

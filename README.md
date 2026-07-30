@@ -2,14 +2,16 @@
 
 **Fluid Spacetime Omni-Theory (FSOT) neural mind — Zig authority.**
 
-Bare-metal multi-region brain, 64-codon genetic spine, fixed-point lattice (SCALE=1e12), episodic 5W1H memory, curiosity, transfer, teach, modulate, SME bands, machine language, English lexicon codec, TTS plant, PK/K/G1 knowledge practice, live host senses, and short-horizon learning.
+Bare-metal multi-region brain, 64-codon genetic spine, fixed-point lattice (SCALE=1e12), wet biophysics (stochastic AMPA/NMDA, spine cascade, glia, STDP), grade ladder PK→G8 (≥95%), paraphrase depth, all-atom MD lab (host f64), episodic 5W1H memory, machine language, English lexicon codec, TTS plant, live host senses.
 
 Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). The mind core runs in Zig without Python.
 
 | | |
 |--|--|
-| **Theory** | Fluid Spacetime Omni-Theory (FSOT) 2.1 |
-| **Authority** | Fixed-point lattice (`src/fixed.zig`) |
+| **Theory** | Fluid Spacetime Omni-Theory (FSOT) 2.1 — pin D1D38A |
+| **Authority** | Fixed-point lattice (`src/fixed.zig`, SCALE=1e12) |
+| **Math** | [`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`](docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md) |
+| **Lean stamp** | monorepo `formal/` · `scientific_panel_ok` (0 sorry) |
 | **Language** | Zig 0.15+ |
 | **License** | Apache-2.0 |
 | **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
@@ -46,12 +48,17 @@ Or double-click `BOOT_MIND.cmd` for the live organism.
 
 | Mode | What it tests |
 |------|----------------|
+| `ladder` / `straight-a` | PK→G8 STEM/literacy ≥95% per domain |
+| `depth` / `understand` | Paraphrase held-out understand exam ≥95% |
+| `pathways` / `glia` / `molecular` | Synaptic paths + STDP + wet cascade + glia |
+| `md` / `allatom` | All-atom MD lab (water + K⁺ filter; not cognition) |
+| `mnist` | Vision accuracy gate ≥95% (pack from monorepo) |
 | `machine-lang` | Native tongue: TritWord FSOT frames generate/understand |
 | `machine-lang-stress` | 1000-frame round-trip stress |
 | `english` | Lexicon choose + TTS real words |
 | `practice` | Utter → TTS → self-hear → encode |
-| `novel` | Single complex inquiry ? novel synthesis |
-| `grade` | PK/K/G1 teach facts → quiz → solve problems |
+| `novel` | Single complex inquiry → novel synthesis |
+| `grade` | Legacy soft grade practice (prefer `ladder`) |
 | `mind` | Live senses + attention + EN_SAY + machine frames |
 | `stress` / `all` | Fixed suite gates |
 | `teach` / `transfer` / `short-horizon` | Memory / learning |
@@ -59,16 +66,19 @@ Or double-click `BOOT_MIND.cmd` for the live organism.
 ## Architecture (fixed path)
 
 - **Scalar / neuron / network / brain** — `*_fixed.zig`
-- **Genetics** — 64-codon PRIMARY, ORF → expression → phenotype → W
+- **Genetics** — 64-codon PRIMARY, ORF → expression → phenotype → `fsotPairWeight` W
+- **Wet stack** — `channel_stoch_fixed` (48 AMPA / 16 NMDA / 50µs Markov) → `molecular_fixed` → `glia_fixed` → `stdp_fixed`
+- **Pathways / concepts** — `synapse_path_fixed` (Hebb + STDP + novel bonds)
+- **Curriculum** — `grade_ladder_fixed` PK–G8 · `understand_depth_fixed` · `mnist_accuracy_fixed`
+- **All-atom MD lab** — `allatom_md.zig` (host f64 only)
 - **Organism** — continuous tick + inject + modulation
 - **Memory** — episodic fingerprints, 5W1H, curiosity
 - **Machine language** — `machine_lang_fixed.zig` (native I/O tongue)
 - **English codec** — `lexicon_en_fixed.zig` + `host_tts_fixed.zig`
-- **Knowledge apply** — `grade_practice_fixed.zig` (facts ≠ word labels)
 - **Live plant** — display, mic, TTS, optional formant speech organ
 - **Attention / scene** — EEG-anchored gates, ambient scene analysis
 
-IEEE f64 modules remain **lab / parity** only (`float-lab`, `sme-float`).
+IEEE f64 modules remain **lab / parity** only (`float-lab`, `sme-float`, `md`).
 
 ## Language doctrine (short)
 
@@ -84,6 +94,8 @@ Full reproducible pipeline (lexicon growth, curriculum data, teacher scripts): m
 
 ## Doctrine docs (repo only)
 
+- **`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`** — math used to build this system + archive bridge
+- `docs/WHY_NOT_ALL_ATOM_MD.md` — MD is lab, not mind
 - `docs/ZIG_MIND_AUTHORITY.md`
 - `docs/FIXED_POINT_EXPERIMENT.md`
 - `docs/TRINARY_BARE_METAL.md`
@@ -93,6 +105,9 @@ Full reproducible pipeline (lexicon growth, curriculum data, teacher scripts): m
 - `docs/BIO_SENSORY_SYSTEM.md`
 - `docs/HOST_IO_ZIG.md`
 - `docs/LANGUAGE_AND_SPEECH.md`
+
+Monorepo-only (Python host, Lean formal, wet-lab battery):  
+`WET_BIOPHYSICS`, `GRADE_SCHOOL_DEPTH`, `SYNAPTIC_PATHWAYS`, `formal/`, wetlab certificate.
 
 Do **not** put project docs on the Desktop. Authority lives in this repository.
 
