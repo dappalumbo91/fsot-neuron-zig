@@ -892,7 +892,8 @@ fn runInternalThink(minutes: u32) void {
     }
     std.debug.print("=== FSOT THINK HOUR (top-to-bottom internal loop, {d} minutes) ===\n", .{minutes});
     std.debug.print("path: boot world → retrace → cross-check → brainstorm → self-correct → sleep\n", .{});
-    std.debug.print("heartbeat every 30s; wall-clock duration={d} min\n", .{minutes});
+    std.debug.print("heartbeat every 5s; live log: data/results/THINK_LIVE.log\n", .{});
+    std.debug.print("wall-clock duration={d} min — if console looks quiet, tail THINK_LIVE.log\n", .{minutes});
     const r = internal_think_fixed.runThinkMinutes(minutes);
     std.debug.print(
         "THINK_HOUR done min={d} cycles={d} retrace={d}/{d} acc={e} cross={d}/{d} acc={e} ideas={d}/{d} reject={d} correct={d} sleep={d} motor={d} eps={d} eng={d} spikes={d} ms={d}\n",

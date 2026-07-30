@@ -19,7 +19,6 @@ const memory_f = @import("memory_fixed.zig");
 const neuromod_f = @import("neuromod_fixed.zig");
 const organism_f = @import("organism_fixed.zig");
 const curiosity_f = @import("curiosity_fixed.zig");
-const sleep_replay_f = @import("sleep_replay_fixed.zig");
 const eeg = @import("eeg_gate_anchors_fixed.zig");
 const Fixed = fixed.Fixed;
 
@@ -346,13 +345,27 @@ fn passCuriosity(org: *organism_f.OrganismF, rep: *ThinkReport) void {
 pub const ThinkConfig = struct {
     /// Wall-clock run length (ms). 0 = one short probe only.
     duration_ms: u64 = 0,
-    /// Heartbeat print every this many ms
-    heartbeat_ms: u64 = 30_000,
+    /// Heartbeat print every this many ms (default 5s so long runs look alive)
+    heartbeat_ms: u64 = 5_000,
     /// Sleep every N cycles
     sleep_every: u32 = 8,
     /// Min work per cycle (always run all passes once)
     quiet: bool = false,
+    /// Optional live log path (flushed each heartbeat) — Windows redirect buffers hide stderr
+    log_path: ?[]const u8 = null,
 };
+
+fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) void {
+    // Always stderr (visible in console)
+    std.debug.print(fmt, args);
+    // And live file with flush so user can tail it
+    if (log_file) |f| {
+        var buf: [512]u8 = undefined;
+        const line = std.fmt.bufPrint(buf[0..], fmt, args) catch return;
+        f.writeAll(line) catch {};
+        f.sync() catch {};
+    }
+}
 
 /// Bootstrap knowledge then run internal think for duration_ms (0 = quick probe).
 pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
@@ -364,6 +377,16 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     org.steps_per_tick = 3;
     var nm: neuromod_f.NeuromodState = .{};
 
+    // Live log file (flush each heartbeat) — fixes "terminal does nothing" when redirected
+    var log_owned: ?std.fs.File = null;
+    defer if (log_owned) |*f| f.close();
+    if (cfg.log_path) |lp| {
+        log_owned = std.fs.cwd().createFile(lp, .{}) catch null;
+    }
+    const log_ptr: ?*std.fs.File = if (log_owned) |*f| f else null;
+
+    hbPrint(log_ptr, "THINK_BOOT studying {d} world facts...\n", .{WORLD.len});
+
     // ── BOOT: study world once ────────────────────────────────────────
     for (WORLD) |f| {
         studyFact(&org, &nm, f);
@@ -372,9 +395,14 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     }
     sleepQuiet(&org, &nm);
     rep.n_sleep += 1;
+    hbPrint(log_ptr, "THINK_BOOT done studied={d} eps={d} eng={d} — entering loop\n", .{
+        rep.n_studied,
+        org.store.n,
+        org.n_speak_engrams,
+    });
 
     const t0 = std.time.milliTimestamp();
-    var last_hb = t0;
+    var last_hb: i64 = 0; // force immediate first heartbeat
     var seed: u32 = 1;
 
     // ── THINK LOOP ────────────────────────────────────────────────────
@@ -390,10 +418,8 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         if (cfg.sleep_every > 0 and (rep.n_cycles % cfg.sleep_every) == 0) {
             sleepQuiet(&org, &nm);
             rep.n_sleep += 1;
-            // light consolidation probe occasionally (not every sleep — cost)
-            if ((rep.n_cycles % (cfg.sleep_every * 4)) == 0) {
-                _ = sleep_replay_f.runConsolidationProbe();
-            }
+            // Do NOT call full consolidation probe here — it rebuilds a separate brain
+            // and freezes the long run for seconds with no output.
         }
 
         // idle organism ticks (neurological background)
@@ -404,11 +430,13 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         const elapsed: u64 = if (now >= t0) @intCast(now - t0) else 0;
         rep.duration_ms = elapsed;
 
-        if (!cfg.quiet and cfg.heartbeat_ms > 0 and @as(u64, @intCast(now - last_hb)) >= cfg.heartbeat_ms) {
+        const hb_due = cfg.heartbeat_ms == 0 or last_hb == 0 or
+            @as(u64, @intCast(now - last_hb)) >= cfg.heartbeat_ms;
+        if (!cfg.quiet and hb_due) {
             last_hb = now;
             const mins = elapsed / 60_000;
             const secs = (elapsed % 60_000) / 1000;
-            std.debug.print(
+            hbPrint(log_ptr,
                 "THINK_HB t={d}m{d:0>2}s cycles={d} retrace={d}/{d} cross={d}/{d} ideas={d}/{d} reject={d} correct={d} sleep={d} eps={d} eng={d}\n",
                 .{
                     mins,
@@ -428,7 +456,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                 },
             );
             if (rep.last_idea_n > 0) {
-                std.debug.print("  last_idea=\"{s}\"\n", .{rep.last_idea[0..rep.last_idea_n]});
+                hbPrint(log_ptr, "  last_idea=\"{s}\"\n", .{rep.last_idea[0..rep.last_idea_n]});
             }
         }
 
@@ -475,9 +503,10 @@ pub fn runThinkMinutes(minutes: u32) ThinkReport {
     const ms: u64 = @as(u64, minutes) * 60_000;
     return runInternalThink(.{
         .duration_ms = if (ms == 0) 60_000 else ms,
-        .heartbeat_ms = 30_000,
+        .heartbeat_ms = 5_000,
         .sleep_every = 8,
         .quiet = false,
+        .log_path = "data/results/THINK_LIVE.log",
     });
 }
 
