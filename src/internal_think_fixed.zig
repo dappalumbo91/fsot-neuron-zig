@@ -339,8 +339,91 @@ fn spillGrownHalf() void {
     ltm.noteSpillEvent();
 }
 
+/// Meta / probe / derived / reverse-artifact cues must not enter grown or brainstorm.
+fn cueIsBanned(c: []const u8) bool {
+    if (c.len < 2) return true;
+    // derived compose keys and LTM probe markers
+    if (std.mem.startsWith(u8, c, "link ") or std.mem.eql(u8, c, "link")) return true;
+    if (std.mem.startsWith(u8, c, "ltm_probe") or std.mem.startsWith(u8, c, "ltm_")) return true;
+    if (std.mem.startsWith(u8, c, "skill")) return true;
+    if (std.mem.eql(u8, c, "idea") or std.mem.eql(u8, c, "compose")) return true;
+    // reverse-skill artifact ("mind" → "dnim")
+    if (std.mem.indexOf(u8, c, "dnim") != null) return true;
+    // multi-space / truncation noise
+    if (std.mem.indexOf(u8, c, "  ") != null) return true;
+    if (std.mem.indexOf(u8, c, "link link") != null) return true;
+    // truncated mid-token: ends with incomplete stem (common hour scrap)
+    if (c.len >= 3 and c.len <= 5) {
+        // allow only pure short seed words (sun, dog, …) — reject mixed junk later
+        // reject if contains digit or punctuation
+        for (c) |ch| {
+            if (!((ch >= 'a' and ch <= 'z') or (ch >= 'A' and ch <= 'Z') or ch == ' ' or ch == '-')) return true;
+        }
+    }
+    return false;
+}
+
+/// Single content-word answer preferred for concept composition.
+fn ansIsCleanConcept(a: []const u8) bool {
+    if (a.len < 2 or a.len > 22) return false;
+    if (std.mem.indexOf(u8, a, "  ") != null) return false;
+    if (std.mem.indexOf(u8, a, "is is") != null) return false;
+    if (std.mem.indexOf(u8, a, "dnim") != null) return false;
+    if (std.mem.indexOf(u8, a, "link") != null) return false;
+    if (std.mem.indexOf(u8, a, "We ") != null or std.mem.indexOf(u8, a, "we ") != null) return false;
+    if (std.mem.indexOf(u8, a, "review") != null) return false;
+    var spaces: u32 = 0;
+    var letters: u32 = 0;
+    for (a) |ch| {
+        if (ch == ' ') spaces += 1;
+        if ((ch >= 'a' and ch <= 'z') or (ch >= 'A' and ch <= 'Z')) letters += 1;
+    }
+    // at most one space (two-word ans ok); mostly letters
+    if (spaces > 1) return false;
+    if (letters < 2) return false;
+    return true;
+}
+
+/// Reject composed idea strings that recycle meta junk.
+fn ideaLooksClean(p: []const u8) bool {
+    if (p.len < 10 or p.len > 72) return false;
+    if (std.mem.indexOf(u8, p, "link ") != null) return false;
+    if (std.mem.indexOf(u8, p, "ltm_probe") != null) return false;
+    if (std.mem.indexOf(u8, p, " is is ") != null) return false;
+    if (std.mem.indexOf(u8, p, "dnim") != null) return false;
+    if (std.mem.indexOf(u8, p, "review") != null) return false;
+    if (std.mem.indexOf(u8, p, "We ") != null) return false;
+    // form: "A is X so B is Y" — exactly one " so ", two " is "
+    var so_n: u32 = 0;
+    var is_n: u32 = 0;
+    var i: usize = 0;
+    while (i + 4 <= p.len) : (i += 1) {
+        if (p[i] == ' ' and p[i + 1] == 's' and p[i + 2] == 'o' and p[i + 3] == ' ') so_n += 1;
+        if (p[i] == ' ' and p[i + 1] == 'i' and p[i + 2] == 's' and p[i + 3] == ' ') is_n += 1;
+    }
+    // leading "X is " without leading space
+    if (p.len >= 4 and p[0] != ' ') {
+        // check first " is " occurrence may start after first word
+    }
+    if (so_n != 1) return false;
+    // " is " count: with leading pattern "word is word so word is word" → two spaces before is
+    // first clause may be "word is" with space before is only once mid-clause
+    if (is_n < 1) return false;
+    // total " is " including possible start: count substring
+    is_n = 0;
+    i = 0;
+    while (i + 4 <= p.len) : (i += 1) {
+        if (i + 3 < p.len and p[i] == 'i' and p[i + 1] == 's' and p[i + 2] == ' ') {
+            if (i == 0 or p[i - 1] == ' ') is_n += 1;
+        }
+    }
+    if (is_n != 2) return false;
+    return true;
+}
+
 fn addGrown(cue: []const u8, ans: []const u8, utter: []const u8) bool {
     if (cue.len < 2) return false;
+    if (cueIsBanned(cue)) return false;
     const ch = memory_f.hashToken(cue);
     var i: usize = 0;
     while (i < n_grown) : (i += 1) {
@@ -659,24 +742,68 @@ pub const ThinkReport = struct {
     n_wet_sleep_maint: u32 = 0,
 };
 
-/// Cold LTM → hot STM: sample grown from disk, re-study into organism (hippocampal re-encode).
-fn passLtmWarm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
+/// Cold LTM grown → hot STM (hippocampal re-encode). Skips banned meta cues.
+fn passLtmWarmGrown(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
     var rec: ltm.GrownRec = .{};
-    if (!ltm.sampleGrown(seed, &rec) or !rec.valid) return;
-    const cue = rec.cue[0..rec.cue_n];
-    const ans = rec.ans[0..rec.ans_n];
-    const utter = rec.utter[0..rec.utter_n];
-    // already hot?
-    const ch = memory_f.hashToken(cue);
-    var i: usize = 0;
-    while (i < n_grown) : (i += 1) {
-        if (grown[i].valid and memory_f.hashToken(grown[i].cue[0..grown[i].cue_n]) == ch) return;
+    // try a few seeds so one banned probe line does not kill the warm
+    var t: u32 = 0;
+    while (t < 4) : (t += 1) {
+        if (!ltm.sampleGrown(seed +% t *% 97, &rec) or !rec.valid) continue;
+        const cue = rec.cue[0..rec.cue_n];
+        if (cueIsBanned(cue) or isStopOrJunk(cue)) continue;
+        const ans = rec.ans[0..rec.ans_n];
+        const utter = rec.utter[0..rec.utter_n];
+        const ch = memory_f.hashToken(cue);
+        var i: usize = 0;
+        var hot = false;
+        while (i < n_grown) : (i += 1) {
+            if (grown[i].valid and memory_f.hashToken(grown[i].cue[0..grown[i].cue_n]) == ch) {
+                hot = true;
+                break;
+            }
+        }
+        if (hot) continue;
+        studyFact(org, nm, cue, ans, utter);
+        rep.n_ltm_warm += 1;
+        rep.n_motor += 1;
+        _ = addGrown(cue, ans, utter);
+        return;
     }
-    studyFact(org, nm, cue, ans, utter);
-    rep.n_ltm_warm += 1;
-    rep.n_motor += 1;
-    // promote into STM grown bank
-    _ = addGrown(cue, ans, utter);
+}
+
+/// Cold LTM speak-engram → hot motor STM (re-bind + re-study).
+fn passLtmWarmEngram(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
+    var rec: ltm.EngramRec = .{};
+    var t: u32 = 0;
+    while (t < 4) : (t += 1) {
+        if (!ltm.sampleEngram(seed +% t *% 53, &rec) or !rec.valid) continue;
+        const cue = rec.cue[0..rec.cue_n];
+        if (cueIsBanned(cue) or isStopOrJunk(cue)) continue;
+        // already hot motor?
+        if (org.engramForCue(memory_f.hashToken(cue))) |_| continue;
+        const ans = if (rec.ans_n > 0) rec.ans[0..rec.ans_n] else cue;
+        const utter = if (rec.phrase_n > 0) rec.phrase[0..rec.phrase_n] else cue;
+        studyFact(org, nm, cue, ans, utter);
+        rep.n_ltm_warm += 1;
+        rep.n_motor += 1;
+        _ = addGrown(cue, ans, utter);
+        return;
+    }
+}
+
+/// Full LTM warm: grown + engram cold pages into STM.
+fn passLtmWarm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
+    passLtmWarmGrown(org, nm, rep, seed);
+    passLtmWarmEngram(org, nm, rep, seed +% 19);
+}
+
+/// When speak-engram STM is full, spill oldest half to disk so growth continues.
+fn maybeSpillSpeakEngrams(org: *organism_f.OrganismF, rep: *ThinkReport) void {
+    if (org.n_speak_engrams < organism_f.MAX_SPEAK_ENGRAMS) return;
+    const n = org.spillSpeakEngramHalf();
+    if (n > 0) {
+        rep.n_ltm_spill_events +%= 1;
+    }
 }
 
 /// Multi-engram articulation: utter_depth engrams in one motor burst (not chat).
@@ -693,12 +820,12 @@ fn passMultiEngram(org: *organism_f.OrganismF, rep: *ThinkReport, seed: u32, dep
 }
 
 /// Procedural skill organ (Python interpreter) — rare, experience-bound.
+/// Do not grow reverse-skill text (produces "dnim" etc. that polluted brainstorm).
 fn passSkill(org: *organism_f.OrganismF, rep: *ThinkReport, seed: u32) void {
-    // rotate simple built-in skills
-    const skills = [_]struct { name: []const u8, arg: []const u8 }{
-        .{ .name = "add", .arg = "3 5" },
-        .{ .name = "reverse", .arg = "mind" },
-        .{ .name = "wordcount", .arg = "a dog is an animal" },
+    const skills = [_]struct { name: []const u8, arg: []const u8, grow: bool }{
+        .{ .name = "add", .arg = "3 5", .grow = true },
+        .{ .name = "reverse", .arg = "mind", .grow = false },
+        .{ .name = "wordcount", .arg = "a dog is an animal", .grow = false },
     };
     const s = skills[seed % skills.len];
     const r = skill_organ.runSkill(s.name, s.arg, 5000);
@@ -706,14 +833,19 @@ fn passSkill(org: *organism_f.OrganismF, rep: *ThinkReport, seed: u32) void {
     if (skill_organ.bindSkillResult(org, s.name, &r)) {
         rep.n_skill += 1;
         rep.n_motor += 1;
-        // also grow cue "skill:<name>"
-        var utter: [96]u8 = undefined;
-        const un = (std.fmt.bufPrint(utter[0..], "skill {s} -> {s}", .{
-            s.name,
-            r.stdout[0..@min(r.stdout_n, 40)],
-        }) catch s.name).len;
-        _ = addGrown(s.name, r.stdout[0..@min(r.stdout_n, MAX_ANS_LEN)], utter[0..un]);
-        rep.n_new_concepts += 1;
+        if (s.grow) {
+            // only grow clean arithmetic results, never reverse artifacts
+            var ans_buf: [16]u8 = undefined;
+            const an = @min(r.stdout_n, ans_buf.len);
+            @memcpy(ans_buf[0..an], r.stdout[0..an]);
+            if (ansIsCleanConcept(ans_buf[0..an]) and !cueIsBanned(s.name)) {
+                var utter: [64]u8 = undefined;
+                const un = (std.fmt.bufPrint(utter[0..], "add is {s}", .{ans_buf[0..an]}) catch s.name).len;
+                if (addGrown("sum three five", ans_buf[0..an], utter[0..un])) {
+                    rep.n_new_concepts += 1;
+                }
+            }
+        }
     }
 }
 
@@ -728,6 +860,7 @@ fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *
         const g = grown[idx];
         if (!g.valid) continue;
         const cue = g.cue[0..g.cue_n];
+        if (cueIsBanned(cue)) continue;
         rep.n_retrace += 1;
         if (recallOk(org, cue)) {
             rep.n_retrace_ok += 1;
@@ -790,9 +923,17 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
                     word = word[0 .. word.len - 1];
                 }
                 // skip last token if phrase is maxed — usually a mid-word cut ("procedur", "alphabe")
-                if (wi == eng.phrase_n and eng.phrase_n >= 90) {
+                if (wi == eng.phrase_n and eng.phrase_n >= 80) {
                     wstart = wi + 1;
                     continue;
+                }
+                // skip last token always when it ends the buffer without trailing punctuation
+                if (wi == eng.phrase_n and eng.phrase_n >= 48) {
+                    const lastc = eng.phrase[eng.phrase_n - 1];
+                    if ((lastc >= 'a' and lastc <= 'z') or (lastc >= 'A' and lastc <= 'Z')) {
+                        wstart = wi + 1;
+                        continue;
+                    }
                 }
                 // lowercase copy for stable attempt keys
                 var wbuf: [32]u8 = undefined;
@@ -803,6 +944,10 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
                         wbuf[wj] = if (c >= 'A' and c <= 'Z') c + 32 else c;
                     }
                     const wlow = wbuf[0..word.len];
+                    if (cueIsBanned(wlow)) {
+                        wstart = wi + 1;
+                        continue;
+                    }
                     if (!isStopOrJunk(wlow) and !alreadyAttempted(wlow) and !recallOk(org, wlow)) {
                         markAttempted(wlow);
                         rep.n_discover += 1;
@@ -855,52 +1000,44 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
     }
 }
 
-/// True if grown entry is concept-scale (seed/wiki style), not arxiv abstract scrap.
+/// True if grown entry is concept-scale (seed/wiki style), not arxiv/meta scrap.
 fn grownIsConceptScale(g: *const Grown) bool {
     if (!g.valid) return false;
-    if (g.cue_n < 2 or g.cue_n > 28) return false;
-    if (g.ans_n < 2 or g.ans_n > 28) return false;
-    if (g.utter_n > 80) return false;
-    // reject abstract openers / paper scrap in answer
+    if (g.cue_n < 2 or g.cue_n > 24) return false;
+    if (g.ans_n < 2 or g.ans_n > 22) return false;
+    if (g.utter_n > 72) return false;
+    const c = g.cue[0..g.cue_n];
     const a = g.ans[0..g.ans_n];
-    if (std.mem.indexOf(u8, a, "We ") != null) return false;
-    if (std.mem.indexOf(u8, a, "we ") != null) return false;
-    if (std.mem.indexOf(u8, a, "review") != null) return false;
-    if (std.mem.indexOf(u8, a, "Review") != null) return false;
+    if (cueIsBanned(c)) return false;
+    if (isStopOrJunk(c)) return false;
+    if (!ansIsCleanConcept(a)) return false;
     if (std.mem.indexOf(u8, a, "arXiv") != null) return false;
     if (std.mem.indexOf(u8, a, "hep-") != null) return false;
-    // multi-space long phrase in ans → not a concept word
-    var spaces: u32 = 0;
-    for (a) |c| {
-        if (c == ' ') spaces += 1;
-    }
-    if (spaces > 3) return false;
     return true;
 }
 
-/// Brainstorm: sample two distinct grown cues not seen as pair; compose if both recall.
-/// Dual pool: early seed/concept bank + recent concept-scale grown (not abstract dumps).
+/// Brainstorm: two concept-scale grown cues → short "A is X so B is Y".
+/// No "link …" derived grown (that polluted uniq with meta junk).
 fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
     if (n_grown < 2) return;
     rep.n_brainstorm += 1;
     const n = @as(u32, @intCast(n_grown));
 
-    // Build concept-scale index pool (stack-limited scan)
+    // Prefer early seed bank + any concept-scale entries (not abstract dumps)
     var pool: [256]u32 = undefined;
     var pool_n: u32 = 0;
+    // always seed early window first (stable world facts)
     var gi: u32 = 0;
-    while (gi < n and pool_n < pool.len) : (gi += 1) {
+    const early = @min(n, 64);
+    while (gi < early and pool_n < pool.len) : (gi += 1) {
         if (grownIsConceptScale(&grown[gi])) {
             pool[pool_n] = gi;
             pool_n += 1;
         }
     }
-    if (pool_n < 2) {
-        // fallback: early grown only (seeds)
-        pool_n = 0;
-        gi = 0;
-        const early = @min(n, 48);
-        while (gi < early and pool_n < pool.len) : (gi += 1) {
+    // then scan rest for more concept-scale (discover words etc.)
+    while (gi < n and pool_n < pool.len) : (gi += 1) {
+        if (grownIsConceptScale(&grown[gi])) {
             pool[pool_n] = gi;
             pool_n += 1;
         }
@@ -908,12 +1045,13 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
     if (pool_n < 2) return;
 
     var tries: u32 = 0;
-    while (tries < 28) : (tries += 1) {
+    while (tries < 32) : (tries += 1) {
         const ia = pool[(seed +% tries *% 11) % pool_n];
         const ib = pool[(seed *% 17 +% tries *% 5 +% 3) % pool_n];
         if (ia == ib or ia >= n or ib >= n) continue;
         const ca = grown[ia].cue[0..grown[ia].cue_n];
         const cb = grown[ib].cue[0..grown[ib].cue_n];
+        if (cueIsBanned(ca) or cueIsBanned(cb)) continue;
         if (isStopOrJunk(ca) or isStopOrJunk(cb)) continue;
         if (!grownIsConceptScale(&grown[ia]) or !grownIsConceptScale(&grown[ib])) continue;
         if (phraseLooksJunk(grown[ia].utter[0..grown[ia].utter_n])) continue;
@@ -927,43 +1065,34 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
             continue;
         }
 
-        // Concept composition: "cueA is ansA so cueB is ansB" — short, grounded, unique.
+        // Single-token ans only (concept word)
+        var aa1 = grown[ia].ans[0..grown[ia].ans_n];
+        var ab1 = grown[ib].ans[0..grown[ib].ans_n];
+        if (std.mem.indexOfScalar(u8, aa1, ' ')) |sp| aa1 = aa1[0..@min(sp, 16)];
+        if (std.mem.indexOfScalar(u8, ab1, ' ')) |sp| ab1 = ab1[0..@min(sp, 16)];
+        if (!ansIsCleanConcept(aa1) or !ansIsCleanConcept(ab1)) {
+            rep.n_ideas_rejected += 1;
+            continue;
+        }
+
         var idea: [128]u8 = undefined;
-        const aa = grown[ia].ans[0..grown[ia].ans_n];
-        const ab = grown[ib].ans[0..grown[ib].ans_n];
-        // first-token ans only (concept word), not full abstract line
-        var aa1 = aa;
-        var ab1 = ab;
-        if (std.mem.indexOfScalar(u8, aa, ' ')) |sp| aa1 = aa[0..@min(sp, 18)];
-        if (std.mem.indexOfScalar(u8, ab, ' ')) |sp| ab1 = ab[0..@min(sp, 18)];
         const out = std.fmt.bufPrint(idea[0..], "{s} is {s} so {s} is {s}", .{
-            ca[0..@min(ca.len, 18)],
-            aa1[0..@min(aa1.len, 16)],
-            cb[0..@min(cb.len, 18)],
-            ab1[0..@min(ab1.len, 16)],
+            ca[0..@min(ca.len, 16)],
+            aa1[0..@min(aa1.len, 14)],
+            cb[0..@min(cb.len, 16)],
+            ab1[0..@min(ab1.len, 14)],
         }) catch {
             rep.n_ideas_rejected += 1;
             continue;
         };
         const pos = out.len;
-        if (pos < 10 or pos > 90) {
-            rep.n_ideas_rejected += 1;
-            continue;
-        }
-        // reject abstract residue in the composed idea itself
-        if (std.mem.indexOf(u8, idea[0..pos], "review") != null) {
-            rep.n_ideas_rejected += 1;
-            continue;
-        }
-        if (std.mem.indexOf(u8, idea[0..pos], "We ") != null) {
+        if (!ideaLooksClean(idea[0..pos])) {
             rep.n_ideas_rejected += 1;
             continue;
         }
 
         const ih = memory_f.hashToken(idea[0..pos]);
-        const is_new = noteUniqueIdea(ih);
-        // only count as grounded idea if unique — no recycling same composition as "progress"
-        if (!is_new) {
+        if (!noteUniqueIdea(ih)) {
             rep.n_ideas_rejected += 1;
             continue;
         }
@@ -973,7 +1102,7 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
         rep.last_idea_n = @min(pos, rep.last_idea.len);
         @memcpy(rep.last_idea[0..rep.last_idea_n], idea[0..rep.last_idea_n]);
 
-        // encode composition; if unique, also grow as derived knowledge cue
+        // Motor + episodic only — no "link X" grown (that re-polluted brainstorm pool)
         var meaning: [8]Fixed = undefined;
         var fa: [8]Fixed = undefined;
         var fb: [8]Fixed = undefined;
@@ -984,30 +1113,20 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
             meaning[i] = fixed.add(fixed.mul(fa[i], fixed.fromDecimalStr("0.5")), fixed.mul(fb[i], fixed.fromDecimalStr("0.5")));
         }
         const toks = [_]u32{
-            memory_f.hashToken("idea"),
+            memory_f.hashToken("compose"),
             ha,
             hb,
             memory_f.hashToken(ca),
             memory_f.hashToken(cb),
-            memory_f.hashToken("compose"),
+            memory_f.hashToken("idea"),
         };
         const ep = org.store.encode(&org.brain, meaning[0..], 0b111111, toks);
-        org.bindSpeakEngram(ep, "idea", "compose", idea[0..pos], meaning[0..]);
+        // Bind under real cue ca (not meta "idea"/"link") for motor retrace
+        org.bindSpeakEngram(ep, ca, cb, idea[0..pos], meaning[0..]);
         org.setMeaning(meaning[0..]);
         org.speakNow();
         rep.n_motor += 1;
-        neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.11"));
-
-        if (is_new) {
-            // derived concept key: "link:cueA|cueB" short form
-            var dkey: [MAX_CUE_LEN]u8 = undefined;
-            const dk = std.fmt.bufPrint(dkey[0..], "link {s}", .{ca[0..@min(ca.len, 20)]}) catch ca;
-            _ = addGrown(dk, cb, idea[0..@min(pos, MAX_UTTER_LEN)]);
-            // bind under derived cue so future retrace can hit it
-            studyFact(org, nm, dk, cb[0..@min(cb.len, MAX_ANS_LEN)], idea[0..@min(pos, MAX_UTTER_LEN)]);
-            rep.n_new_concepts += 1;
-            rep.n_motor += 1;
-        }
+        neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.06"));
         return;
     }
     rep.n_ideas_rejected += 1;
@@ -1288,9 +1407,13 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
 
         passRetrace(org, &nm, &rep, seed);
         passDiscover(org, &nm, &rep, seed +% 3, cfg.allow_live_query);
-        // LTM warm: pull cold disk knowledge into STM (every 3 cycles, or always on probe)
-        if (cfg.duration_ms == 0 or (rep.n_cycles % 3) == 0) {
-            passLtmWarm(org, &nm, &rep, seed +% 29);
+        // Speak-engram STM full → spill oldest half to disk LTM (growth unbounded)
+        maybeSpillSpeakEngrams(org, &rep);
+        // LTM warm: every cycle grown+engram cold pages (was every 3 — underused warm=1/hour)
+        passLtmWarm(org, &nm, &rep, seed +% 29);
+        // extra engram warm when ring was recently full
+        if (org.n_speak_engrams >= organism_f.MAX_SPEAK_ENGRAMS / 2 or (rep.n_cycles % 2) == 0) {
+            passLtmWarmEngram(org, &nm, &rep, seed +% 101);
         }
         if (cfg.duration_ms == 0 or (rep.n_cycles % 2) == 0) {
             passBrainstorm(org, &nm, &rep, seed +% 11);

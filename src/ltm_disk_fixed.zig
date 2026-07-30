@@ -116,15 +116,26 @@ pub fn spillGrown(cue: []const u8, ans: []const u8, utter: []const u8) bool {
     return true;
 }
 
-/// Spill a speak engram (motor memory) to disk LTM.
-pub fn spillEngram(ep_id: u32, cue_h: u32, ans_h: u32, phrase: []const u8) bool {
+/// Spill a speak engram (motor memory) to disk LTM — cue/ans text for warm re-encode.
+pub fn spillEngram(
+    ep_id: u32,
+    cue_h: u32,
+    ans_h: u32,
+    phrase: []const u8,
+    cue: []const u8,
+    ans: []const u8,
+) bool {
     var pbuf: [96]u8 = undefined;
+    var cbuf: [40]u8 = undefined;
+    var abuf: [40]u8 = undefined;
     const pn = scrub(phrase, pbuf[0..]);
-    var line: [256]u8 = undefined;
+    const cn = scrub(cue, cbuf[0..]);
+    const an = scrub(ans, abuf[0..]);
+    var line: [384]u8 = undefined;
     const out = std.fmt.bufPrint(
         line[0..],
-        "{{\"kind\":\"engram\",\"ep_id\":{d},\"cue_h\":{d},\"ans_h\":{d},\"phrase\":\"{s}\"}}\n",
-        .{ ep_id, cue_h, ans_h, pbuf[0..pn] },
+        "{{\"kind\":\"engram\",\"ep_id\":{d},\"cue_h\":{d},\"ans_h\":{d},\"cue\":\"{s}\",\"ans\":\"{s}\",\"phrase\":\"{s}\"}}\n",
+        .{ ep_id, cue_h, ans_h, cbuf[0..cn], abuf[0..an], pbuf[0..pn] },
     ) catch {
         stats.io_errors += 1;
         return false;
@@ -132,6 +143,100 @@ pub fn spillEngram(ep_id: u32, cue_h: u32, ans_h: u32, phrase: []const u8) bool 
     if (!appendLine(ENGRAM_PATH, out)) return false;
     stats.engram_spilled += 1;
     return true;
+}
+
+/// Parsed speak engram from LTM (for cold → hot warm).
+pub const EngramRec = struct {
+    ep_id: u32 = 0,
+    cue: [40]u8 = .{0} ** 40,
+    cue_n: usize = 0,
+    ans: [40]u8 = .{0} ** 40,
+    ans_n: usize = 0,
+    phrase: [96]u8 = .{0} ** 96,
+    phrase_n: usize = 0,
+    valid: bool = false,
+};
+
+pub fn parseEngramLine(line: []const u8, out: *EngramRec) bool {
+    out.* = .{};
+    if (line.len < 12) return false;
+    if (std.mem.indexOf(u8, line, "\"kind\":\"engram\"") == null and
+        std.mem.indexOf(u8, line, "\"phrase\"") == null) return false;
+    out.cue_n = extractJsonStr(line, "cue", out.cue[0..]);
+    out.ans_n = extractJsonStr(line, "ans", out.ans[0..]);
+    out.phrase_n = extractJsonStr(line, "phrase", out.phrase[0..]);
+    // legacy lines: phrase only — try to split "X is Y" / "X: Y"
+    if (out.cue_n < 2 and out.phrase_n >= 4) {
+        if (std.mem.indexOf(u8, out.phrase[0..out.phrase_n], " is ")) |sp| {
+            out.cue_n = copyField(out.cue[0..], out.phrase[0..sp]);
+            const rest = out.phrase[sp + 4 .. out.phrase_n];
+            out.ans_n = copyField(out.ans[0..], rest[0..@min(rest.len, out.ans.len)]);
+        } else if (std.mem.indexOfScalar(u8, out.phrase[0..out.phrase_n], ':')) |col| {
+            out.cue_n = copyField(out.cue[0..], out.phrase[0..col]);
+            var r = col + 1;
+            while (r < out.phrase_n and out.phrase[r] == ' ') r += 1;
+            out.ans_n = copyField(out.ans[0..], out.phrase[r..out.phrase_n]);
+        }
+    }
+    if (out.cue_n < 2) return false;
+    if (out.ans_n < 1) {
+        out.ans_n = copyField(out.ans[0..], out.cue[0..out.cue_n]);
+    }
+    if (out.phrase_n < 2) {
+        out.phrase_n = copyField(out.phrase[0..], out.cue[0..out.cue_n]);
+    }
+    out.valid = true;
+    return true;
+}
+
+/// Sample one engram record from LTM by seed (deterministic pick among lines).
+pub fn sampleEngram(seed: u32, out: *EngramRec) bool {
+    out.* = .{};
+    const nlines = countLines(ENGRAM_PATH);
+    if (nlines == 0) return false;
+    const target: u64 = @as(u64, seed) % nlines;
+    const file = std.fs.cwd().openFile(ENGRAM_PATH, .{}) catch {
+        stats.io_errors += 1;
+        return false;
+    };
+    defer file.close();
+    var buf: [512]u8 = undefined;
+    var line_i: u64 = 0;
+    var pos: usize = 0;
+    while (true) {
+        const nr = file.read(buf[pos..]) catch break;
+        if (nr == 0 and pos == 0) break;
+        const total = pos + nr;
+        var i: usize = 0;
+        var line_start: usize = 0;
+        while (i < total) : (i += 1) {
+            if (buf[i] == '\n') {
+                const line = buf[line_start..i];
+                if (line_i == target) {
+                    const ok = parseEngramLine(line, out);
+                    if (ok) stats.warm_recalls += 1;
+                    return ok;
+                }
+                line_i += 1;
+                line_start = i + 1;
+            }
+        }
+        if (nr == 0) {
+            if (line_start < total and line_i == target) {
+                const ok = parseEngramLine(buf[line_start..total], out);
+                if (ok) stats.warm_recalls += 1;
+                return ok;
+            }
+            break;
+        }
+        const rem = total - line_start;
+        if (rem > 0 and line_start > 0) {
+            @memcpy(buf[0..rem], buf[line_start .. line_start + rem]);
+        }
+        pos = rem;
+        if (pos >= buf.len) pos = 0;
+    }
+    return false;
 }
 
 /// Spill one episode (id + tokens + raw Fixed fingerprint) to disk LTM.

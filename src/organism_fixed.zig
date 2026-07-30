@@ -19,6 +19,11 @@ pub const SpeakEngram = struct {
     ep_id: u32 = 0,
     cue_h: u32 = 0,
     ans_h: u32 = 0,
+    /// Short cue/ans text kept for LTM spill/warm (not just hashes).
+    cue_txt: [40]u8 = .{0} ** 40,
+    cue_txt_n: usize = 0,
+    ans_txt: [40]u8 = .{0} ** 40,
+    ans_txt_n: usize = 0,
     phrase: [96]u8 = .{0} ** 96,
     phrase_n: usize = 0,
     meaning: [speech_f.MEANING_N]Fixed = .{0} ** speech_f.MEANING_N,
@@ -54,6 +59,8 @@ pub const OrganismF = struct {
     /// When an episode is retrieved, this is what the tract can say.
     speak_engrams: [MAX_SPEAK_ENGRAMS]SpeakEngram = [_]SpeakEngram{.{}} ** MAX_SPEAK_ENGRAMS,
     n_speak_engrams: usize = 0,
+    /// FIFO cursor for cold spill when STM engram ring is full (oldest-first).
+    speak_fifo_i: usize = 0,
     last_engram_i: usize = 0,
     has_last_engram: bool = false,
 
@@ -65,6 +72,7 @@ pub const OrganismF = struct {
         o.store.clear();
         o.speech.clear();
         o.n_speak_engrams = 0;
+        o.speak_fifo_i = 0;
         o.has_last_engram = false;
         return o;
     }
@@ -143,6 +151,7 @@ pub const OrganismF = struct {
 
     /// Bind an utterable fact to an episode at encode time (experience → sayable).
     /// This is motor/engram memory — not an intent parser or chat policy.
+    /// When STM ring is full: spill oldest (FIFO) to disk LTM, then overwrite slot.
     pub fn bindSpeakEngram(
         self: *OrganismF,
         ep_id: u32,
@@ -156,24 +165,67 @@ pub const OrganismF = struct {
         var i: usize = 0;
         while (i < self.n_speak_engrams) : (i += 1) {
             if (self.speak_engrams[i].valid and self.speak_engrams[i].cue_h == ch) {
-                self.writeEngram(i, ep_id, ch, answer, phrase, meaning);
+                self.writeEngram(i, ep_id, ch, cue, answer, phrase, meaning);
                 return;
             }
         }
         if (self.n_speak_engrams >= MAX_SPEAK_ENGRAMS) {
-            // STM full → spill cold engram to disk LTM, then O(1) slot overwrite.
-            const slot = @as(usize, @intCast(ch % @as(u32, @intCast(MAX_SPEAK_ENGRAMS))));
+            // STM full → spill oldest FIFO slot to disk LTM, then overwrite.
+            const slot = self.speak_fifo_i % MAX_SPEAK_ENGRAMS;
             const cold = &self.speak_engrams[slot];
             if (cold.valid) {
-                _ = ltm.spillEngram(cold.ep_id, cold.cue_h, cold.ans_h, cold.phrase[0..cold.phrase_n]);
+                _ = ltm.spillEngram(
+                    cold.ep_id,
+                    cold.cue_h,
+                    cold.ans_h,
+                    cold.phrase[0..cold.phrase_n],
+                    cold.cue_txt[0..cold.cue_txt_n],
+                    cold.ans_txt[0..cold.ans_txt_n],
+                );
                 ltm.noteSpillEvent();
             }
-            self.writeEngram(slot, ep_id, ch, answer, phrase, meaning);
+            self.writeEngram(slot, ep_id, ch, cue, answer, phrase, meaning);
+            self.speak_fifo_i = (slot + 1) % MAX_SPEAK_ENGRAMS;
             return;
         }
         const slot = self.n_speak_engrams;
-        self.writeEngram(slot, ep_id, ch, answer, phrase, meaning);
+        self.writeEngram(slot, ep_id, ch, cue, answer, phrase, meaning);
         self.n_speak_engrams += 1;
+    }
+
+    /// Proactive half-spill when ring is full (frees oldest half to LTM; keeps recent).
+    /// Call from think when eng is at capacity so growth does not only hash-overwrite.
+    pub fn spillSpeakEngramHalf(self: *OrganismF) u32 {
+        if (self.n_speak_engrams < MAX_SPEAK_ENGRAMS / 2) return 0;
+        const n = self.n_speak_engrams;
+        const half = n / 2;
+        var spilled: u32 = 0;
+        var i: usize = 0;
+        while (i < half) : (i += 1) {
+            const e = &self.speak_engrams[i];
+            if (!e.valid) continue;
+            if (ltm.spillEngram(
+                e.ep_id,
+                e.cue_h,
+                e.ans_h,
+                e.phrase[0..e.phrase_n],
+                e.cue_txt[0..e.cue_txt_n],
+                e.ans_txt[0..e.ans_txt_n],
+            )) spilled += 1;
+            e.valid = false;
+        }
+        // compact remaining to front
+        var w: usize = 0;
+        i = half;
+        while (i < n) : (i += 1) {
+            if (!self.speak_engrams[i].valid) continue;
+            if (w != i) self.speak_engrams[w] = self.speak_engrams[i];
+            w += 1;
+        }
+        self.n_speak_engrams = w;
+        self.speak_fifo_i = 0;
+        if (spilled > 0) ltm.noteSpillEvent();
+        return spilled;
     }
 
     fn writeEngram(
@@ -181,6 +233,7 @@ pub const OrganismF = struct {
         slot: usize,
         ep_id: u32,
         cue_h: u32,
+        cue: []const u8,
         answer: []const u8,
         phrase: []const u8,
         meaning: []const Fixed,
@@ -189,6 +242,10 @@ pub const OrganismF = struct {
         e.ep_id = ep_id;
         e.cue_h = cue_h;
         e.ans_h = memory_f.hashToken(answer);
+        e.cue_txt_n = @min(cue.len, e.cue_txt.len);
+        @memcpy(e.cue_txt[0..e.cue_txt_n], cue[0..e.cue_txt_n]);
+        e.ans_txt_n = @min(answer.len, e.ans_txt.len);
+        @memcpy(e.ans_txt[0..e.ans_txt_n], answer[0..e.ans_txt_n]);
         e.phrase_n = @min(phrase.len, e.phrase.len);
         @memcpy(e.phrase[0..e.phrase_n], phrase[0..e.phrase_n]);
         var j: usize = 0;
