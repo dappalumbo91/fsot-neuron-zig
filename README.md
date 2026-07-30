@@ -14,7 +14,8 @@ Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). Th
 | **Lean stamp** | monorepo `formal/` · `scientific_panel_ok` (0 sorry) |
 | **Language** | Zig 0.15+ |
 | **License** | Apache-2.0 |
-| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
+| **Learned capacity** | [`docs/LEARNED_CAPACITY.md`](docs/LEARNED_CAPACITY.md) — Zig intel stack + companion multi-hop snapshot |
+| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Python organism / experience school) |
 
 ## Quick start
 
