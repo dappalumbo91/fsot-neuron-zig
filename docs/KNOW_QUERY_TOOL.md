@@ -44,8 +44,24 @@ fsot_mind study-tool        # alias
 - Not an LLM chat that pretends to “know” without encode  
 - Not raw web dump without retain → re-probe proof  
 
+## Pending questions (stuck → note → move on)
+
+When lookup fails or the definition is unusable, the mind **does not loop**.
+
+It writes one JSONL line to:
+
+`data/results/THINK_PENDING_QUESTIONS.jsonl`
+
+```json
+{"id":3,"status":"open","question":"what is foobar?","reason":"query_miss","context":"...","cycle":42}
+```
+
+Reasons: `query_miss` | `def_unusable`  
+
+Later you (or a live API pass) can answer these; the organism already encoded an “unknown/pending” episode and continues thinking.
+
 ## Next
 
-- Stream more arXiv/wiki into think-hour as study cards (`literature_ingest_fixed.zig`)  
-- Pending-question list like SR-ITE `pending_questions.json` on the Zig organism  
-- Live OpenAlex query (same mailto policy as archive) when cache miss  
+- Resolve pending questions via `know-query-live` batch  
+- Live OpenAlex query (archive mailto policy) when cache miss  
+

@@ -70,11 +70,131 @@ var unique_idea_h: [MAX_UNIQUE_IDEAS]u32 = .{0} ** MAX_UNIQUE_IDEAS;
 var n_unique_ideas: usize = 0;
 var pair_seen_h: [MAX_PAIR_SEEN]u32 = .{0} ** MAX_PAIR_SEEN;
 var n_pair_seen: usize = 0;
+/// Words we already tried to discover (hit or miss) — never re-query in a loop.
+const MAX_ATTEMPTED: usize = 1024;
+var attempted_h: [MAX_ATTEMPTED]u32 = .{0} ** MAX_ATTEMPTED;
+var n_attempted: usize = 0;
+/// Open questions log — stuck lookups tucked away so the mind can move on.
+var pending_file: ?std.fs.File = null;
+var n_pending_logged: u32 = 0;
+
+const PENDING_PATH = "data/results/THINK_PENDING_QUESTIONS.jsonl";
 
 fn grownClear() void {
     n_grown = 0;
     n_unique_ideas = 0;
     n_pair_seen = 0;
+    n_attempted = 0;
+    n_pending_logged = 0;
+}
+
+fn openPendingLog() void {
+    std.fs.cwd().makePath("data/results") catch {};
+    // append so hour restarts keep history
+    pending_file = std.fs.cwd().openFile(PENDING_PATH, .{ .mode = .write_only }) catch blk: {
+        break :blk std.fs.cwd().createFile(PENDING_PATH, .{}) catch null;
+    };
+    if (pending_file) |f| f.seekFromEnd(0) catch {};
+}
+
+fn closePendingLog() void {
+    if (pending_file) |f| {
+        f.close();
+        pending_file = null;
+    }
+}
+
+/// Tuck an unsolved question away and move on (SR-ITE pending_questions spirit).
+fn notePendingQuestion(term: []const u8, reason: []const u8, context: []const u8, cycle: u32) void {
+    n_pending_logged += 1;
+    const f = pending_file orelse return;
+    var line: [384]u8 = undefined;
+    // JSONL one object per line (escape quotes in fields by dropping them)
+    var tbuf: [48]u8 = undefined;
+    var rbuf: [64]u8 = undefined;
+    var cbuf: [120]u8 = undefined;
+    const tn = scrubField(term, tbuf[0..]);
+    const rn = scrubField(reason, rbuf[0..]);
+    const cn = scrubField(context, cbuf[0..]);
+    const out = std.fmt.bufPrint(
+        line[0..],
+        "{{\"id\":{d},\"status\":\"open\",\"question\":\"what is {s}?\",\"reason\":\"{s}\",\"context\":\"{s}\",\"cycle\":{d}}}\n",
+        .{ n_pending_logged, tbuf[0..tn], rbuf[0..rn], cbuf[0..cn], cycle },
+    ) catch return;
+    f.writeAll(out) catch {};
+    f.sync() catch {};
+}
+
+fn scrubField(src: []const u8, dst: []u8) usize {
+    var o: usize = 0;
+    for (src) |c| {
+        if (o >= dst.len) break;
+        if (c == '"' or c == '\\' or c == '\n' or c == '\r') continue;
+        if (c >= 32 and c < 127) {
+            dst[o] = c;
+            o += 1;
+        }
+    }
+    return o;
+}
+
+fn alreadyAttempted(word: []const u8) bool {
+    const h = memory_f.hashToken(word);
+    var i: usize = 0;
+    while (i < n_attempted) : (i += 1) if (attempted_h[i] == h) return true;
+    return false;
+}
+
+fn markAttempted(word: []const u8) void {
+    const h = memory_f.hashToken(word);
+    if (alreadyAttempted(word)) return;
+    if (n_attempted < MAX_ATTEMPTED) {
+        attempted_h[n_attempted] = h;
+        n_attempted += 1;
+    } else {
+        attempted_h[h % MAX_ATTEMPTED] = h;
+    }
+}
+
+fn isStopOrJunk(word: []const u8) bool {
+    const junk = [_][]const u8{
+        "april", "august", "march", "january", "theory", "unclear", "possibly", "common",
+        "where", "which", "their", "there", "these", "those", "about", "after", "before",
+        "would", "could", "should", "being", "using", "other", "first", "second", "third",
+        "month", "year", "years", "days", "named", "comes", "roman", "latin", "greek",
+        "title", "abstract", "paper", "between", "every", "always", "often", "never",
+        "communities", "important", "properties", "several", "addition", "beginning",
+    };
+    for (junk) |j| {
+        if (word.len == j.len) {
+            var ok = true;
+            for (word, 0..) |c, i| {
+                const x = if (c >= 'A' and c <= 'Z') c + 32 else c;
+                if (x != j[i]) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) return true;
+        }
+    }
+    return false;
+}
+
+fn defLooksBad(def: []const u8) bool {
+    // Reject calendar-etymology dead-ends and empty noise
+    if (def.len < 12) return true;
+    // lowercase check for "unclear"
+    var i: usize = 0;
+    while (i + 7 <= def.len) : (i += 1) {
+        if ((def[i] == 'u' or def[i] == 'U') and i + 7 <= def.len) {
+            // rough: unclear
+            if (def[i + 1] == 'n' or def[i + 1] == 'N') {
+                if (def[i + 2] == 'c' or def[i + 2] == 'C') return true;
+            }
+        }
+    }
+    return false;
 }
 
 fn copyTo(dst: []u8, src: []const u8) usize {
@@ -214,6 +334,8 @@ pub const ThinkReport = struct {
     n_retrace_ok: u32 = 0,
     n_discover: u32 = 0,
     n_discover_hit: u32 = 0,
+    n_discover_miss: u32 = 0,
+    n_pending_open: u32 = 0,
     n_new_concepts: u32 = 0,
     n_brainstorm: u32 = 0,
     n_ideas_grounded: u32 = 0,
@@ -264,56 +386,102 @@ fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *
 }
 
 /// Pull candidate words from an engram phrase; if unknown, query tool → retain.
+/// Never re-query the same word (attempted set) — stops April/communities loops.
 fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32, allow_live: bool) void {
     if (org.n_speak_engrams == 0) return;
-    const ei = seed % @as(u32, @intCast(org.n_speak_engrams));
-    const eng = org.speak_engrams[ei];
-    if (!eng.valid or eng.phrase_n < 8) return;
-
-    // extract words length >= 5 from phrase
-    var wstart: usize = 0;
-    var wi: usize = 0;
-    var tried: u32 = 0;
-    while (wi <= eng.phrase_n and tried < 3) : (wi += 1) {
-        const end = wi == eng.phrase_n or eng.phrase[wi] == ' ';
-        if (!end) continue;
-        if (wi > wstart) {
-            var word = eng.phrase[wstart..wi];
-            // strip punctuation
-            while (word.len > 0 and !((word[0] >= 'a' and word[0] <= 'z') or (word[0] >= 'A' and word[0] <= 'Z')))
-                word = word[1..];
-            while (word.len > 0) {
-                const c = word[word.len - 1];
-                if ((c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')) break;
-                word = word[0 .. word.len - 1];
+    // Prefer diverse engrams: skip calendar/meta phrases stuck in ring
+    var ei = seed % @as(u32, @intCast(org.n_speak_engrams));
+    var skip: u32 = 0;
+    while (skip < 8) : (skip += 1) {
+        const eng = org.speak_engrams[ei];
+        ei = (ei +% 3) % @as(u32, @intCast(org.n_speak_engrams));
+        if (!eng.valid or eng.phrase_n < 8) continue;
+        // skip stuck April etymology / "unclear" phrases
+        var bad = false;
+        var pi: usize = 0;
+        while (pi + 6 < eng.phrase_n) : (pi += 1) {
+            if (eng.phrase[pi] == 'u' or eng.phrase[pi] == 'U') {
+                if (pi + 7 <= eng.phrase_n and (eng.phrase[pi + 1] == 'n' or eng.phrase[pi + 1] == 'N')) {
+                    bad = true;
+                    break;
+                }
             }
-            if (word.len >= 5 and word.len <= 24) {
-                // skip if already known
-                if (!recallOk(org, word)) {
-                    rep.n_discover += 1;
-                    tried += 1;
-                    const hit = query_tool.queryConcept(word, allow_live);
-                    if (hit.found) {
-                        rep.n_discover_hit += 1;
-                        // first token as answer anchor
-                        var ans = hit.def[0..hit.def_n];
-                        if (std.mem.indexOfScalar(u8, ans, ' ')) |sp| ans = ans[0..@min(sp, MAX_ANS_LEN)];
-                        if (ans.len == 0) ans = word;
-                        var utter_buf: [MAX_UTTER_LEN]u8 = undefined;
-                        const un = (std.fmt.bufPrint(utter_buf[0..], "{s}: {s}", .{ word, hit.def[0..@min(hit.def_n, 80)] }) catch word).len;
-                        const before = n_grown;
-                        studyFact(org, nm, word, ans, utter_buf[0..un]);
-                        rep.n_motor += 1;
-                        if (n_grown > before) {
-                            rep.n_new_concepts += 1;
-                            rep.last_new_n = @min(word.len, rep.last_new.len);
-                            @memcpy(rep.last_new[0..rep.last_new_n], word[0..rep.last_new_n]);
+        }
+        if (bad) continue;
+
+        var wstart: usize = 0;
+        var wi: usize = 0;
+        var tried: u32 = 0;
+        while (wi <= eng.phrase_n and tried < 2) : (wi += 1) {
+            const end = wi == eng.phrase_n or eng.phrase[wi] == ' ';
+            if (!end) continue;
+            if (wi > wstart) {
+                var word = eng.phrase[wstart..wi];
+                while (word.len > 0 and !((word[0] >= 'a' and word[0] <= 'z') or (word[0] >= 'A' and word[0] <= 'Z')))
+                    word = word[1..];
+                while (word.len > 0) {
+                    const c = word[word.len - 1];
+                    if ((c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')) break;
+                    word = word[0 .. word.len - 1];
+                }
+                // lowercase copy for stable attempt keys
+                var wbuf: [32]u8 = undefined;
+                if (word.len >= 5 and word.len <= 24 and word.len <= wbuf.len) {
+                    var wj: usize = 0;
+                    while (wj < word.len) : (wj += 1) {
+                        const c = word[wj];
+                        wbuf[wj] = if (c >= 'A' and c <= 'Z') c + 32 else c;
+                    }
+                    const wlow = wbuf[0..word.len];
+                    if (!isStopOrJunk(wlow) and !alreadyAttempted(wlow) and !recallOk(org, wlow)) {
+                        markAttempted(wlow);
+                        rep.n_discover += 1;
+                        tried += 1;
+                        const hit = query_tool.queryConcept(wlow, allow_live);
+                        if (hit.found and !defLooksBad(hit.def[0..hit.def_n])) {
+                            rep.n_discover_hit += 1;
+                            var ans = hit.def[0..hit.def_n];
+                            if (std.mem.indexOfScalar(u8, ans, ' ')) |sp| ans = ans[0..@min(sp, MAX_ANS_LEN)];
+                            if (ans.len == 0) ans = wlow;
+                            var utter_buf: [MAX_UTTER_LEN]u8 = undefined;
+                            const un = (std.fmt.bufPrint(utter_buf[0..], "{s}: {s}", .{ wlow, hit.def[0..@min(hit.def_n, 80)] }) catch wlow).len;
+                            const before_g = n_grown;
+                            const before_e = org.n_speak_engrams;
+                            studyFact(org, nm, wlow, ans, utter_buf[0..un]);
+                            rep.n_motor += 1;
+                            if (n_grown > before_g or org.n_speak_engrams >= before_e) {
+                                rep.n_new_concepts += 1;
+                                rep.last_new_n = @min(wlow.len, rep.last_new.len);
+                                @memcpy(rep.last_new[0..rep.last_new_n], wlow[0..rep.last_new_n]);
+                            }
+                        } else {
+                            // FALLBACK: tuck away as open question and MOVE ON (no loop)
+                            rep.n_discover_miss += 1;
+                            rep.n_pending_open += 1;
+                            const reason: []const u8 = if (!hit.found) "query_miss" else "def_unusable";
+                            var ctx: [96]u8 = undefined;
+                            const cn = @min(eng.phrase_n, ctx.len);
+                            @memcpy(ctx[0..cn], eng.phrase[0..cn]);
+                            notePendingQuestion(wlow, reason, ctx[0..cn], rep.n_cycles);
+                            // encode "I don't know yet" episode (open curiosity slot)
+                            var ufeats: [8]Fixed = undefined;
+                            cueFeat(wlow, &ufeats);
+                            const utoks = [_]u32{
+                                memory_f.hashToken("self"),
+                                memory_f.hashToken("unknown"),
+                                memory_f.hashToken(wlow),
+                                0,
+                                0,
+                                memory_f.hashToken("pending"),
+                            };
+                            _ = org.store.encode(&org.brain, ufeats[0..], 0b000111, utoks);
                         }
                     }
                 }
             }
+            wstart = wi + 1;
         }
-        wstart = wi + 1;
+        if (tried > 0) return; // one engram per discover pass when we found candidates
     }
 }
 
@@ -332,12 +500,14 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
         ia = (seed +% tries *% 11) % n;
         ib = (seed *% 17 +% tries *% 5 +% 3) % n;
         if (ia == ib) continue;
-        const ha = memory_f.hashToken(grown[ia].cue[0..grown[ia].cue_n]);
-        const hb = memory_f.hashToken(grown[ib].cue[0..grown[ib].cue_n]);
-        if (!notePair(ha, hb)) continue; // already brainstormed this pair
-
         const ca = grown[ia].cue[0..grown[ia].cue_n];
         const cb = grown[ib].cue[0..grown[ib].cue_n];
+        // skip calendar / junk cues in brainstorm
+        if (isStopOrJunk(ca) or isStopOrJunk(cb)) continue;
+        const ha = memory_f.hashToken(ca);
+        const hb = memory_f.hashToken(cb);
+        if (!notePair(ha, hb)) continue; // already brainstormed this pair
+
         if (!recallOk(org, ca) or !recallOk(org, cb)) {
             rep.n_ideas_rejected += 1;
             continue;
@@ -347,11 +517,20 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
         var idea: [128]u8 = undefined;
         var pos: usize = 0;
         if (org.engramForCue(ha)) |ea| {
+            // skip stuck unclear phrases
+            if (defLooksBad(ea.phrase[0..ea.phrase_n])) {
+                rep.n_ideas_rejected += 1;
+                continue;
+            }
             const n1 = @min(ea.phrase_n, 55);
             @memcpy(idea[0..n1], ea.phrase[0..n1]);
             pos = n1;
         } else {
             pos = copyTo(idea[0..], grown[ia].utter[0..grown[ia].utter_n]);
+        }
+        if (defLooksBad(idea[0..pos])) {
+            rep.n_ideas_rejected += 1;
+            continue;
         }
         if (pos + 5 < idea.len) {
             idea[pos] = ' ';
@@ -466,7 +645,10 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     var log_ptr: ?*std.fs.File = null;
     if (log_file) |*f| log_ptr = f;
 
-    hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 live_query={}\n", .{cfg.allow_live_query});
+    openPendingLog();
+    defer closePendingLog();
+
+    hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 live_query={} pending_log={s}\n", .{ cfg.allow_live_query, PENDING_PATH });
 
     // ── BOOT: seed world ──────────────────────────────────────────────
     for (SEED_WORLD) |f| {
@@ -544,7 +726,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             const mins = elapsed / 60_000;
             const secs = (elapsed % 60_000) / 1000;
             hbPrint(log_ptr,
-                "THINK_HB t={d}m{d:0>2}s cy={d} retr={d}/{d} disc={d}/{d} new={d} ideas={d} uniq={d} grown={d} eng={d} eps={d}\n",
+                "THINK_HB t={d}m{d:0>2}s cy={d} retr={d}/{d} disc={d}/{d} miss={d} pending={d} new={d} ideas={d} uniq={d} grown={d} eng={d}\n",
                 .{
                     mins,
                     secs,
@@ -553,12 +735,13 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                     rep.n_retrace,
                     rep.n_discover_hit,
                     rep.n_discover,
+                    rep.n_discover_miss,
+                    rep.n_pending_open,
                     rep.n_new_concepts,
                     rep.n_ideas_grounded,
                     rep.n_ideas_unique,
                     n_grown,
                     org.n_speak_engrams,
-                    org.store.n,
                 },
             );
             if (rep.last_new_n > 0) {
@@ -587,15 +770,19 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.idea_ground_rate = @as(f64, @floatFromInt(rep.n_ideas_grounded)) / @as(f64, @floatFromInt(rep.n_brainstorm));
     }
 
-    hbPrint(log_ptr, "THINK_DONE cy={d} ms={d} lit={d} new_concepts={d} uniq_ideas={d} grown={d} eng={d}\n", .{
+    hbPrint(log_ptr, "THINK_DONE cy={d} ms={d} lit={d} new={d} uniq={d} pending={d} grown={d} eng={d}\n", .{
         rep.n_cycles,
         rep.duration_ms,
         rep.n_lit_cards,
         rep.n_new_concepts,
         rep.n_ideas_unique,
+        rep.n_pending_open,
         rep.n_grown,
         rep.n_engrams,
     });
+    if (rep.n_pending_open > 0) {
+        hbPrint(log_ptr, "THINK_PENDING_LOG {s} open_questions={d} (review later / clarify)\n", .{ PENDING_PATH, rep.n_pending_open });
+    }
 
     rep.ok = rep.n_studied >= 10 and
         rep.n_cycles >= 1 and

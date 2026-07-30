@@ -186,10 +186,14 @@ fn queryWikiFiles(term: []const u8, hit: *QueryHit) bool {
                 while (nl < art.len and art[nl] != '\n') : (nl += 1) {}
                 if (nl < 1) continue;
                 const title = art[0..nl];
-                // title match or first word
-                if (!lowerEq(title, term) and !containsLower(title, term)) continue;
+                // STRICT: title must equal term (or title is single-word equal). No fuzzy contains —
+                // "name" matching "April" article via "name" in body/title caused April etymology loops.
+                var title_trim = title;
+                while (title_trim.len > 0 and title_trim[0] == ' ') title_trim = title_trim[1..];
+                while (title_trim.len > 0 and title_trim[title_trim.len - 1] == ' ') title_trim = title_trim[0 .. title_trim.len - 1];
+                if (!lowerEq(title_trim, term)) continue;
                 const body = if (nl + 1 < art.len) art[nl + 1 ..] else title;
-                // first sentence-ish
+                // first useful sentence (skip "It is unclear…" dead-ends)
                 var end: usize = @min(body.len, 140);
                 var j: usize = 0;
                 while (j < end) : (j += 1) {
@@ -198,7 +202,22 @@ fn queryWikiFiles(term: []const u8, hit: *QueryHit) bool {
                         break;
                     }
                 }
-                copyDef(hit, body[0..end]);
+                var sent = body[0..end];
+                // if first sentence is unhelpful, try next sentence
+                if (containsLower(sent, "unclear") or (containsLower(sent, "possibly") and sent.len < 40)) {
+                    var k = end;
+                    while (k < body.len and (body[k] == ' ' or body[k] == '\n')) : (k += 1) {}
+                    var k2 = k;
+                    while (k2 < body.len and k2 - k < 140) : (k2 += 1) {
+                        if (body[k2] == '.' and k2 - k > 20) {
+                            k2 += 1;
+                            break;
+                        }
+                    }
+                    if (k2 > k) sent = body[k..k2];
+                }
+                if (containsLower(sent, "unclear as to where")) continue;
+                copyDef(hit, sent);
                 setSrc(hit, "simple-wiki");
                 hit.via = "simple-wiki";
                 return hit.found;

@@ -181,6 +181,24 @@ pub fn runKnowQuery(allow_live: bool) KnowQueryReport {
         const hit = query_tool.queryConcept(term, allow_live);
         if (!hit.found) {
             rep.n_query_miss += 1;
+            // Tuck away for later clarification (same safety as think pending log)
+            std.fs.cwd().makePath("data/results") catch {};
+            if (std.fs.cwd().openFile("data/results/THINK_PENDING_QUESTIONS.jsonl", .{ .mode = .write_only })) |pf| {
+                defer pf.close();
+                pf.seekFromEnd(0) catch {};
+                var line: [200]u8 = undefined;
+                if (std.fmt.bufPrint(line[0..], "{{\"status\":\"open\",\"question\":\"what is {s}?\",\"reason\":\"query_miss\",\"via\":\"know-query\"}}\n", .{term})) |out| {
+                    pf.writeAll(out) catch {};
+                } else |_| {}
+            } else |_| {
+                if (std.fs.cwd().createFile("data/results/THINK_PENDING_QUESTIONS.jsonl", .{})) |pf| {
+                    defer pf.close();
+                    var line: [200]u8 = undefined;
+                    if (std.fmt.bufPrint(line[0..], "{{\"status\":\"open\",\"question\":\"what is {s}?\",\"reason\":\"query_miss\",\"via\":\"know-query\"}}\n", .{term})) |out| {
+                        pf.writeAll(out) catch {};
+                    } else |_| {}
+                } else |_| {}
+            }
             continue;
         }
         rep.n_query_hit += 1;
