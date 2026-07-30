@@ -102,6 +102,7 @@ const bio_articulate_fixed = @import("bio_articulate_fixed.zig");
 const bio_learn_eval_fixed = @import("bio_learn_eval_fixed.zig");
 const self_study_fixed = @import("self_study_fixed.zig");
 const bio_converse_fixed = @import("bio_converse_fixed.zig");
+const internal_think_fixed = @import("internal_think_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -840,13 +841,90 @@ fn runBioConverse(do_tts: bool) void {
 }
 
 fn runBioSuite() void {
-    std.debug.print("=== FSOT BIO SUITE (learn + self-study + converse + sensory) ===\n", .{});
+    std.debug.print("=== FSOT BIO SUITE (learn + self-study + converse + think + sensory) ===\n", .{});
     std.debug.print("scope: rebuild neurological function from FSOT+genetics — harder than wet MEA borrow\n", .{});
     runBioLearnEval();
     runSelfStudy();
     runBioConverse(false);
+    runInternalThink(0); // probe (not hour)
     runMnistAccuracy();
     std.debug.print("FSOT_BIO_SUITE PASS\n", .{});
+}
+
+fn runInternalThink(minutes: u32) void {
+    if (minutes == 0) {
+        std.debug.print("=== FSOT INTERNAL THINK (retrace · cross-check · brainstorm · self-correct) ===\n", .{});
+        std.debug.print("doctrine: scientific method on organism memory — NOT LLM chain-of-thought\n", .{});
+        const r = internal_think_fixed.runThinkProbe();
+        std.debug.print(
+            "THINK studied={d} cycles={d} retrace={d}/{d} acc={e} cross={d}/{d} acc={e} ideas={d}/{d} reject={d} correct={d} sleep={d} motor={d} eps={d} eng={d} spikes={d} dur_ms={d}\n",
+            .{
+                r.n_studied,
+                r.n_cycles,
+                r.n_retrace_ok,
+                r.n_retrace,
+                r.retrace_acc,
+                r.n_cross_ok,
+                r.n_cross,
+                r.cross_acc,
+                r.n_ideas_grounded,
+                r.n_brainstorm,
+                r.n_ideas_rejected,
+                r.n_self_correct,
+                r.n_sleep,
+                r.n_motor,
+                r.n_episodes,
+                r.n_engrams,
+                r.spikes,
+                r.duration_ms,
+            },
+        );
+        if (r.last_idea_n > 0) std.debug.print("last_idea=\"{s}\"\n", .{r.last_idea[0..r.last_idea_n]});
+        if (r.ok) {
+            std.debug.print("FSOT_INTERNAL_THINK PASS\n", .{});
+            std.debug.print("FSOT_BRAINSTORM_GROUNDED_OK\n", .{});
+            std.debug.print("FSOT_SELF_CORRECT_OK\n", .{});
+        } else {
+            std.debug.print("FSOT_INTERNAL_THINK FAIL\n", .{});
+            std.process.exit(1);
+        }
+        return;
+    }
+    std.debug.print("=== FSOT THINK HOUR (top-to-bottom internal loop, {d} minutes) ===\n", .{minutes});
+    std.debug.print("path: boot world → retrace → cross-check → brainstorm → self-correct → sleep\n", .{});
+    std.debug.print("heartbeat every 30s; wall-clock duration={d} min\n", .{minutes});
+    const r = internal_think_fixed.runThinkMinutes(minutes);
+    std.debug.print(
+        "THINK_HOUR done min={d} cycles={d} retrace={d}/{d} acc={e} cross={d}/{d} acc={e} ideas={d}/{d} reject={d} correct={d} sleep={d} motor={d} eps={d} eng={d} spikes={d} ms={d}\n",
+        .{
+            minutes,
+            r.n_cycles,
+            r.n_retrace_ok,
+            r.n_retrace,
+            r.retrace_acc,
+            r.n_cross_ok,
+            r.n_cross,
+            r.cross_acc,
+            r.n_ideas_grounded,
+            r.n_brainstorm,
+            r.n_ideas_rejected,
+            r.n_self_correct,
+            r.n_sleep,
+            r.n_motor,
+            r.n_episodes,
+            r.n_engrams,
+            r.spikes,
+            r.duration_ms,
+        },
+    );
+    if (r.last_idea_n > 0) std.debug.print("last_idea=\"{s}\"\n", .{r.last_idea[0..r.last_idea_n]});
+    if (r.ok) {
+        std.debug.print("FSOT_THINK_HOUR PASS\n", .{});
+        std.debug.print("FSOT_LONG_THINK_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_THINK_HOUR FAIL\n", .{});
+        std.process.exit(1);
+    }
 }
 
 fn runBioArticulate(do_tts: bool) void {
@@ -2327,6 +2405,33 @@ pub fn main() !void {
         runBioArticulate(false);
     } else if (std.mem.eql(u8, mode, "bio-articulate-speak") or std.mem.eql(u8, mode, "articulate-speak") or std.mem.eql(u8, mode, "say-fact-speak")) {
         runBioArticulate(true);
+    } else if (std.mem.eql(u8, mode, "think") or std.mem.eql(u8, mode, "internal-think") or std.mem.eql(u8, mode, "brainstorm") or std.mem.eql(u8, mode, "self-correct")) {
+        // Internal loop: retrace → cross-check → brainstorm → self-correct (probe)
+        runInternalThink(0);
+    } else if (std.mem.eql(u8, mode, "think-hour") or std.mem.eql(u8, mode, "think_hour") or std.mem.eql(u8, mode, "hour-think")) {
+        runInternalThink(60);
+    } else if (std.mem.eql(u8, mode, "think-min") or std.mem.eql(u8, mode, "think_min")) {
+        var mins: u32 = 5;
+        if (args.len >= 3) {
+            mins = std.fmt.parseInt(u32, args[2], 10) catch 5;
+            if (mins == 0) mins = 1;
+            if (mins > 24 * 60) mins = 24 * 60;
+        }
+        runInternalThink(mins);
+    } else if (std.mem.eql(u8, mode, "boot-think") or std.mem.eql(u8, mode, "top-to-bottom") or std.mem.eql(u8, mode, "t2b")) {
+        // Top-to-bottom boot: bio gates then long internal think (default 60 min)
+        std.debug.print("=== FSOT TOP-TO-BOTTOM BOOT → THINK ===\n", .{});
+        runBioLearnEval();
+        runSelfStudy();
+        runBioConverse(false);
+        runInternalThink(0);
+        var mins: u32 = 60;
+        if (args.len >= 3) {
+            mins = std.fmt.parseInt(u32, args[2], 10) catch 60;
+            if (mins == 0) mins = 60;
+        }
+        std.debug.print("--- entering long think ({d} min) ---\n", .{mins});
+        runInternalThink(mins);
     } else if (std.mem.eql(u8, mode, "cross-modal") or std.mem.eql(u8, mode, "cross_modal") or std.mem.eql(u8, mode, "av") or std.mem.eql(u8, mode, "crossmodal")) {
         runCrossModal();
     } else if (std.mem.eql(u8, mode, "bio-io") or std.mem.eql(u8, mode, "bio_io") or std.mem.eql(u8, mode, "sensory") or std.mem.eql(u8, mode, "io")) {
@@ -2569,7 +2674,10 @@ pub fn main() !void {
         std.debug.print("  self-study     = read materials → try → re-read → sleep → prove\n", .{});
         std.debug.print("  bio-suite      = learn + self-study + converse + MNIST\n", .{});
         std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
-        std.debug.print("  converse       = same (NOT LLM chat — bio retrieve path)\n", .{});
+        std.debug.print("  think          = internal retrace/cross-check/brainstorm/self-correct\n", .{});
+        std.debug.print("  think-hour     = same loop for 60 wall-clock minutes\n", .{});
+        std.debug.print("  think-min N    = internal think for N minutes\n", .{});
+        std.debug.print("  boot-think     = top-to-bottom gates then 60min think (or boot-think N)\n", .{});
         std.debug.print("  bio-articulate = teach→retrieve→motor→self-hear\n", .{});
         std.debug.print("  mnist          = classic NN sensory discrimination gate\n", .{});
         std.debug.print("  speakers       = formant/DAC smoke only (NOT English)\n", .{});
