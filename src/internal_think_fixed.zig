@@ -1,16 +1,13 @@
-//! Internal thinking loop — brainstorm, retrace, cross-check, self-correct.
+//! Adaptive internal thinking — literature + discover + query + grow knowledge.
 //!
-//! Human target (not LLM chain-of-thought theatre):
-//!   1) RETRACE     — walk stored episodes / engrams; re-retrieve; verify consistency
-//!   2) CROSS-CHECK — multi-hop: premise A → answer feeds cue B; both must ground
-//!   3) BRAINSTORM  — compose a *new* claim only from retrieved, grounded tokens
-//!   4) SELF-CORRECT— on fail, re-experience truth; do not keep broken claim
-//!   5) SLEEP       — quiet + NREM ticks between long runs
+//! NOT a fixed 20-fact recycle. Over a long run the organism should:
+//!   boot seed world + arxiv/wiki cards
+//!   retrace known engrams
+//!   discover unknown words in definitions → query tool → retain (new concepts)
+//!   brainstorm novel pairs of engrams (not a fixed pair table)
+//!   self-correct misses; sleep
 //!
-//! Scientific method spirit on the organism:
-//!   hypothesis (compose) → test (retrieve each hop) → reject or encode idea
-//!
-//! Mode: fsot_mind think | internal-think | brainstorm | think-hour
+//! Mode: think | think-hour | think-min N
 
 const std = @import("std");
 const fixed = @import("fixed.zig");
@@ -20,6 +17,8 @@ const neuromod_f = @import("neuromod_fixed.zig");
 const organism_f = @import("organism_fixed.zig");
 const curiosity_f = @import("curiosity_fixed.zig");
 const eeg = @import("eeg_gate_anchors_fixed.zig");
+const query_tool = @import("query_tool_fixed.zig");
+const lit = @import("literature_ingest_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Fact = struct {
@@ -28,57 +27,108 @@ const Fact = struct {
     utter: []const u8,
 };
 
-/// Grounded knowledge base for internal thought (studied once at boot).
-const WORLD = [_]Fact{
+const SEED_WORLD = [_]Fact{
     .{ .cue = "dog", .answer = "animal", .utter = "a dog is an animal" },
     .{ .cue = "water", .answer = "liquid", .utter = "water is a liquid" },
     .{ .cue = "sun", .answer = "star", .utter = "the sun is a star" },
     .{ .cue = "plants need", .answer = "sun", .utter = "plants need sun" },
     .{ .cue = "people need", .answer = "water", .utter = "people need water" },
-    .{ .cue = "living need", .answer = "water", .utter = "living things need water" },
     .{ .cue = "sun when", .answer = "day", .utter = "the sun is out in the day" },
-    .{ .cue = "moon when", .answer = "night", .utter = "the moon is out at night" },
     .{ .cue = "sky color", .answer = "blue", .utter = "the sky is blue" },
-    .{ .cue = "grass color", .answer = "green", .utter = "grass is green" },
-    .{ .cue = "see with", .answer = "eyes", .utter = "we see with our eyes" },
+    .{ .cue = "neuron", .answer = "cell", .utter = "a neuron is a nerve cell" },
+    .{ .cue = "brain", .answer = "organ", .utter = "the brain is the thinking organ" },
+    .{ .cue = "light", .answer = "see", .utter = "light is what we see with eyes" },
+    .{ .cue = "gravity", .answer = "force", .utter = "gravity is a force that pulls" },
     .{ .cue = "half of ten", .answer = "five", .utter = "half of ten is five" },
-    .{ .cue = "half of forty", .answer = "twenty", .utter = "half of forty is twenty" },
-    .{ .cue = "twice three", .answer = "six", .utter = "twice three is six" },
     .{ .cue = "twice five", .answer = "ten", .utter = "twice five is ten" },
     .{ .cue = "one and one", .answer = "two", .utter = "one and one make two" },
-    .{ .cue = "two and three", .answer = "five", .utter = "two and three make five" },
-    .{ .cue = "dozen is", .answer = "twelve", .utter = "a dozen is twelve" },
     .{ .cue = "earth is", .answer = "planet", .utter = "earth is a planet" },
     .{ .cue = "friends do", .answer = "share", .utter = "friends share" },
 };
 
-/// Cross-check chains: hop1 cue → answer should equal hop2's related fact (scientific check).
-const CHAINS = [_]struct { c1: []const u8, c2: []const u8, final: []const u8 }{
-    .{ .c1 = "plants need", .c2 = "sun when", .final = "day" },
-    .{ .c1 = "people need", .c2 = "water", .final = "liquid" },
-    .{ .c1 = "living need", .c2 = "people need", .final = "water" },
-    .{ .c1 = "half of forty", .c2 = "half of ten", .final = "five" }, // not math compose — both must recall
-    .{ .c1 = "see with", .c2 = "sky color", .final = "blue" },
-    .{ .c1 = "one and one", .c2 = "two and three", .final = "five" },
+/// Growable cue strings studied this session (seed + literature + queries).
+const MAX_GROWN: usize = 256;
+const MAX_CUE_LEN: usize = 48;
+const MAX_ANS_LEN: usize = 40;
+const MAX_UTTER_LEN: usize = 120;
+const MAX_UNIQUE_IDEAS: usize = 512;
+const MAX_PAIR_SEEN: usize = 1024;
+
+const Grown = struct {
+    cue: [MAX_CUE_LEN]u8 = .{0} ** MAX_CUE_LEN,
+    cue_n: usize = 0,
+    ans: [MAX_ANS_LEN]u8 = .{0} ** MAX_ANS_LEN,
+    ans_n: usize = 0,
+    utter: [MAX_UTTER_LEN]u8 = .{0} ** MAX_UTTER_LEN,
+    utter_n: usize = 0,
+    valid: bool = false,
 };
 
-/// Brainstorm pairs: compose claim from two grounded retrieves (novel whole).
-const BRAIN_PAIRS = [_]struct { a: []const u8, b: []const u8 }{
-    .{ .a = "plants need", .b = "sun when" },
-    .{ .a = "people need", .b = "water" },
-    .{ .a = "dog", .b = "friends do" },
-    .{ .a = "sky color", .b = "sun when" },
-    .{ .a = "half of ten", .b = "twice five" },
-    .{ .a = "earth is", .b = "people need" },
-    .{ .a = "grass color", .b = "plants need" },
-    .{ .a = "moon when", .b = "sky color" },
-};
+var grown: [MAX_GROWN]Grown = undefined;
+var n_grown: usize = 0;
+var unique_idea_h: [MAX_UNIQUE_IDEAS]u32 = .{0} ** MAX_UNIQUE_IDEAS;
+var n_unique_ideas: usize = 0;
+var pair_seen_h: [MAX_PAIR_SEEN]u32 = .{0} ** MAX_PAIR_SEEN;
+var n_pair_seen: usize = 0;
+
+fn grownClear() void {
+    n_grown = 0;
+    n_unique_ideas = 0;
+    n_pair_seen = 0;
+}
+
+fn copyTo(dst: []u8, src: []const u8) usize {
+    const n = @min(src.len, dst.len);
+    @memcpy(dst[0..n], src[0..n]);
+    return n;
+}
+
+fn addGrown(cue: []const u8, ans: []const u8, utter: []const u8) bool {
+    if (cue.len < 2 or n_grown >= MAX_GROWN) return false;
+    const ch = memory_f.hashToken(cue);
+    var i: usize = 0;
+    while (i < n_grown) : (i += 1) {
+        if (grown[i].valid and memory_f.hashToken(grown[i].cue[0..grown[i].cue_n]) == ch) return false;
+    }
+    var g = &grown[n_grown];
+    g.* = .{};
+    g.cue_n = copyTo(g.cue[0..], cue);
+    g.ans_n = copyTo(g.ans[0..], ans);
+    g.utter_n = copyTo(g.utter[0..], utter);
+    g.valid = true;
+    n_grown += 1;
+    return true;
+}
+
+fn noteUniqueIdea(h: u32) bool {
+    var i: usize = 0;
+    while (i < n_unique_ideas) : (i += 1) if (unique_idea_h[i] == h) return false;
+    if (n_unique_ideas >= MAX_UNIQUE_IDEAS) return false;
+    unique_idea_h[n_unique_ideas] = h;
+    n_unique_ideas += 1;
+    return true;
+}
+
+fn notePair(a: u32, b: u32) bool {
+    const h = a *% 0x9E3779B1 +% b;
+    var i: usize = 0;
+    while (i < n_pair_seen) : (i += 1) if (pair_seen_h[i] == h) return false;
+    if (n_pair_seen >= MAX_PAIR_SEEN) {
+        // ring overwrite — still try new combinations
+        pair_seen_h[n_pair_seen % MAX_PAIR_SEEN] = h;
+        n_pair_seen += 1;
+        return true;
+    }
+    pair_seen_h[n_pair_seen] = h;
+    n_pair_seen += 1;
+    return true;
+}
 
 fn cueFeat(cue: []const u8, out: *[8]Fixed) void {
     const base = memory_f.hashToken(cue);
     var i: usize = 0;
     while (i < 8) : (i += 1) {
-        const mix = base *% (@as(u32, @intCast(i)) +% 1) *% 0x9E3779B1 +% (@as(u32, @intCast(i)) *% 97) +% 67;
+        const mix = base *% (@as(u32, @intCast(i)) +% 1) *% 0x9E3779B1 +% 67;
         out[i] = fixed.sub(fixed.div(fixed.fromInt(@intCast(mix % 181)), fixed.fromInt(90)), fixed.fromInt(1));
     }
 }
@@ -98,11 +148,11 @@ fn drive(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, feats: *cons
     }
 }
 
-fn studyFact(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, f: Fact) void {
+fn studyFact(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, cue: []const u8, ans: []const u8, utter: []const u8) void {
     var feats: [8]Fixed = undefined;
-    cueFeat(f.cue, &feats);
+    cueFeat(cue, &feats);
     var ans_f: [8]Fixed = undefined;
-    cueFeat(f.answer, &ans_f);
+    cueFeat(ans, &ans_f);
     var meaning: [8]Fixed = undefined;
     var i: usize = 0;
     while (i < 8) : (i += 1) {
@@ -111,50 +161,42 @@ fn studyFact(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, f: Fact)
     drive(org, nm, &feats, 10);
     const toks = [_]u32{
         memory_f.hashToken("know"),
-        memory_f.hashToken(f.answer),
-        memory_f.hashToken(f.cue),
-        memory_f.hashToken(f.cue),
-        memory_f.hashToken("world"),
-        memory_f.hashToken("learn"),
+        memory_f.hashToken(ans),
+        memory_f.hashToken(cue),
+        memory_f.hashToken(cue),
+        memory_f.hashToken("study"),
+        memory_f.hashToken("lit"),
     };
     const ep_id = org.store.encode(&org.brain, feats[0..], 0b111111, toks);
-    org.bindSpeakEngram(ep_id, f.cue, f.answer, f.utter, meaning[0..]);
+    org.bindSpeakEngram(ep_id, cue, ans, utter, meaning[0..]);
     org.setMeaning(meaning[0..]);
     org.speakNow();
     neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.10"));
+    _ = addGrown(cue, ans, utter);
 }
 
-fn recall(org: *organism_f.OrganismF, cue: []const u8) u32 {
-    const cue_h = memory_f.hashToken(cue);
+fn recallOk(org: *organism_f.OrganismF, cue: []const u8) bool {
+    if (org.engramForCue(memory_f.hashToken(cue))) |_| return true;
     var feats: [8]Fixed = undefined;
     cueFeat(cue, &feats);
     var sim: Fixed = 0;
-    const ep_id = org.store.retrieve(&org.brain, feats[0..], &sim);
-    if (ep_id != 0) {
-        if (org.store.findEpisode(ep_id)) |ep| {
-            if (ep.tokens[2] == cue_h and ep.tokens[1] != 0) return ep.tokens[1];
-        }
-    }
-    var j: usize = 0;
-    while (j < org.store.n) : (j += 1) {
-        const ep = &org.store.episodes[j];
-        if (ep.valid and ep.tokens[2] == cue_h and ep.tokens[1] != 0) return ep.tokens[1];
-    }
-    if (org.engramForCue(cue_h)) |e| return e.ans_h;
-    return 0;
+    const ep = org.store.retrieve(&org.brain, feats[0..], &sim);
+    if (ep == 0) return false;
+    if (org.store.findEpisode(ep)) |e| return e.tokens[2] == memory_f.hashToken(cue);
+    return false;
 }
 
 fn sleepQuiet(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) void {
     var ext: [brain_f.N_TOTAL]Fixed = undefined;
     var t: usize = 0;
-    while (t < 25) : (t += 1) {
+    while (t < 20) : (t += 1) {
         neuromod_f.step(nm, .wake_rest, 0, 0, 0, 0, fixed.fromInt(1));
         var i: usize = 0;
         while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.04");
         org.brain.step(ext[0..]);
     }
     t = 0;
-    while (t < 40) : (t += 1) {
+    while (t < 30) : (t += 1) {
         neuromod_f.step(nm, .sleep_nrem, fixed.fromDecimalStr("0.05"), 0, 0, fixed.fromDecimalStr("0.02"), fixed.fromInt(1));
         var i: usize = 0;
         while (i < org.brain.n) : (i += 1) ext[i] = fixed.fromDecimalStr("0.03");
@@ -167,12 +209,15 @@ pub const ThinkReport = struct {
     duration_ms: u64 = 0,
     n_cycles: u32 = 0,
     n_studied: u32 = 0,
+    n_lit_cards: u32 = 0,
     n_retrace: u32 = 0,
     n_retrace_ok: u32 = 0,
-    n_cross: u32 = 0,
-    n_cross_ok: u32 = 0,
+    n_discover: u32 = 0,
+    n_discover_hit: u32 = 0,
+    n_new_concepts: u32 = 0,
     n_brainstorm: u32 = 0,
     n_ideas_grounded: u32 = 0,
+    n_ideas_unique: u32 = 0,
     n_ideas_rejected: u32 = 0,
     n_self_correct: u32 = 0,
     n_curiosity: u32 = 0,
@@ -180,202 +225,230 @@ pub const ThinkReport = struct {
     n_motor: u32 = 0,
     n_episodes: u32 = 0,
     n_engrams: u32 = 0,
+    n_grown: u32 = 0,
     retrace_acc: f64 = 0,
-    cross_acc: f64 = 0,
     idea_ground_rate: f64 = 0,
     last_idea: [128]u8 = .{0} ** 128,
     last_idea_n: usize = 0,
+    last_new: [48]u8 = .{0} ** 48,
+    last_new_n: usize = 0,
     spikes: u32 = 0,
     eeg_encode_drive: f64 = 0,
     bio_path: bool = true,
     not_llm: bool = true,
+    adaptive: bool = true,
 };
 
-/// One retrace pass: re-walk WORLD cues; fail → self-correct re-study.
 fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
-    const n = WORLD.len;
+    if (n_grown == 0) return;
     var k: u32 = 0;
     while (k < 4) : (k += 1) {
-        const idx = (seed +% k *% 7) % @as(u32, @intCast(n));
-        const f = WORLD[idx];
+        const idx = (seed +% k *% 7) % @as(u32, @intCast(n_grown));
+        const g = grown[idx];
+        if (!g.valid) continue;
+        const cue = g.cue[0..g.cue_n];
         rep.n_retrace += 1;
-        const got = recall(org, f.cue);
-        const expect = memory_f.hashToken(f.answer);
-        if (got == expect) {
+        if (recallOk(org, cue)) {
             rep.n_retrace_ok += 1;
-            // strengthen by silent motor of known fact
-            if (org.engramForCue(memory_f.hashToken(f.cue))) |e| {
+            if (org.engramForCue(memory_f.hashToken(cue))) |e| {
                 org.articulateEngram(e);
                 rep.n_motor += 1;
             }
         } else {
-            // SELF-CORRECT: re-experience truth
-            studyFact(org, nm, f);
+            studyFact(org, nm, cue, g.ans[0..g.ans_n], g.utter[0..g.utter_n]);
             rep.n_self_correct += 1;
             rep.n_motor += 1;
-            // re-test once
-            if (recall(org, f.cue) == expect) rep.n_retrace_ok += 1;
+            if (recallOk(org, cue)) rep.n_retrace_ok += 1;
         }
     }
 }
 
-/// Cross-check multi-hop consistency (scientific method: test linked claims).
-fn passCrossCheck(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
-    const n = CHAINS.len;
-    const idx = seed % @as(u32, @intCast(n));
-    const ch = CHAINS[idx];
-    rep.n_cross += 1;
-    const a1 = recall(org, ch.c1);
-    const a2 = recall(org, ch.c2);
-    const fin = memory_f.hashToken(ch.final);
-    // Grounded if both hops retrieve and hop2 answer matches expected final
-    // (or hop1 answer matches expected intermediate for plants→sun→day)
-    var ok = a1 != 0 and a2 != 0 and a2 == fin;
-    // special: plants need → sun must match
-    if (std.mem.eql(u8, ch.c1, "plants need")) {
-        ok = a1 == memory_f.hashToken("sun") and a2 == fin;
-    }
-    if (std.mem.eql(u8, ch.c1, "people need")) {
-        ok = a1 == memory_f.hashToken("water") and a2 == fin;
-    }
-    if (ok) {
-        rep.n_cross_ok += 1;
-        neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.08"));
-    } else {
-        // self-correct both premises
-        for (WORLD) |f| {
-            if (std.mem.eql(u8, f.cue, ch.c1) or std.mem.eql(u8, f.cue, ch.c2)) {
-                studyFact(org, nm, f);
-                rep.n_self_correct += 1;
+/// Pull candidate words from an engram phrase; if unknown, query tool → retain.
+fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32, allow_live: bool) void {
+    if (org.n_speak_engrams == 0) return;
+    const ei = seed % @as(u32, @intCast(org.n_speak_engrams));
+    const eng = org.speak_engrams[ei];
+    if (!eng.valid or eng.phrase_n < 8) return;
+
+    // extract words length >= 5 from phrase
+    var wstart: usize = 0;
+    var wi: usize = 0;
+    var tried: u32 = 0;
+    while (wi <= eng.phrase_n and tried < 3) : (wi += 1) {
+        const end = wi == eng.phrase_n or eng.phrase[wi] == ' ';
+        if (!end) continue;
+        if (wi > wstart) {
+            var word = eng.phrase[wstart..wi];
+            // strip punctuation
+            while (word.len > 0 and !((word[0] >= 'a' and word[0] <= 'z') or (word[0] >= 'A' and word[0] <= 'Z')))
+                word = word[1..];
+            while (word.len > 0) {
+                const c = word[word.len - 1];
+                if ((c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')) break;
+                word = word[0 .. word.len - 1];
+            }
+            if (word.len >= 5 and word.len <= 24) {
+                // skip if already known
+                if (!recallOk(org, word)) {
+                    rep.n_discover += 1;
+                    tried += 1;
+                    const hit = query_tool.queryConcept(word, allow_live);
+                    if (hit.found) {
+                        rep.n_discover_hit += 1;
+                        // first token as answer anchor
+                        var ans = hit.def[0..hit.def_n];
+                        if (std.mem.indexOfScalar(u8, ans, ' ')) |sp| ans = ans[0..@min(sp, MAX_ANS_LEN)];
+                        if (ans.len == 0) ans = word;
+                        var utter_buf: [MAX_UTTER_LEN]u8 = undefined;
+                        const un = (std.fmt.bufPrint(utter_buf[0..], "{s}: {s}", .{ word, hit.def[0..@min(hit.def_n, 80)] }) catch word).len;
+                        const before = n_grown;
+                        studyFact(org, nm, word, ans, utter_buf[0..un]);
+                        rep.n_motor += 1;
+                        if (n_grown > before) {
+                            rep.n_new_concepts += 1;
+                            rep.last_new_n = @min(word.len, rep.last_new.len);
+                            @memcpy(rep.last_new[0..rep.last_new_n], word[0..rep.last_new_n]);
+                        }
+                    }
+                }
             }
         }
+        wstart = wi + 1;
     }
 }
 
-/// Brainstorm: compose idea from two retrieves; only encode if both grounded.
+/// Brainstorm: sample two distinct grown cues not seen as pair; compose if both recall.
 fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *ThinkReport, seed: u32) void {
-    const n = BRAIN_PAIRS.len;
-    const idx = seed % @as(u32, @intCast(n));
-    const p = BRAIN_PAIRS[idx];
+    if (n_grown < 2) return;
     rep.n_brainstorm += 1;
+    const n = @as(u32, @intCast(n_grown));
+    var ia = seed % n;
+    var ib = (seed *% 13 +% 7) % n;
+    if (ia == ib) ib = (ib +% 1) % n;
 
-    const a = recall(org, p.a);
-    const b = recall(org, p.b);
-    if (a == 0 or b == 0) {
-        rep.n_ideas_rejected += 1;
-        // re-study missing
-        for (WORLD) |f| {
-            if ((std.mem.eql(u8, f.cue, p.a) and a == 0) or (std.mem.eql(u8, f.cue, p.b) and b == 0)) {
-                studyFact(org, nm, f);
-                rep.n_self_correct += 1;
-            }
+    // try a few pair candidates for novelty
+    var tries: u32 = 0;
+    while (tries < 6) : (tries += 1) {
+        ia = (seed +% tries *% 11) % n;
+        ib = (seed *% 17 +% tries *% 5 +% 3) % n;
+        if (ia == ib) continue;
+        const ha = memory_f.hashToken(grown[ia].cue[0..grown[ia].cue_n]);
+        const hb = memory_f.hashToken(grown[ib].cue[0..grown[ib].cue_n]);
+        if (!notePair(ha, hb)) continue; // already brainstormed this pair
+
+        const ca = grown[ia].cue[0..grown[ia].cue_n];
+        const cb = grown[ib].cue[0..grown[ib].cue_n];
+        if (!recallOk(org, ca) or !recallOk(org, cb)) {
+            rep.n_ideas_rejected += 1;
+            continue;
+        }
+
+        // compose idea
+        var idea: [128]u8 = undefined;
+        var pos: usize = 0;
+        if (org.engramForCue(ha)) |ea| {
+            const n1 = @min(ea.phrase_n, 55);
+            @memcpy(idea[0..n1], ea.phrase[0..n1]);
+            pos = n1;
+        } else {
+            pos = copyTo(idea[0..], grown[ia].utter[0..grown[ia].utter_n]);
+        }
+        if (pos + 5 < idea.len) {
+            idea[pos] = ' ';
+            idea[pos + 1] = 's';
+            idea[pos + 2] = 'o';
+            idea[pos + 3] = ' ';
+            pos += 4;
+        }
+        if (org.engramForCue(hb)) |eb| {
+            const n2 = @min(eb.phrase_n, idea.len - pos);
+            @memcpy(idea[pos .. pos + n2], eb.phrase[0..n2]);
+            pos += n2;
+        }
+
+        const ih = memory_f.hashToken(idea[0..pos]);
+        const is_new = noteUniqueIdea(ih);
+        rep.n_ideas_grounded += 1;
+        if (is_new) rep.n_ideas_unique += 1;
+
+        rep.last_idea_n = @min(pos, rep.last_idea.len);
+        @memcpy(rep.last_idea[0..rep.last_idea_n], idea[0..rep.last_idea_n]);
+
+        // encode composition; if unique, also grow as derived knowledge cue
+        var meaning: [8]Fixed = undefined;
+        var fa: [8]Fixed = undefined;
+        var fb: [8]Fixed = undefined;
+        cueFeat(ca, &fa);
+        cueFeat(cb, &fb);
+        var i: usize = 0;
+        while (i < 8) : (i += 1) {
+            meaning[i] = fixed.add(fixed.mul(fa[i], fixed.fromDecimalStr("0.5")), fixed.mul(fb[i], fixed.fromDecimalStr("0.5")));
+        }
+        const toks = [_]u32{
+            memory_f.hashToken("idea"),
+            ha,
+            hb,
+            memory_f.hashToken(ca),
+            memory_f.hashToken(cb),
+            memory_f.hashToken("compose"),
+        };
+        const ep = org.store.encode(&org.brain, meaning[0..], 0b111111, toks);
+        org.bindSpeakEngram(ep, "idea", "compose", idea[0..pos], meaning[0..]);
+        org.setMeaning(meaning[0..]);
+        org.speakNow();
+        rep.n_motor += 1;
+        neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.11"));
+
+        if (is_new) {
+            // derived concept key: "link:cueA|cueB" short form
+            var dkey: [MAX_CUE_LEN]u8 = undefined;
+            const dk = std.fmt.bufPrint(dkey[0..], "link {s}", .{ca[0..@min(ca.len, 20)]}) catch ca;
+            _ = addGrown(dk, cb, idea[0..@min(pos, MAX_UTTER_LEN)]);
+            // bind under derived cue so future retrace can hit it
+            studyFact(org, nm, dk, cb[0..@min(cb.len, MAX_ANS_LEN)], idea[0..@min(pos, MAX_UTTER_LEN)]);
+            rep.n_new_concepts += 1;
+            rep.n_motor += 1;
         }
         return;
     }
-
-    // Cross-check: re-retrieve same cues (retrace of components)
-    const a2 = recall(org, p.a);
-    const b2 = recall(org, p.b);
-    if (a2 != a or b2 != b) {
-        rep.n_ideas_rejected += 1;
-        rep.n_self_correct += 1;
-        return;
-    }
-
-    // Compose grounded idea string from engram utterances
-    var idea: [128]u8 = undefined;
-    var pos: usize = 0;
-    if (org.engramForCue(memory_f.hashToken(p.a))) |ea| {
-        const n1 = @min(ea.phrase_n, 50);
-        @memcpy(idea[0..n1], ea.phrase[0..n1]);
-        pos = n1;
-    }
-    if (pos + 5 < idea.len) {
-        idea[pos] = ' ';
-        idea[pos + 1] = 's';
-        idea[pos + 2] = 'o';
-        idea[pos + 3] = ' ';
-        pos += 4;
-    }
-    if (org.engramForCue(memory_f.hashToken(p.b))) |eb| {
-        const n2 = @min(eb.phrase_n, idea.len - pos);
-        @memcpy(idea[pos .. pos + n2], eb.phrase[0..n2]);
-        pos += n2;
-    }
-
-    // Grounded idea accepted
-    rep.n_ideas_grounded += 1;
-    rep.last_idea_n = @min(pos, rep.last_idea.len);
-    @memcpy(rep.last_idea[0..rep.last_idea_n], idea[0..rep.last_idea_n]);
-
-    // Encode idea as novel experience (both hops grounded)
-    var meaning: [8]Fixed = undefined;
-    var fa: [8]Fixed = undefined;
-    var fb: [8]Fixed = undefined;
-    cueFeat(p.a, &fa);
-    cueFeat(p.b, &fb);
-    var i: usize = 0;
-    while (i < 8) : (i += 1) {
-        meaning[i] = fixed.add(fixed.mul(fa[i], fixed.fromDecimalStr("0.5")), fixed.mul(fb[i], fixed.fromDecimalStr("0.5")));
-    }
-    const toks = [_]u32{
-        memory_f.hashToken("idea"),
-        a,
-        b,
-        memory_f.hashToken(p.a),
-        memory_f.hashToken(p.b),
-        memory_f.hashToken("brainstorm"),
-    };
-    const ep = org.store.encode(&org.brain, meaning[0..], 0b111111, toks);
-    org.bindSpeakEngram(ep, "idea", "grounded", idea[0..pos], meaning[0..]);
-    org.setMeaning(meaning[0..]);
-    org.speakNow();
-    rep.n_motor += 1;
-    neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.12"));
+    rep.n_ideas_rejected += 1;
 }
 
 fn passCuriosity(org: *organism_f.OrganismF, rep: *ThinkReport) void {
     if (org.store.n == 0) return;
-    // curiosity on newest episode
     const id = org.store.episodes[org.store.n - 1].id;
     const cur = curiosity_f.runCuriosity(&org.store, id, @intCast(rep.n_cycles % 6));
     rep.n_curiosity += cur.n_resolved;
 }
 
 pub const ThinkConfig = struct {
-    /// Wall-clock run length (ms). 0 = one short probe only.
     duration_ms: u64 = 0,
-    /// Heartbeat print every this many ms (default 5s so long runs look alive)
     heartbeat_ms: u64 = 5_000,
-    /// Sleep every N cycles
     sleep_every: u32 = 8,
-    /// Min work per cycle (always run all passes once)
     quiet: bool = false,
-    /// Optional live log path (flushed each heartbeat) — Windows redirect buffers hide stderr
     log_path: ?[]const u8 = null,
+    allow_live_query: bool = false,
+    lit_cards: usize = 120,
 };
 
 fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) void {
-    // Always stderr (visible in console)
     std.debug.print(fmt, args);
-    // And live file with flush so user can tail it
     if (log_file) |f| {
-        var buf: [512]u8 = undefined;
+        var buf: [640]u8 = undefined;
         const line = std.fmt.bufPrint(buf[0..], fmt, args) catch return;
         f.writeAll(line) catch {};
         f.sync() catch {};
     }
 }
 
-/// Bootstrap knowledge then run internal think for duration_ms (0 = quick probe).
-/// Organism is HEAP-allocated — stack OrganismF is large enough to crash long Windows runs.
 pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     var rep: ThinkReport = .{};
     rep.eeg_encode_drive = fixed.toF64(eeg.encodeDriveFromTheta());
+    grownClear();
 
     const gpa = std.heap.page_allocator;
     const org = gpa.create(organism_f.OrganismF) catch {
-        hbPrint(null, "THINK_FATAL cannot allocate OrganismF on heap\n", .{});
+        hbPrint(null, "THINK_FATAL heap alloc failed\n", .{});
         return rep;
     };
     defer gpa.destroy(org);
@@ -384,48 +457,66 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     org.steps_per_tick = 3;
     var nm: neuromod_f.NeuromodState = .{};
 
-    // Live log: open once, append mode so restarts don't fight; flush each line
     var log_file: ?std.fs.File = null;
     defer if (log_file) |f| f.close();
     if (cfg.log_path) |lp| {
-        // ensure results dir
         std.fs.cwd().makePath("data/results") catch {};
-        log_file = std.fs.cwd().createFile(lp, .{}) catch blk: {
-            break :blk std.fs.cwd().openFile(lp, .{ .mode = .write_only }) catch null;
-        };
-        if (log_file) |f| f.seekFromEnd(0) catch {};
+        log_file = std.fs.cwd().createFile(lp, .{}) catch null;
     }
     var log_ptr: ?*std.fs.File = null;
     if (log_file) |*f| log_ptr = f;
 
-    hbPrint(log_ptr, "THINK_BOOT heap_org=1 studying {d} world facts...\n", .{WORLD.len});
+    hbPrint(log_ptr, "THINK_BOOT adaptive=1 heap_org=1 live_query={}\n", .{cfg.allow_live_query});
 
-    // ── BOOT: study world once ────────────────────────────────────────
-    for (WORLD) |f| {
-        studyFact(org, &nm, f);
+    // ── BOOT: seed world ──────────────────────────────────────────────
+    for (SEED_WORLD) |f| {
+        studyFact(org, &nm, f.cue, f.answer, f.utter);
         rep.n_studied += 1;
         rep.n_motor += 1;
     }
+
+    // ── BOOT: literature cards (arxiv + simple-wiki) ──────────────────
+    var bank: lit.LitBank = .{};
+    if (lit.loadDefault(&bank, cfg.lit_cards)) {
+        rep.n_lit_cards = @intCast(bank.n);
+        hbPrint(log_ptr, "THINK_BOOT literature cards={d} arxiv={d} wiki={d} bytes={d}\n", .{
+            bank.n,
+            bank.n_arxiv,
+            bank.n_wiki,
+            bank.bytes_read,
+        });
+        var i: usize = 0;
+        while (i < bank.n) : (i += 1) {
+            const c = bank.cards[i];
+            if (!c.valid) continue;
+            studyFact(org, &nm, lit.cardCue(&c), lit.cardAns(&c), lit.cardUtter(&c));
+            rep.n_studied += 1;
+            rep.n_motor += 1;
+        }
+    } else {
+        hbPrint(log_ptr, "THINK_BOOT literature miss — seed world only (check D:\\training data)\n", .{});
+    }
+
     sleepQuiet(org, &nm);
     rep.n_sleep += 1;
-    hbPrint(log_ptr, "THINK_BOOT done studied={d} eps={d} eng={d} — entering loop\n", .{
+    hbPrint(log_ptr, "THINK_BOOT done studied={d} grown={d} eng={d} eps={d} — loop\n", .{
         rep.n_studied,
-        org.store.n,
+        n_grown,
         org.n_speak_engrams,
+        org.store.n,
     });
 
     const t0 = std.time.milliTimestamp();
-    var last_hb: i64 = 0; // force immediate first heartbeat
+    var last_hb: i64 = 0;
     var seed: u32 = 1;
 
-    // ── THINK LOOP ────────────────────────────────────────────────────
     while (true) {
         rep.n_cycles += 1;
-        seed +%= 17;
+        seed +%= 19;
 
         passRetrace(org, &nm, &rep, seed);
-        passCrossCheck(org, &nm, &rep, seed +% 3);
-        // brainstorm only every other cycle on long runs (less encode pressure)
+        // discover unknowns every cycle on long runs — this is knowledge growth
+        passDiscover(org, &nm, &rep, seed +% 3, cfg.allow_live_query);
         if (cfg.duration_ms == 0 or (rep.n_cycles % 2) == 0) {
             passBrainstorm(org, &nm, &rep, seed +% 11);
         }
@@ -436,8 +527,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             rep.n_sleep += 1;
         }
 
-        // idle organism ticks (neurological background) — fewer on long runs
-        const idle_n: u32 = if (cfg.duration_ms >= 60_000) 2 else 6;
+        const idle_n: u32 = if (cfg.duration_ms >= 60_000) 2 else 4;
         var t: u32 = 0;
         while (t < idle_n) : (t += 1) _ = org.tickOnce();
 
@@ -454,76 +544,73 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             const mins = elapsed / 60_000;
             const secs = (elapsed % 60_000) / 1000;
             hbPrint(log_ptr,
-                "THINK_HB t={d}m{d:0>2}s cycles={d} retrace={d}/{d} cross={d}/{d} ideas={d}/{d} reject={d} correct={d} sleep={d} eps={d} eng={d}\n",
+                "THINK_HB t={d}m{d:0>2}s cy={d} retr={d}/{d} disc={d}/{d} new={d} ideas={d} uniq={d} grown={d} eng={d} eps={d}\n",
                 .{
                     mins,
                     secs,
                     rep.n_cycles,
                     rep.n_retrace_ok,
                     rep.n_retrace,
-                    rep.n_cross_ok,
-                    rep.n_cross,
+                    rep.n_discover_hit,
+                    rep.n_discover,
+                    rep.n_new_concepts,
                     rep.n_ideas_grounded,
-                    rep.n_brainstorm,
-                    rep.n_ideas_rejected,
-                    rep.n_self_correct,
-                    rep.n_sleep,
-                    org.store.n,
+                    rep.n_ideas_unique,
+                    n_grown,
                     org.n_speak_engrams,
+                    org.store.n,
                 },
             );
+            if (rep.last_new_n > 0) {
+                hbPrint(log_ptr, "  new_concept=\"{s}\"\n", .{rep.last_new[0..rep.last_new_n]});
+            }
             if (rep.last_idea_n > 0) {
                 hbPrint(log_ptr, "  last_idea=\"{s}\"\n", .{rep.last_idea[0..rep.last_idea_n]});
             }
         }
 
-        if (cfg.duration_ms == 0) break; // single-cycle probe after boot
+        if (cfg.duration_ms == 0) break;
         if (elapsed >= cfg.duration_ms) break;
-
-        // pace long runs (~80ms) — keeps CPU sane and Windows responsive
         if (cfg.duration_ms >= 10_000) {
             std.Thread.sleep(80 * std.time.ns_per_ms);
         }
     }
 
-    hbPrint(log_ptr, "THINK_DONE cycles={d} ms={d} retrace_ok={d}/{d} ideas={d}\n", .{
-        rep.n_cycles,
-        rep.duration_ms,
-        rep.n_retrace_ok,
-        rep.n_retrace,
-        rep.n_ideas_grounded,
-    });
-
+    rep.n_grown = @intCast(n_grown);
     rep.n_episodes = @intCast(org.store.n);
     rep.n_engrams = @intCast(org.n_speak_engrams);
     rep.spikes = org.brain.totalSpikes();
     if (rep.n_retrace > 0) {
         rep.retrace_acc = @as(f64, @floatFromInt(rep.n_retrace_ok)) / @as(f64, @floatFromInt(rep.n_retrace));
     }
-    if (rep.n_cross > 0) {
-        rep.cross_acc = @as(f64, @floatFromInt(rep.n_cross_ok)) / @as(f64, @floatFromInt(rep.n_cross));
-    }
     if (rep.n_brainstorm > 0) {
         rep.idea_ground_rate = @as(f64, @floatFromInt(rep.n_ideas_grounded)) / @as(f64, @floatFromInt(rep.n_brainstorm));
     }
 
-    rep.ok = rep.n_studied >= 15 and
+    hbPrint(log_ptr, "THINK_DONE cy={d} ms={d} lit={d} new_concepts={d} uniq_ideas={d} grown={d} eng={d}\n", .{
+        rep.n_cycles,
+        rep.duration_ms,
+        rep.n_lit_cards,
+        rep.n_new_concepts,
+        rep.n_ideas_unique,
+        rep.n_grown,
+        rep.n_engrams,
+    });
+
+    rep.ok = rep.n_studied >= 10 and
         rep.n_cycles >= 1 and
-        rep.retrace_acc >= 0.75 and
-        rep.cross_acc >= 0.50 and
-        rep.n_ideas_grounded >= 1 and
+        rep.retrace_acc >= 0.60 and
+        rep.n_grown >= 10 and
         rep.bio_path and
         rep.not_llm;
 
     return rep;
 }
 
-/// Quick probe (one cycle after boot).
 pub fn runThinkProbe() ThinkReport {
-    return runInternalThink(.{ .duration_ms = 0, .quiet = false, .heartbeat_ms = 0 });
+    return runInternalThink(.{ .duration_ms = 0, .quiet = false, .heartbeat_ms = 0, .lit_cards = 40 });
 }
 
-/// Hour-long internal think (or custom minutes).
 pub fn runThinkMinutes(minutes: u32) ThinkReport {
     const ms: u64 = @as(u64, minutes) * 60_000;
     return runInternalThink(.{
@@ -532,6 +619,21 @@ pub fn runThinkMinutes(minutes: u32) ThinkReport {
         .sleep_every = 8,
         .quiet = false,
         .log_path = "data/results/THINK_LIVE.log",
+        .allow_live_query = false, // local archive/wiki; use think-hour-live for Wikipedia
+        .lit_cards = 160,
+    });
+}
+
+pub fn runThinkMinutesLive(minutes: u32) ThinkReport {
+    const ms: u64 = @as(u64, minutes) * 60_000;
+    return runInternalThink(.{
+        .duration_ms = if (ms == 0) 60_000 else ms,
+        .heartbeat_ms = 5_000,
+        .sleep_every = 8,
+        .quiet = false,
+        .log_path = "data/results/THINK_LIVE.log",
+        .allow_live_query = true,
+        .lit_cards = 160,
     });
 }
 

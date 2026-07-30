@@ -904,71 +904,64 @@ fn runInternalThink(minutes: u32) void {
         std.debug.print("doctrine: scientific method on organism memory — NOT LLM chain-of-thought\n", .{});
         const r = internal_think_fixed.runThinkProbe();
         std.debug.print(
-            "THINK studied={d} cycles={d} retrace={d}/{d} acc={e} cross={d}/{d} acc={e} ideas={d}/{d} reject={d} correct={d} sleep={d} motor={d} eps={d} eng={d} spikes={d} dur_ms={d}\n",
+            "THINK studied={d} lit={d} cy={d} retr={d}/{d} disc={d}/{d} new={d} ideas={d} uniq={d} grown={d} eng={d} eps={d}\n",
             .{
                 r.n_studied,
+                r.n_lit_cards,
                 r.n_cycles,
                 r.n_retrace_ok,
                 r.n_retrace,
-                r.retrace_acc,
-                r.n_cross_ok,
-                r.n_cross,
-                r.cross_acc,
+                r.n_discover_hit,
+                r.n_discover,
+                r.n_new_concepts,
                 r.n_ideas_grounded,
-                r.n_brainstorm,
-                r.n_ideas_rejected,
-                r.n_self_correct,
-                r.n_sleep,
-                r.n_motor,
-                r.n_episodes,
+                r.n_ideas_unique,
+                r.n_grown,
                 r.n_engrams,
-                r.spikes,
-                r.duration_ms,
+                r.n_episodes,
             },
         );
+        if (r.last_new_n > 0) std.debug.print("new_concept=\"{s}\"\n", .{r.last_new[0..r.last_new_n]});
         if (r.last_idea_n > 0) std.debug.print("last_idea=\"{s}\"\n", .{r.last_idea[0..r.last_idea_n]});
         if (r.ok) {
             std.debug.print("FSOT_INTERNAL_THINK PASS\n", .{});
-            std.debug.print("FSOT_BRAINSTORM_GROUNDED_OK\n", .{});
-            std.debug.print("FSOT_SELF_CORRECT_OK\n", .{});
+            std.debug.print("FSOT_ADAPTIVE_KNOWLEDGE_OK\n", .{});
         } else {
             std.debug.print("FSOT_INTERNAL_THINK FAIL\n", .{});
             std.process.exit(1);
         }
         return;
     }
-    std.debug.print("=== FSOT THINK HOUR (top-to-bottom internal loop, {d} minutes) ===\n", .{minutes});
-    std.debug.print("path: boot world → retrace → cross-check → brainstorm → self-correct → sleep\n", .{});
-    std.debug.print("heartbeat every 5s; live log: data/results/THINK_LIVE.log\n", .{});
-    std.debug.print("wall-clock duration={d} min — if console looks quiet, tail THINK_LIVE.log\n", .{minutes});
+    std.debug.print("=== FSOT THINK HOUR (adaptive: lit + discover + compose) {d} min ===\n", .{minutes});
+    std.debug.print("path: seed+arxiv/wiki → retrace → discover(query) → novel brainstorm → sleep\n", .{});
+    std.debug.print("heartbeat 5s; live log: data/results/THINK_LIVE.log\n", .{});
+    std.debug.print("watch: new= / uniq= / grown= rising over the hour (knowledge emergence)\n", .{});
     const r = internal_think_fixed.runThinkMinutes(minutes);
     std.debug.print(
-        "THINK_HOUR done min={d} cycles={d} retrace={d}/{d} acc={e} cross={d}/{d} acc={e} ideas={d}/{d} reject={d} correct={d} sleep={d} motor={d} eps={d} eng={d} spikes={d} ms={d}\n",
+        "THINK_HOUR done min={d} cy={d} lit={d} retr={d}/{d} disc={d}/{d} new={d} ideas={d} uniq={d} grown={d} eng={d} eps={d} ms={d}\n",
         .{
             minutes,
             r.n_cycles,
+            r.n_lit_cards,
             r.n_retrace_ok,
             r.n_retrace,
-            r.retrace_acc,
-            r.n_cross_ok,
-            r.n_cross,
-            r.cross_acc,
+            r.n_discover_hit,
+            r.n_discover,
+            r.n_new_concepts,
             r.n_ideas_grounded,
-            r.n_brainstorm,
-            r.n_ideas_rejected,
-            r.n_self_correct,
-            r.n_sleep,
-            r.n_motor,
-            r.n_episodes,
+            r.n_ideas_unique,
+            r.n_grown,
             r.n_engrams,
-            r.spikes,
+            r.n_episodes,
             r.duration_ms,
         },
     );
+    if (r.last_new_n > 0) std.debug.print("last_new_concept=\"{s}\"\n", .{r.last_new[0..r.last_new_n]});
     if (r.last_idea_n > 0) std.debug.print("last_idea=\"{s}\"\n", .{r.last_idea[0..r.last_idea_n]});
     if (r.ok) {
         std.debug.print("FSOT_THINK_HOUR PASS\n", .{});
         std.debug.print("FSOT_LONG_THINK_OK\n", .{});
+        std.debug.print("FSOT_ADAPTIVE_KNOWLEDGE_OK\n", .{});
     } else {
         std.debug.print("FSOT_THINK_HOUR FAIL\n", .{});
         std.process.exit(1);
