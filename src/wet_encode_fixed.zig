@@ -49,6 +49,8 @@ pub const WetStack = struct {
     total_prune: u32 = 0,
     total_myelo: u32 = 0,
     total_releases: u32 = 0,
+    /// glia soft-path prune count (micro low homeostatic)
+    total_prune_soft: u32 = 0,
     epochs: u32 = 0,
     inited: bool = false,
 
@@ -160,7 +162,9 @@ pub const WetStack = struct {
 
         // 7) structural glial maintenance after epoch
         if (apply_plasticity) {
+            const soft0 = self.glia.n_prune_soft_path;
             rep.n_prune += self.glia.microglialPrune(&org.brain);
+            self.total_prune_soft +%= self.glia.n_prune_soft_path -% soft0;
             rep.n_myelo += self.glia.myelinate(&org.brain);
         }
 

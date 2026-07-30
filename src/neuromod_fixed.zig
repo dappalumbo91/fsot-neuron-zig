@@ -128,6 +128,22 @@ pub fn pulseDa(s: *NeuromodState, amp: Fixed) void {
     s.n_da_pulses += 1;
 }
 
+/// Budgeted DA pulse: skip when already elevated so encode/probe/sleep retain contrast.
+/// Hour diagnosis: mean_da≈0.92 saturated from frequent study/compose pulses.
+/// Returns true if pulse applied.
+pub fn pulseDaBudgeted(s: *NeuromodState, amp: Fixed) bool {
+    // already high → no further drive (leave room for sleep NREM descent)
+    if (!fixed.lt(s.da, fixed.fromDecimalStr("0.48"))) return false;
+    // soft-cap amp when mid-high
+    var a = amp;
+    if (!fixed.lt(s.da, fixed.fromDecimalStr("0.32"))) {
+        a = fixed.mul(amp, fixed.fromDecimalStr("0.45"));
+    }
+    if (fixed.lt(a, fixed.fromDecimalStr("0.005"))) return false;
+    pulseDa(s, a);
+    return true;
+}
+
 pub fn setPhase(s: *NeuromodState, phase: Phase) void {
     _ = s;
     _ = phase;

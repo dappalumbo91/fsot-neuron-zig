@@ -244,17 +244,31 @@ fn markAttempted(word: []const u8) void {
 
 fn isStopOrJunk(word: []const u8) bool {
     const junk = [_][]const u8{
-        "april", "august", "march", "january", "theory", "unclear", "possibly", "common",
+        // calendar
+        "april", "august", "march", "january", "february", "september", "october",
+        "november", "december", "month", "year", "years", "days", "monday", "friday",
+        // function / discourse
         "where", "which", "their", "there", "these", "those", "about", "after", "before",
         "would", "could", "should", "being", "using", "other", "first", "second", "third",
-        "month", "year", "years", "days", "named", "comes", "roman", "latin", "greek",
-        "title", "abstract", "paper", "between", "every", "always", "often", "never",
-        "communities", "important", "properties", "several", "addition", "beginning",
-        "particular", "artists", "approach", "called", "those", "affect", "emotio",
-        "follow", "follo", "procedure", "procedur", "frequency", "freque", "alphabet", "alphabe",
-        "object", "almost", "subject", "subjected", "painting", "practical",
-        "october", "worked", "thinking", "earth's", "diphthong", "generation",
-        "intention", "atmosphere", "isocurvature", "teleportation", "special",
+        "theory", "unclear", "possibly", "common", "named", "comes", "called", "almost",
+        "every", "always", "often", "never", "between", "several", "addition", "beginning",
+        // paper / abstract filler (hour pending pile)
+        "title", "abstract", "paper", "communities", "important", "properties",
+        "particular", "artists", "approach", "affect", "object", "subject", "subjected",
+        "painting", "practical", "worked", "thinking", "styles", "envision", "results",
+        "aspects", "features", "nothing", "source", "coming", "containing", "limited",
+        "recent", "proposed", "suggested", "explore", "explores", "thanks", "proven",
+        "subtle", "models", "domain", "descriptor", "different", "evaluated", "details",
+        "importantly", "concerning", "investigate", "analysis", "analyzing", "element",
+        "levels", "structure", "formula", "layout", "transform", "solution", "processing",
+        "analyses", "detection", "models", "particle", "relative", "dimension",
+        "additionally", "demonstrate", "shimmering", "responding", "modernity", "emotional",
+        "expanse", "intelligence", "society", "family",
+        "generation", "intention", "atmosphere", "special", "teleportation", "isocurvature",
+        // truncated stems seen in hour logs
+        "emotio", "follo", "procedur", "freque", "alphabe", "particu", "backgrou",
+        "additio", "polarizat", "deriva", "birefringe", "non-stand", "large-scal",
+        "horizon-s", "path-enta", "roman", "latin", "greek", "diphthong", "earth's",
     };
     for (junk) |j| {
         if (word.len == j.len) {
@@ -268,7 +282,51 @@ fn isStopOrJunk(word: []const u8) bool {
             }
             if (ok) return true;
         }
+        // prefix match for long junk stems (truncated variants)
+        if (j.len >= 6 and word.len >= 6 and word.len < j.len + 3) {
+            var ok = true;
+            var k: usize = 0;
+            while (k < j.len and k < word.len) : (k += 1) {
+                const x = if (word[k] >= 'A' and word[k] <= 'Z') word[k] + 32 else word[k];
+                if (x != j[k]) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok and k == word.len and word.len >= 6) return true;
+        }
     }
+    return false;
+}
+
+/// Mid-word cuts from maxed phrase buffers (procedur, alphabe, freque, …).
+fn wordLooksTruncated(w: []const u8) bool {
+    if (w.len < 5 or w.len > 14) return false;
+    // known cut endings (incomplete morphemes)
+    const cuts = [_][]const u8{
+        "ur", "be", "io", "lo", "cu", "ou", "qe", "ng", // weak — use with length
+    };
+    _ = cuts;
+    // no vowel in a longish token → not English content word
+    var vowels: u32 = 0;
+    for (w) |c| {
+        const x = if (c >= 'A' and c <= 'Z') c + 32 else c;
+        if (x == 'a' or x == 'e' or x == 'i' or x == 'o' or x == 'u' or x == 'y') vowels += 1;
+    }
+    if (w.len >= 6 and vowels == 0) return true;
+    // ends with incomplete scientific/common stems
+    if (std.mem.endsWith(u8, w, "tio") or std.mem.endsWith(u8, w, "sio")) return true;
+    if (std.mem.endsWith(u8, w, "que") and w.len <= 8) return true; // freque
+    if (std.mem.endsWith(u8, w, "abe") and w.len <= 8) return true; // alphabe
+    if (std.mem.endsWith(u8, w, "dur") and w.len <= 9) return true; // procedur
+    if (std.mem.endsWith(u8, w, "tio") ) return true;
+    if (std.mem.endsWith(u8, w, "zat") or std.mem.endsWith(u8, w, "iza")) return true;
+    if (std.mem.endsWith(u8, w, "rou") and w.len <= 9) return true; // backgrou
+    if (std.mem.endsWith(u8, w, "icu") and w.len <= 8) return true; // particu
+    if (std.mem.endsWith(u8, w, "llo") and w.len <= 6) return true; // follo
+    if (std.mem.endsWith(u8, w, "tio") ) return true;
+    // hyphenated paper scrap often truncated
+    if (std.mem.indexOfScalar(u8, w, '-') != null and w.len < 12) return true;
     return false;
 }
 
@@ -611,7 +669,7 @@ fn studyFact(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, cue: []c
     org.bindSpeakEngram(ep_id, cue, ans, utter, meaning[0..]);
     org.setMeaning(meaning[0..]);
     org.speakNow();
-    neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.05"));
+    _ = neuromod_f.pulseDaBudgeted(nm, fixed.fromDecimalStr("0.025"));
     _ = addGrown(cue, ans, utter);
 }
 
@@ -740,6 +798,8 @@ pub const ThinkReport = struct {
     n_wet_myelo: u32 = 0,
     n_wet_releases: u32 = 0,
     n_wet_sleep_maint: u32 = 0,
+    /// last mean DA (also on DONE) — for budget diagnostics
+    n_da_pulses_sess: u32 = 0,
 };
 
 /// Cold LTM grown → hot STM (hippocampal re-encode). Skips banned meta cues.
@@ -869,8 +929,7 @@ fn passRetrace(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: *
                 rep.n_motor += 1;
                 // one DA tag per pass — avoids saturating process-scale DA at xMax
                 if (!da_tagged) {
-                    neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.02"));
-                    da_tagged = true;
+                    if (neuromod_f.pulseDaBudgeted(nm, fixed.fromDecimalStr("0.012"))) da_tagged = true;
                 }
             }
         } else {
@@ -944,40 +1003,47 @@ fn passDiscover(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep: 
                         wbuf[wj] = if (c >= 'A' and c <= 'Z') c + 32 else c;
                     }
                     const wlow = wbuf[0..word.len];
-                    if (cueIsBanned(wlow)) {
+                    if (cueIsBanned(wlow) or isStopOrJunk(wlow) or wordLooksTruncated(wlow)) {
                         wstart = wi + 1;
                         continue;
                     }
-                    if (!isStopOrJunk(wlow) and !alreadyAttempted(wlow) and !recallOk(org, wlow)) {
+                    if (!alreadyAttempted(wlow) and !recallOk(org, wlow)) {
                         markAttempted(wlow);
                         rep.n_discover += 1;
                         tried += 1;
                         const hit = query_tool.queryConcept(wlow, allow_live);
                         if (hit.found and !defLooksBad(hit.def[0..hit.def_n])) {
-                            rep.n_discover_hit += 1;
                             var ans = hit.def[0..hit.def_n];
                             if (std.mem.indexOfScalar(u8, ans, ' ')) |sp| ans = ans[0..@min(sp, MAX_ANS_LEN)];
                             if (ans.len == 0) ans = wlow;
-                            var utter_buf: [MAX_UTTER_LEN]u8 = undefined;
-                            const un = (std.fmt.bufPrint(utter_buf[0..], "{s}: {s}", .{ wlow, hit.def[0..@min(hit.def_n, 80)] }) catch wlow).len;
-                            const before_g = n_grown;
-                            const before_e = org.n_speak_engrams;
-                            studyFact(org, nm, wlow, ans, utter_buf[0..un]);
-                            rep.n_motor += 1;
-                            if (n_grown > before_g or org.n_speak_engrams >= before_e) {
-                                rep.n_new_concepts += 1;
-                                rep.last_new_n = @min(wlow.len, rep.last_new.len);
-                                @memcpy(rep.last_new[0..rep.last_new_n], wlow[0..rep.last_new_n]);
+                            // refuse junk answers even if query hit
+                            if (isStopOrJunk(ans) or wordLooksTruncated(ans)) {
+                                rep.n_discover_miss += 1;
+                            } else {
+                                rep.n_discover_hit += 1;
+                                var utter_buf: [MAX_UTTER_LEN]u8 = undefined;
+                                const un = (std.fmt.bufPrint(utter_buf[0..], "{s}: {s}", .{ wlow, hit.def[0..@min(hit.def_n, 80)] }) catch wlow).len;
+                                const before_g = n_grown;
+                                const before_e = org.n_speak_engrams;
+                                studyFact(org, nm, wlow, ans, utter_buf[0..un]);
+                                rep.n_motor += 1;
+                                if (n_grown > before_g or org.n_speak_engrams >= before_e) {
+                                    rep.n_new_concepts += 1;
+                                    rep.last_new_n = @min(wlow.len, rep.last_new.len);
+                                    @memcpy(rep.last_new[0..rep.last_new_n], wlow[0..rep.last_new_n]);
+                                }
                             }
                         } else {
-                            // FALLBACK: tuck away as open question and MOVE ON (no loop)
+                            // FALLBACK: pending only for real content words (B+ hygiene)
                             rep.n_discover_miss += 1;
-                            rep.n_pending_open += 1;
-                            const reason: []const u8 = if (!hit.found) "query_miss" else "def_unusable";
-                            var ctx: [96]u8 = undefined;
-                            const cn = @min(eng.phrase_n, ctx.len);
-                            @memcpy(ctx[0..cn], eng.phrase[0..cn]);
-                            notePendingQuestion(wlow, reason, ctx[0..cn], rep.n_cycles);
+                            if (!isStopOrJunk(wlow) and !wordLooksTruncated(wlow) and wlow.len >= 5) {
+                                rep.n_pending_open += 1;
+                                const reason: []const u8 = if (!hit.found) "query_miss" else "def_unusable";
+                                var ctx: [96]u8 = undefined;
+                                const cn = @min(eng.phrase_n, ctx.len);
+                                @memcpy(ctx[0..cn], eng.phrase[0..cn]);
+                                notePendingQuestion(wlow, reason, ctx[0..cn], rep.n_cycles);
+                            }
                             // encode "I don't know yet" episode (open curiosity slot)
                             var ufeats: [8]Fixed = undefined;
                             cueFeat(wlow, &ufeats);
@@ -1126,7 +1192,7 @@ fn passBrainstorm(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState, rep
         org.setMeaning(meaning[0..]);
         org.speakNow();
         rep.n_motor += 1;
-        neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.06"));
+        _ = neuromod_f.pulseDaBudgeted(nm, fixed.fromDecimalStr("0.03"));
         return;
     }
     rep.n_ideas_rejected += 1;

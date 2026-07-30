@@ -40,6 +40,10 @@ pub const GliaState = struct {
     n_clear_events: u32 = 0,
     n_prune_events: u32 = 0,
     n_myelo_events: u32 = 0,
+    /// Times prune ran under low-micro homeostatic path (diag)
+    n_prune_homeo: u32 = 0,
+    /// Times micro was below old hard gate (diag — was causing prune=0 all hour)
+    n_prune_soft_path: u32 = 0,
 
     pub fn init() GliaState {
         var g: GliaState = .{};
@@ -122,12 +126,26 @@ pub const GliaState = struct {
         return fixed.clamp(fixed.add(base, ca_bump), fixed.fromDecimalStr("0.2"), fixed.fromDecimalStr("1.6"));
     }
 
-    /// Microglia-biased prune: weaken weak/idle edges when micro high.
+    /// Microglia-biased prune: weaken weak/idle edges.
+    ///
+    /// Hour diagnosis: micro hard-gate 0.25 + thr 0.04 never fired under continuous
+    /// encode (load cleared → micro stuck ~0.15–0.22) while myelo kept boosting |W|.
+    /// Fix: always allow homeostatic weak-edge clear; scale intensity by micro.
     pub fn microglialPrune(self: *GliaState, b: *brain_f.BrainF) u32 {
         var n: u32 = 0;
-        if (fixed.lt(self.micro, fixed.fromDecimalStr("0.25"))) return 0;
-        const thr = fixed.fromDecimalStr("0.04");
-        const factor = fixed.sub(fixed.fromInt(1), fixed.mul(self.micro, fixed.fromDecimalStr("0.15")));
+        // Soft path when micro low (homeostasis); full path when micro elevated.
+        const elevated = !fixed.lt(self.micro, fixed.fromDecimalStr("0.18"));
+        if (!elevated) self.n_prune_soft_path +%= 1;
+
+        // Zero very weak edges; soften moderate-weak. Thresholds raised so STDP-boosted
+        // small weights still get homeostatic pressure.
+        const thr_zero = if (elevated) fixed.fromDecimalStr("0.05") else fixed.fromDecimalStr("0.035");
+        const thr_soft = if (elevated) fixed.fromDecimalStr("0.14") else fixed.fromDecimalStr("0.09");
+        const shrink = if (elevated)
+            fixed.sub(fixed.fromInt(1), fixed.mul(self.micro, fixed.fromDecimalStr("0.18")))
+        else
+            fixed.fromDecimalStr("0.94");
+
         var post: usize = 0;
         while (post < b.n) : (post += 1) {
             var pre: usize = 0;
@@ -136,14 +154,18 @@ pub const GliaState = struct {
                 const idx = post * network_f.MAX_N + pre;
                 const w = b.net.W[idx];
                 if (w == 0) continue;
-                if (fixed.lt(fixed.abs(w), thr)) {
+                const aw = fixed.abs(w);
+                if (fixed.lt(aw, thr_zero)) {
                     b.net.W[idx] = 0;
                     n += 1;
                     self.n_prune_events += 1;
-                } else if (fixed.lt(fixed.abs(w), fixed.fromDecimalStr("0.12"))) {
-                    b.net.W[idx] = fixed.mul(w, factor);
+                } else if (fixed.lt(aw, thr_soft)) {
+                    b.net.W[idx] = fixed.mul(w, shrink);
+                    // floor tiny residuals to zero
+                    if (fixed.lt(fixed.abs(b.net.W[idx]), fixed.fromDecimalStr("0.01"))) b.net.W[idx] = 0;
                     n += 1;
                     self.n_prune_events += 1;
+                    if (!elevated) self.n_prune_homeo +%= 1;
                 }
             }
         }
