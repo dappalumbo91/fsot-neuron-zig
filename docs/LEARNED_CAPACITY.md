@@ -14,13 +14,15 @@ Honest inventory of the **Zig neurological mind**. School knowledge **encodes in
 
 | Mode | Result |
 |------|--------|
-| `bio-learn` | **primary eval** — one-shot 8/8 · feedback improve · interference 8/8 · transfer 6/6 · sleep retained · motor · **NOT LLM benches** |
-| `bio-articulate` | retrieve/motor/self **10/10** (teach→sleep→cue→say) |
-| `brain-learn` | practice **42/42**, multi-hop prove **20/20**, claimable **20**, retrieve **144/144**, `bio=true` |
-| Path | experience once → try → feedback re-study → sleep → prove (animal/human style) |
+| `bio-suite` | **architecture-native battery** — all green |
+| `bio-learn` | one-shot 8/8 · interf 8/8 · transfer 6/6 · sleep kept · MNIST **95.1%** sensory |
+| `self-study` | materials 44 · quiz/prove **44/44** after study→try→re-read→sleep (no SGD epochs) |
+| `bio-articulate` | retrieve/motor/self **10/10** |
+| `brain-learn` | practice 42/42 · prove 20/20 · retrieve prove · `bio=true` |
 
-**Primary benchmarks:** bio-learn suite (see [`BIO_LEARNING_DOCTRINE.md`](BIO_LEARNING_DOCTRINE.md)) — sensory/episodic/few-shot/interference/transfer/motor/sleep.  
-**Not primary:** GSM8K / MMLU / chat Q→A (LLM-attuned).  
+**Primary benchmarks:** [`BIO_LEARNING_DOCTRINE.md`](BIO_LEARNING_DOCTRINE.md) + MNIST gate.  
+**Frontier map:** [`BIO_FRONTIER_LANDSCAPE.md`](BIO_FRONTIER_LANDSCAPE.md) — Cortical Labs CL1/DishBrain (wet neurons) is **adjacent inspiration**, different substrate.  
+**Not primary:** GSM8K / MMLU / chat (LLM-attuned).  
 
 **Refused:** conversational modules, intent parsers, `bankGet` as the mind, epoch-SGD as the learning story.
 

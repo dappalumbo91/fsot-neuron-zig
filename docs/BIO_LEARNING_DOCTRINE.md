@@ -72,9 +72,14 @@ INSTRUCTION / MATERIAL  (once or few times — experience)
 | Mode | Role |
 |------|------|
 | `fsot_mind bio-learn` | Full animal/human-style eval suite (primary) |
+| `fsot_mind self-study` | materials → try → re-read miss → sleep → prove |
+| `fsot_mind bio-suite` | bio-learn + self-study + MNIST |
 | `fsot_mind bio-articulate` | teach → sleep → cue → motor → self-hear |
 | `fsot_mind brain-learn` | school on OrganismF via **retrieve** prove |
-| `fsot_mind mnist` / gate | sensory discrimination (if pack present) |
+| `fsot_mind mnist` | sensory discrimination (classic NN gate) |
+
+**Frontier map** (Cortical Labs / DishBrain / neuromorphic vs us):  
+[`BIO_FRONTIER_LANDSCAPE.md`](BIO_FRONTIER_LANDSCAPE.md)
 
 ---
 

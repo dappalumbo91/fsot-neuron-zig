@@ -18,6 +18,7 @@ const brain_f = @import("brain_fixed.zig");
 const memory_f = @import("memory_fixed.zig");
 const neuromod_f = @import("neuromod_fixed.zig");
 const organism_f = @import("organism_fixed.zig");
+const mnist_f = @import("mnist_accuracy_fixed.zig");
 const Fixed = fixed.Fixed;
 
 const Item = struct {
@@ -188,6 +189,11 @@ pub const BioLearnReport = struct {
     n_motor: u32 = 0,
     n_episodes: u32 = 0,
     n_engrams: u32 = 0,
+    // sensory discrimination (classic NN bench — MNIST gate pack)
+    sensory_ok: bool = false,
+    sensory_top1: f64 = 0,
+    sensory_n: u32 = 0,
+    sensory_ran: bool = false,
     /// Explicit: this is NOT an LLM benchmark suite
     not_llm_bench: bool = true,
 };
@@ -320,10 +326,21 @@ pub fn runBioLearnEval() BioLearnReport {
         rep.n_motor += 1;
     }
 
+    // ── 7) SENSORY: classic NN discrimination (MNIST pack if present) ─
+    // Not required to pass core cognitive suite if pack missing (honest CI).
+    {
+        const m = mnist_f.runMnistAccuracy();
+        rep.sensory_ran = m.from_pack;
+        rep.sensory_top1 = m.top1;
+        rep.sensory_n = m.n_test;
+        rep.sensory_ok = m.ok;
+    }
+
     rep.n_episodes = @intCast(org.store.n);
     rep.n_engrams = @intCast(org.n_speak_engrams);
 
     // Pass criteria (BIO_LEARNING_DOCTRINE) — no GSM8K
+    // Sensory pack is bonus when present; core is animal/human cognitive learning.
     rep.ok = rep.oneshot_acc >= 0.75 and
         rep.feedback_improved and
         rep.feedback_second_hit >= (rep.feedback_n * 3 / 4) and
