@@ -67,16 +67,20 @@ fn oneTrial(
     meaningFromWord(seed_word, &meaning);
     org.setMeaning(meaning[0..]);
 
+    // Grammatical frame with seed forced in (not nearest-neighbor word salad)
     var phrase: [lexicon_en.MAX_PHRASE]u8 = undefined;
+    const seed_ph = lexicon_en.phraseFromSeedWord(seed_word, phrase[0..]);
+    if (seed_ph.n == 0) return;
+    const phrase_n = seed_ph.n;
+
     var frame: machine_lang.MachineFrame = .{};
-    const ut = lexicon_en.utterEnglish(&meaning, phrase[0..], &frame);
-    if (ut.phrase_n == 0) return;
+    machine_lang.generateFromMind(&seed_ph.tokens, meaning[0..], &frame);
 
     rep.n_trials += 1;
-    rep.n_known_out += countKnownInPhrase(phrase[0..ut.phrase_n]);
+    rep.n_known_out += countKnownInPhrase(phrase[0..phrase_n]);
 
     // save last phrase for report
-    rep.last_phrase_n = @min(ut.phrase_n, rep.last_phrase.len);
+    rep.last_phrase_n = @min(phrase_n, rep.last_phrase.len);
     @memcpy(rep.last_phrase[0..rep.last_phrase_n], phrase[0..rep.last_phrase_n]);
 
     // machine frame round-trip
@@ -87,14 +91,14 @@ fn oneTrial(
     }
 
     // TTS plant (real words)
-    const tts = host_tts.speakEnglish(phrase[0..ut.phrase_n]);
+    const tts = host_tts.speakEnglish(phrase[0..phrase_n]);
     if (tts.spoken) rep.n_tts_spoken += 1;
 
     // SELF-HEAR (implementation learning): re-ingest own English as input
     // = corollary discharge / bone-like path (mind knows what it said)
     var toks: [6]u32 = undefined;
     var heard_m: [8]Fixed = undefined;
-    const inp = lexicon_en.inputEnglish(phrase[0..ut.phrase_n], &toks, &heard_m);
+    const inp = lexicon_en.inputEnglish(phrase[0..phrase_n], &toks, &heard_m);
     rep.n_known_in += inp.n_known;
     if (inp.n_known >= 2) rep.n_self_recover += 1;
 

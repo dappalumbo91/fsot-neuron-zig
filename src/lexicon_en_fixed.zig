@@ -277,8 +277,15 @@ pub fn findByToken(tok: u32) ?Entry {
     return null;
 }
 
-/// CHOOSE: nearest lexicon word of a given role to the meaning vector.
+/// CHOOSE: nearest **core** lexicon word of a given role (generation path).
+/// Teacher extras (en_roles.tsv) are for *input recognition*, not free speak —
+/// including them here produced word-salad ("governor notice the lazy ear").
 pub fn chooseByRole(meaning: *const [FEAT]Fixed, role: Role) Entry {
+    return chooseByRoleCore(meaning, role);
+}
+
+/// Core-only role choose (embedded WORDS). Safe for TTS phrase building.
+pub fn chooseByRoleCore(meaning: *const [FEAT]Fixed, role: Role) Entry {
     var best_word: []const u8 = WORDS[0][0];
     var best_role: Role = WORDS[0][1];
     var best_d: Fixed = fixed.fromInt(999);
@@ -296,20 +303,14 @@ pub fn chooseByRole(meaning: *const [FEAT]Fixed, role: Role) Entry {
             found = true;
         }
     }
-    i = 0;
-    while (i < n_extra) : (i += 1) {
-        if (extra_role[i] != role) continue;
-        const w = extra_buf[i][0..extra_len[i]];
-        wordProto(w, &proto);
-        const d = dist2(meaning, &proto);
-        if (!found or fixed.lt(d, best_d)) {
-            best_d = d;
-            best_word = w;
-            best_role = extra_role[i];
-            found = true;
+    if (!found) {
+        // fallback first word of that role in core
+        i = 0;
+        while (i < N_WORDS) : (i += 1) {
+            if (WORDS[i][1] == role) return entryAt(i);
         }
+        return entryAt(0);
     }
-    if (!found) return entryAt(0);
     return .{
         .word = best_word,
         .role = best_role,
@@ -317,7 +318,28 @@ pub fn chooseByRole(meaning: *const [FEAT]Fixed, role: Role) Entry {
     };
 }
 
-/// Nearest word of any role (free choice under meaning).
+/// Recognition path: core + teacher extras (input only).
+pub fn chooseByRoleRecognize(meaning: *const [FEAT]Fixed, role: Role) Entry {
+    var best = chooseByRoleCore(meaning, role);
+    var best_d: Fixed = fixed.fromInt(999);
+    var proto: [FEAT]Fixed = undefined;
+    wordProto(best.word, &proto);
+    best_d = dist2(meaning, &proto);
+    var i: usize = 0;
+    while (i < n_extra) : (i += 1) {
+        if (extra_role[i] != role) continue;
+        const w = extra_buf[i][0..extra_len[i]];
+        wordProto(w, &proto);
+        const d = dist2(meaning, &proto);
+        if (fixed.lt(d, best_d)) {
+            best_d = d;
+            best = .{ .word = w, .role = extra_role[i], .token = memory_f.hashToken(w) };
+        }
+    }
+    return best;
+}
+
+/// Nearest core word of any role (free choice under meaning — generation-safe).
 pub fn chooseAny(meaning: *const [FEAT]Fixed) Entry {
     var best_word: []const u8 = WORDS[0][0];
     var best_role: Role = WORDS[0][1];
@@ -331,17 +353,6 @@ pub fn chooseAny(meaning: *const [FEAT]Fixed) Entry {
             best_d = d;
             best_word = WORDS[i][0];
             best_role = WORDS[i][1];
-        }
-    }
-    i = 0;
-    while (i < n_extra) : (i += 1) {
-        const w = extra_buf[i][0..extra_len[i]];
-        wordProto(w, &proto);
-        const d = dist2(meaning, &proto);
-        if (fixed.lt(d, best_d)) {
-            best_d = d;
-            best_word = w;
-            best_role = extra_role[i];
         }
     }
     return .{
@@ -364,8 +375,94 @@ fn appendWord(dst: []u8, pos: *usize, w: []const u8, first: *bool) void {
     first.* = false;
 }
 
-/// EXPORT: build English phrase from meaning (chosen words, not echo of inject bytes).
-/// Template: "{who} {verb} {adj?} {what} {where?} {when?}."
+/// Grammar templates — fixed English word order (not bag-of-nearest-words).
+/// Meaning only selects *which* core content fills slots; structure is English.
+const TemplateKind = enum(u8) {
+    /// I {verb} the {what}.
+    i_verb_the_what = 0,
+    /// I {verb} the {adj} {what}.
+    i_verb_the_adj_what = 1,
+    /// I {verb} the {what} here.
+    i_verb_the_what_here = 2,
+    /// I want to {verb} the {what}.
+    i_want_to_verb_the_what = 3,
+    /// I know the {what}.
+    i_know_the_what = 4,
+    /// I hear the {what} now.
+    i_hear_the_what_now = 5,
+    /// You {verb} the {what}.
+    you_verb_the_what = 6,
+    /// I {verb} my {what}.
+    i_verb_my_what = 7,
+};
+
+fn meaningHash(meaning: *const [FEAT]Fixed) u32 {
+    var h: u32 = 2166136261;
+    var i: usize = 0;
+    while (i < FEAT) : (i += 1) {
+        // SCALE lattice raw via f64 quantize (deterministic)
+        const q: i32 = @intFromFloat(fixed.toF64(meaning[i]) * 1000.0);
+        const u: u32 = @bitCast(q);
+        h ^= u +% @as(u32, @intCast(i)) *% 0x9e3779b9;
+        h *%= 16777619;
+    }
+    return h;
+}
+
+fn pickTemplate(meaning: *const [FEAT]Fixed) TemplateKind {
+    return switch (meaningHash(meaning) % 8) {
+        0 => .i_verb_the_what,
+        1 => .i_verb_the_adj_what,
+        2 => .i_verb_the_what_here,
+        3 => .i_want_to_verb_the_what,
+        4 => .i_know_the_what,
+        5 => .i_hear_the_what_now,
+        6 => .you_verb_the_what,
+        else => .i_verb_my_what,
+    };
+}
+
+/// Prefer coherent verb+object pairs from the core lexicon (not hash-nearest junk).
+const VerbObject = struct { verb: []const u8, what: []const u8 };
+
+const COHERENT = [_]VerbObject{
+    .{ .verb = "see", .what = "light" },
+    .{ .verb = "see", .what = "person" },
+    .{ .verb = "see", .what = "scene" },
+    .{ .verb = "hear", .what = "sound" },
+    .{ .verb = "hear", .what = "voice" },
+    .{ .verb = "hear", .what = "noise" },
+    .{ .verb = "say", .what = "word" },
+    .{ .verb = "speak", .what = "word" },
+    .{ .verb = "know", .what = "pattern" },
+    .{ .verb = "know", .what = "thing" },
+    .{ .verb = "learn", .what = "pattern" },
+    .{ .verb = "learn", .what = "word" },
+    .{ .verb = "feel", .what = "signal" },
+    .{ .verb = "think", .what = "frame" },
+    .{ .verb = "encode", .what = "memory" },
+    .{ .verb = "encode", .what = "pattern" },
+    .{ .verb = "recall", .what = "memory" },
+    .{ .verb = "recall", .what = "pattern" },
+    .{ .verb = "want", .what = "thing" },
+    .{ .verb = "want", .what = "light" },
+};
+
+fn pickCoherentPair(meaning: *const [FEAT]Fixed) VerbObject {
+    return COHERENT[meaningHash(meaning) % COHERENT.len];
+}
+
+fn pickSafeAdj(meaning: *const [FEAT]Fixed) Entry {
+    const a = chooseByRoleCore(meaning, .adj);
+    // block awkward fillers
+    if (std.mem.eql(u8, a.word, "own") or std.mem.eql(u8, a.word, "bad")) {
+        return .{ .word = "good", .role = .adj, .token = memory_f.hashToken("good") };
+    }
+    return a;
+}
+
+/// EXPORT: grammatical English from meaning (core lexicon + templates).
+/// Not bag-of-nearest-extra-words.
 pub fn phraseFromMeaning(meaning: *const [FEAT]Fixed, out: []u8) struct {
     n: usize,
     who: Entry,
@@ -375,45 +472,84 @@ pub fn phraseFromMeaning(meaning: *const [FEAT]Fixed, out: []u8) struct {
     when_e: Entry,
     tokens: [6]u32,
 } {
-    const who = chooseByRole(meaning, .who);
-    const verb = chooseByRole(meaning, .verb);
-    const what = chooseByRole(meaning, .what);
-    const where_e = chooseByRole(meaning, .where);
-    const when_e = chooseByRole(meaning, .when);
-    const adj = chooseByRole(meaning, .adj);
+    const pair = pickCoherentPair(meaning);
+    const verb = Entry{ .word = pair.verb, .role = .verb, .token = memory_f.hashToken(pair.verb) };
+    const what = Entry{ .word = pair.what, .role = .what, .token = memory_f.hashToken(pair.what) };
+    const adj = pickSafeAdj(meaning);
+    const who_i = Entry{ .word = "I", .role = .who, .token = memory_f.hashToken("I") };
+    const who_you = Entry{ .word = "you", .role = .who, .token = memory_f.hashToken("you") };
+    const where_e = Entry{ .word = "here", .role = .where, .token = memory_f.hashToken("here") };
+    const when_e = Entry{ .word = "now", .role = .when, .token = memory_f.hashToken("now") };
 
-    // Mild diversity: include adj if meaning energy mid-high
-    var energy: Fixed = 0;
-    var i: usize = 0;
-    while (i < FEAT) : (i += 1) energy = fixed.add(energy, fixed.abs(meaning[i]));
-    const use_adj = fixed.gt(energy, fixed.fromDecimalStr("1.5"));
-    const use_where = fixed.gt(energy, fixed.fromDecimalStr("2.0"));
-    const use_when = fixed.gt(energy, fixed.fromDecimalStr("2.5"));
-
-    // Template: "{who} {verb} the [{adj}] {what} [{where}] [{when}]."
+    const tmpl = pickTemplate(meaning);
     var pos: usize = 0;
     var first = true;
-    appendWord(out, &pos, who.word, &first);
-    appendWord(out, &pos, verb.word, &first);
-    appendWord(out, &pos, "the", &first);
-    if (use_adj and !std.mem.eql(u8, adj.word, "own")) {
-        // skip weak "own" that reads like a grammar bug before "the"
-        appendWord(out, &pos, adj.word, &first);
+    var who = who_i;
+
+    switch (tmpl) {
+        .i_verb_the_what => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, verb.word, &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, what.word, &first);
+        },
+        .i_verb_the_adj_what => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, verb.word, &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, adj.word, &first);
+            appendWord(out, &pos, what.word, &first);
+        },
+        .i_verb_the_what_here => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, verb.word, &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, what.word, &first);
+            appendWord(out, &pos, "here", &first);
+        },
+        .i_want_to_verb_the_what => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "want", &first);
+            appendWord(out, &pos, "to", &first);
+            appendWord(out, &pos, verb.word, &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, what.word, &first);
+        },
+        .i_know_the_what => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "know", &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, what.word, &first);
+        },
+        .i_hear_the_what_now => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "hear", &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, what.word, &first);
+            appendWord(out, &pos, "now", &first);
+        },
+        .you_verb_the_what => {
+            who = who_you;
+            appendWord(out, &pos, "you", &first);
+            appendWord(out, &pos, verb.word, &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, what.word, &first);
+        },
+        .i_verb_my_what => {
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, verb.word, &first);
+            appendWord(out, &pos, "my", &first);
+            appendWord(out, &pos, what.word, &first);
+        },
     }
-    appendWord(out, &pos, what.word, &first);
-    if (use_where) {
-        appendWord(out, &pos, "here", &first); // normalize place tail
-        if (!std.mem.eql(u8, where_e.word, "here")) appendWord(out, &pos, where_e.word, &first);
-    }
-    if (use_when) appendWord(out, &pos, when_e.word, &first);
     appendStr(out, &pos, ".");
 
     const tokens = [_]u32{
         who.token,
         verb.token,
         what.token,
-        if (use_where) where_e.token else 0,
-        if (use_when) when_e.token else 0,
+        where_e.token,
+        when_e.token,
         adj.token,
     };
     return .{
@@ -425,6 +561,90 @@ pub fn phraseFromMeaning(meaning: *const [FEAT]Fixed, out: []u8) struct {
         .when_e = when_e,
         .tokens = tokens,
     };
+}
+
+/// Utter a known seed word *in a grammatical frame* (practice / teach path).
+/// Seed is forced into the sentence so meaning is not word salad.
+pub fn phraseFromSeedWord(seed: []const u8, out: []u8) struct {
+    n: usize,
+    tokens: [6]u32,
+} {
+    const e = findWord(seed) orelse Entry{
+        .word = seed,
+        .role = .what,
+        .token = memory_f.hashToken(seed),
+    };
+    var pos: usize = 0;
+    var first = true;
+    var toks: [6]u32 = .{0} ** 6;
+    switch (e.role) {
+        .verb => {
+            // I {verb} the thing.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, e.word, &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, "thing", &first);
+            toks = .{ memory_f.hashToken("I"), e.token, memory_f.hashToken("thing"), 0, 0, 0 };
+        },
+        .adj => {
+            // I see the {adj} thing.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "see", &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, e.word, &first);
+            appendWord(out, &pos, "thing", &first);
+            toks = .{ memory_f.hashToken("I"), memory_f.hashToken("see"), e.token, memory_f.hashToken("thing"), 0, 0 };
+        },
+        .who => {
+            // {who} can hear the sound.
+            appendWord(out, &pos, e.word, &first);
+            appendWord(out, &pos, "can", &first);
+            appendWord(out, &pos, "hear", &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, "sound", &first);
+            toks = .{ e.token, memory_f.hashToken("hear"), memory_f.hashToken("sound"), 0, 0, 0 };
+        },
+        .where => {
+            // I am {where} now.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "am", &first);
+            appendWord(out, &pos, e.word, &first);
+            appendWord(out, &pos, "now", &first);
+            toks = .{ memory_f.hashToken("I"), e.token, memory_f.hashToken("now"), 0, 0, 0 };
+        },
+        .when => {
+            // I speak {when}.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "speak", &first);
+            appendWord(out, &pos, e.word, &first);
+            toks = .{ memory_f.hashToken("I"), memory_f.hashToken("speak"), e.token, 0, 0, 0 };
+        },
+        .how => {
+            // I speak {how}.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "speak", &first);
+            appendWord(out, &pos, e.word, &first);
+            toks = .{ memory_f.hashToken("I"), memory_f.hashToken("speak"), e.token, 0, 0, 0 };
+        },
+        .link => {
+            // I know the word.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "know", &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, "word", &first);
+            toks = .{ memory_f.hashToken("I"), memory_f.hashToken("know"), memory_f.hashToken("word"), 0, 0, 0 };
+        },
+        .what => {
+            // I see the {what}.
+            appendWord(out, &pos, "I", &first);
+            appendWord(out, &pos, "see", &first);
+            appendWord(out, &pos, "the", &first);
+            appendWord(out, &pos, e.word, &first);
+            toks = .{ memory_f.hashToken("I"), memory_f.hashToken("see"), e.token, 0, 0, 0 };
+        },
+    }
+    appendStr(out, &pos, ".");
+    return .{ .n = pos, .tokens = toks };
 }
 
 /// INPUT: English text (space-separated known words) → tokens + blended meaning.
