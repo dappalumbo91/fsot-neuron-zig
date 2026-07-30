@@ -368,32 +368,45 @@ fn hbPrint(log_file: ?*std.fs.File, comptime fmt: []const u8, args: anytype) voi
 }
 
 /// Bootstrap knowledge then run internal think for duration_ms (0 = quick probe).
+/// Organism is HEAP-allocated — stack OrganismF is large enough to crash long Windows runs.
 pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
     var rep: ThinkReport = .{};
     rep.eeg_encode_drive = fixed.toF64(eeg.encodeDriveFromTheta());
 
-    var org = organism_f.OrganismF.init();
+    const gpa = std.heap.page_allocator;
+    const org = gpa.create(organism_f.OrganismF) catch {
+        hbPrint(null, "THINK_FATAL cannot allocate OrganismF on heap\n", .{});
+        return rep;
+    };
+    defer gpa.destroy(org);
+    org.* = organism_f.OrganismF.init();
     org.encode_every = 0;
     org.steps_per_tick = 3;
     var nm: neuromod_f.NeuromodState = .{};
 
-    // Live log file (flush each heartbeat) — fixes "terminal does nothing" when redirected
-    var log_owned: ?std.fs.File = null;
-    defer if (log_owned) |*f| f.close();
+    // Live log: open once, append mode so restarts don't fight; flush each line
+    var log_file: ?std.fs.File = null;
+    defer if (log_file) |f| f.close();
     if (cfg.log_path) |lp| {
-        log_owned = std.fs.cwd().createFile(lp, .{}) catch null;
+        // ensure results dir
+        std.fs.cwd().makePath("data/results") catch {};
+        log_file = std.fs.cwd().createFile(lp, .{}) catch blk: {
+            break :blk std.fs.cwd().openFile(lp, .{ .mode = .write_only }) catch null;
+        };
+        if (log_file) |f| f.seekFromEnd(0) catch {};
     }
-    const log_ptr: ?*std.fs.File = if (log_owned) |*f| f else null;
+    var log_ptr: ?*std.fs.File = null;
+    if (log_file) |*f| log_ptr = f;
 
-    hbPrint(log_ptr, "THINK_BOOT studying {d} world facts...\n", .{WORLD.len});
+    hbPrint(log_ptr, "THINK_BOOT heap_org=1 studying {d} world facts...\n", .{WORLD.len});
 
     // ── BOOT: study world once ────────────────────────────────────────
     for (WORLD) |f| {
-        studyFact(&org, &nm, f);
+        studyFact(org, &nm, f);
         rep.n_studied += 1;
         rep.n_motor += 1;
     }
-    sleepQuiet(&org, &nm);
+    sleepQuiet(org, &nm);
     rep.n_sleep += 1;
     hbPrint(log_ptr, "THINK_BOOT done studied={d} eps={d} eng={d} — entering loop\n", .{
         rep.n_studied,
@@ -410,28 +423,32 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         rep.n_cycles += 1;
         seed +%= 17;
 
-        passRetrace(&org, &nm, &rep, seed);
-        passCrossCheck(&org, &nm, &rep, seed +% 3);
-        passBrainstorm(&org, &nm, &rep, seed +% 11);
-        passCuriosity(&org, &rep);
+        passRetrace(org, &nm, &rep, seed);
+        passCrossCheck(org, &nm, &rep, seed +% 3);
+        // brainstorm only every other cycle on long runs (less encode pressure)
+        if (cfg.duration_ms == 0 or (rep.n_cycles % 2) == 0) {
+            passBrainstorm(org, &nm, &rep, seed +% 11);
+        }
+        passCuriosity(org, &rep);
 
         if (cfg.sleep_every > 0 and (rep.n_cycles % cfg.sleep_every) == 0) {
-            sleepQuiet(&org, &nm);
+            sleepQuiet(org, &nm);
             rep.n_sleep += 1;
-            // Do NOT call full consolidation probe here — it rebuilds a separate brain
-            // and freezes the long run for seconds with no output.
         }
 
-        // idle organism ticks (neurological background)
+        // idle organism ticks (neurological background) — fewer on long runs
+        const idle_n: u32 = if (cfg.duration_ms >= 60_000) 2 else 6;
         var t: u32 = 0;
-        while (t < 6) : (t += 1) _ = org.tickOnce();
+        while (t < idle_n) : (t += 1) _ = org.tickOnce();
 
         const now = std.time.milliTimestamp();
-        const elapsed: u64 = if (now >= t0) @intCast(now - t0) else 0;
+        const elapsed: u64 = if (now >= t0) @as(u64, @intCast(now - t0)) else 0;
         rep.duration_ms = elapsed;
 
-        const hb_due = cfg.heartbeat_ms == 0 or last_hb == 0 or
-            @as(u64, @intCast(now - last_hb)) >= cfg.heartbeat_ms;
+        var hb_due = last_hb == 0 or cfg.heartbeat_ms == 0;
+        if (!hb_due and now >= last_hb) {
+            hb_due = @as(u64, @intCast(now - last_hb)) >= cfg.heartbeat_ms;
+        }
         if (!cfg.quiet and hb_due) {
             last_hb = now;
             const mins = elapsed / 60_000;
@@ -463,11 +480,19 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
         if (cfg.duration_ms == 0) break; // single-cycle probe after boot
         if (elapsed >= cfg.duration_ms) break;
 
-        // pace: don't burn 100% CPU for hour run — ~50–80ms between cycles
-        if (cfg.duration_ms >= 60_000) {
-            std.Thread.sleep(50 * std.time.ns_per_ms);
+        // pace long runs (~80ms) — keeps CPU sane and Windows responsive
+        if (cfg.duration_ms >= 10_000) {
+            std.Thread.sleep(80 * std.time.ns_per_ms);
         }
     }
+
+    hbPrint(log_ptr, "THINK_DONE cycles={d} ms={d} retrace_ok={d}/{d} ideas={d}\n", .{
+        rep.n_cycles,
+        rep.duration_ms,
+        rep.n_retrace_ok,
+        rep.n_retrace,
+        rep.n_ideas_grounded,
+    });
 
     rep.n_episodes = @intCast(org.store.n);
     rep.n_engrams = @intCast(org.n_speak_engrams);

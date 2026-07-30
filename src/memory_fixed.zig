@@ -20,11 +20,14 @@ pub const EpisodeF = struct {
 pub const StoreF = struct {
     n: usize = 0,
     next_id: u32 = 1,
+    /// Ring write index when full (O(1) overwrite — never memmove 192 large episodes).
+    ring_i: usize = 0,
     episodes: [MAX_EPISODES]EpisodeF = undefined,
 
     pub fn clear(self: *StoreF) void {
         self.n = 0;
         self.next_id = 1;
+        self.ring_i = 0;
     }
 
     pub fn encode(
@@ -74,7 +77,9 @@ pub const StoreF = struct {
             .tokens = tokens,
             .valid = true,
         };
-        self.next_id += 1;
+        // wrap next_id safely (never 0)
+        self.next_id +%= 1;
+        if (self.next_id == 0) self.next_id = 1;
         const sf = fixed.fromInt(@intCast(ENCODE_STEPS));
         u = 0;
         while (u < b.n) : (u += 1) {
@@ -84,10 +89,11 @@ pub const StoreF = struct {
         if (self.n < MAX_EPISODES) {
             self.episodes[self.n] = ep;
             self.n += 1;
+            self.ring_i = self.n % MAX_EPISODES;
         } else {
-            var i: usize = 0;
-            while (i + 1 < MAX_EPISODES) : (i += 1) self.episodes[i] = self.episodes[i + 1];
-            self.episodes[MAX_EPISODES - 1] = ep;
+            // O(1) ring overwrite — old path memmoved ~192 episodes every encode and stalled/crashed long runs
+            self.episodes[self.ring_i] = ep;
+            self.ring_i = (self.ring_i + 1) % MAX_EPISODES;
         }
         return ep.id;
     }

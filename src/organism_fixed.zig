@@ -159,10 +159,10 @@ pub const OrganismF = struct {
             }
         }
         if (self.n_speak_engrams >= MAX_SPEAK_ENGRAMS) {
-            // ring: overwrite oldest
-            i = 0;
-            while (i + 1 < MAX_SPEAK_ENGRAMS) : (i += 1) self.speak_engrams[i] = self.speak_engrams[i + 1];
-            self.n_speak_engrams = MAX_SPEAK_ENGRAMS - 1;
+            // O(1) overwrite middle slot by cue-ish index — avoid O(N) memmove thrash on long runs
+            const slot = @as(usize, @intCast(ch % @as(u32, @intCast(MAX_SPEAK_ENGRAMS))));
+            self.writeEngram(slot, ep_id, ch, answer, phrase, meaning);
+            return;
         }
         const slot = self.n_speak_engrams;
         self.writeEngram(slot, ep_id, ch, answer, phrase, meaning);
