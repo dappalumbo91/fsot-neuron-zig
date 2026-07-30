@@ -52,6 +52,10 @@ Or double-click `BOOT_MIND.cmd` for the live organism.
 | `depth` / `understand` | Paraphrase held-out understand exam ≥95% |
 | `pathways` / `glia` / `molecular` | Synaptic paths + STDP + wet cascade + glia |
 | `md` / `allatom` | All-atom MD lab (water + K⁺ filter; not cognition) |
+| `neuromod` | DA/ACh/NE/5-HT Fixed ODEs (systems neuromodulation) |
+| `sleep` / `consolidate` | Offline sleep-like replay + STDP consolidation |
+| `claim` / `claimability` | Multi-hop grounded claimability ≥95% (1–3 hops) |
+| `intel-bio` | Full neuromod + sleep + claim stack |
 | `mnist` | Vision accuracy gate ≥95% (pack from monorepo) |
 | `machine-lang` | Native tongue: TritWord FSOT frames generate/understand |
 | `machine-lang-stress` | 1000-frame round-trip stress |
