@@ -45,4 +45,14 @@ sensing — not STT-as-mind-core.
 ## Modes
 
 - `fsot_mind speech` — speech organ probe  
+- `fsot_mind bio-articulate` — teach → retrieve → motor → self-hear (**not** a chat layer)
 - `fsot_mind cross-modal` — AV bind probe  
+
+## What we refuse to build
+
+- Conversational modules / dialogue managers  
+- Intent parsers that map English → canned reply templates  
+- Next-token LLM heads as the “voice” of the organism  
+
+Articulation is always: **retrieved meaning → motor plant → sound → self-hear**.  
+`OrganismF.SpeakEngram` stores the utterable fact bound at encode time (motor memory).

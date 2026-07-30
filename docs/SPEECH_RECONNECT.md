@@ -41,13 +41,28 @@ Recent work locked **substrate intelligence** (channels, neuromod, sleep, claima
 ## Modes that must stay green
 
 ```text
-fsot_mind practice     # utter → TTS → self-hear → encode
-fsot_mind english      # lexicon + TTS
-fsot_mind mind         # full connected plant
-fsot_mind speakers     # DAC smoke
+fsot_mind practice          # utter → TTS → self-hear → encode
+fsot_mind bio-articulate    # teach → retrieve → motor → self-hear (NO chat layer)
+fsot_mind english           # lexicon + TTS
+fsot_mind mind              # full connected plant (engram speech, not freebag)
+fsot_mind speakers          # DAC smoke
 ```
 
 If any of these regress, fix **before** adding new speech features.
+
+## Bio articulation (not conversational LLM)
+
+**Do not** add intent parsers, dialogue managers, or next-token chat heads.
+
+Path (see `bio_articulate_fixed.zig`, `OrganismF.SpeakEngram`):
+
+1. **Teach** — experience a fact → episodic encode + bind motor engram (utterable string + meaning).
+2. **Cue** — hear/sense the cue word → feature drive.
+3. **Retrieve** — hippocampal cosine match on episode fingerprints.
+4. **Articulate** — load engram meaning → `speakNow` (formant motor) → optional host TTS of **stored** phrase only.
+5. **Self-hear** — re-afferent residual + lexical recover of own utterance.
+
+English TTS is a **host plant codec**, not the generative substrate of thought.
 
 ## Doctrine
 

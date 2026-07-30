@@ -143,6 +143,16 @@ pub const StoreF = struct {
         out_sim.* = best_s;
         return self.episodes[best].id;
     }
+
+    /// Lookup episode by id (for motor engram bind after retrieve).
+    pub fn findEpisode(self: *StoreF, id: u32) ?*EpisodeF {
+        if (id == 0) return null;
+        var j: usize = 0;
+        while (j < self.n) : (j += 1) {
+            if (self.episodes[j].valid and self.episodes[j].id == id) return &self.episodes[j];
+        }
+        return null;
+    }
 };
 
 fn cosine(a: *const [FP_DIM]Fixed, b: *const [FP_DIM]Fixed) Fixed {

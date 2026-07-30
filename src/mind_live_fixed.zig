@@ -272,6 +272,7 @@ pub fn runLiveMind(cfg: LiveConfig) LiveReport {
         _ = win_sp;
 
         // --- multi-domain teach card (Python curriculum/autonomous spirit) ---
+        // Bio: encode episode + bind motor engram of what can be said (not chat policy)
         if (cfg.teach_every > 0 and (t % cfg.teach_every) == (cfg.teach_every / 2)) {
             const di: usize = @intCast(t / cfg.teach_every % domains.len);
             const card = teach_f.buildLesson(
@@ -290,8 +291,12 @@ pub fn runLiveMind(cfg: LiveConfig) LiveReport {
                 feats[i] = fixed.sub(fixed.div(fixed.fromInt(@intCast(u % 181)), fixed.fromInt(90)), fixed.fromInt(1));
             }
             // only who+what filled → curiosity can fill why/where/when/how
-            _ = org.store.encode(&org.brain, feats[0..], 0b000011, card.tokens);
-            org.last_encode_id = org.store.episodes[org.store.n - 1].id;
+            const ep_id = org.store.encode(&org.brain, feats[0..], 0b000011, card.tokens);
+            org.last_encode_id = ep_id;
+            // utterable fact string for later retrieve→motor (secondary orthography plant)
+            var utter_buf: [72]u8 = undefined;
+            const utter = std.fmt.bufPrint(utter_buf[0..], "{s} knows {s}", .{ who_s[di], what_s[di] }) catch "know fact";
+            org.bindSpeakEngram(ep_id, what_s[di], what_s[di], utter, feats[0..]);
             n_teach += 1;
             n_enc += 1;
         }
@@ -330,20 +335,33 @@ pub fn runLiveMind(cfg: LiveConfig) LiveReport {
             if (cur.n_resolved > 0) n_cur += cur.n_resolved;
         }
 
-        // --- retrieve recognition ---
+        // --- retrieve recognition → load speak engram (bio path, not chat) ---
+        var last_ret_ep: u32 = 0;
         if (org.store.n >= 2 and (t % 12) == 0) {
             var sim: Fixed = 0;
-            const hit = org.store.retrieve(&org.brain, last_vision[0..], &sim);
+            // cue from joint vision+audio (what is being sensed now)
+            var joint_cue: [8]Fixed = undefined;
+            var ci: usize = 0;
+            while (ci < 8) : (ci += 1) {
+                joint_cue[ci] = fixed.add(
+                    fixed.mul(last_vision[ci], fixed.fromDecimalStr("0.55")),
+                    fixed.mul(last_audio[ci], fixed.fromDecimalStr("0.45")),
+                );
+            }
+            const hit = org.store.retrieve(&org.brain, joint_cue[0..], &sim);
             if (hit != 0) {
                 n_ret += 1;
                 last_meaning = fixed.clamp(sim, 0, fixed.fromInt(1));
+                last_ret_ep = hit;
+                // load motor engram if this episode has one
+                _ = org.engramForEpisode(hit);
             }
         }
 
-        // --- machine language + English lexicon (choose words → TTS) ---
-        // Native: TritWord frame. Translation: English dictionary. Plant: OS TTS.
+        // --- BIO ARTICULATION: retrieve engram → meaning → motor; TTS only for stored fact ---
+        // Doctrine: NOT freebag nearest-neighbor from vision (LLM-ish codec abuse).
+        // If no engram, still drive formant from sensory meaning; English only when taught.
         if (is_speak_tick) {
-            // meaning from live vision+audio (what the mind is attending)
             var meaning: [8]Fixed = undefined;
             var mi: usize = 0;
             while (mi < 8) : (mi += 1) {
@@ -352,16 +370,52 @@ pub fn runLiveMind(cfg: LiveConfig) LiveReport {
                     fixed.mul(last_audio[mi], fixed.fromDecimalStr("0.45")),
                 );
             }
-            org.setMeaning(meaning[0..]);
 
             var phrase: [lexicon_en.MAX_PHRASE]u8 = undefined;
-            var frame: machine_lang.MachineFrame = .{};
-            const ut = lexicon_en.utterEnglish(&meaning, phrase[0..], &frame);
-            n_en += 1;
-            last_phrase_n = @min(ut.phrase_n, last_phrase.len);
-            @memcpy(last_phrase[0..last_phrase_n], phrase[0..last_phrase_n]);
+            var phrase_n: usize = 0;
+            var used_engram = false;
 
-            // machine frame bytes + self-ingest
+            // Prefer speak engram from last retrieve or most recent bind
+            const eng: ?*organism_f.SpeakEngram = blk: {
+                if (last_ret_ep != 0) {
+                    if (org.engramForEpisode(last_ret_ep)) |e| break :blk e;
+                }
+                if (org.has_last_engram and org.last_engram_i < org.n_speak_engrams) {
+                    break :blk &org.speak_engrams[org.last_engram_i];
+                }
+                if (org.n_speak_engrams > 0) {
+                    break :blk &org.speak_engrams[org.n_speak_engrams - 1];
+                }
+                break :blk null;
+            };
+
+            if (eng) |e| {
+                used_engram = true;
+                @memcpy(meaning[0..], e.meaning[0..]);
+                phrase_n = @min(e.phrase_n, phrase.len);
+                @memcpy(phrase[0..phrase_n], e.phrase[0..phrase_n]);
+            }
+
+            org.setMeaning(meaning[0..]);
+
+            // Machine frame from meaning (native tongue); English only if engram phrase exists
+            var frame: machine_lang.MachineFrame = .{};
+            if (phrase_n > 0) {
+                // build frame from stored fact words (experience), not freebag utterEnglish
+                var toks: [6]u32 = undefined;
+                var hm: [8]Fixed = undefined;
+                _ = lexicon_en.inputEnglish(phrase[0..phrase_n], &toks, &hm);
+                machine_lang.generateFromMind(&toks, meaning[0..], &frame);
+            } else {
+                // no taught utterable: silent English; machine from meaning only
+                var empty_toks: [6]u32 = .{0} ** 6;
+                machine_lang.generateFromMind(&empty_toks, meaning[0..], &frame);
+            }
+
+            n_en += 1;
+            last_phrase_n = phrase_n;
+            if (phrase_n > 0) @memcpy(last_phrase[0..phrase_n], phrase[0..phrase_n]);
+
             var mraw: [machine_lang.MAX_FRAME_BYTES]u8 = undefined;
             const nb = frame.toBytes(mraw[0..]);
             n_mach += 1;
@@ -373,27 +427,28 @@ pub fn runLiveMind(cfg: LiveConfig) LiveReport {
 
             const mtok_ep = [_]u32{
                 memory_f.hashToken("self"),
-                memory_f.hashToken("english"),
+                if (used_engram) memory_f.hashToken("engram") else memory_f.hashToken("sense"),
                 memory_f.hashToken("say"),
-                @as(u32, @truncate(frame.words[0].pack)),
+                if (frame.n_words > 0) @as(u32, @truncate(frame.words[0].pack)) else 0,
                 0,
-                memory_f.hashToken("phrase"),
+                memory_f.hashToken("articulate"),
             };
             org.last_encode_id = org.store.encode(&org.brain, mfeats[0..], 0b100111, mtok_ep);
             n_enc += 1;
 
-            // TTS plant — real English words out the speakers
-            if (cfg.english_tts and ut.phrase_n > 0) {
-                const tr = host_tts.speakEnglish(phrase[0..ut.phrase_n]);
+            // TTS plant — only stored engram English (host codec), never LM decode
+            if (cfg.english_tts and phrase_n > 0) {
+                const tr = host_tts.speakEnglish(phrase[0..phrase_n]);
                 if (tr.spoken) n_tts += 1;
             }
 
             if ((t / cfg.speak_every) < 4 or ((t + 1) % cfg.report_every) == 0) {
                 var hex: [64]u8 = undefined;
                 const hl = machine_lang.frameToHex(mraw[0..@min(nb, 24)], hex[0..]);
+                const tag = if (used_engram) "ENGRAM" else "SENSE";
                 std.debug.print(
-                    "EN_SAY t={d} \"{s}\" | MACHINE words={d} bytes={d} hex={s}\n",
-                    .{ t, phrase[0..ut.phrase_n], frame.n_words, nb, hex[0..hl] },
+                    "ARTICULATE t={d} [{s}] \"{s}\" | MACHINE words={d} bytes={d} hex={s}\n",
+                    .{ t, tag, phrase[0..phrase_n], frame.n_words, nb, hex[0..hl] },
                 );
             }
         }

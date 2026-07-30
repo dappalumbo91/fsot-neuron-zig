@@ -10,6 +10,18 @@ const pathways_f = @import("pathways_fixed.zig");
 const speech_f = @import("speech_organ_fixed.zig");
 const Fixed = fixed.Fixed;
 
+/// Bound utterable fact for one episode (motor memory, not dialogue manager).
+pub const MAX_SPEAK_ENGRAMS: usize = 24;
+pub const SpeakEngram = struct {
+    ep_id: u32 = 0,
+    cue_h: u32 = 0,
+    ans_h: u32 = 0,
+    phrase: [96]u8 = .{0} ** 96,
+    phrase_n: usize = 0,
+    meaning: [speech_f.MEANING_N]Fixed = .{0} ** speech_f.MEANING_N,
+    valid: bool = false,
+};
+
 pub const OrganismF = struct {
     brain: brain_f.BrainF,
     store: memory_f.StoreF,
@@ -35,6 +47,12 @@ pub const OrganismF = struct {
     speak_every: u32 = 0, // 0 = off; else utter from recent meaning each N ticks
     last_meaning: [speech_f.MEANING_N]Fixed = .{0} ** speech_f.MEANING_N,
     has_meaning: bool = false,
+    /// Motor engrams: utterable facts bound at encode time (not a chat layer).
+    /// When an episode is retrieved, this is what the tract can say.
+    speak_engrams: [MAX_SPEAK_ENGRAMS]SpeakEngram = [_]SpeakEngram{.{}} ** MAX_SPEAK_ENGRAMS,
+    n_speak_engrams: usize = 0,
+    last_engram_i: usize = 0,
+    has_last_engram: bool = false,
 
     pub fn init() OrganismF {
         var o: OrganismF = .{
@@ -43,6 +61,8 @@ pub const OrganismF = struct {
         };
         o.store.clear();
         o.speech.clear();
+        o.n_speak_engrams = 0;
+        o.has_last_engram = false;
         return o;
     }
 
@@ -116,6 +136,90 @@ pub const OrganismF = struct {
         air_heard: bool,
     ) void {
         self.speech.adaptFromSelfHear(residual, air_match, air_heard);
+    }
+
+    /// Bind an utterable fact to an episode at encode time (experience → sayable).
+    /// This is motor/engram memory — not an intent parser or chat policy.
+    pub fn bindSpeakEngram(
+        self: *OrganismF,
+        ep_id: u32,
+        cue: []const u8,
+        answer: []const u8,
+        phrase: []const u8,
+        meaning: []const Fixed,
+    ) void {
+        // Upsert by cue hash
+        const ch = memory_f.hashToken(cue);
+        var i: usize = 0;
+        while (i < self.n_speak_engrams) : (i += 1) {
+            if (self.speak_engrams[i].valid and self.speak_engrams[i].cue_h == ch) {
+                self.writeEngram(i, ep_id, ch, answer, phrase, meaning);
+                return;
+            }
+        }
+        if (self.n_speak_engrams >= MAX_SPEAK_ENGRAMS) {
+            // ring: overwrite oldest
+            i = 0;
+            while (i + 1 < MAX_SPEAK_ENGRAMS) : (i += 1) self.speak_engrams[i] = self.speak_engrams[i + 1];
+            self.n_speak_engrams = MAX_SPEAK_ENGRAMS - 1;
+        }
+        const slot = self.n_speak_engrams;
+        self.writeEngram(slot, ep_id, ch, answer, phrase, meaning);
+        self.n_speak_engrams += 1;
+    }
+
+    fn writeEngram(
+        self: *OrganismF,
+        slot: usize,
+        ep_id: u32,
+        cue_h: u32,
+        answer: []const u8,
+        phrase: []const u8,
+        meaning: []const Fixed,
+    ) void {
+        var e = &self.speak_engrams[slot];
+        e.ep_id = ep_id;
+        e.cue_h = cue_h;
+        e.ans_h = memory_f.hashToken(answer);
+        e.phrase_n = @min(phrase.len, e.phrase.len);
+        @memcpy(e.phrase[0..e.phrase_n], phrase[0..e.phrase_n]);
+        var j: usize = 0;
+        while (j < speech_f.MEANING_N) : (j += 1) {
+            e.meaning[j] = if (j < meaning.len) meaning[j] else 0;
+        }
+        e.valid = true;
+    }
+
+    pub fn engramForEpisode(self: *OrganismF, ep_id: u32) ?*SpeakEngram {
+        if (ep_id == 0) return null;
+        var i: usize = 0;
+        while (i < self.n_speak_engrams) : (i += 1) {
+            if (self.speak_engrams[i].valid and self.speak_engrams[i].ep_id == ep_id) {
+                self.last_engram_i = i;
+                self.has_last_engram = true;
+                return &self.speak_engrams[i];
+            }
+        }
+        return null;
+    }
+
+    pub fn engramForCue(self: *OrganismF, cue_h: u32) ?*SpeakEngram {
+        if (cue_h == 0) return null;
+        var i: usize = 0;
+        while (i < self.n_speak_engrams) : (i += 1) {
+            if (self.speak_engrams[i].valid and self.speak_engrams[i].cue_h == cue_h) {
+                self.last_engram_i = i;
+                self.has_last_engram = true;
+                return &self.speak_engrams[i];
+            }
+        }
+        return null;
+    }
+
+    /// Load retrieved engram into meaning and fire motor plant once.
+    pub fn articulateEngram(self: *OrganismF, eng: *const SpeakEngram) void {
+        self.setMeaning(eng.meaning[0..]);
+        self.speakNow();
     }
 
     pub fn tickOnce(self: *OrganismF) struct { tick: u32, mean_s: Fixed, spikes: u32, episodes: u32 } {

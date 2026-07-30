@@ -98,6 +98,7 @@ const intel_loop_fixed = @import("intel_loop_fixed.zig");
 const intel_frontier_fixed = @import("intel_frontier_fixed.zig");
 const brain_learn_fixed = @import("brain_learn_fixed.zig");
 const language_depth_fixed = @import("language_depth_fixed.zig");
+const bio_articulate_fixed = @import("bio_articulate_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -706,6 +707,43 @@ fn runSpeechOrgan() void {
         std.debug.print("FSOT_SPEECH PASS\n", .{});
     } else {
         std.debug.print("FSOT_SPEECH FAIL\n", .{});
+        std.process.exit(1);
+    }
+}
+
+fn runBioArticulate(do_tts: bool) void {
+    std.debug.print("=== FSOT BIO ARTICULATE (teach→retrieve→motor→self-hear; NOT chat layer) ===\n", .{});
+    std.debug.print("doctrine: SPEECH_ORGAN — meaning→motor→acoustic; English only as stored engram codec\n", .{});
+    const r = bio_articulate_fixed.runBioArticulate(do_tts);
+    std.debug.print(
+        "BIO_ART taught={d} eps={d} engrams={d} probes={d} retrieve={d}/{d} ans={d}/{d} motor={d}/{d} self={d}/{d} ret_acc={e} ans_acc={e} motor_acc={e} self_acc={e} tts={d}\n",
+        .{
+            r.n_taught,
+            r.n_episodes,
+            r.n_engrams,
+            r.n_probes,
+            r.n_retrieve_hit,
+            r.n_probes,
+            r.n_answer_match,
+            r.n_probes,
+            r.n_motor_spoke,
+            r.n_probes,
+            r.n_self_recover,
+            r.n_probes,
+            r.retrieve_acc,
+            r.answer_acc,
+            r.motor_acc,
+            r.self_acc,
+            r.n_tts,
+        },
+    );
+    if (r.last_utter_n > 0) {
+        std.debug.print("last_utter=\"{s}\"\n", .{r.last_utter[0..r.last_utter_n]});
+    }
+    if (r.ok) {
+        std.debug.print("FSOT_BIO_ARTICULATE PASS\n", .{});
+    } else {
+        std.debug.print("FSOT_BIO_ARTICULATE FAIL\n", .{});
         std.process.exit(1);
     }
 }
@@ -2126,8 +2164,13 @@ pub fn main() !void {
         runTeach();
     } else if (std.mem.eql(u8, mode, "short-horizon") or std.mem.eql(u8, mode, "short_horizon") or std.mem.eql(u8, mode, "sh")) {
         runShortHorizon();
-    } else if (std.mem.eql(u8, mode, "speech") or std.mem.eql(u8, mode, "speech-organ") or std.mem.eql(u8, mode, "articulate")) {
+    } else if (std.mem.eql(u8, mode, "speech") or std.mem.eql(u8, mode, "speech-organ")) {
         runSpeechOrgan();
+    } else if (std.mem.eql(u8, mode, "bio-articulate") or std.mem.eql(u8, mode, "bio_articulate") or std.mem.eql(u8, mode, "articulate") or std.mem.eql(u8, mode, "say-fact") or std.mem.eql(u8, mode, "engram-speak")) {
+        // Pure bio path: teach fact → episodic retrieve → motor speak → self-hear (NO chat module)
+        runBioArticulate(false);
+    } else if (std.mem.eql(u8, mode, "bio-articulate-speak") or std.mem.eql(u8, mode, "articulate-speak") or std.mem.eql(u8, mode, "say-fact-speak")) {
+        runBioArticulate(true);
     } else if (std.mem.eql(u8, mode, "cross-modal") or std.mem.eql(u8, mode, "cross_modal") or std.mem.eql(u8, mode, "av") or std.mem.eql(u8, mode, "crossmodal")) {
         runCrossModal();
     } else if (std.mem.eql(u8, mode, "bio-io") or std.mem.eql(u8, mode, "bio_io") or std.mem.eql(u8, mode, "sensory") or std.mem.eql(u8, mode, "io")) {
@@ -2366,6 +2409,8 @@ pub fn main() !void {
         std.debug.print("  brain-learn-speak = same + English TTS of learned facts\n", .{});
         std.debug.print("  english        = lexicon + Windows TTS (real words, not formants)\n", .{});
         std.debug.print("  practice       = utter → TTS → self-hear → encode\n", .{});
+        std.debug.print("  bio-articulate = teach→retrieve→motor→self-hear (NOT chat layer)\n", .{});
+        std.debug.print("  articulate     = same as bio-articulate\n", .{});
         std.debug.print("  speakers       = formant/DAC smoke only (NOT English)\n", .{});
         std.debug.print("  body           = plant smoke only (senses loop)\n", .{});
         std.debug.print("  suite          = unit-test gates\n", .{});
