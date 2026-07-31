@@ -1610,10 +1610,13 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             );
 
             // ── LOOP DETECT: no progress on new+uniq ──────────────────
+            // Note: same last_idea alone is NOT thrash if discover still lands new
+            // concepts (post-quality brainstorm: clean ideas recycle; discovery continues).
             if (cfg.duration_ms > 0 and rep.n_cycles > 20) {
                 const prog = (rep.n_new_concepts > last_new_snap) or (rep.n_ideas_unique > last_uniq_snap);
                 if (prog) {
                     stuck_prog = 0;
+                    stuck_idea = 0; // real progress — do not kill on recycled clean idea
                     last_new_snap = rep.n_new_concepts;
                     last_uniq_snap = rep.n_ideas_unique;
                 } else {
@@ -1622,6 +1625,15 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                 const ih: u32 = if (rep.last_idea_n > 0) memory_f.hashToken(rep.last_idea[0..rep.last_idea_n]) else 0;
                 if (ih != 0 and ih == last_idea_h) {
                     stuck_idea += 1;
+                    // unlock pair memory so brainstorm can form new compositions
+                    if (stuck_idea == 3 and n_pair_seen > 8) {
+                        var j: usize = 0;
+                        while (j < n_pair_seen / 2) : (j += 1) {
+                            pair_seen_h[j] = pair_seen_h[j + n_pair_seen / 2];
+                        }
+                        n_pair_seen = n_pair_seen / 2;
+                        hbPrint(log_ptr, "THINK_PAIR_UNLOCK half_pairs cleared (same idea, try new compose)\n", .{});
+                    }
                 } else {
                     stuck_idea = 0;
                     last_idea_h = ih;
@@ -1631,8 +1643,9 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
                     rep.stop_reason = "stuck_no_progress";
                     break;
                 }
-                if (stuck_idea >= cfg.stuck_idea_heartbeats) {
-                    hbPrint(log_ptr, "THINK_STUCK same last_idea for {d} heartbeats — shutting down\n", .{stuck_idea});
+                // same idea only stops if also no new/uniq progress (true thrash)
+                if (stuck_idea >= cfg.stuck_idea_heartbeats and stuck_prog >= @divTrunc(cfg.stuck_heartbeats, 2)) {
+                    hbPrint(log_ptr, "THINK_STUCK same last_idea + no new/uniq for {d}/{d} heartbeats — shutting down\n", .{ stuck_idea, stuck_prog });
                     rep.stop_reason = "stuck_same_idea";
                     break;
                 }
