@@ -62,21 +62,24 @@ Cross-language Phase A / product (2026-08-01 lab boot):
 | Compose multi-hop | PASS | PASS | PASS |
 | Intel-loop train→sleep→prove | PASS | PASS | PASS |
 | Continuous think probe | PASS | PASS | PASS |
-| Allen ISI KS product | PASS | PASS | *port next* |
+| Allen ISI KS product | PASS | PASS | **PASS** |
+| Class FI scalpel closed | PASS | *via isi-ks* | **PASS** |
 | Every-cell Allen iron | PASS | *host twin path* | *host twin path* |
 | QEMU bare metal | PASS | n/a | n/a |
+| Think-hour 60 min | **PASS** | n/a (Zig authority) | n/a |
 
-### Lean 4 stamp + scientific certificate (2026-08-01)
+### Lean 4 stamp + scientific certificate (2026-08-01, post-closure)
 
 | Verification class | Status |
 |--------------------|--------|
 | **Formula verification** (`scientific_panel_ok`, SCALE=1e12, free_params=0, pin D1D38A) | **PASS** — Lean 4.31.0, 0 `sorry` |
-| **Archive lake build** | **PASS** (2204 jobs) |
-| **Neural formal lake build** | **PASS** (16 jobs) |
-| **Empirical verification** (Allen ISI KS / class FI) | **PASS** Zig+Haskell; Idris DNA+Phase A |
+| **Archive / neural lake build** | **PASS** (2204 / 16 jobs) |
+| **Empirical verification** (Allen ISI KS / class FI / Phase A) | **PASS ×3 languages** |
+| **Zig think-hour** | **PASS** — see `data/results/THINK_HOUR_ANALYSIS.md` |
 | **Stamp** | `LEAN4_STAMP:scientific_panel_ok:v4.31.0:0_sorry:mind_stack` |
+| **Residuals** | D2 Fixed vs Double KS path (low); D5 Zig embodiment depth (expected) |
 
-Full discrepancy table + citations: **`docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md`**  
+Full certificate: **`docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md`**  
 Machine table: `data/results/CROSS_LANG_DISCREPANCY.json` · stamp: `data/results/LEAN4_STAMP.txt`
 
 Reproduce:
