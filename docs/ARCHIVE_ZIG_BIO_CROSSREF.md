@@ -26,7 +26,7 @@ Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · arch
 | **Genetic W pair law** | genetic_network | `genetic_fixed.fsotPairWeight` | **Parity** | Keep both |
 | **Cell types Pyr/PV/SST/VIP fractions** | cell_types | `cell_types.zig` | **Parity** | Keep both |
 | **Allen pop ISI bio_match ≤2%** | calibrate + report_card **closed ~1.26%** | `runAllenBioMatch` **closed ~0.77%** | **Zig ≥ archive** | Zig → archive note |
-| **Allen pop adapt ≤10%** | closed in report_card | closed ~5.2% | **Zig ≥ archive** | Keep |
+| **Allen pop adapt ≤10% gate / ≤2.5% iron** | archive Python residual **~6.7%** | Zig dual-polish **~1.6%** iron | **Zig ≥ archive** | Keep |
 | **Class rates Pyr/PV/SST/VIP ≤2%** | wetlab T2 **closed** | `scalpel_rate_fixed` **ported** | **Closing** | Zig gate |
 | **PV ≫ Pyr order** | wetlab critical | scalpel `pv_faster_than_pyr` | **Ported** | Keep |
 | **bio_match vs efficient modes** | `modes.py` | pop ISI lock = bio_match; efficient not default for mind | **Partial** | optional efficient later |

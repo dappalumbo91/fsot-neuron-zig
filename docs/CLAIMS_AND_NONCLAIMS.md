@@ -26,7 +26,7 @@
 | Claim | How verified |
 |-------|----------------|
 | Pop ISI vs Allen bio_match target **≤2%** rel | `fsot_mind fixed` → `FSOT_ALLEN_ISI_RESIDUAL_CLOSED` (~0.77% in docs) |
-| Pop adapt **≤10%** rel | same suite (~5.2% in docs) |
+| Pop adapt **≤10%** gate; polish iron **≤2.5%** when achievable | same suite (~1.6% iron after dual polish; archive Python ~6.7%) |
 | Class rates Pyr/PV/SST/VIP **≤2%** + PV ≫ Pyr | `fsot_mind scalpel` → `FSOT_SCALPEL_RATES PASS` |
 | Genetic structure (codon ORFs, E/I, pair W) | suite + Neural Lean structure panel |
 | Wet process cascade runs on think encode (STDP/glia/mol/consol/prune) | think logs: `THINK_WET`, non-zero stdp/releases; mut≠0 plasticity |

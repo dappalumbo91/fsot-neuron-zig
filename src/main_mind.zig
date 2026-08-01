@@ -448,7 +448,7 @@ fn runFixed() void {
     } else |_| {}
     if (n_params == 0) n_params = 32; // defaultBioParams already filled
 
-    std.debug.print("bio_params=allen_lock n={d} target_isi_ms={e} target_adapt={e} isi_tol=2%\n", .{
+    std.debug.print("bio_params=allen_lock n={d} target_isi_ms={e} target_adapt={e} isi_tol=2% adapt_gate=10% adapt_iron=2.5%\n", .{
         n_params,
         bio_probe_fixed.ALLEN_ISI_MS,
         bio_probe_fixed.ALLEN_ADAPT,
@@ -466,6 +466,9 @@ fn runFixed() void {
     std.debug.print("gate_bio_rate={s}\n", .{if (fi.rate_band_ok) "PASS" else "FAIL"});
     std.debug.print("gate_bio_isi={s}\n", .{if (fi.isi_closed) "PASS" else "FAIL"});
     std.debug.print("gate_bio_adapt={s}\n", .{if (fi.adapt_closed) "PASS" else "FAIL"});
+    if (fi.adapt_rel_err <= bio_probe_fixed.ADAPT_TIGHT_REL) {
+        std.debug.print("FSOT_ALLEN_ADAPT_IRON_CLOSED adapt_rel_err={e} iron_tol=2.5%\n", .{fi.adapt_rel_err});
+    }
     if (!fi.bio_match_ok) {
         std.debug.print("FSOT_FIXED_BIO FAIL (Allen bio_match residual open)\n", .{});
         std.process.exit(1);

@@ -13,7 +13,10 @@ const Fixed = fixed.Fixed;
 pub const ALLEN_ISI_MS: f64 = 70.59855571638475;
 pub const ALLEN_ADAPT: f64 = 0.051153889361673456;
 pub const ISI_TOL_REL: f64 = 0.02; // 2% FSOT-grade floor
-pub const ADAPT_TOL_REL: f64 = 0.10; // 10% — sign/order primary for AHP
+/// Gate pass (AHP sign/order primary; archive Python bio_match was ~6.7% residual).
+pub const ADAPT_TOL_REL: f64 = 0.10;
+/// Polish iron target — keep tightening until this or max iters (scientific accuracy).
+pub const ADAPT_TIGHT_REL: f64 = 0.025; // 2.5% iron (between 2% ISI-class and old 10% floor)
 
 pub const UnitParamsF = struct {
     d_eff: Fixed = fixed.fromInt(13),
@@ -190,8 +193,9 @@ fn adaptStepFromTarget(R: f64, ad: f64) f64 {
     if (A < 1e-6) return 0.0;
     const n1: f64 = 9.0; // n_isi≈10 → n-1
     var d = (2.0 * A * Rr) / (n1 * (1.0 - A) + 1e-9);
-    // Fixed lattice AHP is weaker than torch batch — stronger δ to hit Allen ~0.051
-    d *= 1.55;
+    // Fixed lattice AHP weaker than torch — slightly stronger δ to hit Allen ~0.051
+    // (was 1.55 → residual ~5.2% under; 1.63 + dual polish aims ≤2.5% iron)
+    d *= 1.63;
     return @max(0.0, @min(10.0, d));
 }
 
@@ -213,17 +217,30 @@ pub fn analyticalLockBioMatch(params: []UnitParamsF) void {
         params[u].adapt_step = fixed.fromF64Lab(d);
         // Keep adapt_gain near Allen-mapped values (needed for AHP index)
         const g0 = fixed.toF64(params[u].adapt_gain);
-        const g1 = @max(0.025, @min(0.08, @max(g0, 0.035)));
+        const g1 = @max(0.028, @min(0.085, @max(g0, 0.038)));
         params[u].adapt_gain = fixed.fromF64Lab(g1);
     }
 }
 
-/// Population polish — same spirit as calibrate_batch snap (up to 8 iters).
+fn scoreBioMatch(isi_err: f64, ad_err: f64) f64 {
+    // Prefer closed ISI; then iron adapt residual
+    const isi_pen = if (isi_err <= ISI_TOL_REL) isi_err else 10.0 * isi_err;
+    const ad_pen = if (ad_err <= ADAPT_TIGHT_REL) ad_err else 3.0 * ad_err;
+    return isi_pen + ad_pen;
+}
+
+/// Population polish — dual objective ISI ≤2% + adapt iron ≤2.5% (gate still ≤10%).
+/// Bugfix: early return when adapt_err ~5% satisfied 10% gate while ISI closed,
+/// so polish never tightened AHP further. Now continue until iron or max iters.
 pub fn polishBioMatch(params: []UnitParamsF, steps: usize) PopReportF {
     analyticalLockBioMatch(params);
     var snap: u32 = 0;
     var last: PopReportF = .{};
-    while (snap < 8) : (snap += 1) {
+    var best: PopReportF = .{};
+    var best_score: f64 = 1e9;
+    var have_best = false;
+
+    while (snap < 14) : (snap += 1) {
         last = runFIPopulation(params, steps);
         const isi = last.mean_isi_ms;
         const ad = last.mean_adapt;
@@ -235,39 +252,79 @@ pub fn polishBioMatch(params: []UnitParamsF, steps: usize) PopReportF {
         last.adapt_closed = ad_err <= ADAPT_TOL_REL;
         last.rate_band_ok = last.mean_rate_Hz >= 5.0 and last.mean_rate_Hz <= 80.0;
         last.bio_match_ok = last.isi_closed and last.adapt_closed and last.rate_band_ok and last.n_with_isi >= 1;
-        if (last.bio_match_ok) return last;
 
-        // scale all units' ref_steps / adapt_step / adapt_gain
+        const sc = scoreBioMatch(isi_err, ad_err);
+        if (!have_best or sc < best_score) {
+            best = last;
+            best_score = sc;
+            have_best = true;
+        }
+
+        // Iron success: ISI closed AND adapt within tight band
+        const adapt_tight = ad_err <= ADAPT_TIGHT_REL;
+        if (last.isi_closed and adapt_tight and last.rate_band_ok and last.n_with_isi >= 1) {
+            return last;
+        }
+
+        // --- ISI polish (only if open; gentle to protect adapt) ---
         if (isi > 1 and !last.isi_closed) {
             var fac = ALLEN_ISI_MS / isi;
-            fac = 1.0 + 0.85 * (fac - 1.0);
-            fac = @max(0.90, @min(1.12, fac));
+            fac = 1.0 + 0.70 * (fac - 1.0);
+            fac = @max(0.92, @min(1.10, fac));
             var u: usize = 0;
             while (u < params.len) : (u += 1) {
                 const r: f64 = @floatFromInt(params[u].ref_steps);
                 params[u].ref_steps = @intFromFloat(@max(4.0, @min(200.0, @round(r * fac))));
             }
         }
-        if (!last.adapt_closed) {
-            // Aggressive when under-adapted (fixed lattice AHP weaker than torch)
-            var sfac: f64 = if (@abs(ad) < 1e-5) 2.0 else ALLEN_ADAPT / (ad + 1e-9);
-            sfac = 1.0 + 1.05 * (sfac - 1.0);
-            sfac = @max(0.45, @min(2.8, sfac));
+
+        // --- Adapt polish if not iron-tight (even when 10% gate already passes) ---
+        if (!adapt_tight) {
+            // Fixed lattice AHP: under-adapted common; over-adapt rare after lock
+            var sfac: f64 = if (@abs(ad) < 1e-5) 1.8 else ALLEN_ADAPT / (ad + 1e-9);
+            // Soften when already near gate (avoid overshoot past Allen)
+            if (ad_err < 0.08) {
+                sfac = 1.0 + 0.55 * (sfac - 1.0);
+            } else {
+                sfac = 1.0 + 0.85 * (sfac - 1.0);
+            }
+            sfac = @max(0.75, @min(1.55, sfac));
+            // If ISI is already closed, keep adapt nudge smaller so rate/ISI stay put
+            if (last.isi_closed) {
+                sfac = 1.0 + 0.40 * (sfac - 1.0);
+                sfac = @max(0.88, @min(1.18, sfac));
+            }
             var u: usize = 0;
             while (u < params.len) : (u += 1) {
-                const d = fixed.toF64(params[u].adapt_step) * sfac;
-                params[u].adapt_step = fixed.fromF64Lab(@max(0.0, @min(10.0, d)));
+                const d0 = fixed.toF64(params[u].adapt_step);
+                params[u].adapt_step = fixed.fromF64Lab(@max(0.0, @min(10.0, d0 * sfac)));
                 if (ad < ALLEN_ADAPT) {
-                    const g = fixed.toF64(params[u].adapt_gain) * @min(1.15, sfac);
-                    params[u].adapt_gain = fixed.fromF64Lab(@max(0.025, @min(0.09, g)));
+                    const g0 = fixed.toF64(params[u].adapt_gain);
+                    const g1 = g0 * @min(1.12, @max(1.0, sfac));
+                    params[u].adapt_gain = fixed.fromF64Lab(@max(0.028, @min(0.09, g1)));
+                } else if (ad > ALLEN_ADAPT) {
+                    // pull back step+gain when overshooting Allen AHP index
+                    const d1 = fixed.toF64(params[u].adapt_step) * 0.97;
+                    params[u].adapt_step = fixed.fromF64Lab(@max(0.0, @min(10.0, d1)));
+                    const g0 = fixed.toF64(params[u].adapt_gain);
+                    params[u].adapt_gain = fixed.fromF64Lab(@max(0.025, g0 * 0.965));
                 }
             }
         }
     }
+    // Prefer best dual score; re-score best flags for callers
+    if (have_best) {
+        best.isi_closed = best.isi_rel_err <= ISI_TOL_REL;
+        best.adapt_closed = best.adapt_rel_err <= ADAPT_TOL_REL;
+        best.rate_band_ok = best.mean_rate_Hz >= 5.0 and best.mean_rate_Hz <= 80.0;
+        best.bio_match_ok = best.isi_closed and best.adapt_closed and best.rate_band_ok and best.n_with_isi >= 1;
+        return best;
+    }
     return last;
 }
 
-/// Full Allen bio_match path: load → lock → polish → score vs 2% ISI / 10% adapt.
+/// Full Allen bio_match path: load → lock → polish → ISI ≤2% gate / adapt ≤10% gate
+/// with polish iron target adapt ≤2.5% when achievable without breaking ISI.
 pub fn runAllenBioMatch(params: []UnitParamsF, steps: usize) PopReportF {
     return polishBioMatch(params, if (steps < 1200) 1200 else steps);
 }
