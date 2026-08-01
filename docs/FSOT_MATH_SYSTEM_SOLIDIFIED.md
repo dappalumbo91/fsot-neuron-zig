@@ -4,10 +4,14 @@
 **Date:** 2026-07-29  
 **Owner:** Damian Arthur Palumbo  
 **Physical archive (master reference):** `I:\FSOT-Physical-Archive`  
+**GitHub face of that archive (Lean verification):** https://github.com/dappalumbo91/FSOT-2.1-Lean  
+**Zig mind (this embodiment):** https://github.com/dappalumbo91/fsot-neuron-zig  
 **Authority pin (SHA-256 of `vendor/fsot_compute.py`):**  
 `D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70`
 
 This document does **not** invent a new theory. It **solidifies** the single FSOT spine already verified across the physical archive (hundreds of domains, multi-prover, ≤0.5% green gate) and records **exactly how that math was engineered into** the genetic Fixed-lattice mind: scalar → genetics → synapses → wet cascade → curriculum.
+
+**Unity:** Cosmology and the neural mind are **domain folds of the same** \(S=K(T_1+T_2+T_3)\) engine — see [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md).
 
 Cross-links:
 
@@ -15,9 +19,10 @@ Cross-links:
 |-------|------|
 | Archive usage doctrine | `I:\FSOT-Physical-Archive\FSOT_USAGE_DOCTRINE.md` |
 | Archive math deep dig | `I:\FSOT-Physical-Archive\ARCHIVE_MATH_AND_VERIFICATION_DEEP_DIG.md` |
-| Full Lean hub (analytic S) | `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full` |
+| Archive ↔ GitHub ↔ Zig map | `I:\FSOT-Physical-Archive\ZIG_MIND_AND_GITHUB_MAP.md` |
+| Full Lean hub (analytic S) | `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full` · [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | Neural formula ledger | [`FORMULAS.md`](FORMULAS.md) |
-| Neural Lean panel | `formal/` · theorem `scientific_panel_ok` |
+| Neural Lean panel | monorepo `formal/` · theorem `scientific_panel_ok` |
 | Certificate stamp | `data/results/LEAN_WETLAB_CERTIFICATE.md` |
 
 ---

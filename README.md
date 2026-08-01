@@ -2,23 +2,36 @@
 
 **Fluid Spacetime Omni-Theory (FSOT) neural mind — Zig authority.**
 
-Bare-metal multi-region brain, 64-codon genetic spine, fixed-point lattice (SCALE=1e12), wet biophysics (stochastic AMPA/NMDA, spine cascade, glia, STDP), grade ladder PK→G8 (≥95%), paraphrase depth, all-atom MD lab (host f64), episodic 5W1H memory, machine language, English lexicon codec, TTS plant, live host senses.
+**One law, many folds.** Cosmology and the neural mind share the **same** seed-derived scalar \(S=K(T_1+T_2+T_3)\) (pin **D1D38A**). This repo is the **silicon domain engine** for the neuroscience fold — not a second theory.
+
+| Authority | Where |
+|-----------|--------|
+| **Physical Archive (offline master)** | `I:\FSOT-Physical-Archive` |
+| **GitHub = archive / Lean verification** | [**FSOT-2.1-Lean**](https://github.com/dappalumbo91/FSOT-2.1-Lean) — public face of the Physical Archive |
+| **Neural monorepo (Allen / wet-lab)** | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
+| **This repo (Zig mind body)** | Fixed lattice, genetics, wet cascade, think/sleep, organism |
+
+Map: [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md)
+
+Bare-metal multi-region brain, 64-codon genetic spine, fixed-point lattice (SCALE=1e12), wet biophysics (stochastic AMPA/NMDA, spine cascade, glia, STDP), grade ladder PK→G8 (≥95% **on project gates**), paraphrase depth, all-atom MD lab (host f64), episodic 5W1H memory, machine language, English lexicon codec, TTS plant, live host senses.
 
 Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). The mind core runs in Zig without Python.
 
 | | |
 |--|--|
-| **Theory** | Fluid Spacetime Omni-Theory (FSOT) 2.1 — pin D1D38A |
-| **Authority** | Fixed-point lattice (`src/fixed.zig`, SCALE=1e12) |
-| **Math** | [`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`](docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md) |
-| **Lean stamp** | monorepo `formal/` · `scientific_panel_ok` (0 sorry) |
+| **Theory / pin** | FSOT 2.1 — pin D1D38A ([FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) + Physical Archive) |
+| **Law path** | One scalar engine; cosmology = fold; mind = fold + domain engine (this repo) |
+| **Embodiment authority** | Fixed-point lattice (`src/fixed.zig`, SCALE=1e12) |
+| **Math solidification** | [`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`](docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md) |
+| **Archive ↔ Zig map** | [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md) · [`docs/ARCHIVE_ZIG_BIO_CROSSREF.md`](docs/ARCHIVE_ZIG_BIO_CROSSREF.md) |
+| **Lean stamp (neural structure)** | monorepo `formal/` · `scientific_panel_ok` (0 sorry) |
 | **Language** | Zig 0.15+ |
 | **License** | Apache-2.0 |
 | **Learned capacity** | [`docs/LEARNED_CAPACITY.md`](docs/LEARNED_CAPACITY.md) — Zig intel stack + companion multi-hop snapshot |
 | **Top-to-bottom verify** | [`docs/TOP_TO_BOTTOM_VERIFICATION.md`](docs/TOP_TO_BOTTOM_VERIFICATION.md) — stress · QEMU · Lean stamp · bio |
 | **Real-brain school** | [`docs/BRAIN_LEARN_BRIDGE.md`](docs/BRAIN_LEARN_BRIDGE.md) — `fsot_mind brain-learn` teaches **OrganismF** |
 | **Lean × wet-lab cert** | [`data/results/LEAN_WETLAB_CERTIFICATE.md`](data/results/LEAN_WETLAB_CERTIFICATE.md) |
-| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Lean sources / export_brain_teach_bank) |
+| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (wet-lab / export banks) |
 
 ## Quick start
 

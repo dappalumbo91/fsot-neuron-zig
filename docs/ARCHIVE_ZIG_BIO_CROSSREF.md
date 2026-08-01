@@ -1,12 +1,16 @@
 # Archive ↔ Zig mind — biological accuracy cross-reference
 
-**Purpose:** Silicon-neuron substrate. Be as wet-lab accurate as the archive already proved; feed Zig refinements back into the archive.
+**Purpose:** Silicon-neuron substrate under the **same FSOT law** that routes cosmology and other domains. Be as wet-lab accurate as the archive already proved; feed Zig refinements back into the archive.
 
 | Authority | Role |
 |-----------|------|
-| **I:\FSOT-Physical-Archive** | FSOT scalar, pin D1D38A, Lean continuous math |
-| **I:\fsot nuron** (monorepo) | Allen ephys, wetlab 37/37, calibrate/scalpel, Python battery |
-| **I:\fsot-neuron-zig** (this repo) | Fixed lattice mind body, genetic brain, think/sleep/LTM/GPU |
+| **I:\FSOT-Physical-Archive** | Offline master: scalar, pin D1D38A, multi-prover, public-data panels |
+| **[FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)** | **GitHub face of the Physical Archive** — Lean + verification bundle |
+| **[FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural)** / `I:\fsot nuron` | Allen ephys, wetlab 37/37, calibrate/scalpel, Python battery |
+| **This repo** / `I:\fsot-neuron-zig` | Fixed lattice **neural fold** domain engine: genetics, wet cascade, think/sleep/LTM/GPU |
+
+**Unity claim:** Cosmology fold and neural fold share \(S=K(T_1+T_2+T_3)\) (pin D1D38A). Zig is embodiment + domain metrics, not a second theory.  
+Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · archive `ZIG_MIND_AND_GITHUB_MAP.md`
 
 **Silicon vision:** process-accurate neuron/network laws on non-biological substrate (code → chip). Not a claim of molecular identity with wet tissue.
 
