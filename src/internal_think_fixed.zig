@@ -422,14 +422,36 @@ fn cueIsBanned(c: []const u8) bool {
 }
 
 /// Single content-word answer preferred for concept composition.
+/// Rejects paper scrap first-tokens (An, We, The, …) that polluted hour ideas.
 fn ansIsCleanConcept(a: []const u8) bool {
-    if (a.len < 2 or a.len > 22) return false;
+    if (a.len < 3 or a.len > 22) return false;
     if (std.mem.indexOf(u8, a, "  ") != null) return false;
     if (std.mem.indexOf(u8, a, "is is") != null) return false;
     if (std.mem.indexOf(u8, a, "dnim") != null) return false;
     if (std.mem.indexOf(u8, a, "link") != null) return false;
-    if (std.mem.indexOf(u8, a, "We ") != null or std.mem.indexOf(u8, a, "we ") != null) return false;
     if (std.mem.indexOf(u8, a, "review") != null) return false;
+    // lowercase first token for function-word ban
+    var low: [24]u8 = undefined;
+    if (a.len > low.len) return false;
+    var li: usize = 0;
+    while (li < a.len) : (li += 1) {
+        const c = a[li];
+        low[li] = if (c >= 'A' and c <= 'Z') c + 32 else c;
+    }
+    const al = low[0..a.len];
+    // bare determiner / pronoun / paper openers (was: "dynamics is An so …")
+    const scrap = [_][]const u8{
+        "an", "a", "the", "we", "our", "this", "that", "these", "those", "i",
+        "in", "on", "of", "to", "for", "and", "or", "as", "by", "with",
+        "from", "into", "its", "it", "is", "are", "was", "were", "be",
+        "abstract", "paper", "title", "section", "figure", "table",
+    };
+    for (scrap) |s| {
+        if (al.len == s.len and std.mem.eql(u8, al, s)) return false;
+        // "an ..." multiword still bad as concept ans
+        if (al.len > s.len + 1 and std.mem.startsWith(u8, al, s) and al[s.len] == ' ') return false;
+    }
+    if (std.mem.startsWith(u8, al, "we ") or std.mem.startsWith(u8, al, "the ")) return false;
     var spaces: u32 = 0;
     var letters: u32 = 0;
     for (a) |ch| {
@@ -438,7 +460,13 @@ fn ansIsCleanConcept(a: []const u8) bool {
     }
     // at most one space (two-word ans ok); mostly letters
     if (spaces > 1) return false;
-    if (letters < 2) return false;
+    if (letters < 3) return false;
+    // must contain a vowel (English content word)
+    var vowels: u32 = 0;
+    for (al) |c| {
+        if (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' or c == 'y') vowels += 1;
+    }
+    if (vowels == 0) return false;
     return true;
 }
 

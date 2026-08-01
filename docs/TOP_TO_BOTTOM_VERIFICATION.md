@@ -1,8 +1,11 @@
 # Top-to-bottom verification report
 
-**Date:** 2026-07-30  
+**Date:** 2026-07-30 (claims hygiene link 2026-08-01)  
 **Repo:** [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig)  
 **Companion monorepo:** [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (Lean formal + Python wet-lab battery)  
+**Law spine:** [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) · pin D1D38A · Physical Archive  
+**Claims / non-claims:** [`CLAIMS_AND_NONCLAIMS.md`](CLAIMS_AND_NONCLAIMS.md)  
+**Reproduce bio gates:** `scripts/reproduce_bio_gates.ps1`  
 **Verdict:** **CRITICAL PATH GREEN**
 
 Nothing in this run indicates a broken mind stack, bare-metal drop, or lost Lean stamp.  

@@ -11,7 +11,9 @@
 | **Neural monorepo (Allen / wet-lab)** | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
 | **This repo (Zig mind body)** | Fixed lattice, genetics, wet cascade, think/sleep, organism |
 
-Map: [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md)
+Map: [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md)  
+**Claims hygiene:** [`docs/CLAIMS_AND_NONCLAIMS.md`](docs/CLAIMS_AND_NONCLAIMS.md) — only what is verified  
+**Reproduce bio gates:** `powershell -File .\scripts\reproduce_bio_gates.ps1`
 
 Bare-metal multi-region brain, 64-codon genetic spine, fixed-point lattice (SCALE=1e12), wet biophysics (stochastic AMPA/NMDA, spine cascade, glia, STDP), grade ladder PK→G8 (≥95% **on project gates**), paraphrase depth, all-atom MD lab (host f64), episodic 5W1H memory, machine language, English lexicon codec, TTS plant, live host senses.
 
