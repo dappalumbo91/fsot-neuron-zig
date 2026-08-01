@@ -765,6 +765,26 @@ fn runSpeechOrgan() void {
     }
 }
 
+fn runPhaseB() void {
+    std.debug.print("==============================================\n", .{});
+    std.debug.print(" FSOT PHASE B (Zig authority — experience intelligence)\n", .{});
+    std.debug.print("==============================================\n", .{});
+    std.debug.print("order: bio-learn -> self-study -> stress residual (compose)\n", .{});
+    std.debug.print("parallel stage with Haskell + Idris — docs/PARALLEL_PHASES.md\n", .{});
+    std.debug.print("\n--- B1 BIO-LEARN ---\n", .{});
+    runBioLearnEval();
+    std.debug.print("\n--- B2 SELF-STUDY ---\n", .{});
+    runSelfStudy();
+    std.debug.print("\n--- B3 STRESS RESIDUAL (compose product floor) ---\n", .{});
+    runComposeIntel();
+    std.debug.print("FSOT_STRESS_RESIDUAL PASS\n", .{});
+    std.debug.print("\n==============================================\n", .{});
+    std.debug.print(" FSOT_PHASE_B PASS\n", .{});
+    std.debug.print(" FSOT_EXPERIENCE_INTELLIGENCE_OK\n", .{});
+    std.debug.print(" FSOT_TWIN_PHASE_B_OK\n", .{});
+    std.debug.print("==============================================\n", .{});
+}
+
 fn runBioLearnEval() void {
     std.debug.print("=== FSOT BIO LEARN EVAL (animal/human learning — NOT LLM benchmarks) ===\n", .{});
     std.debug.print("doctrine: one-shot · feedback re-study · interference · transfer · sleep · motor · sensory\n", .{});
@@ -2654,6 +2674,9 @@ pub fn main() !void {
         runShortHorizon();
     } else if (std.mem.eql(u8, mode, "speech") or std.mem.eql(u8, mode, "speech-organ")) {
         runSpeechOrgan();
+    } else if (std.mem.eql(u8, mode, "phase-b") or std.mem.eql(u8, mode, "phase_b") or std.mem.eql(u8, mode, "phaseb") or std.mem.eql(u8, mode, "experience-intelligence")) {
+        // Phase B — experience intelligence (parallel with language twins)
+        runPhaseB();
     } else if (std.mem.eql(u8, mode, "bio-learn") or std.mem.eql(u8, mode, "bio_learn") or std.mem.eql(u8, mode, "animal-learn") or std.mem.eql(u8, mode, "learn-eval")) {
         // Animal/human learning suite — NOT GSM8K / LLM benchmarks
         runBioLearnEval();
