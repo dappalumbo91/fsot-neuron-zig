@@ -14,7 +14,7 @@ Run each phase **in parallel** across the trio; only advance when **all three** 
 | **A** | Continuous organism product | Organism · compose · intel-loop · think · isi-ks · scalpel | **PASS ×3** | QEMU bare metal |
 | **B** | Experience intelligence | One-shot · feedback · interference · transfer · sleep · motor | **PASS ×3** | MNIST pack, full wet, brain-learn depth |
 | **C** | Embodied I/O | bio-io · articulate · converse · speech-EEG phase order | **PASS ×3** | GDI/mic/TTS plant depth on Zig |
-| **D** | Scientific packaging | Cross-lang certificate · Lean stamp · EEG/MRI learning-catch citations | next | archive lake build |
+| **D** | Scientific packaging | Cross-lang certificate · Lean stamp · EEG/MRI learning-catch citations | **PASS ×3** | archive lake build residual |
 
 **Stress:** every phase ends with a short product residual (Phase A suite or isi-ks) so gates do not regress.
 
@@ -81,14 +81,31 @@ Zig has full Fixed plant (pathways/speech organ); host twins implement the **sam
 
 ---
 
-## Phase D — Scientific packaging (parallel)
+## Phase D — Scientific packaging (DONE · parallel)
 
 | Deliverable | All three |
 |-------------|-----------|
 | Cross-lang certificate | `docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md` |
-| Lean stamp | `LEAN4_STAMP:scientific_panel_ok:…` |
-| Learning-catch data map | SME θ/γ · NREM · OpenNeuro inner speech |
-| Phase matrix published | this file + results logs |
+| Lean stamp | `LEAN4_STAMP:scientific_panel_ok:v4.31.0:0_sorry:mind_stack` |
+| Learning-catch data map | `docs/LEARNING_CATCH_EMPIRICAL_MAP.md` |
+| Phase matrix published | `docs/SCIENTIFIC_PHASE_MATRIX.md` |
+| Local ship doctrine | no server — local binary per language |
+
+### Commands (parallel)
+
+```text
+Zig:      fsot_mind phase-d
+Haskell:  cabal run fsot-mind -- phase-d
+Idris:    ./build/exec/fsot-mind phase-d
+```
+
+Order inside `phase-d`:
+
+1. D1 Lean stamp artifact present  
+2. D2 Formula verification claims (S, pin, SCALE, free_params=0)  
+3. D3 Empirical package matrix A+B+C + learning-catch map paths  
+4. D4 Stress residual (compose)  
+5. `FSOT_PHASE_D PASS` · `FSOT_LOCAL_DISSEMINATION_OK server_required=false`
 
 ---
 

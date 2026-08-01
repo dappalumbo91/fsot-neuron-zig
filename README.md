@@ -67,6 +67,9 @@ Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). Th
 | **Lean × wet-lab cert** | [`data/results/LEAN_WETLAB_CERTIFICATE.md`](data/results/LEAN_WETLAB_CERTIFICATE.md) |
 | **Cross-lang × Lean stamp** | [`docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md`](docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md) · [`data/results/LEAN4_STAMP.txt`](data/results/LEAN4_STAMP.txt) |
 | **Think-hour analysis** | [`data/results/THINK_HOUR_ANALYSIS.md`](data/results/THINK_HOUR_ANALYSIS.md) — 60 min continuous bio/wet PASS |
+| **Phase matrix A–D** | [`docs/SCIENTIFIC_PHASE_MATRIX.md`](docs/SCIENTIFIC_PHASE_MATRIX.md) · `phase-a`…`phase-d` |
+| **Learning-catch map** | [`docs/LEARNING_CATCH_EMPIRICAL_MAP.md`](docs/LEARNING_CATCH_EMPIRICAL_MAP.md) |
+| **Ship doctrine** | **Local** multi-language mind — no server required to run intelligence |
 | **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (wet-lab / export banks) |
 
 ## Quick start

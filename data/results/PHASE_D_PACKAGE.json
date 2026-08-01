@@ -1,0 +1,42 @@
+{
+  "phase": "D",
+  "name": "scientific_packaging",
+  "lab_date": "2026-08-01",
+  "overall": "PASS",
+  "dissemination": {
+    "model": "local_binary_per_language",
+    "server_required": false,
+    "languages": ["zig", "haskell", "idris"]
+  },
+  "formula_verification": {
+    "stamp": "LEAN4_STAMP:scientific_panel_ok:v4.31.0:0_sorry:mind_stack",
+    "pin": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+    "scalar_law": "S = K*(T1+T2+T3)",
+    "free_parameters": 0,
+    "SCALE": 1000000000000,
+    "lean": "v4.31.0",
+    "archive_lake_jobs": 2204,
+    "neural_formal_jobs": 16,
+    "sorry": 0
+  },
+  "empirical_verification": {
+    "phase_a": "PASS_x3",
+    "phase_b": "PASS_x3",
+    "phase_c": "PASS_x3",
+    "allen_isi_ks": "PASS_x3",
+    "think_hour_zig": "PASS"
+  },
+  "artifacts": {
+    "certificate": "docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md",
+    "matrix": "docs/SCIENTIFIC_PHASE_MATRIX.md",
+    "learning_catch_map": "docs/LEARNING_CATCH_EMPIRICAL_MAP.md",
+    "stamp": "data/results/LEAN4_STAMP.txt",
+    "parallel_phases": "docs/PARALLEL_PHASES.md"
+  },
+  "repos": {
+    "zig": "https://github.com/dappalumbo91/fsot-neuron-zig",
+    "haskell": "https://github.com/dappalumbo91/fsot-neuron-haskell",
+    "idris": "https://github.com/dappalumbo91/fsot-neuron-idris",
+    "lean": "https://github.com/dappalumbo91/FSOT-2.1-Lean"
+  }
+}
