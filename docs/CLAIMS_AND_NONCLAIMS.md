@@ -32,6 +32,7 @@
 | Wet process cascade runs on think encode (STDP/glia/mol/consol/prune) | think logs: `THINK_WET`, non-zero stdp/releases; mut≠0 plasticity |
 | STM/LTM disk spill + warm | `ltm_disk_fixed`; hour logs warm/spill counts |
 | Bio metrics are process metrics, not LLM benches | `metric_kind=bio_episodic_not_llm`; doctrine docs |
+| Answer-dependent composition (hop N from answer N−1) with ablation dependence | `fsot_mind compose` → `FSOT_COMPOSE_INTEL PASS` · claim ≥90% · ablate break ≥80% |
 
 ### Process organism (measured on host)
 

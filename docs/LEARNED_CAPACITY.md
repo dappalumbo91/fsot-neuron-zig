@@ -37,7 +37,7 @@ Honest inventory of the **Zig neurological mind**. School knowledge **encodes in
 | **Mind host** | `zig build` / `BOOT_MIND.cmd` → `fsot_mind` modes |
 | **Core** | `brain_fixed`, `neuron_fixed`, `genetic_fixed`, `organism_fixed`, `memory_fixed`, `learning_fixed` |
 | **Wet stack** | `channel_stoch_fixed` · `molecular_fixed` · `glia_fixed` · `stdp_fixed` |
-| **Intel** | `neuromod_fixed` · `sleep_replay_fixed` · `claimability_fixed` · `intel_loop_fixed` · `intel_frontier_fixed` |
+| **Intel** | `neuromod_fixed` · `sleep_replay_fixed` · `claimability_fixed` · `compose_intel_fixed` · `intel_loop_fixed` · `intel_frontier_fixed` |
 | **Curriculum** | `grade_ladder_fixed` PK→G8 · `understand_depth_fixed` · `teach_fixed` · `transfer_fixed` |
 | **I/O** | host senses · speech organ · machine-lang · MNIST gate pack under `data/multimodal/` |
 

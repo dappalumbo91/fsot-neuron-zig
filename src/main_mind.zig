@@ -94,6 +94,7 @@ const allatom_md = @import("allatom_md.zig");
 const neuromod_fixed = @import("neuromod_fixed.zig");
 const sleep_replay_fixed = @import("sleep_replay_fixed.zig");
 const claimability_fixed = @import("claimability_fixed.zig");
+const compose_intel_fixed = @import("compose_intel_fixed.zig");
 const intel_loop_fixed = @import("intel_loop_fixed.zig");
 const intel_frontier_fixed = @import("intel_frontier_fixed.zig");
 const brain_learn_fixed = @import("brain_learn_fixed.zig");
@@ -1886,11 +1887,56 @@ fn runClaimability() void {
     }
 }
 
+fn runComposeIntel() void {
+    std.debug.print("=== FSOT COMPOSE-INTEL (answer-dependent multi-hop) ===\n", .{});
+    std.debug.print("doctrine: hop N cue from hop N-1 answer (hipp bind → WM → edge re-cue)\n", .{});
+    std.debug.print("not parallel claimability — ablation must break when intermediate corrupted\n", .{});
+    const r = compose_intel_fixed.runComposeIntel();
+    std.debug.print(
+        "COMPOSE taught={d} chains={d} correct={d} claimable={d} acc={e} claim_rate={e} 2hop={d}/{d} 3hop={d}/{d}\n",
+        .{
+            r.n_taught,
+            r.n_chains,
+            r.n_correct,
+            r.n_claimable,
+            r.accuracy,
+            r.claim_rate,
+            r.correct_2,
+            r.n_2hop,
+            r.correct_3,
+            r.n_3hop,
+        },
+    );
+    std.debug.print(
+        "COMPOSE pe_hit={d} pe_miss={d} ach={e} wm_peak={d} ablate={d}/{d} break_rate={e} nm={} answer_dep={}\n",
+        .{
+            r.pe_hits,
+            r.pe_miss,
+            r.mean_ach,
+            r.wm_peak,
+            r.n_ablate_broke,
+            r.n_ablate,
+            r.ablate_break_rate,
+            r.neuromod_ok,
+            r.answer_dependent,
+        },
+    );
+    if (r.ok) {
+        std.debug.print("FSOT_COMPOSE_INTEL PASS\n", .{});
+        std.debug.print("FSOT_ANSWER_DEPENDENT_HOP_OK\n", .{});
+        std.debug.print("FSOT_COMPOSE_ABLATION_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_COMPOSE_INTEL FAIL (need ≥90% claimable + ablation break ≥80%)\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runIntelBio() void {
-    std.debug.print("=== FSOT INTEL-BIO STACK (neuromod + sleep + claimability) ===\n", .{});
+    std.debug.print("=== FSOT INTEL-BIO STACK (neuromod + sleep + claimability + compose) ===\n", .{});
     runNeuromod();
     runSleepReplay();
     runClaimability();
+    runComposeIntel();
     std.debug.print("FSOT_INTEL_BIO_STACK PASS\n", .{});
 }
 
@@ -2685,6 +2731,8 @@ pub fn main() !void {
         runSleepReplay();
     } else if (std.mem.eql(u8, mode, "claim") or std.mem.eql(u8, mode, "claimability") or std.mem.eql(u8, mode, "multi-hop") or std.mem.eql(u8, mode, "multihop")) {
         runClaimability();
+    } else if (std.mem.eql(u8, mode, "compose") or std.mem.eql(u8, mode, "compose-intel") or std.mem.eql(u8, mode, "compose_intel") or std.mem.eql(u8, mode, "answer-hop") or std.mem.eql(u8, mode, "answer_hop")) {
+        runComposeIntel();
     } else if (std.mem.eql(u8, mode, "intel-bio") or std.mem.eql(u8, mode, "intel_bio") or std.mem.eql(u8, mode, "bio-intel")) {
         runIntelBio();
     } else if (std.mem.eql(u8, mode, "intel-loop") or std.mem.eql(u8, mode, "intel_loop") or std.mem.eql(u8, mode, "train-sleep-prove") or std.mem.eql(u8, mode, "loop")) {
