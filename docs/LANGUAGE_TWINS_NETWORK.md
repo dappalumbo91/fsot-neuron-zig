@@ -14,6 +14,7 @@ Copy lives in each twin repo under `docs/LANGUAGE_TWINS_NETWORK.md`.
 | **Authority** | Zig 0.15+ | [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig) | `I:\fsot-neuron-zig` |
 | **Host twin** | Haskell (GHC 9.x) | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) | `Desktop\FSOT NEURON haskell` |
 | **Host twin + structure** | Idris 2 | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) | `Desktop\FSOT NEURON idris` |
+| **Host twin (usability)** | Python 3 | planned `fsot-neuron-python` | `Desktop\FSOT NEURON python` |
 
 ```text
                     FSOT law pin D1D38A
@@ -107,6 +108,7 @@ Lean:     formal/ lake build · archive 02_FSOT-2.1-Lean-Full lake build
 | **Zig** | Systems / bare metal / Fixed lattice / Windows plant I/O / full mode surface |
 | **Haskell** | Pure host twin; full Phase A + isi-ks; rapid parity stress |
 | **Idris 2** | Same Phase A + **type-checked DNA→trinary structure** (biological hygiene as proof) |
+| **Python** | Scientist/usability host twin — local CLI, Apache-2.0, same gates direction (not a server LLM) |
 
 ---
 
