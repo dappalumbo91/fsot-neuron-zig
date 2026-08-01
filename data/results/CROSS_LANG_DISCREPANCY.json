@@ -1,0 +1,90 @@
+{
+  "generated_at": "2026-08-01",
+  "document": "CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE",
+  "overall": "PASS",
+  "lean4_stamp": "LEAN4_STAMP:scientific_panel_ok:v4.31.0:0_sorry:mind_stack",
+  "formula_verification": {
+    "scalar_law": "S = K*(T1+T2+T3)",
+    "archive_pin_sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+    "toolchain": "leanprover/lean4:v4.31.0",
+    "archive_lake_build": { "ok": true, "jobs": 2204, "exit": 0 },
+    "neural_formal_lake_build": { "ok": true, "jobs": 16, "exit": 0, "theorem": "scientific_panel_ok", "sorry": 0 },
+    "free_parameters": 0,
+    "SCALE": 1000000000000,
+    "S_Biology": 0.4447250077038458,
+    "S_Neuroscience": 0.5143619629083619
+  },
+  "empirical_verification": {
+    "allen_isi_population": {
+      "source": "data/allen/allen_dist_targets.txt",
+      "provenance": "Allen Cell Types ephys_features class data (lab: ephys_features.csv)",
+      "n": 1977,
+      "isi_mean_ms": 73.57222670,
+      "isi_sd_ms": 57.32806565
+    },
+    "isi_ks_product": {
+      "n_sim": 256,
+      "n_allen": 256,
+      "D_cap": 0.22,
+      "D_crit05": 0.12003137610641645,
+      "zig": {
+        "pass": true,
+        "sim_mean_ms": 69.70466050804993,
+        "D": 0.12890625,
+        "ks_ok": true,
+        "mean_ok": true,
+        "sd_ok": true,
+        "quant_ok": true
+      },
+      "haskell": {
+        "pass": true,
+        "sim_mean_ms": 74.28205,
+        "D": 0.07421875,
+        "ks_ok": true,
+        "mean_ok": true,
+        "sd_ok": true,
+        "quant_ok": true
+      },
+      "idris": {
+        "pass": null,
+        "note": "isi-ks not in phase-a suite (residual D1)"
+      }
+    },
+    "class_fi_scalpel_zig": {
+      "pass": true,
+      "Pyr": { "target_Hz": 16.35121532610921, "measured_Hz": 16.666666666666668, "rel_err": 0.019292225945661316 },
+      "PV": { "target_Hz": 83.3504049172855, "measured_Hz": 83.33333333333333, "rel_err": 0.0002048170488087572 },
+      "SST": { "target_Hz": 29.538052683455557, "measured_Hz": 29.722222222222225, "rel_err": 0.006234992561639718 },
+      "VIP": { "target_Hz": 34.81541758294487, "measured_Hz": 34.72222222222223, "rel_err": 0.0026768416751173163 },
+      "pv_faster_than_pyr": true
+    },
+    "idris_genetic_core": {
+      "pass_order": true,
+      "Pyr_rate_Hz": 17.0,
+      "PV_rate_Hz": 100.0,
+      "note": "order PASS; not closed 2% FI lock (residual D4)"
+    }
+  },
+  "phase_a_parity": {
+    "codon_primary": { "zig": "PASS", "haskell": "PASS", "idris": "PASS" },
+    "organism": { "zig": "PASS", "haskell": "PASS spikes=160", "idris": "PASS spikes=192" },
+    "compose_claim_rate": { "zig": 1.0, "haskell": 1.0, "idris": 1.0 },
+    "intel_loop_claim": { "zig": 1.0, "haskell": 1.0, "idris": 1.0 },
+    "think": { "zig": "PASS", "haskell": "PASS", "idris": "PASS" },
+    "isi_ks": { "zig": "PASS", "haskell": "PASS", "idris": "pending" }
+  },
+  "discrepancies": [
+    { "id": "D1", "severity": "medium", "finding": "Idris phase-a lacks isi-ks product gate" },
+    { "id": "D2", "severity": "low", "finding": "Zig vs Haskell ISI mean/D differ; both product PASS" },
+    { "id": "D3", "severity": "low", "finding": "Organism spike counts differ across hosts" },
+    { "id": "D4", "severity": "medium", "finding": "Idris genetic PV=100Hz vs Allen ~83Hz (order only)" },
+    { "id": "D5", "severity": "low", "finding": "Zig think stack deeper than twin probes" },
+    { "id": "D6", "severity": "low", "finding": "Compose taught count Zig 24 vs twins 19" }
+  ],
+  "repos": {
+    "zig": "https://github.com/dappalumbo91/fsot-neuron-zig",
+    "haskell": "https://github.com/dappalumbo91/fsot-neuron-haskell",
+    "idris": "https://github.com/dappalumbo91/fsot-neuron-idris",
+    "lean": "https://github.com/dappalumbo91/FSOT-2.1-Lean"
+  }
+}

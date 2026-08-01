@@ -66,12 +66,26 @@ Cross-language Phase A / product (2026-08-01 lab boot):
 | Every-cell Allen iron | PASS | *host twin path* | *host twin path* |
 | QEMU bare metal | PASS | n/a | n/a |
 
+### Lean 4 stamp + scientific certificate (2026-08-01)
+
+| Verification class | Status |
+|--------------------|--------|
+| **Formula verification** (`scientific_panel_ok`, SCALE=1e12, free_params=0, pin D1D38A) | **PASS** — Lean 4.31.0, 0 `sorry` |
+| **Archive lake build** | **PASS** (2204 jobs) |
+| **Neural formal lake build** | **PASS** (16 jobs) |
+| **Empirical verification** (Allen ISI KS / class FI) | **PASS** Zig+Haskell; Idris DNA+Phase A |
+| **Stamp** | `LEAN4_STAMP:scientific_panel_ok:v4.31.0:0_sorry:mind_stack` |
+
+Full discrepancy table + citations: **`docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md`**  
+Machine table: `data/results/CROSS_LANG_DISCREPANCY.json` · stamp: `data/results/LEAN4_STAMP.txt`
+
 Reproduce:
 
 ```text
 Zig:      fsot_mind phase path → fixed | compose | intel-loop | think | isi-ks
 Haskell:  cabal run fsot-mind -- phase-a
 Idris:    ./build/exec/fsot-mind phase-a
+Lean:     formal/ lake build · archive 02_FSOT-2.1-Lean-Full lake build
 ```
 
 ---

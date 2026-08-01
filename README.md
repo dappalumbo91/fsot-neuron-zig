@@ -65,6 +65,7 @@ Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). Th
 | **Top-to-bottom verify** | [`docs/TOP_TO_BOTTOM_VERIFICATION.md`](docs/TOP_TO_BOTTOM_VERIFICATION.md) — stress · QEMU · Lean stamp · bio |
 | **Real-brain school** | [`docs/BRAIN_LEARN_BRIDGE.md`](docs/BRAIN_LEARN_BRIDGE.md) — `fsot_mind brain-learn` teaches **OrganismF** |
 | **Lean × wet-lab cert** | [`data/results/LEAN_WETLAB_CERTIFICATE.md`](data/results/LEAN_WETLAB_CERTIFICATE.md) |
+| **Cross-lang × Lean stamp** | [`docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md`](docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md) · [`data/results/LEAN4_STAMP.txt`](data/results/LEAN4_STAMP.txt) |
 | **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (wet-lab / export banks) |
 
 ## Quick start
