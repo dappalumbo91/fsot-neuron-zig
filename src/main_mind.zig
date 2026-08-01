@@ -117,6 +117,8 @@ const allen_class_dist_fixed = @import("allen_class_dist_fixed.zig");
 const genetic_var_fixed = @import("genetic_var_fixed.zig");
 const allen_baremetal_fixed = @import("allen_baremetal_fixed.zig");
 const allen_isi_ks_product = @import("allen_isi_ks_product.zig");
+const glia_product_fixed = @import("glia_product_fixed.zig");
+const self_talk_fixed = @import("self_talk_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -2756,6 +2758,14 @@ pub fn main() !void {
     } else if (std.mem.eql(u8, mode, "phase-d") or std.mem.eql(u8, mode, "phase_d") or std.mem.eql(u8, mode, "phased") or std.mem.eql(u8, mode, "scientific") or std.mem.eql(u8, mode, "scientific-packaging")) {
         // Phase D — scientific packaging (parallel with language twins)
         runPhaseD();
+    } else if (std.mem.eql(u8, mode, "glia-ca") or std.mem.eql(u8, mode, "glia_ca") or std.mem.eql(u8, mode, "glia-product") or std.mem.eql(u8, mode, "glia_product") or std.mem.eql(u8, mode, "astrocyte")) {
+        const gr = glia_product_fixed.runGliaProduct(120);
+        glia_product_fixed.printReport(gr);
+        if (!gr.ok) std.process.exit(1);
+    } else if (std.mem.eql(u8, mode, "self-talk") or std.mem.eql(u8, mode, "self_talk") or std.mem.eql(u8, mode, "internal-speech") or std.mem.eql(u8, mode, "covert-speech")) {
+        const sr = self_talk_fixed.runSelfTalk();
+        self_talk_fixed.printReport(sr);
+        if (!sr.ok) std.process.exit(1);
     } else if (std.mem.eql(u8, mode, "bio-learn") or std.mem.eql(u8, mode, "bio_learn") or std.mem.eql(u8, mode, "animal-learn") or std.mem.eql(u8, mode, "learn-eval")) {
         // Animal/human learning suite — NOT GSM8K / LLM benchmarks
         runBioLearnEval();
