@@ -72,6 +72,7 @@ powershell -File .\run_qemu.ps1
 | Failure boundaries / wire-around | **PASS** | stress suite |
 | Bio I/O pathways (thal/sens/assoc/hipp) | **PASS** | stress H/* |
 | Pop ISI vs Allen (strict FSOT-grade) | **CLOSED** | `runAllenBioMatch`; **\|ΔISI\| ≤ 1.42 ms**; adapt **\|ΔA\| ≤ 0.00512** (iron 0.00128); fractional residual diagnostic only |
+| Allen full CSV variance (KS / sd / quantiles) | **CLOSED** | `allen_dist_fixed` · specimen-mapped 128-cell sample · `FSOT_ALLEN_CSV_VARIANCE_OK` |
 
 **Note:** Raw full-CSV Allen mean (~73 ms) is not the bio_match target. Authority is the solved sample target in `bio_report_card.json` (~70.60 ms), already closed in archive Python at ~1.26%. Zig now uses the same lock/polish path (`FSOT_ALLEN_ISI_RESIDUAL_CLOSED`).
 

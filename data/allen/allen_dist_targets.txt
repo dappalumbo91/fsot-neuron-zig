@@ -1,0 +1,21 @@
+# Allen Cell Types ephys_features.csv distribution targets (avg_isi ms, adaptation)
+# source=I:/fsot nuron/data/eeg/allen_ephys/ephys_features.csv
+# valid_rows=1977 adapt_rows=1977
+isi_n 1977
+isi_mean_ms 73.57222670
+isi_sd_ms 57.32806565
+isi_sem_ms 1.28932960
+isi_p05 10.92633627
+isi_p25 36.38285714
+isi_p50 63.40366667
+isi_p75 92.92400000
+isi_p95 170.28400000
+adapt_n 1977
+adapt_mean 0.06487468
+adapt_sd 0.12257758
+adapt_sem 0.00275682
+adapt_p05 -0.00646814
+adapt_p25 0.00800640
+adapt_p50 0.02500819
+adapt_p75 0.06745253
+adapt_p95 0.27500498

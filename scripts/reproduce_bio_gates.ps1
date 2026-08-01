@@ -50,6 +50,11 @@ Write-Log "=== GATE scalpel (class rates Pyr/PV/SST/VIP) ==="
 $ec2 = $LASTEXITCODE
 
 Write-Log ""
+Write-Log "=== GATE allen-dist (full CSV variance / KS) ==="
+& $Exe allen-dist 2>&1 | ForEach-Object { Write-Log "$_" }
+$ec3 = $LASTEXITCODE
+
+Write-Log ""
 Write-Log "=== SUMMARY ==="
 $txt = Get-Content $Log -Raw
 $needles = @(
@@ -60,6 +65,8 @@ $needles = @(
     "FSOT_SCALPEL_RATES PASS",
     "FSOT_ALLEN_CLASS_RATES_CLOSED",
     "FSOT_EVERY_CELL_CLASS_RATE_OK",
+    "FSOT_ALLEN_CSV_VARIANCE_OK",
+    "FSOT_KS_ISI_ADAPT_OK",
     "gate_bio_isi=PASS",
     "gate_bio_adapt=PASS",
     "gate_bio_every_cell=PASS",
@@ -72,10 +79,10 @@ foreach ($n in $needles) {
         Write-Log ($n + ": MISSING")
     }
 }
-Write-Log ("exit_fixed=" + $ec1 + " exit_scalpel=" + $ec2)
+Write-Log ("exit_fixed=" + $ec1 + " exit_scalpel=" + $ec2 + " exit_allen_dist=" + $ec3)
 Write-Log ("log=" + $Log)
 
-if (($ec1 -ne 0) -or ($ec2 -ne 0)) {
+if (($ec1 -ne 0) -or ($ec2 -ne 0) -or ($ec3 -ne 0)) {
     Write-Host "BIO GATES FAIL - see log"
     exit 1
 }

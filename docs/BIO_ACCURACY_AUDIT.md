@@ -47,6 +47,7 @@
 | Molecular cascade (CaMKII/AMPA/protein) | **Yes** (`molecular_fixed`) | tag→camk→ampa→protein→consolidate W | Compressed late-LTP stand-in |
 | Allen FI bio_match **every cell** | **Yes** (`runAllenBioMatch` + `polishAllUnits`) | archive lock + per-unit refine | **each** cell \|ΔISI\|≤1.42 ms, \|ΔA\|≤0.00512, \|Δr\|≤0.40 Hz · `FSOT_EVERY_CELL_BIO_MATCH_OK` |
 | Allen class rates **every replicate** | **Yes** (`scalpel_rate_fixed`) | wetlab T1–T2 Cre means | **each** Pyr/PV/SST/VIP cell \|Δr\| Hz · `FSOT_EVERY_CELL_CLASS_RATE_OK` |
+| Allen **full CSV variance** | **Yes** (`allen_dist_fixed`) | ephys_features.csv snapshot + KS | specimen-mapped mean/sd/quantiles + KS · `FSOT_ALLEN_CSV_VARIANCE_OK` |
 | Full STDP curve + multi-timescale | Partial | discrete windows | **Gap — deepen** |
 | Wet cascade in think tick | Partial | modules exist; not full encode path | **Gap — wire** |
 | History / moral corpus | **Excluded** | — | Intentional |

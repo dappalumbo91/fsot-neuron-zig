@@ -57,12 +57,30 @@ These fractions exist for comparison with older logs and archive Python. **PASS/
 
 ---
 
+## Full CSV variance (distribution match)
+
+Mean-only lock is **not** the full Allen story. Public `ephys_features.csv` has large CV (ISI CV ~0.8). Protocol:
+
+| Layer | Gate | File / mode |
+|-------|------|-------------|
+| Mean FI lock | every cell near bio_match mean | `bio_probe_fixed` · `fixed` |
+| Class means | every Cre class replicate | `scalpel_rate_fixed` |
+| **CSV variance** | specimen-mapped pop: mean/sd/quantiles + **KS** | `allen_dist_fixed` · `allen-dist` / inside `fixed` |
+
+Snapshots (from monorepo Allen CSV, seed=42 sample 128):
+
+- `data/allen/allen_dist_targets.txt` — full-CSV mean, SD, SEM, p05…p95  
+- `data/allen/allen_sample_128.txt` — specimen rows (isi, adapt, tau, rin, vrest, rheobase)
+
+**Per-cell (distribution protocol):** residual vs **assigned specimen**, not vs population mean.  
+**Population:** |Δmean|, relative |Δsd|, quantile errors (ms), two-sample KS on ISI and adapt.
+
 ## Honest bounds
 
-- **Within this organism model**, every simulated FI cell and every class replicate **must** pass the absolute bounds above. Open cells fail the gate and are refined (`polishOneUnit` / scalpel adjust).
-- Tolerances are **model–Allen-target lock criteria** (public Cre / bio_match means), not a claim about SEM of the entire Allen CSV distribution.
-- We do **not** yet claim full ISI histogram KS tests vs whole Allen CSV unless that protocol is added and measured.
-- Biochemical cascade modules (`channel_stoch`, molecular) report counts and rates in their own process units; they are not re-expressed as “% error” of Allen FI — they get their own SI-style residuals as those gates tighten.
+- **Mean lock:** every FI cell / class replicate inside absolute bounds (above).  
+- **CSV dist lock:** specimen-mapped sample must match full-CSV variance structure (KS + sd + quantiles).  
+- Not a claim that a 128-unit Fixed lattice is a physical patch-clamp rig or that every rare Allen outlier is reproduced.  
+- Biochemical cascade modules use their own SI-style residuals as those gates tighten.
 
 ---
 

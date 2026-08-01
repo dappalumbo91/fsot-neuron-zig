@@ -112,6 +112,7 @@ const gpu_batch_fixed = @import("gpu_batch_fixed.zig");
 const gpu_vram_fixed = @import("gpu_vram_fixed.zig");
 const skill_organ_fixed = @import("skill_organ_fixed.zig");
 const scalpel_rate_fixed = @import("scalpel_rate_fixed.zig");
+const allen_dist_fixed = @import("allen_dist_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -517,6 +518,9 @@ fn runFixed() void {
         std.debug.print("FSOT_FIXED_BIO FAIL (Allen class rates residual open)\n", .{});
         std.process.exit(1);
     }
+
+    // Full Allen CSV distribution (mean/sd/quantiles/KS + per-specimen cells)
+    runAllenDist();
 
     // structure class vs f64 brain authority (+ synapse density band)
     var bf64 = brain.Brain.initSeeded(42, false);
@@ -1984,6 +1988,16 @@ fn runIntelBio() void {
     std.debug.print("FSOT_INTEL_BIO_STACK PASS\n", .{});
 }
 
+fn runAllenDist() void {
+    std.debug.print("=== FSOT ALLEN CSV DISTRIBUTION (variance / KS) ===\n", .{});
+    const r = allen_dist_fixed.runAllenDistMatch();
+    allen_dist_fixed.printReport(r);
+    if (!r.ok) {
+        std.debug.print("FSOT_FIXED_BIO FAIL (Allen CSV distribution residual open)\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runIntelFrontier() void {
     std.debug.print("=== FSOT INTEL FRONTIER (multi-day + curiosity + ladder) ===\n", .{});
     std.debug.print("schedule: N days of curiosity-select → ACh encode → PE retrieve → sleep → claim\n", .{});
@@ -2616,6 +2630,8 @@ pub fn main() !void {
             std.process.exit(1);
         }
         gpu_batch_fixed.printVramProbe();
+    } else if (std.mem.eql(u8, mode, "allen-dist") or std.mem.eql(u8, mode, "allen_dist") or std.mem.eql(u8, mode, "csv-dist") or std.mem.eql(u8, mode, "allen-variance") or std.mem.eql(u8, mode, "ks-allen")) {
+        runAllenDist();
     } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
         // Archive wetlab T1–T2: per-class FI rates abs Hz
         if (!scalpel_rate_fixed.selfTest()) {
