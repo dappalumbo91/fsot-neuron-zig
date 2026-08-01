@@ -2,7 +2,9 @@
 //!
 //! Archive authority (Allen Cell Types Database, mouse Cre means):
 //!   Pyr ≈ 16.35 Hz, PV ≈ 83.35 Hz, SST ≈ 29.54 Hz, VIP ≈ 34.82 Hz
-//! Strict gate: |rate − target| / target ≤ 2% (same as wetlab battery).
+//!
+//! Primary gate (ephys field units): |rate − target| ≤ class abs tolerance (Hz).
+//! Relative residual is diagnostic only. See docs/EPHYS_METRIC_UNITS.md
 //!
 //! Method (no free-fit nets): adjust per-class fire_threshold / ref_steps /
 //! fi_stim on UnitParamsF until class mean rates match Allen order + tolerance.
@@ -20,6 +22,13 @@ pub const ALLEN_PYR_HZ: f64 = 16.35121532610921;
 pub const ALLEN_PV_HZ: f64 = 83.3504049172855;
 pub const ALLEN_SST_HZ: f64 = 29.538052683455557;
 pub const ALLEN_VIP_HZ: f64 = 34.81541758294487;
+
+/// Absolute rate tolerances (Hz) — ≈ former 2% of each Allen Cre mean.
+pub const TOL_PYR_HZ: f64 = 0.33;
+pub const TOL_PV_HZ: f64 = 1.67;
+pub const TOL_SST_HZ: f64 = 0.59;
+pub const TOL_VIP_HZ: f64 = 0.70;
+/// Legacy fractional diagnostic (not gate label).
 pub const RATE_TOL: f64 = 0.02;
 
 pub const ClassRate = struct {
@@ -27,6 +36,11 @@ pub const ClassRate = struct {
     n: u32 = 0,
     target_Hz: f64 = 0,
     measured_Hz: f64 = 0,
+    /// Primary residual (Hz)
+    abs_err_Hz: f64 = 1,
+    /// Absolute tolerance used for closed (Hz)
+    tol_Hz: f64 = 0,
+    /// Diagnostic only
     rel_err: f64 = 1,
     closed: bool = false,
 };
@@ -47,6 +61,15 @@ fn targetFor(ct: cell_types.CellType) f64 {
         .pv => ALLEN_PV_HZ,
         .sst => ALLEN_SST_HZ,
         .vip => ALLEN_VIP_HZ,
+    };
+}
+
+fn tolHzFor(ct: cell_types.CellType) f64 {
+    return switch (ct) {
+        .pyr => TOL_PYR_HZ,
+        .pv => TOL_PV_HZ,
+        .sst => TOL_SST_HZ,
+        .vip => TOL_VIP_HZ,
     };
 }
 
@@ -104,10 +127,12 @@ fn measureClass(ct: cell_types.CellType, p: *const bio.UnitParamsF, steps: usize
         .label = labelFor(ct),
         .n = n_units,
         .target_Hz = targetFor(ct),
+        .tol_Hz = tolHzFor(ct),
     };
     if (n_units == 0) {
         cr.closed = true;
         cr.rel_err = 0;
+        cr.abs_err_Hz = 0;
         return cr;
     }
     var sum: f64 = 0;
@@ -121,24 +146,25 @@ fn measureClass(ct: cell_types.CellType, p: *const bio.UnitParamsF, steps: usize
     }
     cr.measured_Hz = sum / @as(f64, @floatFromInt(n_units));
     if (cr.target_Hz > 1 and cr.measured_Hz == cr.measured_Hz) {
-        cr.rel_err = @abs(cr.measured_Hz - cr.target_Hz) / cr.target_Hz;
-        cr.closed = cr.rel_err <= RATE_TOL;
+        cr.abs_err_Hz = @abs(cr.measured_Hz - cr.target_Hz);
+        cr.rel_err = cr.abs_err_Hz / cr.target_Hz;
+        cr.closed = cr.abs_err_Hz <= cr.tol_Hz;
     }
     return cr;
 }
 
-fn adjustToward(p: *bio.UnitParamsF, measured: f64, target: f64) void {
+fn adjustToward(p: *bio.UnitParamsF, measured: f64, target: f64, tol_hz: f64) void {
     if (target <= 1 or measured != measured or measured <= 0) return;
-    const err = (measured - target) / target;
+    const abs_e = measured - target;
     // Larger steps when far from target (archive: close large errors first)
-    const big = @abs(err) > 0.15;
-    if (err > RATE_TOL) {
+    const big = @abs(abs_e) > 5.0 * tol_hz;
+    if (abs_e > tol_hz) {
         const thr = fixed.toF64(p.fire_thr) + if (big) @as(f64, 0.03) else 0.012;
         p.fire_thr = fixed.fromF64Lab(@min(1.40, thr));
         const st = fixed.toF64(p.fi_stim) * if (big) @as(f64, 0.92) else 0.97;
         p.fi_stim = fixed.fromF64Lab(@max(0.22, st));
         p.ref_steps = @min(180, p.ref_steps + if (big) @as(i32, 3) else 1);
-    } else if (err < -RATE_TOL) {
+    } else if (abs_e < -tol_hz) {
         const thr = fixed.toF64(p.fire_thr) - if (big) @as(f64, 0.04) else 0.015;
         p.fire_thr = fixed.fromF64Lab(@max(0.72, thr));
         const st = fixed.toF64(p.fi_stim) * if (big) @as(f64, 1.10) else 1.05;
@@ -154,7 +180,7 @@ fn adjustToward(p: *bio.UnitParamsF, measured: f64, target: f64) void {
     }
 }
 
-/// Run class scalpel until each class is within 2% or max_iters.
+/// Run class scalpel until each class is within absolute Hz tol or max_iters.
 pub fn runScalpel(max_iters: u32) ScalpelReport {
     // Prefer more iters for PV (hard on 1 ms lattice)
     var rep: ScalpelReport = .{};
@@ -187,10 +213,10 @@ pub fn runScalpel(max_iters: u32) ScalpelReport {
             return rep;
         }
         // Large-error first (archive scalpel order)
-        if (!rep.pyr.closed) adjustToward(&p_pyr, rep.pyr.measured_Hz, rep.pyr.target_Hz);
-        if (!rep.pv.closed) adjustToward(&p_pv, rep.pv.measured_Hz, rep.pv.target_Hz);
-        if (!rep.sst.closed) adjustToward(&p_sst, rep.sst.measured_Hz, rep.sst.target_Hz);
-        if (!rep.vip.closed) adjustToward(&p_vip, rep.vip.measured_Hz, rep.vip.target_Hz);
+        if (!rep.pyr.closed) adjustToward(&p_pyr, rep.pyr.measured_Hz, rep.pyr.target_Hz, rep.pyr.tol_Hz);
+        if (!rep.pv.closed) adjustToward(&p_pv, rep.pv.measured_Hz, rep.pv.target_Hz, rep.pv.tol_Hz);
+        if (!rep.sst.closed) adjustToward(&p_sst, rep.sst.measured_Hz, rep.sst.target_Hz, rep.sst.tol_Hz);
+        if (!rep.vip.closed) adjustToward(&p_vip, rep.vip.measured_Hz, rep.vip.target_Hz, rep.vip.tol_Hz);
     }
     rep.ok = rep.pyr.closed and rep.pv.closed and rep.sst.closed and rep.vip.closed and rep.pv_faster_than_pyr;
     return rep;
@@ -198,18 +224,18 @@ pub fn runScalpel(max_iters: u32) ScalpelReport {
 
 pub fn printReport(r: ScalpelReport) void {
     std.debug.print("=== FSOT SCALPEL RATES (Allen Cre class FI) ===\n", .{});
-    std.debug.print("doctrine: archive wetlab T1–T2 · |err|≤2% · PV≫Pyr order\n", .{});
-    std.debug.print("Pyr target={e} measured={e} rel_err={e} closed={}\n", .{
-        r.pyr.target_Hz, r.pyr.measured_Hz, r.pyr.rel_err, r.pyr.closed,
+    std.debug.print("doctrine: ephys units · |Δrate| Hz abs · PV≫Pyr order · rel diagnostic only\n", .{});
+    std.debug.print("Pyr target={e} Hz measured={e} Hz |Δ|={e} Hz tol={e} Hz closed={}\n", .{
+        r.pyr.target_Hz, r.pyr.measured_Hz, r.pyr.abs_err_Hz, r.pyr.tol_Hz, r.pyr.closed,
     });
-    std.debug.print("PV  target={e} measured={e} rel_err={e} closed={}\n", .{
-        r.pv.target_Hz, r.pv.measured_Hz, r.pv.rel_err, r.pv.closed,
+    std.debug.print("PV  target={e} Hz measured={e} Hz |Δ|={e} Hz tol={e} Hz closed={}\n", .{
+        r.pv.target_Hz, r.pv.measured_Hz, r.pv.abs_err_Hz, r.pv.tol_Hz, r.pv.closed,
     });
-    std.debug.print("SST target={e} measured={e} rel_err={e} closed={}\n", .{
-        r.sst.target_Hz, r.sst.measured_Hz, r.sst.rel_err, r.sst.closed,
+    std.debug.print("SST target={e} Hz measured={e} Hz |Δ|={e} Hz tol={e} Hz closed={}\n", .{
+        r.sst.target_Hz, r.sst.measured_Hz, r.sst.abs_err_Hz, r.sst.tol_Hz, r.sst.closed,
     });
-    std.debug.print("VIP target={e} measured={e} rel_err={e} closed={}\n", .{
-        r.vip.target_Hz, r.vip.measured_Hz, r.vip.rel_err, r.vip.closed,
+    std.debug.print("VIP target={e} Hz measured={e} Hz |Δ|={e} Hz tol={e} Hz closed={}\n", .{
+        r.vip.target_Hz, r.vip.measured_Hz, r.vip.abs_err_Hz, r.vip.tol_Hz, r.vip.closed,
     });
     std.debug.print("pv_faster_than_pyr={} iters={d}\n", .{ r.pv_faster_than_pyr, r.iters });
     if (r.ok) {

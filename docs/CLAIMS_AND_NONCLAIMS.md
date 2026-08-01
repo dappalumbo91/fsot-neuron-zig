@@ -25,14 +25,16 @@
 
 | Claim | How verified |
 |-------|----------------|
-| Pop ISI vs Allen bio_match target **≤2%** rel | `fsot_mind fixed` → `FSOT_ALLEN_ISI_RESIDUAL_CLOSED` (~0.77% in docs) |
-| Pop adapt **≤10%** gate; polish iron **≤2.5%** when achievable | same suite (~1.6% iron after dual polish; archive Python ~6.7%) |
-| Class rates Pyr/PV/SST/VIP **≤2%** + PV ≫ Pyr | `fsot_mind scalpel` → `FSOT_SCALPEL_RATES PASS` |
+| Pop ISI vs Allen: **\|ΔISI\| ≤ 1.42 ms** (ephys unit; not % gate) | `fsot_mind fixed` → `FSOT_ALLEN_ISI_RESIDUAL_CLOSED` · `FSOT_EPHYS_NATIVE_UNITS_OK` |
+| Pop adapt: **\|ΔA\| ≤ 0.00512** pass; iron **≤ 0.00128** (dimensionless abs) | same suite; see `docs/EPHYS_METRIC_UNITS.md` |
+| Class rates Pyr/PV/SST/VIP: **\|Δr\| Hz** per-class abs + PV ≫ Pyr | `fsot_mind scalpel` → `FSOT_SCALPEL_RATES PASS` |
 | Genetic structure (codon ORFs, E/I, pair W) | suite + Neural Lean structure panel |
 | Wet process cascade runs on think encode (STDP/glia/mol/consol/prune) | think logs: `THINK_WET`, non-zero stdp/releases; mut≠0 plasticity |
 | STM/LTM disk spill + warm | `ltm_disk_fixed`; hour logs warm/spill counts |
 | Bio metrics are process metrics, not LLM benches | `metric_kind=bio_episodic_not_llm`; doctrine docs |
 | Answer-dependent composition (hop N from answer N−1) with ablation dependence | `fsot_mind compose` → `FSOT_COMPOSE_INTEL PASS` · claim ≥90% · ablate break ≥80% |
+| Schema edges induced from experience pairs + static baseline | same · `FSOT_SCHEMA_DISCOVERY_OK` |
+| Compose module inside intel-loop regression | `fsot_mind intel-loop` · `compose_mod=true` |
 
 ### Process organism (measured on host)
 

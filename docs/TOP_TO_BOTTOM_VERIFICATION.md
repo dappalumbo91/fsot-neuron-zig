@@ -9,7 +9,7 @@
 **Verdict:** **CRITICAL PATH GREEN**
 
 Nothing in this run indicates a broken mind stack, bare-metal drop, or lost Lean stamp.  
-**Allen ISI residual (was ~2.45% open):** closed via archive bio_match analytical lock + polish ported to Zig (`runAllenBioMatch`, 2% ISI / 10% adapt).
+**Allen ISI residual:** closed via archive bio_match analytical lock + polish (`runAllenBioMatch`). Primary gate is **\|ΔISI\| ≤ 1.42 ms** and **\|ΔA\| abs** — see [`EPHYS_METRIC_UNITS.md`](EPHYS_METRIC_UNITS.md).
 
 ---
 
@@ -71,7 +71,7 @@ powershell -File .\run_qemu.ps1
 | Wet stack contract (AMPA/NMDA/glia/STDP) | **PASS** | Lean WetStack + Zig wet modules |
 | Failure boundaries / wire-around | **PASS** | stress suite |
 | Bio I/O pathways (thal/sens/assoc/hipp) | **PASS** | stress H/* |
-| Pop ISI vs Allen (strict FSOT-grade) | **CLOSED** | Archive analytical_lock + polish ported to Zig (`bio_probe_fixed.runAllenBioMatch`); ISI ≤ **2%** vs Allen bio_match target; adapt ≤ 10% |
+| Pop ISI vs Allen (strict FSOT-grade) | **CLOSED** | `runAllenBioMatch`; **\|ΔISI\| ≤ 1.42 ms**; adapt **\|ΔA\| ≤ 0.00512** (iron 0.00128); fractional residual diagnostic only |
 
 **Note:** Raw full-CSV Allen mean (~73 ms) is not the bio_match target. Authority is the solved sample target in `bio_report_card.json` (~70.60 ms), already closed in archive Python at ~1.26%. Zig now uses the same lock/polish path (`FSOT_ALLEN_ISI_RESIDUAL_CLOSED`).
 

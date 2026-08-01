@@ -25,9 +25,9 @@ Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · arch
 | **Gene ORFs SCN/KCN/CACNA/LEAK** | wetlab T4 | `genotype_fixed` | **Parity** | Keep both |
 | **Genetic W pair law** | genetic_network | `genetic_fixed.fsotPairWeight` | **Parity** | Keep both |
 | **Cell types Pyr/PV/SST/VIP fractions** | cell_types | `cell_types.zig` | **Parity** | Keep both |
-| **Allen pop ISI bio_match ≤2%** | calibrate + report_card **closed ~1.26%** | `runAllenBioMatch` **closed ~0.77%** | **Zig ≥ archive** | Zig → archive note |
-| **Allen pop adapt ≤10% gate / ≤2.5% iron** | archive Python residual **~6.7%** | Zig dual-polish **~1.6%** iron | **Zig ≥ archive** | Keep |
-| **Class rates Pyr/PV/SST/VIP ≤2%** | wetlab T2 **closed** | `scalpel_rate_fixed` **ported** | **Closing** | Zig gate |
+| **Allen pop ISI \|Δ\| ms** (was ≤2% rel) | calibrate + report_card closed | `runAllenBioMatch` **\|ΔISI\| ms** | **Zig ≥ archive** | native units |
+| **Allen pop adapt \|ΔA\| abs** (pass/iron) | archive Python residual larger | Zig dual-polish iron abs | **Zig ≥ archive** | Keep |
+| **Class rates \|Δ\| Hz** | wetlab T2 **closed** | `scalpel_rate_fixed` **ported** | **Closing** | Zig gate |
 | **PV ≫ Pyr order** | wetlab critical | scalpel `pv_faster_than_pyr` | **Ported** | Keep |
 | **bio_match vs efficient modes** | `modes.py` | pop ISI lock = bio_match; efficient not default for mind | **Partial** | optional efficient later |
 | **STDP** | learning paths | `stdp_fixed` + think `wet_encode` | **Wired into studyFact** | Keep |
@@ -68,12 +68,12 @@ Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · arch
 |----------|------:|--------|
 | Pop ISI target (bio_match) | 70.5986 ms | bio_report_card.json |
 | Pop adapt target | 0.05115 | bio_report_card.json |
-| ISI tol | **2%** | wetlab doctrine |
+| ISI tol | **1.42 ms abs** (diag ~2% of mean) | ephys native units |
 | Pyr rate | 16.351 Hz | wetlab T1 Cre |
 | PV rate | 83.350 Hz | wetlab T1 Cre |
 | SST rate | 29.538 Hz | wetlab T1 Cre |
 | VIP rate | 34.815 Hz | wetlab T1 Cre |
-| Class rate tol | **2%** | wetlab T2 |
+| Class rate tol | **abs Hz / class** | wetlab T2 + EPHYS_METRIC_UNITS |
 
 ---
 
@@ -84,7 +84,7 @@ Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · arch
 cd I:\fsot-neuron-zig
 zig build -Doptimize=ReleaseFast
 .\zig-out\bin\fsot_mind.exe fixed      # Allen lock + structure
-.\zig-out\bin\fsot_mind.exe scalpel    # class rates ≤2%
+.\zig-out\bin\fsot_mind.exe scalpel    # class rates |Δ| Hz
 
 # Archive monorepo (when env set)
 cd "I:\fsot nuron"

@@ -55,10 +55,12 @@ $txt = Get-Content $Log -Raw
 $needles = @(
     "FSOT_FIXED_BIO_ACCURATE_OK",
     "FSOT_ALLEN_ISI_RESIDUAL_CLOSED",
+    "FSOT_EPHYS_NATIVE_UNITS_OK",
     "FSOT_SCALPEL_RATES PASS",
     "FSOT_ALLEN_CLASS_RATES_CLOSED",
     "gate_bio_isi=PASS",
-    "gate_bio_adapt=PASS"
+    "gate_bio_adapt=PASS",
+    "isi_abs_err_ms="
 )
 foreach ($n in $needles) {
     if ($txt -like ("*" + $n + "*")) {

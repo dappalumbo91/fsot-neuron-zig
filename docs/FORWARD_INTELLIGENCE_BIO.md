@@ -12,8 +12,9 @@ This is the path after wet stack + math stamp: **process-accurate intelligence m
 | Neuromodulators | `neuromod_fixed.zig` | DA / ACh / NE / 5-HT first-order ODEs |
 | Offline consolidate | `sleep_replay_fixed.zig` | Wake encode → rest → NREM → replay+STDP |
 | Multi-hop claimability | `claimability_fixed.zig` | 1–3 hop grounded chains ≥95% (cues up front) |
-| **Answer-dependent compose** | `compose_intel_fixed.zig` | Hop N cue from hop N−1 **answer** + WM + ablation |
+| **Answer-dependent compose** | `compose_intel_fixed.zig` | Hop N from answer N−1 + WM + ablation + **schema discovery** + episodic-first |
 | Combined gate | `fsot_mind intel-bio` | neuromod + sleep + claim + compose |
+| Closed organism | `fsot_mind intel-loop` | train→sleep→prove **and** compose module gate |
 
 ## Biology (honest process scale)
 
@@ -79,9 +80,13 @@ ablation: corrupt intermediate → edge must break (proves dependence)
 | Intermediate in WM | Limited-capacity hold of hop product |
 | Answer → next cue edge | Hippocampal bind + associative re-cue |
 | Ablation break rate | Causal check that hops are not independent |
-| Gate | claim ≥90%; ablation break ≥80%; 2- and 3-hop activity |
+| Schema discovery | Experience pairs strengthen answer→next-cue edges (co-occurrence) |
+| Episodic-first | Hipp fingerprint retrieve preferred; bank is claim floor / fallback |
+| Gate | claim ≥90%; ablation break ≥80%; ≥8 discovered edges; 2- and 3-hop activity |
 
-**Honest non-claim:** edges are taught method schemas (like school “then do X with the result”), not open-world tool use. Still stronger than feeding the full cue list.
+**Honest non-claim:** discovered edges still come from a finite experience curriculum (not open-world web tool use). Stronger than static-only tables and stronger than parallel multi-cue lists.
+
+**Ephys residual units** for the wet lattice (ISI ms, rate Hz, adapt abs) are separate: [`EPHYS_METRIC_UNITS.md`](EPHYS_METRIC_UNITS.md).
 
 ## Run
 

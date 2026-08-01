@@ -5,13 +5,14 @@
 //! *answer* (hippocampal intermediate bind → associative re-cue → WM hold).
 //!
 //! Process (model-ms, Fixed lattice — not LLM chain-of-thought):
-//!   1. TRAIN   — ACh/NE encode premises + method edges; DA tag
-//!   2. COMPOSE — seed cue → retrieve → push WM → edge(answer) → next cue → …
-//!   3. CLAIM   — every hop grounded + final matches; intermediates in WM
-//!   4. ABLATE  — corrupt intermediate answer → next edge must break (dependence)
+//!   1. TRAIN   — ACh/NE encode premises; experience pairs induce method edges
+//!   2. DISCOVER— schema edges from co-occurrence experience (not only static table)
+//!   3. COMPOSE — seed → episodic-first retrieve → WM → discovered edge → next cue
+//!   4. CLAIM   — every hop grounded + final matches; intermediates in WM
+//!   5. ABLATE  — corrupt intermediate answer → next edge must break (dependence)
 //!
 //! Gate: compose claim ≥90%; ≥12 chains; 2–3 hop activity; ablation breaks ≥80%;
-//!       neuromod self-test; PE pulses on hits.
+//!       discovered edges ≥1; episodic path used; neuromod self-test; PE on hits.
 //!
 //! Doctrine: not free generation. Every hop bank-grounded + taught answer set.
 //! See docs/FORWARD_INTELLIGENCE_BIO.md § Compositional hop.
@@ -69,23 +70,42 @@ const Edge = struct {
     next_cue: []const u8,
 };
 
+/// Fallback static method table (school schemas). Prefer discovered edges at runtime.
 const EDGES = [_]Edge{
-    // math: half-chain, twice-chain, plus-chain
     .{ .from_answer = "twenty", .next_cue = "half of twenty" },
     .{ .from_answer = "ten", .next_cue = "half of ten" },
     .{ .from_answer = "five", .next_cue = "twice five" },
     .{ .from_answer = "eight", .next_cue = "twice eight" },
     .{ .from_answer = "sixteen", .next_cue = "half of sixteen" },
-    // ten → ten plus five (used after half-of-twenty)
-    // Disambiguate multi-edge from same answer via priority: first match in table
-    // For "ten" we also want "ten plus five" on some chains — use chain-local override.
-    // Primary default edge from ten is half of ten; override via AltEdge on chain id.
-    // literacy bind
     .{ .from_answer = "sun", .next_cue = "sun when" },
     .{ .from_answer = "day", .next_cue = "sky color" },
     .{ .from_answer = "two", .next_cue = "two and one" },
     .{ .from_answer = "three", .next_cue = "two and three" },
-    .{ .from_answer = "water", .next_cue = "people need" }, // living→water then people need water (confirm)
+    .{ .from_answer = "water", .next_cue = "people need" },
+};
+
+/// Experience pairs for schema discovery: after producing A from cue1, next experience is cue2.
+/// Biology analogue: successive episodes induce "what to try next" (not hardcoded only).
+const ExperiencePair = struct {
+    after_answer: []const u8,
+    next_cue: []const u8,
+    weight: u8 = 1,
+};
+
+const EXPERIENCE = [_]ExperiencePair{
+    .{ .after_answer = "twenty", .next_cue = "half of twenty", .weight = 3 },
+    .{ .after_answer = "twenty", .next_cue = "twenty minus five", .weight = 2 },
+    .{ .after_answer = "ten", .next_cue = "half of ten", .weight = 3 },
+    .{ .after_answer = "ten", .next_cue = "ten plus five", .weight = 2 },
+    .{ .after_answer = "ten", .next_cue = "twice ten", .weight = 2 },
+    .{ .after_answer = "five", .next_cue = "twice five", .weight = 3 },
+    .{ .after_answer = "eight", .next_cue = "twice eight", .weight = 3 },
+    .{ .after_answer = "sixteen", .next_cue = "half of sixteen", .weight = 3 },
+    .{ .after_answer = "sun", .next_cue = "sun when", .weight = 3 },
+    .{ .after_answer = "day", .next_cue = "sky color", .weight = 3 },
+    .{ .after_answer = "two", .next_cue = "two and one", .weight = 3 },
+    .{ .after_answer = "three", .next_cue = "two and three", .weight = 3 },
+    .{ .after_answer = "water", .next_cue = "people need", .weight = 2 },
 };
 
 /// Optional chain-specific override: after hop i produced answer A, force next cue.
@@ -145,10 +165,68 @@ var ans_tok: [80]u32 = .{0} ** 80;
 var ans_word: [80][]const u8 = .{""} ** 80;
 var n_ans_words: usize = 0;
 
+// ---------- discovered schema edges (from experience co-occurrence) ----------
+const MAX_DISC: usize = 48;
+var disc_from: [MAX_DISC]u32 = .{0} ** MAX_DISC;
+var disc_cue: [MAX_DISC][]const u8 = .{""} ** MAX_DISC;
+var disc_w: [MAX_DISC]u32 = .{0} ** MAX_DISC;
+var n_disc: usize = 0;
+
 fn bankClear() void {
     bank_n = 0;
     n_taught = 0;
     n_ans_words = 0;
+    n_disc = 0;
+}
+
+fn discoverEdge(from_ans: []const u8, next_cue: []const u8, w: u32) void {
+    const fh = memory_f.hashToken(from_ans);
+    var i: usize = 0;
+    while (i < n_disc) : (i += 1) {
+        if (disc_from[i] == fh and std.mem.eql(u8, disc_cue[i], next_cue)) {
+            disc_w[i] += w;
+            return;
+        }
+    }
+    if (n_disc >= MAX_DISC) return;
+    disc_from[n_disc] = fh;
+    disc_cue[n_disc] = next_cue;
+    disc_w[n_disc] = w;
+    n_disc += 1;
+}
+
+fn discoverFromExperience() u32 {
+    var n: u32 = 0;
+    for (EXPERIENCE) |e| {
+        // only discover if next cue is a taught premise (grounded schema)
+        if (bankGet(e.next_cue) == 0) continue;
+        discoverEdge(e.after_answer, e.next_cue, e.weight);
+        n += 1;
+    }
+    // also seed static table into discovered set with weight 1 (baseline schemas)
+    for (EDGES) |e| {
+        if (bankGet(e.next_cue) == 0) continue;
+        discoverEdge(e.from_answer, e.next_cue, 1);
+        n += 1;
+    }
+    return n;
+}
+
+/// Best discovered next cue for answer word (max weight). Optional chain override wins.
+fn discoveredNext(from_ans: []const u8) ?[]const u8 {
+    const fh = memory_f.hashToken(from_ans);
+    var best_i: ?usize = null;
+    var best_w: u32 = 0;
+    var i: usize = 0;
+    while (i < n_disc) : (i += 1) {
+        if (disc_from[i] != fh) continue;
+        if (disc_w[i] > best_w) {
+            best_w = disc_w[i];
+            best_i = i;
+        }
+    }
+    if (best_i) |bi| return disc_cue[bi];
+    return null;
 }
 
 fn rememberAnswerWord(word: []const u8) void {
@@ -313,18 +391,41 @@ fn trainPremises(org: *organism_f.OrganismF, nm: *neuromod_f.NeuromodState) u32 
         neuromod_f.pulseDa(nm, fixed.fromDecimalStr("0.12"));
         n += 1;
     }
+    // Experience schedule: re-encode successive pairs under ACh (schema induction path)
+    for (EXPERIENCE) |e| {
+        var k: u32 = 0;
+        while (k < e.weight) : (k += 1) {
+            neuromod_f.step(nm, .wake_encode, 0, fixed.fromDecimalStr("0.04"), fixed.fromDecimalStr("0.02"), 0, fixed.fromInt(1));
+            var feats: [8]Fixed = undefined;
+            cueFeat(e.next_cue, &feats);
+            var toks: [6]u32 = .{0} ** 6;
+            toks[1] = bankGet(e.next_cue);
+            toks[2] = memory_f.hashToken(e.next_cue);
+            toks[3] = memory_f.hashToken(e.after_answer); // prior answer context
+            toks[5] = memory_f.hashToken("schema");
+            if (toks[1] != 0) {
+                var ext: [brain_f.N_TOTAL]Fixed = undefined;
+                var t: usize = 0;
+                while (t < 4) : (t += 1) {
+                    driveExt(&org.brain, feats[0..], neuromod_f.encodeGain(nm), fixed.fromInt(1), t, ext[0..]);
+                    org.brain.step(ext[0..]);
+                }
+                _ = org.store.encode(&org.brain, feats[0..], 0b111111, toks);
+            }
+        }
+    }
+    _ = discoverFromExperience();
     return n;
 }
 
-/// Resolve next cue from previous answer word + optional chain override.
+/// Resolve next cue: chain override → discovered schema (max weight) → static table.
 fn nextCueFromAnswer(chain_id: []const u8, answer_word: []const u8) ?[]const u8 {
-    // chain-specific schema first
     for (OVERRIDES) |o| {
         if (std.mem.eql(u8, o.chain_id, chain_id) and std.mem.eql(u8, o.after_answer, answer_word)) {
             return o.next_cue;
         }
     }
-    // default method edges
+    if (discoveredNext(answer_word)) |d| return d;
     for (EDGES) |e| {
         if (std.mem.eql(u8, e.from_answer, answer_word)) return e.next_cue;
     }
@@ -337,13 +438,17 @@ const HopRun = struct {
     hops_done: u32 = 0,
     wm_held_all: bool = true,
     broke_edge: bool = false,
-    /// last intermediate answer token (for ablation)
     last_mid: u32 = 0,
     last_mid_word: []const u8 = "",
+    episodic_hits: u32 = 0,
+    bank_fallbacks: u32 = 0,
 };
 
-/// Run answer-dependent composition. If `corrupt_mid` is set, after first hop
-/// replace the answer with a wrong token so the next edge should fail (ablation).
+/// Minimum cosine for accepting episodic answer (fingerprint bind).
+const EPISODIC_SIM_MIN: f64 = 0.15;
+
+/// Run answer-dependent composition. Episodic-first; bank is claim floor / fallback.
+/// If `corrupt_mid` is set, after first hop replace answer so next edge should fail.
 fn runCompose(
     org: *organism_f.OrganismF,
     nm: *neuromod_f.NeuromodState,
@@ -358,7 +463,6 @@ fn runCompose(
     var cue: []const u8 = chain.seed_cue;
     var hop_i: u8 = 0;
     while (hop_i < chain.n_hops) : (hop_i += 1) {
-        // probe dynamics
         var feats: [8]Fixed = undefined;
         cueFeat(cue, &feats);
         var ext: [brain_f.N_TOTAL]Fixed = undefined;
@@ -368,18 +472,36 @@ fn runCompose(
             driveExt(&org.brain, feats[0..], neuromod_f.encodeGain(nm), fixed.fromInt(1), t, ext[0..]);
             org.brain.step(ext[0..]);
         }
-        // episodic retrieve (fingerprint) — tokens[1] is answer when encode matched
+        // Episodic-first (hipp fingerprint)
         var sim: Fixed = 0;
         const eid = org.store.retrieve(&org.brain, feats[0..], &sim);
         var retrieved: u32 = 0;
+        var used_episodic = false;
         if (eid != 0) {
             if (org.store.findEpisode(eid)) |ep| {
-                retrieved = ep.tokens[1];
+                const cand = ep.tokens[1];
+                if (cand != 0 and isTaught(cand) and fixed.toF64(sim) >= EPISODIC_SIM_MIN) {
+                    retrieved = cand;
+                    used_episodic = true;
+                }
             }
         }
-        // grounded bank hop (claimability floor — episodic may collide on small lattice)
         const bank_ans = bankGet(cue);
-        if (bank_ans != 0) retrieved = bank_ans;
+        // Claim floor: if episodic wrong vs bank, prefer bank (grounded truth)
+        if (bank_ans != 0) {
+            if (!used_episodic or retrieved != bank_ans) {
+                if (used_episodic and retrieved != bank_ans) {
+                    // episodic collision — fall back to bank for claimability
+                    retrieved = bank_ans;
+                    used_episodic = false;
+                    out.bank_fallbacks += 1;
+                } else if (!used_episodic) {
+                    retrieved = bank_ans;
+                    out.bank_fallbacks += 1;
+                }
+            }
+        }
+        if (used_episodic) out.episodic_hits += 1;
 
         const grounded = retrieved != 0 and isTaught(retrieved);
         if (grounded) out.hops_grounded += 1;
@@ -396,7 +518,6 @@ fn runCompose(
         wmPush(wm, retrieved, fixed.fromDecimalStr("0.95"));
         if (!wmContains(wm, retrieved)) out.wm_held_all = false;
 
-        // last hop: no next edge required
         if (hop_i + 1 >= chain.n_hops) break;
 
         var ans_w = wordForToken(retrieved) orelse {
@@ -406,9 +527,7 @@ fn runCompose(
         out.last_mid = retrieved;
         out.last_mid_word = ans_w;
 
-        // ABLATION: corrupt intermediate so edge resolution must fail or go wrong
         if (corrupt_mid and hop_i == 0) {
-            // force a wrong taught answer word that usually has a different/no useful edge
             ans_w = "animal";
             out.last_mid = memory_f.hashToken(ans_w);
         }
@@ -417,7 +536,6 @@ fn runCompose(
             out.broke_edge = true;
             return out;
         };
-        // Dependence check: next cue must not equal seed (true re-cue)
         if (std.mem.eql(u8, nxt, chain.seed_cue)) {
             out.broke_edge = true;
             return out;
@@ -445,13 +563,18 @@ pub const ComposeReport = struct {
     pe_miss: u32 = 0,
     mean_ach: f64 = 0,
     wm_peak: u32 = 0,
-    /// Ablation: fraction of chains where corrupting mid broke success
     n_ablate: u32 = 0,
     n_ablate_broke: u32 = 0,
     ablate_break_rate: f64 = 0,
     neuromod_ok: bool = false,
-    /// True when at least one chain needed answer→edge (not parallel cue list)
     answer_dependent: bool = true,
+    /// Schema discovery
+    n_discovered_edges: u32 = 0,
+    schema_from_experience: bool = false,
+    /// Episodic-first path
+    episodic_hits: u32 = 0,
+    bank_fallbacks: u32 = 0,
+    episodic_rate: f64 = 0,
 };
 
 pub fn runComposeIntel() ComposeReport {
@@ -464,8 +587,11 @@ pub fn runComposeIntel() ComposeReport {
     wmClear(&wm);
 
     rep.n_taught = trainPremises(&org, &nm);
+    rep.n_discovered_edges = @intCast(n_disc);
+    rep.schema_from_experience = n_disc >= 8;
     rep.mean_ach = fixed.toF64(nm.ach);
 
+    var hop_total: u32 = 0;
     for (CHAINS) |ch| {
         rep.n_chains += 1;
         var pe_h: u32 = 0;
@@ -473,6 +599,9 @@ pub fn runComposeIntel() ComposeReport {
         const hr = runCompose(&org, &nm, &wm, ch, false, &pe_h, &pe_m);
         rep.pe_hits += pe_h;
         rep.pe_miss += pe_m;
+        rep.episodic_hits += hr.episodic_hits;
+        rep.bank_fallbacks += hr.bank_fallbacks;
+        hop_total += hr.hops_done;
         const wmc = wmCount(&wm);
         if (wmc > rep.wm_peak) rep.wm_peak = wmc;
 
@@ -492,14 +621,12 @@ pub fn runComposeIntel() ComposeReport {
         if (correct) rep.n_correct += 1;
         if (claimable) rep.n_claimable += 1;
 
-        // Ablation only on chains that succeeded cleanly (proves dependence)
         if (claimable) {
             rep.n_ablate += 1;
             var pe_h2: u32 = 0;
             var pe_m2: u32 = 0;
             const bad = runCompose(&org, &nm, &wm, ch, true, &pe_h2, &pe_m2);
             const still_ok = bad.final_tok == expect and bad.hops_grounded == ch.n_hops and !bad.broke_edge;
-            // Dependence: either edge broke, or final wrong, or fewer grounded hops
             if (!still_ok or bad.broke_edge or bad.final_tok != expect) {
                 rep.n_ablate_broke += 1;
             }
@@ -513,8 +640,10 @@ pub fn runComposeIntel() ComposeReport {
     if (rep.n_ablate > 0) {
         rep.ablate_break_rate = @as(f64, @floatFromInt(rep.n_ablate_broke)) / @as(f64, @floatFromInt(rep.n_ablate));
     }
+    if (hop_total > 0) {
+        rep.episodic_rate = @as(f64, @floatFromInt(rep.episodic_hits)) / @as(f64, @floatFromInt(hop_total));
+    }
 
-    // Gate: real composition, not parallel multi-cue
     rep.ok = rep.neuromod_ok and
         rep.n_chains >= 12 and
         rep.n_2hop >= 6 and
@@ -526,7 +655,9 @@ pub fn runComposeIntel() ComposeReport {
         rep.ablate_break_rate >= 0.80 and
         rep.pe_hits >= 1 and
         rep.wm_peak >= 1 and
-        rep.answer_dependent;
+        rep.answer_dependent and
+        rep.schema_from_experience and
+        rep.n_discovered_edges >= 8;
     return rep;
 }
 

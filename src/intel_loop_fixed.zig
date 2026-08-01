@@ -24,6 +24,7 @@ const network_f = @import("network_fixed.zig");
 const teach_f = @import("teach_fixed.zig");
 const organism_f = @import("organism_fixed.zig");
 const claimability_f = @import("claimability_fixed.zig");
+const compose_intel_f = @import("compose_intel_fixed.zig");
 const sleep_replay_f = @import("sleep_replay_fixed.zig");
 const understand_depth_f = @import("understand_depth_fixed.zig");
 const Fixed = fixed.Fixed;
@@ -456,6 +457,8 @@ pub const LoopReport = struct {
     neuromod_ok: bool = false,
     // external stack gates (reused modules)
     claim_module_ok: bool = false,
+    compose_module_ok: bool = false,
+    compose_claim_rate: f64 = 0,
     sleep_module_ok: bool = false,
     depth_ran: bool = false,
     depth_acc: f64 = 0,
@@ -468,6 +471,10 @@ pub fn runIntelLoop() LoopReport {
     // Keep module gates green in the same process (regression safety)
     rep.claim_module_ok = claimability_f.selfTest();
     rep.sleep_module_ok = sleep_replay_f.selfTest();
+    // Answer-dependent compose + schema discovery (next intel layer)
+    const cr = compose_intel_f.runComposeIntel();
+    rep.compose_module_ok = cr.ok;
+    rep.compose_claim_rate = cr.claim_rate;
 
     var org = organism_f.OrganismF.init();
     org.brain = brain_f.BrainF.initSeeded(21, true);
@@ -535,6 +542,7 @@ pub fn runIntelLoop() LoopReport {
     const chance = 1.0 / @as(f64, @floatFromInt(N_MEM));
     rep.ok = rep.neuromod_ok and
         rep.claim_module_ok and
+        rep.compose_module_ok and
         rep.sleep_module_ok and
         rep.n_taught >= 18 and
         rep.claim_pre >= 0.95 and

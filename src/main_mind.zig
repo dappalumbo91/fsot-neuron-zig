@@ -436,7 +436,7 @@ fn runFixed() void {
     }
     var params: [32]bio_probe_fixed.UnitParamsF = undefined;
     bio_probe_fixed.defaultBioParams(params[0..]);
-    // optional Allen params file + archive analytical lock (close 2% ISI residual)
+    // optional Allen params file + archive analytical lock (ISI residual in ms)
     const allen_path = "I:\\fsot nuron\\artifacts\\zig_bio_params.txt";
     var n_params: usize = 0;
     if (std.fs.cwd().openFile(allen_path, .{})) |file| {
@@ -449,11 +449,17 @@ fn runFixed() void {
     } else |_| {}
     if (n_params == 0) n_params = 32; // defaultBioParams already filled
 
-    std.debug.print("bio_params=allen_lock n={d} target_isi_ms={e} target_adapt={e} isi_tol=2% adapt_gate=10% adapt_iron=2.5%\n", .{
-        n_params,
-        bio_probe_fixed.ALLEN_ISI_MS,
-        bio_probe_fixed.ALLEN_ADAPT,
-    });
+    std.debug.print(
+        "bio_params=allen_lock n={d} target_isi_ms={e} target_adapt={e} isi_tol_ms={e} adapt_tol_abs={e} adapt_iron_abs={e}\n",
+        .{
+            n_params,
+            bio_probe_fixed.ALLEN_ISI_MS,
+            bio_probe_fixed.ALLEN_ADAPT,
+            bio_probe_fixed.ISI_TOL_MS,
+            bio_probe_fixed.ADAPT_TOL_ABS,
+            bio_probe_fixed.ADAPT_TIGHT_ABS,
+        },
+    );
     // Archive solution path: analytical_lock + polish (calibrate.py / bio_report_card 6/6)
     const fi = bio_probe_fixed.runAllenBioMatch(params[0..n_params], 1200);
     std.debug.print(
@@ -461,23 +467,35 @@ fn runFixed() void {
         .{ fi.mean_rate_Hz, fi.mean_isi_ms, fi.mean_adapt, fi.total_spikes },
     );
     std.debug.print(
-        "ALLEN_BIO_MATCH isi_rel_err={e} adapt_rel_err={e} isi_closed={} adapt_closed={} rate_ok={}\n",
-        .{ fi.isi_rel_err, fi.adapt_rel_err, fi.isi_closed, fi.adapt_closed, fi.rate_band_ok },
+        "ALLEN_BIO_MATCH isi_abs_err_ms={e} adapt_abs_err={e} isi_closed={} adapt_closed={} rate_ok={} (diag isi_frac={e} adapt_frac={e})\n",
+        .{
+            fi.isi_abs_err_ms,
+            fi.adapt_abs_err,
+            fi.isi_closed,
+            fi.adapt_closed,
+            fi.rate_band_ok,
+            fi.isi_rel_err,
+            fi.adapt_rel_err,
+        },
     );
     std.debug.print("gate_bio_rate={s}\n", .{if (fi.rate_band_ok) "PASS" else "FAIL"});
     std.debug.print("gate_bio_isi={s}\n", .{if (fi.isi_closed) "PASS" else "FAIL"});
     std.debug.print("gate_bio_adapt={s}\n", .{if (fi.adapt_closed) "PASS" else "FAIL"});
-    if (fi.adapt_rel_err <= bio_probe_fixed.ADAPT_TIGHT_REL) {
-        std.debug.print("FSOT_ALLEN_ADAPT_IRON_CLOSED adapt_rel_err={e} iron_tol=2.5%\n", .{fi.adapt_rel_err});
+    if (fi.adapt_abs_err <= bio_probe_fixed.ADAPT_TIGHT_ABS) {
+        std.debug.print(
+            "FSOT_ALLEN_ADAPT_IRON_CLOSED adapt_abs_err={e} iron_tol_abs={e}\n",
+            .{ fi.adapt_abs_err, bio_probe_fixed.ADAPT_TIGHT_ABS },
+        );
     }
     if (!fi.bio_match_ok) {
-        std.debug.print("FSOT_FIXED_BIO FAIL (Allen bio_match residual open)\n", .{});
+        std.debug.print("FSOT_FIXED_BIO FAIL (Allen bio_match residual open — ms/abs units)\n", .{});
         std.process.exit(1);
     }
-    std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match lock ≤2% ISI)\n", .{});
+    std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match |ΔISI| ms + |ΔA| abs)\n", .{});
     std.debug.print("FSOT_ALLEN_ISI_RESIDUAL_CLOSED\n", .{});
+    std.debug.print("FSOT_EPHYS_NATIVE_UNITS_OK\n", .{});
 
-    // Class-rate scalpel (archive wetlab T1–T2: Pyr/PV/SST/VIP ≤2%)
+    // Class-rate scalpel (archive wetlab T1–T2: Pyr/PV/SST/VIP abs Hz)
     const sc = scalpel_rate_fixed.runScalpel(28);
     scalpel_rate_fixed.printReport(sc);
     if (!sc.ok) {
@@ -1921,12 +1939,23 @@ fn runComposeIntel() void {
             r.answer_dependent,
         },
     );
+    std.debug.print(
+        "COMPOSE schema_edges={d} schema_exp={} episodic_hits={d} bank_fb={d} episodic_rate={e}\n",
+        .{
+            r.n_discovered_edges,
+            r.schema_from_experience,
+            r.episodic_hits,
+            r.bank_fallbacks,
+            r.episodic_rate,
+        },
+    );
     if (r.ok) {
         std.debug.print("FSOT_COMPOSE_INTEL PASS\n", .{});
         std.debug.print("FSOT_ANSWER_DEPENDENT_HOP_OK\n", .{});
         std.debug.print("FSOT_COMPOSE_ABLATION_OK\n", .{});
+        std.debug.print("FSOT_SCHEMA_DISCOVERY_OK\n", .{});
     } else {
-        std.debug.print("FSOT_COMPOSE_INTEL FAIL (need ≥90% claimable + ablation break ≥80%)\n", .{});
+        std.debug.print("FSOT_COMPOSE_INTEL FAIL (need ≥90% claimable + ablation + schema discovery)\n", .{});
         std.process.exit(1);
     }
 }
@@ -2013,7 +2042,7 @@ fn runIntelLoop() void {
         },
     );
     std.debug.print(
-        "LOOP sleep_stdp={d} replay={d} sigma={e} ach_train={e} ach_sleep={e} wm={d} claim_ret={} mem_ret={} nm={} claim_mod={} sleep_mod={} depth_ran={} depth_acc={e} depth_ok={}\n",
+        "LOOP sleep_stdp={d} replay={d} sigma={e} ach_train={e} ach_sleep={e} wm={d} claim_ret={} mem_ret={} nm={} claim_mod={} compose_mod={} compose_rate={e} sleep_mod={} depth_ran={} depth_acc={e} depth_ok={}\n",
         .{
             r.n_stdp_sleep,
             r.n_replay,
@@ -2025,6 +2054,8 @@ fn runIntelLoop() void {
             r.mem_retained,
             r.neuromod_ok,
             r.claim_module_ok,
+            r.compose_module_ok,
+            r.compose_claim_rate,
             r.sleep_module_ok,
             r.depth_ran,
             r.depth_acc,
@@ -2571,7 +2602,7 @@ pub fn main() !void {
         }
         gpu_batch_fixed.printVramProbe();
     } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
-        // Archive wetlab T1–T2: per-class FI rates ≤2%
+        // Archive wetlab T1–T2: per-class FI rates abs Hz
         if (!scalpel_rate_fixed.selfTest()) {
             std.debug.print("FSOT_SCALPEL selftest weak — running full scalpel\n", .{});
         }
@@ -2876,7 +2907,8 @@ pub fn main() !void {
         std.debug.print("  gpu-organ      = FSOT-GPU bridge (parity + native kernels)\n", .{});
         std.debug.print("  gpu-batch      = batch cosine/trit sleep replay (Fixed + FSOT-GPU)\n", .{});
         std.debug.print("  gpu-vram       = full VRAM offload → FSOT consensus kernels + top-K\n", .{});
-        std.debug.print("  scalpel        = Allen class rates Pyr/PV/SST/VIP ≤2%\n", .{});
+        std.debug.print("  scalpel        = Allen class rates Pyr/PV/SST/VIP |Δ| Hz\n", .{});
+        std.debug.print("  compose        = answer-dependent hops + schema discovery + ablation\n", .{});
         std.debug.print("  skill          = Python skill organ probe\n", .{});
         std.debug.print("  skill-run NAME = run skill (e.g. skill-run add)\n", .{});
         std.debug.print("  know-query     = I-don't-know → query tool → retain (archive/wiki)\n", .{});
