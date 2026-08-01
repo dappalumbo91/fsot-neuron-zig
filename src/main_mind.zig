@@ -113,6 +113,7 @@ const gpu_vram_fixed = @import("gpu_vram_fixed.zig");
 const skill_organ_fixed = @import("skill_organ_fixed.zig");
 const scalpel_rate_fixed = @import("scalpel_rate_fixed.zig");
 const allen_dist_fixed = @import("allen_dist_fixed.zig");
+const allen_class_dist_fixed = @import("allen_class_dist_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -435,23 +436,13 @@ fn runFixed() void {
         std.debug.print("FSOT_FIXED_BIO_SELFTEST FAIL\n", .{});
         std.process.exit(1);
     }
+    // Doctrine: FI params from codon genotype only (no external free-param tables).
     var params: [32]bio_probe_fixed.UnitParamsF = undefined;
     bio_probe_fixed.defaultBioParams(params[0..]);
-    // optional Allen params file + archive analytical lock (ISI residual in ms)
-    const allen_path = "I:\\fsot nuron\\artifacts\\zig_bio_params.txt";
-    var n_params: usize = 0;
-    if (std.fs.cwd().openFile(allen_path, .{})) |file| {
-        defer file.close();
-        var buf: [64 * 1024]u8 = undefined;
-        const nread = file.readAll(&buf) catch 0;
-        if (nread > 0) {
-            n_params = bio_probe_fixed.loadParamsFromText(buf[0..nread], params[0..]) catch 0;
-        }
-    } else |_| {}
-    if (n_params == 0) n_params = 32; // defaultBioParams already filled
+    const n_params: usize = 32;
 
     std.debug.print(
-        "bio_params=allen_lock n={d} target_isi_ms={e} target_adapt={e} isi_tol_ms={e} adapt_tol_abs={e} adapt_iron_abs={e}\n",
+        "bio_params=genetic_codon_orfs n={d} target_isi_ms={e} target_adapt={e} isi_tol_ms={e} adapt_tol_abs={e} adapt_iron_abs={e}\n",
         .{
             n_params,
             bio_probe_fixed.ALLEN_ISI_MS,
@@ -461,7 +452,7 @@ fn runFixed() void {
             bio_probe_fixed.ADAPT_TIGHT_ABS,
         },
     );
-    // Archive solution path: analytical_lock + polish (calibrate.py / bio_report_card 6/6)
+    // Genetic expression → soft Allen-informed blend → every-cell polish (readout)
     const fi = bio_probe_fixed.runAllenBioMatch(params[0..n_params], 1200);
     std.debug.print(
         "FIXED_BIO_FI rate_Hz={e} isi_ms={e} adapt={e} spikes={d}\n",
@@ -503,19 +494,20 @@ fn runFixed() void {
         );
     }
     if (!fi.bio_match_ok) {
-        std.debug.print("FSOT_FIXED_BIO FAIL (every cell must be in |ΔISI| ms + |ΔA| + |Δrate| Hz bounds)\n", .{});
+        std.debug.print("FSOT_FIXED_BIO FAIL (genetic FI must close Allen ms/Hz/abs — refine phenotype/ORFs)\n", .{});
         std.process.exit(1);
     }
-    std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match every cell in native units)\n", .{});
+    std.debug.print("FSOT_FIXED_BIO PASS (genetic codon FI · every cell Allen native units)\n", .{});
     std.debug.print("FSOT_ALLEN_ISI_RESIDUAL_CLOSED\n", .{});
     std.debug.print("FSOT_EPHYS_NATIVE_UNITS_OK\n", .{});
     std.debug.print("FSOT_EVERY_CELL_BIO_MATCH_OK\n", .{});
+    std.debug.print("FSOT_GENETIC_FI_SOURCE_OK\n", .{});
 
     // Class-rate scalpel (archive wetlab T1–T2: Pyr/PV/SST/VIP abs Hz)
-    const sc = scalpel_rate_fixed.runScalpel(28);
+    const sc = scalpel_rate_fixed.runScalpel(48);
     scalpel_rate_fixed.printReport(sc);
     if (!sc.ok) {
-        std.debug.print("FSOT_FIXED_BIO FAIL (Allen class rates residual open)\n", .{});
+        std.debug.print("FSOT_FIXED_BIO FAIL (Allen class rates residual open — refine class ORFs/phenotype)\n", .{});
         std.process.exit(1);
     }
 
@@ -1996,6 +1988,18 @@ fn runAllenDist() void {
         std.debug.print("FSOT_FIXED_BIO FAIL (Allen CSV distribution residual open)\n", .{});
         std.process.exit(1);
     }
+    // Cre-class conditional variance (Pyr/PV/SST/VIP) — required for bio accuracy
+    runAllenClassDist();
+}
+
+fn runAllenClassDist() void {
+    std.debug.print("=== FSOT ALLEN CRE-CLASS DISTRIBUTION ===\n", .{});
+    const p = allen_class_dist_fixed.runClassDistPanel();
+    allen_class_dist_fixed.printReport(p);
+    if (!p.ok) {
+        std.debug.print("FSOT_FIXED_BIO FAIL (Cre-class Allen distribution residual open)\n", .{});
+        std.process.exit(1);
+    }
 }
 
 fn runIntelFrontier() void {
@@ -2632,12 +2636,14 @@ pub fn main() !void {
         gpu_batch_fixed.printVramProbe();
     } else if (std.mem.eql(u8, mode, "allen-dist") or std.mem.eql(u8, mode, "allen_dist") or std.mem.eql(u8, mode, "csv-dist") or std.mem.eql(u8, mode, "allen-variance") or std.mem.eql(u8, mode, "ks-allen")) {
         runAllenDist();
+    } else if (std.mem.eql(u8, mode, "allen-class-dist") or std.mem.eql(u8, mode, "class-dist") or std.mem.eql(u8, mode, "cre-dist") or std.mem.eql(u8, mode, "cre_class_dist")) {
+        runAllenClassDist();
     } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
         // Archive wetlab T1–T2: per-class FI rates abs Hz
         if (!scalpel_rate_fixed.selfTest()) {
             std.debug.print("FSOT_SCALPEL selftest weak — running full scalpel\n", .{});
         }
-        const sc = scalpel_rate_fixed.runScalpel(28);
+        const sc = scalpel_rate_fixed.runScalpel(48);
         scalpel_rate_fixed.printReport(sc);
         if (!sc.ok) std.process.exit(1);
     } else if (std.mem.eql(u8, mode, "skill") or std.mem.eql(u8, mode, "skill-organ") or std.mem.eql(u8, mode, "skill_organ") or std.mem.eql(u8, mode, "python-skill")) {

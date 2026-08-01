@@ -198,13 +198,18 @@ pub fn phenotypeFromGenes(genes: *const [4]GeneProgramF) PhenotypeF {
     };
 }
 
+/// Class phenotype law after ORF expression (still genetics path — class ORF set
+/// already differs; this folds Cre-class membrane program onto expressed knobs).
+/// Refine HERE (or class ORFs) when Allen class rates miss — not free FI tables.
 fn applyClassNudge(ct: cell_types.CellType, ph: *PhenotypeF) void {
     switch (ct) {
         .pv => {
-            ph.refractory_steps = fixed.clamp(fixed.mul(ph.refractory_steps, fixed.fromDecimalStr("0.45")), fixed.fromInt(3), fixed.fromInt(40));
-            ph.adapt_step = fixed.mul(ph.adapt_step, fixed.fromDecimalStr("0.35"));
-            ph.fire_threshold = fixed.clamp(fixed.sub(ph.fire_threshold, fixed.fromDecimalStr("0.04")), fixed.fromDecimalStr("0.85"), fixed.fromDecimalStr("1.25"));
-            ph.fi_stim = fixed.clamp(fixed.mul(ph.fi_stim, fixed.fromDecimalStr("1.15")), fixed.fromDecimalStr("0.25"), fixed.fromDecimalStr("0.95"));
+            // Fast-spiking Cre program: short ref, weak AHP, elevated drive (Allen ~83 Hz)
+            ph.refractory_steps = fixed.clamp(fixed.mul(ph.refractory_steps, fixed.fromDecimalStr("0.38")), fixed.fromInt(3), fixed.fromInt(40));
+            ph.adapt_step = fixed.mul(ph.adapt_step, fixed.fromDecimalStr("0.28"));
+            ph.adapt_gain = fixed.mul(ph.adapt_gain, fixed.fromDecimalStr("0.60"));
+            ph.fire_threshold = fixed.clamp(fixed.sub(ph.fire_threshold, fixed.fromDecimalStr("0.08")), fixed.fromDecimalStr("0.78"), fixed.fromDecimalStr("1.25"));
+            ph.fi_stim = fixed.clamp(fixed.mul(ph.fi_stim, fixed.fromDecimalStr("1.42")), fixed.fromDecimalStr("0.25"), fixed.fromDecimalStr("1.20"));
         },
         .sst => {
             ph.adapt_step = fixed.clamp(fixed.mul(ph.adapt_step, fixed.fromDecimalStr("1.4")), 0, fixed.fromInt(10));
@@ -215,7 +220,9 @@ fn applyClassNudge(ct: cell_types.CellType, ph: *PhenotypeF) void {
             ph.d_eff = fixed.clamp(fixed.add(ph.d_eff, fixed.mul(fixed.fromDecimalStr("0.3"), seeds_f.phi)), fixed.fromInt(8), fixed.fromInt(20));
         },
         .pyr => {
-            ph.adapt_step = fixed.mul(ph.adapt_step, fixed.fromDecimalStr("1.05"));
+            // Mild AHP for regular-spiking Pyr (Allen pop adapt ~0.051)
+            ph.adapt_step = fixed.mul(ph.adapt_step, fixed.fromDecimalStr("0.95"));
+            ph.adapt_gain = fixed.mul(ph.adapt_gain, fixed.fromDecimalStr("1.08"));
         },
     }
 }
@@ -243,6 +250,78 @@ pub fn buildCellTypeGenotype(unit_id: u32, ct: cell_types.CellType, diversity: b
     gt.composite_spin = gt.phenotype.composite_spin;
     gt.composite_charge = gt.phenotype.composite_charge;
     return gt;
+}
+
+/// Phenotype → FI-probe knobs (codon expression products only).
+///
+/// Network `refractory_steps` is the lattice tick phenotype.
+/// - Regular-spiking (Pyr-like, ref≳10): ISI-scale refractory from Allen bio_match
+///   floor R≈ISI·(1−0.45A) modulated by gene expression (archive analytical path).
+/// - Fast-spiking (PV-like, short ref): keep short genetic ref — do **not** force
+///   Pyr ISI floor (that overdrive FS rates).
+pub fn phenotypeFiKnobs(ph: PhenotypeF) struct {
+    d_eff: Fixed,
+    fire_thr: Fixed,
+    ref_steps: i32,
+    adapt_gain: Fixed,
+    adapt_decay: Fixed,
+    adapt_step: Fixed,
+    fi_stim: Fixed,
+} {
+    const allen_isi: f64 = 70.59855571638475;
+    const allen_ad: f64 = 0.051153889361673456;
+    const ref_net = fixed.toF64(ph.refractory_steps);
+    const eta = fixed.toF64(seeds_f.eta_eff);
+    const psi = fixed.toF64(seeds_f.psi_con);
+    const phi_f = fixed.toF64(seeds_f.phi);
+    const ad_gene = fixed.toF64(ph.adapt_step);
+    var g = fixed.toF64(ph.adapt_gain);
+    var fi = fixed.toF64(ph.fi_stim);
+    var thr = fixed.toF64(ph.fire_threshold);
+
+    // Fast-spiking genetic program (class ORF + nudge → short ref)
+    if (ref_net < 9.0) {
+        const ref_i: i32 = @intFromFloat(@round(@max(3.0, @min(28.0, ref_net * 1.05))));
+        // weak AHP, strong drive — Cre PV ~83 Hz
+        g = @max(0.008, @min(0.04, g * 0.85));
+        const d_fs = @max(0.05, @min(2.5, ad_gene * 0.35));
+        fi = fi * (0.90 + 0.12 * psi) * (0.97 + 0.04 * eta);
+        fi = @max(0.55, @min(1.15, fi));
+        thr = @max(0.78, @min(1.10, thr));
+        return .{
+            .d_eff = ph.d_eff,
+            .fire_thr = fixed.fromF64Lab(thr),
+            .ref_steps = ref_i,
+            .adapt_gain = fixed.fromF64Lab(g),
+            .adapt_decay = ph.adapt_decay,
+            .adapt_step = fixed.fromF64Lab(d_fs),
+            .fi_stim = fixed.fromF64Lab(fi),
+        };
+    }
+
+    // Regular-spiking: Allen ISI-scale refractory from genetics
+    const gene_scale = @max(0.55, @min(1.55, ref_net / 13.0));
+    const R_law = allen_isi * (1.0 - 0.45 * allen_ad);
+    const ref_fi = R_law * 0.72 * gene_scale * (0.92 + 0.05 * (phi_f - 1.0));
+    const ref_i: i32 = @intFromFloat(@round(@max(4.0, @min(160.0, ref_fi))));
+
+    const A = @max(0.0, @min(0.55, allen_ad));
+    var d = (2.0 * A * @max(8.0, ref_fi)) / (9.0 * (1.0 - A) + 1e-9);
+    d *= 1.85 * @max(0.5, @min(1.6, ad_gene / 0.7));
+    d = @max(0.08, @min(10.0, d));
+    g = @max(0.022, @min(0.09, g * 1.35));
+    fi = fi * (0.88 + 0.20 * psi) * (0.95 + 0.08 * eta);
+    fi = @max(0.30, @min(0.95, fi));
+
+    return .{
+        .d_eff = ph.d_eff,
+        .fire_thr = ph.fire_threshold,
+        .ref_steps = ref_i,
+        .adapt_gain = fixed.fromF64Lab(g),
+        .adapt_decay = ph.adapt_decay,
+        .adapt_step = fixed.fromF64Lab(d),
+        .fi_stim = fixed.fromF64Lab(fi),
+    };
 }
 
 pub fn selfTest() bool {

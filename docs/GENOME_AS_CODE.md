@@ -14,7 +14,7 @@ It is **cellular software engineering**: ORF → phenotype → dynamics → veri
 
 | Biology | FSOT-2.1-Neural |
 |---------|-----------------|
-| DNA / codon table | `data/64_codon_trinary_map.txt` + `CHANNEL_GENE_ORFS` |
+| DNA / codon table | [`data/64_codon_trinary_map.txt`](../data/64_codon_trinary_map.txt) + class ORFs in `genotype.zig` · audit [`GENETICS_CODE_AUDIT.md`](GENETICS_CODE_AUDIT.md) |
 | Transcription / translation | Codon → AA/process → ion-channel phenotype |
 | Membrane dynamics | `FSOTNeuronBatch` / Zig `neuron.zig` step |
 | Synaptic proteins | Genetic \(W\) from trinary spins + φ geometry |

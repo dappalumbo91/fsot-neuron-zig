@@ -108,19 +108,54 @@ fn applyParams(n: *neuron_f.NeuronF, p: UnitParamsF) void {
     n.adapt_step = p.adapt_step;
 }
 
+/// Doctrine: FI knobs come from **codon genotype expression**, not free tables.
+/// Mean bio_match pop = pure Pyr class ORFs (no free tables). Variance / CSV
+/// gates use `fillFromGenetics(..., diversity=true)` or mutateOrf populations.
 pub fn defaultBioParams(out: []UnitParamsF) void {
+    fillFromGenetics(out, 42, false, false);
+}
+
+/// Fill FI population from class ORFs → expression → phenotype.
+pub fn fillFromGenetics(out: []UnitParamsF, seed: u32, diversity: bool, cortical_mix: bool) void {
+    const genotype_f = @import("genotype_fixed.zig");
+    const cell_types = @import("cell_types.zig");
     var i: usize = 0;
     while (i < out.len) : (i += 1) {
+        const ct: cell_types.CellType = if (cortical_mix) blk: {
+            const r = (seed +% @as(u32, @intCast(i)) *% 17) % 100;
+            if (r < 70) break :blk .pyr;
+            if (r < 85) break :blk .pv;
+            if (r < 93) break :blk .sst;
+            break :blk .vip;
+        } else .pyr;
+        const gt = genotype_f.buildCellTypeGenotype(seed +% @as(u32, @intCast(i)), ct, diversity);
+        const k = genotype_f.phenotypeFiKnobs(gt.phenotype);
         out[i] = .{
-            .d_eff = fixed.add(fixed.fromInt(13), fixed.mul(fixed.fromDecimalStr("0.1"), fixed.fromInt(@intCast(i % 5)))),
-            .fire_thr = fixed.fromDecimalStr("1.05"),
-            .ref_steps = 45 + @as(i32, @intCast(i % 8)),
-            .adapt_gain = fixed.fromDecimalStr("0.03"),
-            .adapt_decay = fixed.fromDecimalStr("0.991"),
-            .adapt_step = fixed.fromDecimalStr("0.7"),
-            .fi_stim = fixed.fromDecimalStr("0.48"),
+            .d_eff = k.d_eff,
+            .fire_thr = k.fire_thr,
+            .ref_steps = k.ref_steps,
+            .adapt_gain = k.adapt_gain,
+            .adapt_decay = k.adapt_decay,
+            .adapt_step = k.adapt_step,
+            .fi_stim = k.fi_stim,
         };
     }
+}
+
+/// Single-class genetic FI template (for scalpel / Cre-class).
+pub fn paramsFromCellType(ct: @import("cell_types.zig").CellType, unit_id: u32, diversity: bool) UnitParamsF {
+    const genotype_f = @import("genotype_fixed.zig");
+    const gt = genotype_f.buildCellTypeGenotype(unit_id, ct, diversity);
+    const k = genotype_f.phenotypeFiKnobs(gt.phenotype);
+    return .{
+        .d_eff = k.d_eff,
+        .fire_thr = k.fire_thr,
+        .ref_steps = k.ref_steps,
+        .adapt_gain = k.adapt_gain,
+        .adapt_decay = k.adapt_decay,
+        .adapt_step = k.adapt_step,
+        .fi_stim = k.fi_stim,
+    };
 }
 
 /// Load from same text format as bio_params_load (Allen-mapped).
@@ -292,29 +327,33 @@ fn adaptStepFromTarget(R: f64, ad: f64) f64 {
     return @max(0.0, @min(10.0, d));
 }
 
-/// Apply bio_match lock to every cell (in-place).
-/// Doctrine: each unit gets the **same** Allen-derived FI phenotype so no cell
-/// is left outside bounds by artificial diversity. Micro-variation is only
-/// allowed if per-unit polish still closes the cell.
+/// Soft bio_match *nudge* around **existing genetic phenotype** (does not replace ORFs).
+/// Doctrine: genetics set the code; this only micro-adjusts within gene-expressed
+/// ranges so Allen readout can close without free table rewrite.
+/// Prefer refining class ORFs / expression laws when residual stays open.
 pub fn analyticalLockBioMatch(params: []UnitParamsF) void {
     const isi_tgt = ALLEN_ISI_MS;
     const ad_tgt = ALLEN_ADAPT;
     const A = @max(0.0, @min(0.4, ad_tgt));
-    var R = isi_tgt * (1.0 - 0.45 * A);
-    R = @max(6.0, @min(180.0, R));
-    const d = adaptStepFromTarget(R, ad_tgt);
-    const ref_i: i32 = @intFromFloat(@max(4.0, @min(200.0, @round(R))));
+    var R_law = isi_tgt * (1.0 - 0.45 * A);
+    R_law = @max(6.0, @min(180.0, R_law));
+    const d_law = adaptStepFromTarget(R_law, ad_tgt);
     var u: usize = 0;
     while (u < params.len) : (u += 1) {
-        params[u].ref_steps = ref_i;
-        params[u].adapt_step = fixed.fromF64Lab(d);
-        // Uniform gain so every cell starts on the Allen AHP trajectory
-        params[u].adapt_gain = fixed.fromF64Lab(0.055);
-        params[u].adapt_decay = fixed.fromDecimalStr("0.988");
-        params[u].fire_thr = fixed.fromDecimalStr("1.05");
-        params[u].fi_stim = fixed.fromDecimalStr("0.50");
-        // Cap d_eff scatter so FI does not push cells outside ISI/rate bounds
-        params[u].d_eff = fixed.fromF64Lab(13.0);
+        // Blend genetic refractory with Allen-informed floor (keep genetic identity)
+        const r0: f64 = @floatFromInt(params[u].ref_steps);
+        const Rblend = 0.45 * r0 + 0.55 * R_law;
+        params[u].ref_steps = @intFromFloat(@max(3.0, @min(200.0, @round(Rblend))));
+        const d0 = fixed.toF64(params[u].adapt_step);
+        // Genetic AHP slightly strong after class nudge — blend under law δ
+        const d1 = 0.40 * d0 + 0.60 * (d_law * 0.92);
+        params[u].adapt_step = fixed.fromF64Lab(@max(0.05, @min(12.0, d1)));
+        const g0 = fixed.toF64(params[u].adapt_gain);
+        if (g0 < 0.020) {
+            params[u].adapt_gain = fixed.fromF64Lab(0.035);
+        } else {
+            params[u].adapt_gain = fixed.fromF64Lab(@min(0.09, g0 * 1.08));
+        }
     }
 }
 
@@ -367,18 +406,24 @@ pub fn polishOneUnit(p: *UnitParamsF, steps: usize) UnitResidualF {
                 const dec = fixed.toF64(p.adapt_decay);
                 p.adapt_decay = fixed.fromF64Lab(@max(0.970, dec * 0.998));
             } else {
-                const d0 = fixed.toF64(p.adapt_step) * 0.92;
+                // overshoot Allen A — pull AHP down harder so mean/every-cell close
+                const d0 = fixed.toF64(p.adapt_step) * 0.88;
                 p.adapt_step = fixed.fromF64Lab(@max(0.05, d0));
-                const g0 = fixed.toF64(p.adapt_gain) * 0.96;
-                p.adapt_gain = fixed.fromF64Lab(@max(0.022, g0));
+                const g0 = fixed.toF64(p.adapt_gain) * 0.94;
+                p.adapt_gain = fixed.fromF64Lab(@max(0.018, g0));
             }
             // don't fight adapt with strong rate/ISI moves this iter
-            if (it < 24) continue;
-        } else if (!last.iron_adapt and pr.adapt < ALLEN_ADAPT) {
-            const d0 = fixed.toF64(p.adapt_step) * 1.05;
-            p.adapt_step = fixed.fromF64Lab(@min(12.0, d0));
-            const g0 = fixed.toF64(p.adapt_gain) * 1.02;
-            p.adapt_gain = fixed.fromF64Lab(@min(0.12, g0));
+            if (it < 20) continue;
+        } else if (!last.iron_adapt) {
+            if (pr.adapt < ALLEN_ADAPT) {
+                const d0 = fixed.toF64(p.adapt_step) * 1.05;
+                p.adapt_step = fixed.fromF64Lab(@min(12.0, d0));
+                const g0 = fixed.toF64(p.adapt_gain) * 1.02;
+                p.adapt_gain = fixed.fromF64Lab(@min(0.12, g0));
+            } else {
+                const d0 = fixed.toF64(p.adapt_step) * 0.96;
+                p.adapt_step = fixed.fromF64Lab(@max(0.05, d0));
+            }
         }
 
         // ISI (ms)
@@ -432,7 +477,7 @@ pub fn polishBioMatch(params: []UnitParamsF, steps: usize) PopReportF {
     var snap: u32 = 0;
     var last: PopReportF = .{};
 
-    while (snap < 14) : (snap += 1) {
+    while (snap < 18) : (snap += 1) {
         last = runFIPopulation(params, steps);
         fillResiduals(&last);
 

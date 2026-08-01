@@ -88,44 +88,11 @@ fn labelFor(ct: cell_types.CellType) []const u8 {
     };
 }
 
-/// Seed params for one cell class (archive order: PV much faster than Pyr).
+/// Seed params for one cell class from **codon genotype** (class ORFs → phenotype).
+/// Doctrine: no free FI tables — genetics-as-code only. Allen rates are readout.
 pub fn seedClassParams(ct: cell_types.CellType, out: *bio.UnitParamsF) void {
-    out.* = .{};
-    switch (ct) {
-        .pyr => {
-            out.d_eff = fixed.fromDecimalStr("12.5");
-            out.fire_thr = fixed.fromDecimalStr("1.08");
-            out.ref_steps = 55;
-            out.adapt_gain = fixed.fromDecimalStr("0.04");
-            out.adapt_step = fixed.fromDecimalStr("0.9");
-            out.fi_stim = fixed.fromDecimalStr("0.48");
-        },
-        .pv => {
-            // Fast-spiking: short ref, lower thr, strong drive (Allen ~83 Hz)
-            out.d_eff = fixed.fromDecimalStr("10.5");
-            out.fire_thr = fixed.fromDecimalStr("0.88");
-            out.ref_steps = 6;
-            out.adapt_gain = fixed.fromDecimalStr("0.012");
-            out.adapt_step = fixed.fromDecimalStr("0.12");
-            out.fi_stim = fixed.fromDecimalStr("0.85");
-        },
-        .sst => {
-            out.d_eff = fixed.fromDecimalStr("12.0");
-            out.fire_thr = fixed.fromDecimalStr("1.02");
-            out.ref_steps = 28;
-            out.adapt_gain = fixed.fromDecimalStr("0.035");
-            out.adapt_step = fixed.fromDecimalStr("0.7");
-            out.fi_stim = fixed.fromDecimalStr("0.55");
-        },
-        .vip => {
-            out.d_eff = fixed.fromDecimalStr("11.5");
-            out.fire_thr = fixed.fromDecimalStr("1.00");
-            out.ref_steps = 22;
-            out.adapt_gain = fixed.fromDecimalStr("0.03");
-            out.adapt_step = fixed.fromDecimalStr("0.55");
-            out.fi_stim = fixed.fromDecimalStr("0.58");
-        },
-    }
+    // unit_id 0, no diversity: pure class ORF expression
+    out.* = bio.paramsFromCellType(ct, 0, false);
 }
 
 fn measureClass(ct: cell_types.CellType, p: *const bio.UnitParamsF, steps: usize, n_units: u32) ClassRate {
@@ -195,7 +162,7 @@ fn adjustToward(p: *bio.UnitParamsF, measured: f64, target: f64, tol_hz: f64) vo
 
 /// Run class scalpel until every cell of each class is within abs Hz tol.
 pub fn runScalpel(max_iters: u32) ScalpelReport {
-    // Prefer more iters for PV (hard on 1 ms lattice)
+    // Genetics seed may need more iters than free tables (PV on 1 ms lattice)
     var rep: ScalpelReport = .{};
     var p_pyr: bio.UnitParamsF = .{};
     var p_pv: bio.UnitParamsF = .{};

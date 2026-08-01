@@ -65,22 +65,18 @@ Mean-only lock is **not** the full Allen story. Public `ephys_features.csv` has 
 |-------|------|-------------|
 | Mean FI lock | every cell near bio_match mean | `bio_probe_fixed` · `fixed` |
 | Class means | every Cre class replicate | `scalpel_rate_fixed` |
-| **CSV variance** | specimen-mapped pop: mean/sd/quantiles + **KS** | `allen_dist_fixed` · `allen-dist` / inside `fixed` |
+| **CSV variance** | specimen-mapped pop (256 stratified): mean/sd/quantiles + **KS** | `allen_dist_fixed` · `allen-dist` / `fixed` |
+| **Cre-class variance** | Pyr / PV / SST / VIP each match mouse Cre dist + KS | `allen_class_dist_fixed` · `allen-class-dist` / `fixed` |
 
-Snapshots (from monorepo Allen CSV, seed=42 sample 128):
+Snapshots under `data/allen/`:
 
-- `data/allen/allen_dist_targets.txt` — full-CSV mean, SD, SEM, p05…p95  
-- `data/allen/allen_sample_128.txt` — specimen rows (isi, adapt, tau, rin, vrest, rheobase)
+- `allen_dist_targets.txt` — full-CSV mean, SD, SEM, quantiles  
+- `allen_sample_256.txt` — stratified mouse Cre specimen sample  
+- `class_{pyr,pv,sst,vip}_sample.txt` — per-class specimens  
+- `class_dist_targets.txt` — per-class mean/sd/quantiles/rate  
 
-**Per-cell (distribution protocol):** residual vs **assigned specimen**, not vs population mean.  
-**Population:** |Δmean|, relative |Δsd|, quantile errors (ms), two-sample KS on ISI and adapt.
-
-## Honest bounds
-
-- **Mean lock:** every FI cell / class replicate inside absolute bounds (above).  
-- **CSV dist lock:** specimen-mapped sample must match full-CSV variance structure (KS + sd + quantiles).  
-- Not a claim that a 128-unit Fixed lattice is a physical patch-clamp rig or that every rare Allen outlier is reproduced.  
-- Biochemical cascade modules use their own SI-style residuals as those gates tighten.
+**Per-cell:** residual vs **assigned specimen**.  
+**Population / class:** |Δmean|, |Δsd|, quantiles, two-sample KS (ISI + adapt).
 
 ---
 
