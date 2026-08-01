@@ -478,9 +478,23 @@ fn runFixed() void {
             fi.adapt_rel_err,
         },
     );
+    std.debug.print(
+        "ALLEN_EVERY_CELL closed={d}/{d} iron={d}/{d} max_isi_ms={e} max_adapt={e} max_rate_Hz={e} all={}\n",
+        .{
+            fi.n_units_closed,
+            fi.n_units_scored,
+            fi.n_units_iron,
+            fi.n_units_scored,
+            fi.max_isi_abs_err_ms,
+            fi.max_adapt_abs_err,
+            fi.max_rate_abs_err_Hz,
+            fi.all_units_closed,
+        },
+    );
     std.debug.print("gate_bio_rate={s}\n", .{if (fi.rate_band_ok) "PASS" else "FAIL"});
     std.debug.print("gate_bio_isi={s}\n", .{if (fi.isi_closed) "PASS" else "FAIL"});
     std.debug.print("gate_bio_adapt={s}\n", .{if (fi.adapt_closed) "PASS" else "FAIL"});
+    std.debug.print("gate_bio_every_cell={s}\n", .{if (fi.all_units_closed) "PASS" else "FAIL"});
     if (fi.adapt_abs_err <= bio_probe_fixed.ADAPT_TIGHT_ABS) {
         std.debug.print(
             "FSOT_ALLEN_ADAPT_IRON_CLOSED adapt_abs_err={e} iron_tol_abs={e}\n",
@@ -488,12 +502,13 @@ fn runFixed() void {
         );
     }
     if (!fi.bio_match_ok) {
-        std.debug.print("FSOT_FIXED_BIO FAIL (Allen bio_match residual open — ms/abs units)\n", .{});
+        std.debug.print("FSOT_FIXED_BIO FAIL (every cell must be in |ΔISI| ms + |ΔA| + |Δrate| Hz bounds)\n", .{});
         std.process.exit(1);
     }
-    std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match |ΔISI| ms + |ΔA| abs)\n", .{});
+    std.debug.print("FSOT_FIXED_BIO PASS (Allen bio_match every cell in native units)\n", .{});
     std.debug.print("FSOT_ALLEN_ISI_RESIDUAL_CLOSED\n", .{});
     std.debug.print("FSOT_EPHYS_NATIVE_UNITS_OK\n", .{});
+    std.debug.print("FSOT_EVERY_CELL_BIO_MATCH_OK\n", .{});
 
     // Class-rate scalpel (archive wetlab T1–T2: Pyr/PV/SST/VIP abs Hz)
     const sc = scalpel_rate_fixed.runScalpel(28);

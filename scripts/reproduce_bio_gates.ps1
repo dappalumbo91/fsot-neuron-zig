@@ -56,10 +56,13 @@ $needles = @(
     "FSOT_FIXED_BIO_ACCURATE_OK",
     "FSOT_ALLEN_ISI_RESIDUAL_CLOSED",
     "FSOT_EPHYS_NATIVE_UNITS_OK",
+    "FSOT_EVERY_CELL_BIO_MATCH_OK",
     "FSOT_SCALPEL_RATES PASS",
     "FSOT_ALLEN_CLASS_RATES_CLOSED",
+    "FSOT_EVERY_CELL_CLASS_RATE_OK",
     "gate_bio_isi=PASS",
     "gate_bio_adapt=PASS",
+    "gate_bio_every_cell=PASS",
     "isi_abs_err_ms="
 )
 foreach ($n in $needles) {

@@ -45,8 +45,8 @@
 | Novel thought | Bond-composed only | No free prose | Correct for truth doctrine |
 | Glia (astro/micro/oligo) | **Yes** (`glia_fixed`) | supply/load poof·suction; η scale; prune; myelo | Process-level, not full wet glia |
 | Molecular cascade (CaMKII/AMPA/protein) | **Yes** (`molecular_fixed`) | tag→camk→ampa→protein→consolidate W | Compressed late-LTP stand-in |
-| Allen pop ISI/adapt bio_match | **Yes** (`runAllenBioMatch`) | archive analytical_lock port | **\|ΔISI\|≤1.42 ms / \|ΔA\|≤0.00512** ([EPHYS_METRIC_UNITS](EPHYS_METRIC_UNITS.md)) |
-| Allen class rates Pyr/PV/SST/VIP | **Yes** (`scalpel_rate_fixed`) | wetlab T1–T2 Cre means | **\|Δr\| Hz abs per class** |
+| Allen FI bio_match **every cell** | **Yes** (`runAllenBioMatch` + `polishAllUnits`) | archive lock + per-unit refine | **each** cell \|ΔISI\|≤1.42 ms, \|ΔA\|≤0.00512, \|Δr\|≤0.40 Hz · `FSOT_EVERY_CELL_BIO_MATCH_OK` |
+| Allen class rates **every replicate** | **Yes** (`scalpel_rate_fixed`) | wetlab T1–T2 Cre means | **each** Pyr/PV/SST/VIP cell \|Δr\| Hz · `FSOT_EVERY_CELL_CLASS_RATE_OK` |
 | Full STDP curve + multi-timescale | Partial | discrete windows | **Gap — deepen** |
 | Wet cascade in think tick | Partial | modules exist; not full encode path | **Gap — wire** |
 | History / moral corpus | **Excluded** | — | Intentional |

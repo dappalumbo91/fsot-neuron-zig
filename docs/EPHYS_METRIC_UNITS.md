@@ -24,21 +24,24 @@ Percent-of-target is common in engineering QA; it is **not** the primary languag
 
 ## Primary gates (this repo)
 
-| Gate | Quantity | Tolerance (absolute) | Source of magnitude |
-|------|----------|----------------------|---------------------|
-| Pop ISI | \|ISI − Allen\| | **≤ 1.42 ms** | ≈ former 2% of Allen ISI ~70.60 ms |
-| Pop adapt (pass) | \|A − Allen\| | **≤ 0.00512** | ≈ former 10% of Allen A ~0.05115 |
-| Pop adapt (iron) | \|A − Allen\| | **≤ 0.00128** | ≈ former 2.5% polish target |
-| Rate band (pop FI) | mean rate | **5–80 Hz** | envelope during lock (not % of one mean) |
-| Class Pyr | \|r − target\| | **≤ 0.33 Hz** | ≈ former 2% of ~16.35 Hz |
-| Class PV | \|r − target\| | **≤ 1.67 Hz** | ≈ former 2% of ~83.35 Hz |
-| Class SST | \|r − target\| | **≤ 0.59 Hz** | ≈ former 2% of ~29.54 Hz |
-| Class VIP | \|r − target\| | **≤ 0.70 Hz** | ≈ former 2% of ~34.82 Hz |
+**Doctrine:** **every cell** must sit inside these bounds — population mean alone is not enough (`all_units_closed`, `FSOT_EVERY_CELL_BIO_MATCH_OK`).
+
+| Gate | Quantity | Tolerance (absolute) | Applies to |
+|------|----------|----------------------|------------|
+| ISI | \|ISI − Allen\| | **≤ 1.42 ms** | **each** FI unit |
+| Adapt (pass) | \|A − Allen\| | **≤ 0.00512** | **each** FI unit (≥6 spikes) |
+| Adapt (iron) | \|A − Allen\| | **≤ 0.00128** | polish target per unit |
+| Rate | \|r − Allen_rate\| | **≤ 0.40 Hz** | **each** FI unit (Allen_rate = 1000/ISI_ms) |
+| Rate band | mean / unit rate | **5–80 Hz** | safety envelope |
+| Class Pyr | \|r − target\| | **≤ 0.33 Hz** | **each** Pyr replicate |
+| Class PV | \|r − target\| | **≤ 1.67 Hz** | **each** PV replicate |
+| Class SST | \|r − target\| | **≤ 0.59 Hz** | **each** SST replicate |
+| Class VIP | \|r − target\| | **≤ 0.70 Hz** | **each** VIP replicate |
 
 Code:
 
-- `src/bio_probe_fixed.zig` — `ISI_TOL_MS`, `ADAPT_TOL_ABS`, `ADAPT_TIGHT_ABS`
-- `src/scalpel_rate_fixed.zig` — `TOL_*_HZ`, `abs_err_Hz`
+- `src/bio_probe_fixed.zig` — `ISI_TOL_MS`, `ADAPT_TOL_ABS`, `UNIT_RATE_TOL_HZ`, `polishAllUnits`, `all_units_closed`
+- `src/scalpel_rate_fixed.zig` — `TOL_*_HZ`, `n_units_closed`, `max_unit_abs_err_Hz`
 
 ---
 
@@ -56,9 +59,10 @@ These fractions exist for comparison with older logs and archive Python. **PASS/
 
 ## Honest bounds
 
-- Tolerances are **lock criteria** for model–mean agreement, not claims that biology is that precise across cells (CV of rates across neurons is often much larger).
-- We do **not** claim SEM-matched full ISI distributions or KS tests against whole Allen CSV unless a protocol is added and measured.
-- Biochemical cascade modules (`channel_stoch`, molecular) report counts and rates in their own process units; they are not re-expressed as “% error” of Allen FI.
+- **Within this organism model**, every simulated FI cell and every class replicate **must** pass the absolute bounds above. Open cells fail the gate and are refined (`polishOneUnit` / scalpel adjust).
+- Tolerances are **model–Allen-target lock criteria** (public Cre / bio_match means), not a claim about SEM of the entire Allen CSV distribution.
+- We do **not** yet claim full ISI histogram KS tests vs whole Allen CSV unless that protocol is added and measured.
+- Biochemical cascade modules (`channel_stoch`, molecular) report counts and rates in their own process units; they are not re-expressed as “% error” of Allen FI — they get their own SI-style residuals as those gates tighten.
 
 ---
 
