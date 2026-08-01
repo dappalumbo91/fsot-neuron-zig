@@ -30,6 +30,7 @@
 | **Every** class replicate Pyr/PV/SST/VIP: **\|Δr\| Hz** + PV ≫ Pyr | `fsot_mind scalpel` → `FSOT_EVERY_CELL_CLASS_RATE_OK` |
 | **Allen CSV variance:** stratified specimen sample mean/sd/quantiles + KS | `fsot_mind allen-dist` / `fixed` → `FSOT_ALLEN_CSV_VARIANCE_OK` · `FSOT_KS_ISI_ADAPT_OK` |
 | **Cre-class variance:** Pyr/PV/SST/VIP each match Allen mouse Cre dist + KS + PV≫Pyr | `fsot_mind allen-class-dist` / `fixed` → `FSOT_CRE_CLASS_VARIANCE_OK` |
+| **Full ISI distribution KS (product):** genetic class ORF + mutateOrf seed + soft specimen polish → two-sample KS vs Allen sample + mean/SD/quantiles vs full CSV | `fsot_mind isi-ks` → `FSOT_ALLEN_ISI_KS_PRODUCT PASS` · `FSOT_KS_VS_ALLEN_CSV_OK` · `FSOT_GENETIC_ISI_KS_OK` |
 | Genetic structure (codon ORFs, E/I, pair W) | suite + Neural Lean structure panel |
 | Wet process cascade runs on think encode (STDP/glia/mol/consol/prune) | think logs: `THINK_WET`, non-zero stdp/releases; mut≠0 plasticity |
 | STM/LTM disk spill + warm | `ltm_disk_fixed`; hour logs warm/spill counts |
@@ -53,6 +54,7 @@ Reproduce domain gates:
 # or:
 .\zig-out\bin\fsot_mind.exe fixed
 .\zig-out\bin\fsot_mind.exe scalpel
+.\zig-out\bin\fsot_mind.exe isi-ks   # full ISI distribution KS product
 ```
 
 ---

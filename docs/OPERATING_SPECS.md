@@ -18,6 +18,7 @@ zig build kernel             # freestanding kernel → zig-out
 .\run_qemu.ps1               # build kernel + QEMU serial gate
 .\zig-out\bin\fsot_mind.exe capacity
 .\zig-out\bin\fsot_mind.exe genetic-var
+.\zig-out\bin\fsot_mind.exe isi-ks      # full ISI distribution KS product
 ```
 
 ---
@@ -38,6 +39,7 @@ zig build kernel             # freestanding kernel → zig-out
 ```text
 fsot_mind capacity
 fsot_mind genetic-var    # mutateOrf diversity under 64-codon law
+fsot_mind isi-ks         # full ISI distribution KS vs Allen CSV (product)
 fsot_mind bio-learn
 fsot_mind speech
 fsot_mind think          # short probe

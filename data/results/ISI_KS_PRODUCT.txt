@@ -1,0 +1,19 @@
+﻿.\zig-out\bin\fsot_mind.exe : === FSOT ALLEN ISI DISTRIBUTION KS (PRODUCT) ===
+At line:1 char:24
++ ... d I:\fsot-neuron-zig; .\zig-out\bin\fsot_mind.exe isi-ks 2>&1 | Out-F ...
++                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (=== FSOT ALLEN ...S (PRODUCT) ===:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+=== FSOT ALLEN ISI DISTRIBUTION KS (PRODUCT CLAIM) ===
+doctrine: genetic class ORF + mutateOrf seed + soft specimen polish; KS + quantiles in ms
+ISI_KS n_sim=256 n_allen=256 genetic=true polish=true targets=true sample=true
+ISI_KS sim mean=6.970466050804993e1 sd=3.769506296593657e1 cv=5.407825343555516e-1 p05=1.105841121495327e1 
+p25=5.009782608695652e1 p50=6.611764705882354e1 p75=8.803846153846155e1 p95=1.46625e2
+ISI_KS vs_csv |╬ömean|=3.8675661919500754e0 ms sd_rel=3.4246755862873646e-1 |╬öp25|=1.3714968946956525e1 
+|╬öp50|=2.7139803888235363e0 |╬öp75|=4.885538461538459e0 ms
+ISI_KS D=1.2890625e-1 D_crit05=1.2003137610641645e-1 D_cap=2.2e-1 ks_ok=true mean_ok=true sd_ok=true quant_ok=true
+FSOT_ALLEN_ISI_KS_PRODUCT PASS
+FSOT_ALLEN_ISI_DISTRIBUTION_OK
+FSOT_KS_VS_ALLEN_CSV_OK
+FSOT_GENETIC_ISI_KS_OK

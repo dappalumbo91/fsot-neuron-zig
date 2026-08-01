@@ -116,6 +116,7 @@ const allen_dist_fixed = @import("allen_dist_fixed.zig");
 const allen_class_dist_fixed = @import("allen_class_dist_fixed.zig");
 const genetic_var_fixed = @import("genetic_var_fixed.zig");
 const allen_baremetal_fixed = @import("allen_baremetal_fixed.zig");
+const allen_isi_ks_product = @import("allen_isi_ks_product.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -2021,6 +2022,20 @@ fn runGeneticVar() void {
     }
 }
 
+fn runIsiKsProduct() void {
+    std.debug.print("=== FSOT ALLEN ISI DISTRIBUTION KS (PRODUCT) ===\n", .{});
+    if (!allen_isi_ks_product.selfTest()) {
+        std.debug.print("FSOT_ALLEN_ISI_KS_PRODUCT SELFTEST FAIL\n", .{});
+        std.process.exit(1);
+    }
+    const r = allen_isi_ks_product.runIsiKsProduct();
+    allen_isi_ks_product.printReport(r);
+    if (!r.ok) {
+        std.debug.print("FSOT_ALLEN_ISI_KS_PRODUCT FAIL (genetic ISI dist vs Allen CSV)\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runAllenBareHost() void {
     std.debug.print("=== FSOT ALLEN BAREMETAL SUITE (host twin of QEMU full Allen) ===\n", .{});
     std.debug.print("doctrine: same genetic FI + class rates as freestanding kernel\n", .{});
@@ -2691,6 +2706,8 @@ pub fn main() !void {
         runAllenClassDist();
     } else if (std.mem.eql(u8, mode, "genetic-var") or std.mem.eql(u8, mode, "genetic_var") or std.mem.eql(u8, mode, "mutate-orf") or std.mem.eql(u8, mode, "orf-var")) {
         runGeneticVar();
+    } else if (std.mem.eql(u8, mode, "isi-ks") or std.mem.eql(u8, mode, "isi_ks") or std.mem.eql(u8, mode, "allen-isi-ks") or std.mem.eql(u8, mode, "ks-isi") or std.mem.eql(u8, mode, "isi-dist")) {
+        runIsiKsProduct();
     } else if (std.mem.eql(u8, mode, "allen-bare") or std.mem.eql(u8, mode, "allen_bare") or std.mem.eql(u8, mode, "qemu-allen") or std.mem.eql(u8, mode, "bare-allen")) {
         runAllenBareHost();
     } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
@@ -2997,6 +3014,7 @@ pub fn main() !void {
         std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
         std.debug.print("  capacity       = silicon body tier (RAM/GPU) + growth budgets\n", .{});
         std.debug.print("  genetic-var    = mutateOrf FI variance (trinary codon diversity)\n", .{});
+        std.debug.print("  isi-ks         = full ISI distribution KS vs Allen CSV (product)\n", .{});
         std.debug.print("  allen-dist     = CSV variance + Cre-class dist (host)\n", .{});
         std.debug.print("  gpu-organ      = FSOT-GPU bridge (parity + native kernels)\n", .{});
         std.debug.print("  gpu-batch      = batch cosine/trit sleep replay (Fixed + FSOT-GPU)\n", .{});
