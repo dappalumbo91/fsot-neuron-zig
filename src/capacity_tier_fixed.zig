@@ -174,7 +174,12 @@ pub fn printReport(cfg: CapConfig) void {
     std.debug.print("host_hint={s}\n", .{cfg.host_hint});
     std.debug.print("paths: QEMU sim on growth host → flash image → Mac Mini body\n", .{});
     std.debug.print("GPU ref: github.com/dappalumbo91/FSOT-GPU · mode gpu-organ\n", .{});
-    std.debug.print("docs: docs/MINIMUM_STACK.md · docs/SILICON_BODY_ARCHITECTURE.md · docs/FSOT_GPU_ORGAN.md\n", .{});
+    std.debug.print("--- operating envelope (see docs/OPERATING_SPECS.md) ---\n", .{});
+    std.debug.print("floor_host: >=4GB RAM, x86_64/aarch64, no GPU required\n", .{});
+    std.debug.print("qemu_kernel: Multiboot x86, -m 64M class, serial console\n", .{});
+    std.debug.print("host_modes_floor: bio-learn, speech, think-probe, capacity, genetic-var\n", .{});
+    std.debug.print("host_modes_heavy: think-hour, fixed+allen-dist, intel-loop, gpu-organ\n", .{});
+    std.debug.print("docs: docs/MINIMUM_STACK.md · docs/OPERATING_SPECS.md · docs/SILICON_BODY_ARCHITECTURE.md\n", .{});
     std.debug.print("FSOT_CAPACITY_OK\n", .{});
 }
 

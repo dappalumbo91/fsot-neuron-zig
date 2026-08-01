@@ -145,19 +145,25 @@ fn expressionBias(ct: cell_types.CellType, name: GeneName) f64 {
 }
 
 /// Deterministic diversity: flip purine/pyrimidine class at index (same primary trit class).
+/// Trinary-preserving base flips (purine↔purine, pyrimidine↔pyrimidine).
+/// Number of sites scales with unit_id so cohort diversity is genetic, not free noise.
 pub fn mutateOrf(dna_in: []const u8, unit_id: u32, locus: u32, out: *[32]u8) []const u8 {
     const n = @min(dna_in.len, 32);
     @memcpy(out[0..n], dna_in[0..n]);
     if (n == 0) return out[0..0];
-    const idx = (unit_id *% 3 +% locus *% 5) % @as(u32, @intCast(n));
-    const b = out[idx];
-    out[idx] = switch (b) {
-        'A', 'a' => 'G',
-        'G', 'g' => 'A',
-        'C', 'c' => 'T',
-        'T', 't', 'U', 'u' => 'C',
-        else => b,
-    };
+    const n_mut: u32 = 1 + (unit_id % 4); // 1..4 sites
+    var m: u32 = 0;
+    while (m < n_mut) : (m += 1) {
+        const idx = (unit_id *% 3 +% locus *% 5 +% m *% 7) % @as(u32, @intCast(n));
+        const b = out[idx];
+        out[idx] = switch (b) {
+            'A', 'a' => 'G',
+            'G', 'g' => 'A',
+            'C', 'c' => 'T',
+            'T', 't', 'U', 'u' => 'C',
+            else => b,
+        };
+    }
     return out[0..n];
 }
 

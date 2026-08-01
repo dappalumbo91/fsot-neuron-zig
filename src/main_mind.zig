@@ -114,6 +114,7 @@ const skill_organ_fixed = @import("skill_organ_fixed.zig");
 const scalpel_rate_fixed = @import("scalpel_rate_fixed.zig");
 const allen_dist_fixed = @import("allen_dist_fixed.zig");
 const allen_class_dist_fixed = @import("allen_class_dist_fixed.zig");
+const genetic_var_fixed = @import("genetic_var_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -513,6 +514,9 @@ fn runFixed() void {
 
     // Full Allen CSV distribution (mean/sd/quantiles/KS + per-specimen cells)
     runAllenDist();
+
+    // Genetic variance: mutateOrf diversity under 64-codon trinary (not free scatter)
+    runGeneticVar();
 
     // structure class vs f64 brain authority (+ synapse density band)
     var bf64 = brain.Brain.initSeeded(42, false);
@@ -2002,6 +2006,20 @@ fn runAllenClassDist() void {
     }
 }
 
+fn runGeneticVar() void {
+    std.debug.print("=== FSOT GENETIC VARIANCE (mutateOrf) ===\n", .{});
+    if (!genetic_var_fixed.selfTest()) {
+        std.debug.print("FSOT_GENETIC_VARIANCE SELFTEST FAIL\n", .{});
+        std.process.exit(1);
+    }
+    const r = genetic_var_fixed.runGeneticVariance();
+    genetic_var_fixed.printReport(r);
+    if (!r.ok) {
+        std.debug.print("FSOT_GENETIC_VARIANCE FAIL (refine mutateOrf / phenotype)\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runIntelFrontier() void {
     std.debug.print("=== FSOT INTEL FRONTIER (multi-day + curiosity + ladder) ===\n", .{});
     std.debug.print("schedule: N days of curiosity-select → ACh encode → PE retrieve → sleep → claim\n", .{});
@@ -2638,6 +2656,8 @@ pub fn main() !void {
         runAllenDist();
     } else if (std.mem.eql(u8, mode, "allen-class-dist") or std.mem.eql(u8, mode, "class-dist") or std.mem.eql(u8, mode, "cre-dist") or std.mem.eql(u8, mode, "cre_class_dist")) {
         runAllenClassDist();
+    } else if (std.mem.eql(u8, mode, "genetic-var") or std.mem.eql(u8, mode, "genetic_var") or std.mem.eql(u8, mode, "mutate-orf") or std.mem.eql(u8, mode, "orf-var")) {
+        runGeneticVar();
     } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
         // Archive wetlab T1–T2: per-class FI rates abs Hz
         if (!scalpel_rate_fixed.selfTest()) {
@@ -2941,6 +2961,8 @@ pub fn main() !void {
         std.debug.print("  bio-suite      = learn + self-study + converse + MNIST\n", .{});
         std.debug.print("  bio-converse   = multi-turn think-from-memory → articulate\n", .{});
         std.debug.print("  capacity       = silicon body tier (RAM/GPU) + growth budgets\n", .{});
+        std.debug.print("  genetic-var    = mutateOrf FI variance (trinary codon diversity)\n", .{});
+        std.debug.print("  allen-dist     = CSV variance + Cre-class dist (host)\n", .{});
         std.debug.print("  gpu-organ      = FSOT-GPU bridge (parity + native kernels)\n", .{});
         std.debug.print("  gpu-batch      = batch cosine/trit sleep replay (Fixed + FSOT-GPU)\n", .{});
         std.debug.print("  gpu-vram       = full VRAM offload → FSOT consensus kernels + top-K\n", .{});

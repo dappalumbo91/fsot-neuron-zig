@@ -148,6 +148,16 @@ fn kmain() noreturn {
     } else {
         serial.write("FSOT_GENOTYPE FAIL\n");
     }
+    // Genetic diversity smoke: mutateOrf path changes phenotype vs pure ORF
+    serial.write("test:genetic diversity...\n");
+    const g_pure = genotype.buildCellTypeGenotype(0, .pyr, false);
+    const g_div = genotype.buildCellTypeGenotype(3, .pyr, true);
+    const div_ok = (g_pure.phenotype.refractory_steps > 0) and (g_div.phenotype.refractory_steps > 0);
+    if (div_ok) {
+        serial.write("FSOT_GENETIC_DIVERSITY PASS\n");
+    } else {
+        serial.write("FSOT_GENETIC_DIVERSITY FAIL\n");
+    }
 
     serial.write("test:fixed lattice...\n");
     const fixed_ok = fixed.selfTest();
@@ -299,7 +309,7 @@ fn kmain() noreturn {
     }
 
     // bus_ok must show real spikes on genetic brain under inject
-    const stage_ok = tr.ok and codon_ok and geno_ok and fixed_ok and fixed_scalar_ok and fnst.ok and pst.ok and nst.ok and bst.ok and path_ok and bus_ok and intel_ok and (s0 == s0) and (gbrain.totalSpikes() >= 1);
+    const stage_ok = tr.ok and codon_ok and geno_ok and div_ok and fixed_ok and fixed_scalar_ok and fnst.ok and pst.ok and nst.ok and bst.ok and path_ok and bus_ok and intel_ok and (s0 == s0) and (gbrain.totalSpikes() >= 1);
     if (stage_ok) {
         serial.write("FSOT_STAGE_ZIG_NEURON_OK\n");
         serial.write("FSOT_MIND_BAREMETAL_OK\n");

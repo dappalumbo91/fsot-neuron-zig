@@ -300,17 +300,23 @@ pub fn phenotypeFiKnobs(ph: PhenotypeF) struct {
     }
 
     // Regular-spiking: Allen ISI-scale refractory from genetics
+    // Trinary spin / charge (codon expression) modulate FI so mutateOrf diversifies readout
+    const spin = fixed.toF64(ph.composite_spin);
+    const charge = fixed.toF64(ph.composite_charge);
     const gene_scale = @max(0.55, @min(1.55, ref_net / 13.0));
     const R_law = allen_isi * (1.0 - 0.45 * allen_ad);
-    const ref_fi = R_law * 0.72 * gene_scale * (0.92 + 0.05 * (phi_f - 1.0));
-    const ref_i: i32 = @intFromFloat(@round(@max(4.0, @min(160.0, ref_fi))));
+    var ref_fi = R_law * 0.72 * gene_scale * (0.92 + 0.05 * (phi_f - 1.0));
+    ref_fi *= (1.0 + 0.40 * spin + 0.12 * charge);
+    ref_fi = @max(25.0, @min(140.0, ref_fi));
+    const ref_i: i32 = @intFromFloat(@round(ref_fi));
 
     const A = @max(0.0, @min(0.55, allen_ad));
     var d = (2.0 * A * @max(8.0, ref_fi)) / (9.0 * (1.0 - A) + 1e-9);
     d *= 1.85 * @max(0.5, @min(1.6, ad_gene / 0.7));
+    d *= (1.0 + 0.35 * spin);
     d = @max(0.08, @min(10.0, d));
-    g = @max(0.022, @min(0.09, g * 1.35));
-    fi = fi * (0.88 + 0.20 * psi) * (0.95 + 0.08 * eta);
+    g = @max(0.022, @min(0.09, g * 1.35 * (1.0 + 0.20 * @abs(spin))));
+    fi = fi * (0.88 + 0.20 * psi) * (0.95 + 0.08 * eta) * (1.0 + 0.18 * spin);
     fi = @max(0.30, @min(0.95, fi));
 
     return .{
