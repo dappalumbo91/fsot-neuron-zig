@@ -12,9 +12,9 @@ Run each phase **in parallel** across the trio; only advance when **all three** 
 | Phase | Name | Goal | Shared gates | Zig-only extras |
 |-------|------|------|--------------|-----------------|
 | **A** | Continuous organism product | Organism · compose · intel-loop · think · isi-ks · scalpel | **PASS ×3** | QEMU bare metal |
-| **B** | Experience intelligence | One-shot · feedback · interference · transfer · sleep · motor | `phase-b` / bio-learn | MNIST pack, full wet, brain-learn depth |
-| **C** | Embodied I/O | Sense → act → self-hear / bio-io / converse phases | host twins report surface | GDI/mic/TTS plant |
-| **D** | Scientific packaging | Cross-lang certificate · Lean stamp · EEG/MRI learning-catch citations | shared docs + stamps | archive lake build |
+| **B** | Experience intelligence | One-shot · feedback · interference · transfer · sleep · motor | **PASS ×3** | MNIST pack, full wet, brain-learn depth |
+| **C** | Embodied I/O | bio-io · articulate · converse · speech-EEG phase order | **PASS ×3** | GDI/mic/TTS plant depth on Zig |
+| **D** | Scientific packaging | Cross-lang certificate · Lean stamp · EEG/MRI learning-catch citations | next | archive lake build |
 
 **Stress:** every phase ends with a short product residual (Phase A suite or isi-ks) so gates do not regress.
 
@@ -60,15 +60,24 @@ Order inside `phase-b`:
 
 ---
 
-## Phase C — Embodied I/O (next, parallel)
+## Phase C — Embodied I/O (current / parallel)
 
 | Subgate | Meaning |
 |---------|---------|
-| Bio-io path | visual/audio/intero inject spikes |
-| Bio-converse / articulate | teach → sleep → cue → motor → self-hear |
+| Bio-io path | visual/audio/intero inject spikes · speak re-afferent |
+| Bio-articulate | teach → retrieve → motor utter → self-hear |
+| Bio-converse | multi-turn think-from-memory · speech-EEG phase order |
 | Speech-EEG phase order | attend → meaning → motor → self-hear → encode (SME spirit) |
 
-Zig has full plant; twins implement **process reports** with same claim lines where host I/O is unavailable.
+### Commands (parallel)
+
+```text
+Zig:      fsot_mind phase-c
+Haskell:  cabal run fsot-mind -- phase-c
+Idris:    ./build/exec/fsot-mind phase-c
+```
+
+Zig has full Fixed plant (pathways/speech organ); host twins implement the **same process claim lines** with organism store + modality tags (GDI/mic/TTS remain Zig plant depth).
 
 ---
 

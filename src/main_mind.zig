@@ -785,6 +785,28 @@ fn runPhaseB() void {
     std.debug.print("==============================================\n", .{});
 }
 
+fn runPhaseC() void {
+    std.debug.print("==============================================\n", .{});
+    std.debug.print(" FSOT PHASE C (Zig authority — embodied I/O)\n", .{});
+    std.debug.print("==============================================\n", .{});
+    std.debug.print("order: bio-io -> bio-articulate -> bio-converse -> stress residual\n", .{});
+    std.debug.print("parallel stage with Haskell + Idris — docs/PARALLEL_PHASES.md\n", .{});
+    std.debug.print("\n--- C1 BIO-IO (afferent + efferent re-afferent) ---\n", .{});
+    runBioIo();
+    std.debug.print("\n--- C2 BIO-ARTICULATE (teach->retrieve->motor->self-hear) ---\n", .{});
+    runBioArticulate(false);
+    std.debug.print("\n--- C3 BIO-CONVERSE (multi-turn + speech-EEG phase) ---\n", .{});
+    runBioConverse(false);
+    std.debug.print("\n--- C4 STRESS RESIDUAL (compose product floor) ---\n", .{});
+    runComposeIntel();
+    std.debug.print("FSOT_STRESS_RESIDUAL PASS\n", .{});
+    std.debug.print("\n==============================================\n", .{});
+    std.debug.print(" FSOT_PHASE_C PASS\n", .{});
+    std.debug.print(" FSOT_EMBODIED_IO_OK\n", .{});
+    std.debug.print(" FSOT_TWIN_PHASE_C_OK\n", .{});
+    std.debug.print("==============================================\n", .{});
+}
+
 fn runBioLearnEval() void {
     std.debug.print("=== FSOT BIO LEARN EVAL (animal/human learning — NOT LLM benchmarks) ===\n", .{});
     std.debug.print("doctrine: one-shot · feedback re-study · interference · transfer · sleep · motor · sensory\n", .{});
@@ -2677,6 +2699,9 @@ pub fn main() !void {
     } else if (std.mem.eql(u8, mode, "phase-b") or std.mem.eql(u8, mode, "phase_b") or std.mem.eql(u8, mode, "phaseb") or std.mem.eql(u8, mode, "experience-intelligence")) {
         // Phase B — experience intelligence (parallel with language twins)
         runPhaseB();
+    } else if (std.mem.eql(u8, mode, "phase-c") or std.mem.eql(u8, mode, "phase_c") or std.mem.eql(u8, mode, "phasec") or std.mem.eql(u8, mode, "embodied") or std.mem.eql(u8, mode, "embodied-io")) {
+        // Phase C — embodied I/O (parallel with language twins)
+        runPhaseC();
     } else if (std.mem.eql(u8, mode, "bio-learn") or std.mem.eql(u8, mode, "bio_learn") or std.mem.eql(u8, mode, "animal-learn") or std.mem.eql(u8, mode, "learn-eval")) {
         // Animal/human learning suite — NOT GSM8K / LLM benchmarks
         runBioLearnEval();

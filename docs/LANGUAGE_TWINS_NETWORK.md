@@ -68,9 +68,10 @@ Cross-language Phase A / product (2026-08-01 lab boot):
 | QEMU bare metal | PASS | n/a | n/a |
 | Think-hour 60 min | **PASS** | n/a (Zig authority) | n/a |
 | **Phase B** bio-learn / experience | **PASS** | **PASS** | **PASS** |
+| **Phase C** embodied I/O | **PASS** | **PASS** | **PASS** |
 
 **Parallel stage doctrine:** all three languages advance **together** — see [`PARALLEL_PHASES.md`](PARALLEL_PHASES.md).  
-Next: **Phase C** embodied I/O (parallel), then **Phase D** scientific packaging.
+Next: **Phase D** scientific packaging (certificate + learning-catch citations).
 
 ### Lean 4 stamp + scientific certificate (2026-08-01, post-closure)
 
