@@ -4,12 +4,44 @@
 
 **One law, many folds.** Cosmology and the neural mind share the **same** seed-derived scalar \(S=K(T_1+T_2+T_3)\) (pin **D1D38A**). This repo is the **silicon domain engine** for the neuroscience fold — not a second theory.
 
+---
+
+## Language twins network (same function · same accuracy)
+
+This Zig tree is the **authority** implementation. The same mind doctrine and product gates run as **twins** in other languages — not alternate theories.
+
+| Role | Language | Repository |
+|------|----------|------------|
+| **Authority (this repo)** | Zig | [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig) |
+| **Host twin** | Haskell | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) |
+| **Host twin + type structure** | Idris 2 | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) |
+
+```text
+         FSOT pin D1D38A  ·  genetics-as-code  ·  Allen readout (ms/Hz)
+                              |
+              +---------------+---------------+
+              |               |               |
+           [Zig]          [Haskell]        [Idris]
+         Fixed+QEMU       Phase A+KS       Phase A+DNA types
+              |               |               |
+              +------- same product function --------+
+```
+
+**Full linking system:** [`docs/LANGUAGE_TWINS_NETWORK.md`](docs/LANGUAGE_TWINS_NETWORK.md)  
+**Phase A parity table:** mirrored in twin repos as `docs/PHASE_A_PARITY.md`
+
+Twins must support the **same function to the same degree of accuracy** on shared gates (organism · compose · intel-loop · think · Allen product). Zig Fixed SCALE=1e12 and QEMU remain bit / bare-metal authority.
+
+---
+
 | Authority | Where |
 |-----------|--------|
 | **Physical Archive (offline master)** | `I:\FSOT-Physical-Archive` |
 | **GitHub = archive / Lean verification** | [**FSOT-2.1-Lean**](https://github.com/dappalumbo91/FSOT-2.1-Lean) — public face of the Physical Archive |
 | **Neural monorepo (Allen / wet-lab)** | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
 | **This repo (Zig mind body)** | Fixed lattice, genetics, wet cascade, think/sleep, organism |
+| **Haskell twin** | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) |
+| **Idris twin** | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) |
 
 Map: [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md)  
 **Claims hygiene:** [`docs/CLAIMS_AND_NONCLAIMS.md`](docs/CLAIMS_AND_NONCLAIMS.md) — only what is verified  
