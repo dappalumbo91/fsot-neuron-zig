@@ -44,13 +44,21 @@ fsot_mind think          # short probe
 fsot_mind fixed          # full bio stack — slower on 4GB but valid
 ```
 
-### QEMU gate (when qemu-system-x86_64 installed)
+### QEMU gate (when qemu-system-x86_64 installed) — **full Allen, not smoke**
 
 ```text
 .\run_qemu.ps1
-# expect: FSOT_CODON PASS · FSOT_GENETIC_DIVERSITY PASS · FSOT_BRAIN PASS
-#          FSOT_INTEL_BAREMETAL_OK · FSOT_FIXED_BAREMETAL_OK
+# or host parity twin:
+.\zig-out\bin\fsot_mind.exe allen-bare
 ```
+
+Requires genetic FI vs **full Allen targets** on the kernel:
+
+- pop: ISI ≤1.42 ms, adapt abs, every cell 32/32  
+- class: Pyr/PV/SST/VIP abs Hz + PV≫Pyr  
+- lines: `FSOT_ALLEN_BAREMETAL_FULL PASS` · `FSOT_ALLEN_ON_QEMU_OK`
+
+Budget: up to ~15 min under soft-FPU (`-m 256M`).
 
 ### Heavy (prefer desktop / workstation)
 

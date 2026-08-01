@@ -38,12 +38,27 @@ $errLog = Join-Path $env:TEMP "fsot_trit_qemu_err.log"
 Copy-Item -Force $kernelSrc $kernel
 Remove-Item $serialLog, $errLog -ErrorAction SilentlyContinue
 
-Write-Host "=== QEMU (serial log, lite mind tests) ==="
-$arg = "-display none -serial file:$serialLog -no-reboot -m 64M -kernel `"$kernel`""
+Write-Host "=== QEMU (serial log, FULL Allen genetic FI - not smoke) ==="
+Write-Host "budget: genetic pop + polish + class rates (may take several minutes under soft-FPU)"
+$arg = "-display none -serial file:$serialLog -no-reboot -m 256M -kernel `"$kernel`""
 $p = Start-Process -FilePath $qemu -ArgumentList $arg -PassThru -WindowStyle Hidden -RedirectStandardError $errLog
 
-# Genetic brain init under soft-FPU needs headroom on Windows QEMU
-Start-Sleep -Seconds 90
+# Full Allen suite on soft-FPU: long headroom (host fixed ~1 min; QEMU multiplies)
+$maxWaitSec = 900
+$waited = 0
+while (-not $p.HasExited -and $waited -lt $maxWaitSec) {
+    Start-Sleep -Seconds 15
+    $waited += 15
+    if (Test-Path $serialLog) {
+        $partial = Get-Content $serialLog -Raw -ErrorAction SilentlyContinue
+        if ($partial -match "FSOT_ALLEN_BAREMETAL_FULL|FSOT_STAGE_ZIG_NEURON") {
+            # allow a few more seconds for trailing lines
+            Start-Sleep -Seconds 10
+            break
+        }
+    }
+    Write-Host ("  ... waited {0}s" -f $waited)
+}
 if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
 
 Write-Host "--- serial output ---"
@@ -54,29 +69,29 @@ if (Test-Path $serialLog) {
         Write-Host "=== QEMU GATE FAIL (stage reported FAIL) ==="
         exit 1
     }
-    if (
-        ($txt -match "FSOT_INTEL_BAREMETAL_OK") -or
-        ($txt -match "FSOT_MIND_BAREMETAL_OK") -or
-        ($txt -match "FSOT_STAGE_ZIG_NEURON_OK") -or
-        (
-            ($txt -match "FSOT_TRIT PASS") -and
-            ($txt -match "FSOT_NEURON PASS") -and
-            ($txt -match "FSOT_NETWORK PASS") -and
-            ($txt -match "FSOT_BRAIN PASS")
-        )
-    ) {
-        if ($txt -match "FSOT_INTEL_BAREMETAL_OK") {
-            Write-Host "=== QEMU GATE PASS (intel bare metal + codon) ==="
-        } elseif ($txt -match "FSOT_MIND_BAREMETAL_OK") {
-            Write-Host "=== QEMU GATE PASS (mind bare metal) ==="
-        } elseif ($txt -match "FSOT_BRAIN PASS") {
-            Write-Host "=== QEMU GATE PASS (incl. multi-region brain) ==="
-        } else {
-            Write-Host "=== QEMU GATE PASS ==="
-        }
+    # Require full Allen biological accuracy — not smoke-only trit/brain
+    $need = @(
+        "FSOT_CODON PASS",
+        "FSOT_GENOTYPE PASS",
+        "FSOT_BRAIN PASS",
+        "gate_bio_isi=PASS",
+        "gate_bio_adapt=PASS",
+        "gate_bio_every_cell=PASS",
+        "FSOT_ALLEN_POP_BAREMETAL PASS",
+        "FSOT_SCALPEL_RATES PASS",
+        "FSOT_ALLEN_BAREMETAL_FULL PASS",
+        "FSOT_ALLEN_ON_QEMU_OK"
+    )
+    $missing = @()
+    foreach ($n in $need) {
+        if ($txt -notmatch [regex]::Escape($n)) { $missing += $n }
+    }
+    if ($missing.Count -eq 0) {
+        Write-Host "=== QEMU GATE PASS (full Allen genetic FI on bare metal) ==="
         exit 0
     }
-    Write-Host "=== QEMU GATE FAIL (missing stage PASS lines) ==="
+    Write-Host "=== QEMU GATE FAIL (missing Allen bio lines) ==="
+    $missing | ForEach-Object { Write-Host ("  missing: " + $_) }
     exit 1
 }
 Write-Host "no serial log"

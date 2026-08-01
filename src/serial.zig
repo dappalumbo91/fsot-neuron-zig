@@ -63,3 +63,36 @@ pub fn writeU32(n: u32) void {
         putc(buf[i]);
     }
 }
+
+/// Print non-negative f64 with 3 decimal places (e.g. 70.599 → "70.599").
+pub fn writeF64_3(x: f64) void {
+    if (x != x) {
+        write("nan");
+        return;
+    }
+    var v = x;
+    if (v < 0) {
+        putc('-');
+        v = -v;
+    }
+    if (v > 1.0e9) {
+        write("big");
+        return;
+    }
+    const whole: u32 = @intFromFloat(@floor(v));
+    const frac: u32 = @intFromFloat(@floor((v - @as(f64, @floatFromInt(whole))) * 1000.0 + 0.5));
+    if (frac >= 1000) {
+        writeU32(whole + 1);
+        write(".000");
+        return;
+    }
+    writeU32(whole);
+    putc('.');
+    if (frac < 100) putc('0');
+    if (frac < 10) putc('0');
+    writeU32(frac);
+}
+
+pub fn writeBool(b: bool) void {
+    write(if (b) "true" else "false");
+}

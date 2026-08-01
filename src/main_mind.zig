@@ -115,6 +115,7 @@ const scalpel_rate_fixed = @import("scalpel_rate_fixed.zig");
 const allen_dist_fixed = @import("allen_dist_fixed.zig");
 const allen_class_dist_fixed = @import("allen_class_dist_fixed.zig");
 const genetic_var_fixed = @import("genetic_var_fixed.zig");
+const allen_baremetal_fixed = @import("allen_baremetal_fixed.zig");
 
 fn printF64(label: []const u8, x: f64) void {
     std.debug.print("{s}{e}\n", .{ label, x });
@@ -2020,6 +2021,38 @@ fn runGeneticVar() void {
     }
 }
 
+fn runAllenBareHost() void {
+    std.debug.print("=== FSOT ALLEN BAREMETAL SUITE (host twin of QEMU full Allen) ===\n", .{});
+    std.debug.print("doctrine: same genetic FI + class rates as freestanding kernel\n", .{});
+    const ar = allen_baremetal_fixed.runFullGeneticAllen();
+    std.debug.print(
+        "ALLEN_POP rate={e} isi={e} adapt={e} |Δisi|={e} |ΔA|={e} closed={d}/{d} all={} iron={} pop_ok={}\n",
+        .{
+            ar.mean_rate_Hz,
+            ar.mean_isi_ms,
+            ar.mean_adapt,
+            ar.isi_abs_err_ms,
+            ar.adapt_abs_err,
+            ar.n_closed,
+            ar.n_units,
+            ar.all_units_closed,
+            ar.iron_adapt,
+            ar.pop_ok,
+        },
+    );
+    std.debug.print(
+        "ALLEN_CLASS Pyr={e} PV={e} SST={e} VIP={e} pv_fast={} class_ok={}\n",
+        .{ ar.pyr_Hz, ar.pv_Hz, ar.sst_Hz, ar.vip_Hz, ar.pv_faster, ar.class_ok },
+    );
+    if (ar.ok) {
+        std.debug.print("FSOT_ALLEN_BAREMETAL_FULL PASS\n", .{});
+        std.debug.print("FSOT_ALLEN_BIO_ACCURATE_OK\n", .{});
+    } else {
+        std.debug.print("FSOT_ALLEN_BAREMETAL_FULL FAIL\n", .{});
+        std.process.exit(1);
+    }
+}
+
 fn runIntelFrontier() void {
     std.debug.print("=== FSOT INTEL FRONTIER (multi-day + curiosity + ladder) ===\n", .{});
     std.debug.print("schedule: N days of curiosity-select → ACh encode → PE retrieve → sleep → claim\n", .{});
@@ -2658,6 +2691,8 @@ pub fn main() !void {
         runAllenClassDist();
     } else if (std.mem.eql(u8, mode, "genetic-var") or std.mem.eql(u8, mode, "genetic_var") or std.mem.eql(u8, mode, "mutate-orf") or std.mem.eql(u8, mode, "orf-var")) {
         runGeneticVar();
+    } else if (std.mem.eql(u8, mode, "allen-bare") or std.mem.eql(u8, mode, "allen_bare") or std.mem.eql(u8, mode, "qemu-allen") or std.mem.eql(u8, mode, "bare-allen")) {
+        runAllenBareHost();
     } else if (std.mem.eql(u8, mode, "scalpel") or std.mem.eql(u8, mode, "class-rates") or std.mem.eql(u8, mode, "allen-class")) {
         // Archive wetlab T1–T2: per-class FI rates abs Hz
         if (!scalpel_rate_fixed.selfTest()) {

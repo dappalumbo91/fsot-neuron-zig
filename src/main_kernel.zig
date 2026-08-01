@@ -15,6 +15,7 @@ const genotype = @import("genotype.zig");
 const fixed = @import("fixed.zig");
 const neuron_fixed = @import("neuron_fixed.zig");
 const scalar_fixed = @import("scalar_fixed.zig");
+const allen_bare = @import("allen_baremetal_fixed.zig");
 
 const MULTIBOOT_MAGIC: u32 = 0x1BADB002;
 const MULTIBOOT_FLAGS: u32 = 0x00000003;
@@ -26,8 +27,8 @@ export const multiboot_header align(4) linksection(".multiboot") = [_]u32{
     MULTIBOOT_CHECKSUM,
 };
 
-/// Stack for freestanding (soft-float / libm needs headroom under QEMU).
-var stack_bytes: [256 * 1024]u8 align(16) = undefined;
+/// Stack for freestanding (full Allen FI + class rates need headroom under QEMU).
+var stack_bytes: [1024 * 1024]u8 align(16) = undefined;
 
 export fn _start() callconv(.c) noreturn {
     // set ESP to top of stack (i386)
@@ -308,14 +309,113 @@ fn kmain() noreturn {
         serial.write("FSOT_INTEL_LITE FAIL\n");
     }
 
-    // bus_ok must show real spikes on genetic brain under inject
-    const stage_ok = tr.ok and codon_ok and geno_ok and div_ok and fixed_ok and fixed_scalar_ok and fnst.ok and pst.ok and nst.ok and bst.ok and path_ok and bus_ok and intel_ok and (s0 == s0) and (gbrain.totalSpikes() >= 1);
+    // --- FULL Allen bio accuracy on genetic codon FI (same targets as host) ---
+    serial.write("test:ALLEN genetic FI full (not smoke)...\n");
+    serial.write("doctrine: codon ORFs -> FI -> Allen ISI/adapt/rate/class\n");
+    const ar = allen_bare.runFullGeneticAllen();
+    serial.write("ALLEN_TGT isi_ms=");
+    serial.writeF64_3(ar.tgt_isi_ms);
+    serial.write(" adapt=");
+    serial.writeF64_3(ar.tgt_adapt);
+    serial.write(" rate_Hz=");
+    serial.writeF64_3(ar.tgt_rate_Hz);
+    serial.write("\n");
+    serial.write("ALLEN_POP rate_Hz=");
+    serial.writeF64_3(ar.mean_rate_Hz);
+    serial.write(" isi_ms=");
+    serial.writeF64_3(ar.mean_isi_ms);
+    serial.write(" adapt=");
+    serial.writeF64_3(ar.mean_adapt);
+    serial.write("\n");
+    serial.write("ALLEN_ERR isi_abs_ms=");
+    serial.writeF64_3(ar.isi_abs_err_ms);
+    serial.write(" adapt_abs=");
+    serial.writeF64_3(ar.adapt_abs_err);
+    serial.write(" rate_abs_Hz=");
+    serial.writeF64_3(ar.rate_abs_err_Hz);
+    serial.write("\n");
+    serial.write("ALLEN_EVERY_CELL closed=");
+    serial.writeU32(ar.n_closed);
+    serial.write("/");
+    serial.writeU32(ar.n_units);
+    serial.write(" all=");
+    serial.writeBool(ar.all_units_closed);
+    serial.write(" iron=");
+    serial.writeBool(ar.iron_adapt);
+    serial.write("\n");
+    serial.write("gate_bio_isi=");
+    serial.write(if (ar.isi_closed) "PASS" else "FAIL");
+    serial.write("\n");
+    serial.write("gate_bio_adapt=");
+    serial.write(if (ar.adapt_closed) "PASS" else "FAIL");
+    serial.write("\n");
+    serial.write("gate_bio_rate=");
+    serial.write(if (ar.rate_ok) "PASS" else "FAIL");
+    serial.write("\n");
+    serial.write("gate_bio_every_cell=");
+    serial.write(if (ar.all_units_closed) "PASS" else "FAIL");
+    serial.write("\n");
+    if (ar.pop_ok) {
+        serial.write("FSOT_ALLEN_POP_BAREMETAL PASS\n");
+        serial.write("FSOT_EVERY_CELL_BIO_MATCH_OK\n");
+        serial.write("FSOT_GENETIC_FI_SOURCE_OK\n");
+    } else {
+        serial.write("FSOT_ALLEN_POP_BAREMETAL FAIL\n");
+    }
+    serial.write("ALLEN_CLASS Pyr_Hz=");
+    serial.writeF64_3(ar.pyr_Hz);
+    serial.write(" err=");
+    serial.writeF64_3(ar.pyr_err);
+    serial.write(" closed=");
+    serial.writeBool(ar.pyr_closed);
+    serial.write("\n");
+    serial.write("ALLEN_CLASS PV_Hz=");
+    serial.writeF64_3(ar.pv_Hz);
+    serial.write(" err=");
+    serial.writeF64_3(ar.pv_err);
+    serial.write(" closed=");
+    serial.writeBool(ar.pv_closed);
+    serial.write("\n");
+    serial.write("ALLEN_CLASS SST_Hz=");
+    serial.writeF64_3(ar.sst_Hz);
+    serial.write(" err=");
+    serial.writeF64_3(ar.sst_err);
+    serial.write(" closed=");
+    serial.writeBool(ar.sst_closed);
+    serial.write("\n");
+    serial.write("ALLEN_CLASS VIP_Hz=");
+    serial.writeF64_3(ar.vip_Hz);
+    serial.write(" err=");
+    serial.writeF64_3(ar.vip_err);
+    serial.write(" closed=");
+    serial.writeBool(ar.vip_closed);
+    serial.write("\n");
+    serial.write("pv_faster_than_pyr=");
+    serial.writeBool(ar.pv_faster);
+    serial.write("\n");
+    if (ar.class_ok) {
+        serial.write("FSOT_SCALPEL_RATES PASS\n");
+        serial.write("FSOT_ALLEN_CLASS_RATES_CLOSED\n");
+        serial.write("FSOT_EVERY_CELL_CLASS_RATE_OK\n");
+    } else {
+        serial.write("FSOT_SCALPEL_RATES FAIL\n");
+    }
+    if (ar.ok) {
+        serial.write("FSOT_ALLEN_BAREMETAL_FULL PASS\n");
+        serial.write("FSOT_ALLEN_BIO_ACCURATE_OK\n");
+    } else {
+        serial.write("FSOT_ALLEN_BAREMETAL_FULL FAIL\n");
+    }
+
+    // Full stage requires Allen bio accuracy — not smoke-only
+    const stage_ok = tr.ok and codon_ok and geno_ok and div_ok and fixed_ok and fixed_scalar_ok and fnst.ok and pst.ok and nst.ok and bst.ok and path_ok and bus_ok and intel_ok and ar.ok and (s0 == s0) and (gbrain.totalSpikes() >= 1);
     if (stage_ok) {
         serial.write("FSOT_STAGE_ZIG_NEURON_OK\n");
         serial.write("FSOT_MIND_BAREMETAL_OK\n");
         serial.write("FSOT_ORGANISM_LITE_OK\n");
         serial.write("FSOT_INTEL_BAREMETAL_OK\n");
         serial.write("FSOT_FIXED_BAREMETAL_OK\n");
+        serial.write("FSOT_ALLEN_ON_QEMU_OK\n");
     } else {
         serial.write("FSOT_STAGE_ZIG_NEURON_FAIL\n");
     }
