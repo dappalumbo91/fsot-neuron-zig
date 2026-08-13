@@ -18,6 +18,7 @@ skills/python/
     reverse.py upper.py sort_words.py wordcount.py hash_fnv.py
     read_text.py      # sandboxed: skills/ and data/ only
     gpu_topk.py       # optional torch-CUDA matrix top pair
+    fsot_quantum_organ.py  # law organ readout (S, κ, QI) — not a second mind
 ```
 
 ## Contract

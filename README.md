@@ -20,7 +20,8 @@ A **new class of artificial intelligence**: not an LLM with biology metaphors, b
 **Text speech log / chat:** [`docs/SPEECH_TEXT_INTERFACE.md`](docs/SPEECH_TEXT_INTERFACE.md)  
 **Tissue map:** [`docs/BIO_TISSUE_MAP.md`](docs/BIO_TISSUE_MAP.md)  
 **Fluent doctrine:** [`docs/FLUENT_INTELLIGENCE.md`](docs/FLUENT_INTELLIGENCE.md)  
-**Native-mind architecture (from FSOT-Quantum fold):** [`docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md`](docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md)
+**Native-mind architecture (from FSOT-Quantum fold):** [`docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md`](docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md)  
+**Quantum law organ:** [`docs/FSOT_QUANTUM_ORGAN.md`](docs/FSOT_QUANTUM_ORGAN.md)
 
 ---
 

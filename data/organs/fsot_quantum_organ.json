@@ -1,0 +1,116 @@
+{
+  "organ": "fsot_quantum",
+  "role": "GPU/law organ \u2014 not mind authority",
+  "pin": "D1D38A",
+  "pin_expected": "D1D38A",
+  "pin_ok": true,
+  "C_factor": 0.287600151819184,
+  "Theta": 0.9174663774653723,
+  "K": 0.4202216641606967,
+  "S": {
+    "Acoustics": 0.31159079708634146,
+    "Astronomy": 0.8984595681660624,
+    "Astrophysics": 0.882410798418129,
+    "Atmospheric_Physics": -0.47643190542960023,
+    "Atomic_Physics": 0.7358238658627416,
+    "Biochemistry": 0.3062212293865662,
+    "Biology": 0.4447250077038459,
+    "Chemistry": 0.4078840642307453,
+    "Condensed_Matter": 0.33840599557977497,
+    "Cosmology": -0.5024559462100433,
+    "Ecology": 0.3003170815488648,
+    "Economics": 0.6460045206857497,
+    "Electromagnetism": 0.5188655207983146,
+    "Fluid_Dynamics": -0.5627338062568507,
+    "Geophysics": -0.5490942927204094,
+    "High_Energy_Physics": 0.886264056646702,
+    "Materials_Science": 0.33525988073638363,
+    "Meteorology": -0.48499702084688,
+    "Molecular_Chemistry": 0.3345733830778105,
+    "Neuroscience": 0.514361962908362,
+    "Nuclear_Physics": 0.9213094330291351,
+    "Oceanography": -0.37715907584612013,
+    "Optics": 0.4080624712153454,
+    "Particle_Astrophysics": -0.4244117200288863,
+    "Particle_Physics": 0.9504134401245242,
+    "Physical_Chemistry": 0.33401327040170903,
+    "Planetary_Science": 0.7671791385407585,
+    "Psychology": 1.0502056403979545,
+    "Quantum_Computing": -0.14767310363368633,
+    "Quantum_Gravity": -0.5255977531899868,
+    "Quantum_Mechanics": 0.9555063001027194,
+    "Quantum_Optics": 0.40817053817150184,
+    "Seismology": -0.4459015721103036,
+    "Sociology": 0.6501466524159137,
+    "Thermodynamics": 0.7869745016115725
+  },
+  "bleed": [
+    {
+      "from": "Quantum_Computing",
+      "to": "Quantum_Optics",
+      "kappa": 0.009685830349142933
+    },
+    {
+      "from": "Quantum_Optics",
+      "to": "Quantum_Mechanics",
+      "kappa": 0.05222612024241488
+    },
+    {
+      "from": "Quantum_Computing",
+      "to": "Psychology",
+      "kappa": 0.020767695348975188
+    },
+    {
+      "from": "Biology",
+      "to": "Neuroscience",
+      "kappa": 0.034035367337123056
+    },
+    {
+      "from": "Neuroscience",
+      "to": "Psychology",
+      "kappa": 0.08037356598184806
+    },
+    {
+      "from": "Psychology",
+      "to": "Quantum_Mechanics",
+      "kappa": 0.11517909639378703
+    },
+    {
+      "from": "Quantum_Computing",
+      "to": "Quantum_Mechanics",
+      "kappa": 0.018895026822594835
+    }
+  ],
+  "look_path": [
+    "Quantum_Computing",
+    "Quantum_Optics",
+    "Quantum_Mechanics"
+  ],
+  "mind_path": [
+    "Quantum_Computing",
+    "Biology",
+    "Neuroscience",
+    "Psychology",
+    "Quantum_Mechanics"
+  ],
+  "qi": [
+    {
+      "id": "CHSH_TSIRELSON",
+      "question": "What is the Tsirelson bound?",
+      "answer": 2.8284271247461903
+    },
+    {
+      "id": "S_QM",
+      "question": "Is S(Quantum_Mechanics) emergence?",
+      "answer": 0.9555063001027194
+    },
+    {
+      "id": "S_QC",
+      "question": "Is S(Quantum_Computing) damping?",
+      "answer": -0.14767310363368633
+    }
+  ],
+  "doctrine": "Zig Fixed lattice is the mind. This JSON is an organ readout: domain S, bleed \u03ba, and pin QI. Do not softmax. Do not spawn an LLM.",
+  "timestamp": "2026-08-13T03:16:33.071194+00:00",
+  "wall_seconds": 0.0002857999934349209
+}
