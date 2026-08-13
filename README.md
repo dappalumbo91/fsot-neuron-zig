@@ -2,75 +2,67 @@
 
 **Fluid Spacetime Omni-Theory (FSOT) neural mind — Zig authority.**
 
-**One law, many folds.** Cosmology and the neural mind share the **same** seed-derived scalar \(S=K(T_1+T_2+T_3)\) (pin **D1D38A**). This repo is the **silicon domain engine** for the neuroscience fold — not a second theory.
+A **new class of artificial intelligence**: not an LLM with biology metaphors, but a **genetic Fixed-lattice organism** under one seed pin — multi-region brain, developmental expression, wet process plasticity, STEM/logic experience, and **honest** speak (only what was experienced).
+
+| | |
+|--|--|
+| **Pin** | **D1D38A** (same spine as [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)) |
+| **Green residual (hub)** | ≤ **0.5%** pooled median · aspiration **0.05%** |
+| **Free parameters** | **0** — seeds only (π, e, φ, γ, Catalan / ψ_con, η_eff) |
+| **Lattice** | Fixed-point SCALE=**1e12** (`src/fixed.zig`) |
+| **Live lattice** | **7 regions · 60 units** (+ limited hipp recruit → **63**) · striatum selection strip |
+| **Neurological folds** | BG go/nogo · striatum · cerebellar timing · MB sparse · multi-STDP · glia/ECM |
+| **Active intelligence** | think → retrieve → multi-hop compose → honest speak (`fsot_mind active`) |
+| **License** | Apache-2.0 |
+
+**Living metrics ledger:** [`docs/METRICS_AND_ACCOMPLISHMENTS.md`](docs/METRICS_AND_ACCOMPLISHMENTS.md)  
+**Cross-verify (hub multiprover):** [`docs/CROSS_VERIFY_HUB.md`](docs/CROSS_VERIFY_HUB.md)  
+**Text speech log / chat:** [`docs/SPEECH_TEXT_INTERFACE.md`](docs/SPEECH_TEXT_INTERFACE.md)  
+**Tissue map:** [`docs/BIO_TISSUE_MAP.md`](docs/BIO_TISSUE_MAP.md)  
+**Fluent doctrine:** [`docs/FLUENT_INTELLIGENCE.md`](docs/FLUENT_INTELLIGENCE.md)  
+**Native-mind architecture (from FSOT-Quantum fold):** [`docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md`](docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md)
 
 ---
 
-## Language twins network (same function · same accuracy)
+## What this is
 
-This Zig tree is the **authority** implementation. The same mind doctrine and product gates run as **twins** in other languages — not alternate theories.
+```text
+FSOT-2.1-Lean  (D1D38A · multi-domain green ≤0.5%)
+        │  same pin
+        ▼
+Zig Fixed lattice  ·  trinary genetic ORFs  ·  developmental stages
+        │
+        ▼
+6-region plant (thal · sens · motor · assoc · hipp · pfc)
+  + glia / ECM / myelin / multi-timescale STDP / reverse multi-hop sleep
+        │
+        ▼
+STEM + logic experience  →  engrams  →  PFC-then-motor speak
+  (no history corpus · honest "I do not know yet")
+```
+
+**Ship doctrine:** local multi-language mind — no server required to run intelligence. Python is optional host I/O only.
+
+---
+
+## Language twins (same function · same accuracy)
 
 | Role | Language | Repository |
 |------|----------|------------|
 | **Authority (this repo)** | Zig | [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig) |
-| **Host twin** | Haskell | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) |
-| **Host twin + type structure** | Idris 2 | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) |
+| Host twin | Haskell | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) |
+| Host twin + types | Idris 2 | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) |
 
-```text
-         FSOT pin D1D38A  ·  genetics-as-code  ·  Allen readout (ms/Hz)
-                              |
-              +---------------+---------------+
-              |               |               |
-           [Zig]          [Haskell]        [Idris]
-         Fixed+QEMU       Phase A+KS       Phase A+DNA types
-              |               |               |
-              +------- same product function --------+
-```
-
-**Full linking system:** [`docs/LANGUAGE_TWINS_NETWORK.md`](docs/LANGUAGE_TWINS_NETWORK.md)  
-**Phase A parity table:** mirrored in twin repos as `docs/PHASE_A_PARITY.md`
-
-Twins must support the **same function to the same degree of accuracy** on shared gates (organism · compose · intel-loop · think · Allen product). Zig Fixed SCALE=1e12 and QEMU remain bit / bare-metal authority.
-
----
+Full map: [`docs/LANGUAGE_TWINS_NETWORK.md`](docs/LANGUAGE_TWINS_NETWORK.md)
 
 | Authority | Where |
 |-----------|--------|
-| **Physical Archive (offline master)** | `I:\FSOT-Physical-Archive` |
-| **GitHub = archive / Lean verification** | [**FSOT-2.1-Lean**](https://github.com/dappalumbo91/FSOT-2.1-Lean) — public face of the Physical Archive |
-| **Neural monorepo (Allen / wet-lab)** | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
-| **This repo (Zig mind body)** | Fixed lattice, genetics, wet cascade, think/sleep, organism |
-| **Haskell twin** | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) |
-| **Idris twin** | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) |
+| Physical Archive (offline master) | `I:\FSOT-Physical-Archive` |
+| Law + multi-prover hub | [**FSOT-2.1-Lean**](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
+| Neural monorepo (Allen / wet-lab) | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
+| Neuron → OS roadmap (hub) | [NEURON_ZIG_TO_OS_ROADMAP.md](https://github.com/dappalumbo91/FSOT-2.1-Lean/blob/main/docs/NEURON_ZIG_TO_OS_ROADMAP.md) |
 
-Map: [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md)  
-**Claims hygiene:** [`docs/CLAIMS_AND_NONCLAIMS.md`](docs/CLAIMS_AND_NONCLAIMS.md) — only what is verified  
-**Reproduce bio gates:** `powershell -File .\scripts\reproduce_bio_gates.ps1`
-
-Bare-metal multi-region brain, 64-codon genetic spine, fixed-point lattice (SCALE=1e12), wet biophysics (stochastic AMPA/NMDA, spine cascade, glia, STDP), grade ladder PK→G8 (≥95% **on project gates**), paraphrase depth, all-atom MD lab (host f64), episodic 5W1H memory, machine language, English lexicon codec, TTS plant, live host senses.
-
-Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). The mind core runs in Zig without Python.
-
-| | |
-|--|--|
-| **Theory / pin** | FSOT 2.1 — pin D1D38A ([FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) + Physical Archive) |
-| **Law path** | One scalar engine; cosmology = fold; mind = fold + domain engine (this repo) |
-| **Embodiment authority** | Fixed-point lattice (`src/fixed.zig`, SCALE=1e12) |
-| **Math solidification** | [`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`](docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md) |
-| **Archive ↔ Zig map** | [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md) · [`docs/ARCHIVE_ZIG_BIO_CROSSREF.md`](docs/ARCHIVE_ZIG_BIO_CROSSREF.md) |
-| **Lean stamp (neural structure)** | monorepo `formal/` · `scientific_panel_ok` (0 sorry) |
-| **Language** | Zig 0.15+ |
-| **License** | Apache-2.0 |
-| **Learned capacity** | [`docs/LEARNED_CAPACITY.md`](docs/LEARNED_CAPACITY.md) — Zig intel stack + companion multi-hop snapshot |
-| **Top-to-bottom verify** | [`docs/TOP_TO_BOTTOM_VERIFICATION.md`](docs/TOP_TO_BOTTOM_VERIFICATION.md) — stress · QEMU · Lean stamp · bio |
-| **Real-brain school** | [`docs/BRAIN_LEARN_BRIDGE.md`](docs/BRAIN_LEARN_BRIDGE.md) — `fsot_mind brain-learn` teaches **OrganismF** |
-| **Lean × wet-lab cert** | [`data/results/LEAN_WETLAB_CERTIFICATE.md`](data/results/LEAN_WETLAB_CERTIFICATE.md) |
-| **Cross-lang × Lean stamp** | [`docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md`](docs/CROSS_LANG_LEAN_SCIENTIFIC_CERTIFICATE.md) · [`data/results/LEAN4_STAMP.txt`](data/results/LEAN4_STAMP.txt) |
-| **Think-hour analysis** | [`data/results/THINK_HOUR_ANALYSIS.md`](data/results/THINK_HOUR_ANALYSIS.md) — 60 min continuous bio/wet PASS |
-| **Phase matrix A–D** | [`docs/SCIENTIFIC_PHASE_MATRIX.md`](docs/SCIENTIFIC_PHASE_MATRIX.md) · `phase-a`…`phase-d` |
-| **Learning-catch map** | [`docs/LEARNING_CATCH_EMPIRICAL_MAP.md`](docs/LEARNING_CATCH_EMPIRICAL_MAP.md) |
-| **Ship doctrine** | **Local** multi-language mind — no server required to run intelligence |
-| **Related monorepo** | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) (wet-lab / export banks) |
+---
 
 ## Quick start
 
@@ -78,104 +70,223 @@ Python is **optional host I/O only** (lexicon teacher / lab in the monorepo). Th
 # Zig 0.15+ on PATH
 zig build -Doptimize=ReleaseFast
 
-# Mind host (fixed authority suite)
+# Product suite
 ./zig-out/bin/fsot_mind all
 ```
 
-### Windows (recommended if AV locks `zig-out`)
+### Windows (recommended)
 
 ```powershell
-$out = Join-Path $env:TEMP "fsot_mind_live.exe"
-$cache = Join-Path $env:TEMP "fsot_zig_cache_live"
-zig build-exe -OReleaseFast "-femit-bin=$out" --cache-dir $cache --name fsot_mind_live src/main_mind.zig -lgdi32 -luser32 -lwinmm
-
-# Core language / knowledge gates
-& $out machine-lang
-& $out english
-& $out practice
-& $out grade
-& $out mind          # full connected organism (BOOT_MIND.cmd)
-& $out stress
+zig build -Doptimize=ReleaseFast
+.\zig-out\bin\fsot_mind.exe mind-smoke
+.\zig-out\bin\fsot_mind.exe logic-probe
+.\zig-out\bin\fsot_mind.exe verify-stamp   # residual stamp → FSOT-2.1-Lean multiprover
+.\zig-out\bin\fsot_mind.exe mind-long
 ```
 
-Or double-click `BOOT_MIND.cmd` for the live organism.
+Or double-click **`BOOT_MIND.cmd`** / **`BOOT_MENU.cmd`**.
+
+If antivirus locks `zig-out`, emit to `%TEMP%` (see [`docs/README_BOOT.md`](docs/README_BOOT.md)).
+
+---
+
+## Headline verified metrics
+
+*Snapshot from session runs 2026-08-05. Refresh via commands below; authoritative detail in [`docs/METRICS_AND_ACCOMPLISHMENTS.md`](docs/METRICS_AND_ACCOMPLISHMENTS.md).*
+
+### Logic / STEM reasoning probe
+
+```text
+fsot_mind logic-probe
+```
+
+| Bucket | Result |
+|--------|--------|
+| Atomic facts (math/science/bio) | **15/15 (1.00)** |
+| Logic form (true/false/proof) | **5/5 (1.00)** |
+| Multi-hop composition | **4/4 (1.00)** |
+| History / nonsense **refusal** | **4/4 (1.00)** |
+| Overall process score | **1.00** · residual **0.00** |
+| Gates | `FSOT_LOGIC_PROBE PASS` · `FSOT_HISTORY_REFUSAL_OK` · `FSOT_MULTI_HOP_REASON_OK` |
+
+Bank: **323** patterns · **7** reading files · **428** sentences · literature **off**.
+
+### Hub cross-verify (multiprover stamp)
+
+```text
+fsot_mind verify-stamp
+# hub: python scripts/build_neuron_zig_mind_panel.py
+```
+
+| Gate | Status |
+|------|--------|
+| Stamp `ok` · pin D1D38A · free_params=0 | **PASS** |
+| Atomic/logic/multi/unknown | **all 1.00** · residual **0** |
+| Hub pooled residual | **0.0%** (≤0.5% green) |
+| Closure `overall_ok` | **true** · blockers **0** · process_debt **0** |
+| Catalog multiprover (mind panel) | **5** obligations · python+SMT+Coq green |
+
+Full path: [`docs/CROSS_VERIFY_HUB.md`](docs/CROSS_VERIFY_HUB.md).
+
+### Continuous STEM saturation
+
+```text
+fsot_mind mind-long
+```
+
+| Metric | Result |
+|--------|--------|
+| Ticks | **900** |
+| Spikes | **5890** |
+| Encodes / teaches | **290 / 50** |
+| Retrieves | **74** |
+| Speaks / TTS | **20 / 19** |
+| Units / synapses | **59 / 917** (boot 56 / 396) |
+| Systems reverse multi-hop | **196** |
+| Human-function score | **1.0** |
+| SME encode > rest | **true** |
+| Gates | `FSOT_MIND_LONG PASS` · `FSOT_STEM_SATURATION_OK` · `FSOT_HUMAN_FUNCTION_OK` |
+
+### Fluent intelligence
+
+```text
+fsot_mind fluent
+```
+
+Read → extract patterns → encode → grow multi-hop → practice → **honest** speak.  
+Unknown probe: *quantum foam unicorn* → **I do not know yet**.
+
+---
+
+## Curriculum doctrine (facts before nuance)
+
+| Load | Do not load (yet) |
+|------|-------------------|
+| Logic, math, physics, biology, measurement | Human history narratives |
+| Multi-hop science/logic chains | War, politics, moral/religious corpus |
+| Honest unknown | Free invent / chat completion |
+
+**Drop more material:** plain `.txt` into [`data/reading/`](data/reading/) — see [`data/reading/README.txt`](data/reading/README.txt).
+
+Primers: `logic_primer`, `science_primer`, `biology_primer`, `math_facts_primer`, `reasoning_chains`, `world_primer`, `math_primer`.
+
+---
+
+## Architecture (Fixed path)
+
+### Regions (live-grow)
+
+| Region | n | Role |
+|--------|---|------|
+| thal | 5 | Relay / interoception |
+| sens | 14 | Primary sensory |
+| **motor** | **8** | Speech / action plant |
+| assoc | 12 | Association / language stream |
+| hipp | 10 | Episodic bind (+ limited recruit) |
+| **pfc** | **7** | Executive / sequential thought |
+
+Product brain remains **32** units (4-region) for Allen parity locks.
+
+### Process stack
+
+| Layer | Modules |
+|-------|---------|
+| Scalar / neuron / network | `fixed` · `neuron_fixed` · `network_fixed` · `brain_fixed` |
+| Genetics | 64-codon ORFs → phenotype → `fsotPairWeight` W |
+| Development | `develop_fixed` (proliferate → mature W unlock) |
+| Wet cascade | AMPA/NMDA Markov · CaMKII/AMPA · `molecular_fixed` · `glia_fixed` |
+| Plasticity | multi-timescale STDP · late consol · reverse multi-hop sleep |
+| Tissue | white matter · ECM/PNN · E–I homeostat · language fascicle |
+| Sparse encode | `mb_sparse_fixed` (fly Kenyon **function**, not mirror) |
+| Experience | `fluent_read_fixed` · STEM bank · concept bonds |
+| Metrics | `learn_metrics_fixed` · `fsot_margin_fixed` · EEG anchors |
+| Host plant | 64×64 hierarchical vision · mic · TTS · self-hear |
+
+IEEE f64 paths are **lab/parity only** (`float-lab`, all-atom MD).
+
+### Language path
+
+```text
+Machine tongue (FSOT Trit frames)  →  English lexicon codec  →  TTS plant
+Speech order: PFC think  →  motor articulate  →  self-hear
+```
+
+---
 
 ## Modes (high-signal)
 
-| Mode | What it tests |
-|------|----------------|
-| `ladder` / `straight-a` | PK→G8 STEM/literacy ≥95% per domain |
-| `depth` / `understand` | Paraphrase held-out understand exam ≥95% |
-| `pathways` / `glia` / `molecular` | Synaptic paths + STDP + wet cascade + glia |
-| `md` / `allatom` | All-atom MD lab (water + K⁺ filter; not cognition) |
-| `neuromod` | DA/ACh/NE/5-HT Fixed ODEs (systems neuromodulation) |
-| `sleep` / `consolidate` | Offline sleep-like replay + STDP consolidation |
-| `claim` / `claimability` | Multi-hop grounded claimability ≥95% (1–3 hops) |
-| `intel-bio` | Full neuromod + sleep + claim stack |
-| `intel-loop` | Closed train→retrieve→sleep→prove organism cycle |
-| `brain-learn` | **Real-brain school** — encode lessons into OrganismF + sleep + multi-hop prove |
-| `brain-learn-speak` | Same + English TTS of what was learned (not formant waves) |
-| `english` / `practice` | Lexicon + Windows TTS; self-hear language loop |
-| `speakers` | Formant/DAC smoke only — **not** English product path |
-| `frontier` | Multi-day curiosity + sleep cycles; speech path flagged intact |
-| `mnist` | Vision accuracy gate ≥95% (pack from monorepo) |
-| `machine-lang` | Native tongue: TritWord FSOT frames generate/understand |
-| `machine-lang-stress` | 1000-frame round-trip stress |
-| `english` | Lexicon choose + TTS real words |
-| `practice` | Utter → TTS → self-hear → encode |
-| `novel` | Single complex inquiry → novel synthesis |
-| `grade` | Legacy soft grade practice (prefer `ladder`) |
-| `mind` | Live senses + attention + EN_SAY + machine frames |
-| `stress` / `all` | Fixed suite gates |
-| `teach` / `transfer` / `short-horizon` | Memory / learning |
+| Mode | Purpose |
+|------|---------|
+| **`logic-probe`** | STEM/logic retrieve + multi-hop + history refusal suite |
+| **`mind-long`** | Longer continuous saturation (900 ticks, STEM diet) |
+| **`mind-smoke`** | Short connected organism smoke |
+| **`mind`** | Full continuous connected organism |
+| **`fluent`** / `fluent FILE` | Read materials → grow → honest speak |
+| **`learn-metrics`** | Human-fn + EEG SME + pin stamp |
+| **`develop`** | DNA-stage program + 6-region report |
+| **`hipp-recruit`** / **`stdp-multi`** | Recruit · multi-timescale STDP |
+| **`white-matter`** / **`ei`** / **`mb-sparse`** | Tracts · E–I · sparse hipp |
+| **`pathways`** / `glia` / `molecular` | Wet cascade smoke |
+| **`brain-learn`** | Curriculum into `OrganismF` |
+| **`ladder`** / **`depth`** | Grade PK→G8 · paraphrase ≥95% project gates |
+| **`sleep`** / **`claim`** / **`intel-loop`** | Replay · multi-hop claim · train–sleep–prove |
+| **`mnist`** | Vision accuracy pack gate |
+| **`machine-lang`** / **`english`** / **`practice`** | Native frames · TTS · self-hear loop |
+| **`all`** / **`stress`** | Fixed suite gates |
 
-## Architecture (fixed path)
+Unknown mode prints the full CLI list.
 
-- **Scalar / neuron / network / brain** — `*_fixed.zig`
-- **Genetics** — 64-codon PRIMARY, ORF → expression → phenotype → `fsotPairWeight` W
-- **Wet stack** — `channel_stoch_fixed` (48 AMPA / 16 NMDA / 50µs Markov) → `molecular_fixed` → `glia_fixed` → `stdp_fixed`
-- **Pathways / concepts** — `synapse_path_fixed` (Hebb + STDP + novel bonds)
-- **Curriculum** — `grade_ladder_fixed` PK–G8 · `understand_depth_fixed` · `mnist_accuracy_fixed`
-- **All-atom MD lab** — `allatom_md.zig` (host f64 only)
-- **Organism** — continuous tick + inject + modulation
-- **Memory** — episodic fingerprints, 5W1H, curiosity
-- **Machine language** — `machine_lang_fixed.zig` (native I/O tongue)
-- **English codec** — `lexicon_en_fixed.zig` + `host_tts_fixed.zig`
-- **Live plant** — display, mic, TTS, optional formant speech organ
-- **Attention / scene** — EEG-anchored gates, ambient scene analysis
+---
 
-IEEE f64 modules remain **lab / parity** only (`float-lab`, `sme-float`, `md`).
+## Accomplishment summary (recent)
 
-## Language doctrine (short)
+| Area | Shipped |
+|------|---------|
+| Continuous organism | Auto ticks, file logs, multi-hop, reverse NREM |
+| Fluent intelligence | Read bank, natural math utter, honest unknown |
+| Vision | Hierarchical **64×64** + fovea / edge / motion |
+| Connective tissue | Named white-matter tracts, language fascicle, glia |
+| Fly function ref | Sparse hipp combinatorial encode |
+| Plasticity depth | Multi-STDP, late consol, systems reverse order |
+| 6-region brain | motor + pfc projectome |
+| DNA-like develop | Stage-gated expression / W unlock |
+| Hub margin module | D1D38A · 0.5% / 0.05% |
+| STEM diet | Logic/science/bio/math primers · **no history** |
+| Logic probe | Atomic / logic / multi-hop / history refusal |
+| Mind long | 900-tick saturation · human_fn = 1.0 |
 
-```text
-Mind native tongue  = machine language (FSOT frames)
-English             = codec (lexicon + TTS)
-LLM / Ollama        = external teacher in monorepo only — not runtime mind
-```
+Full ledger with reproduce commands: **[`docs/METRICS_AND_ACCOMPLISHMENTS.md`](docs/METRICS_AND_ACCOMPLISHMENTS.md)**.
 
-Details: [`docs/LANGUAGE_AND_SPEECH.md`](docs/LANGUAGE_AND_SPEECH.md)  
-Full reproducible pipeline (lexicon growth, curriculum data, teacher scripts): monorepo  
-[`docs/LANGUAGE_LEARNING_METHODOLOGY.md`](https://github.com/dappalumbo91/FSOT-2.1-Neural/blob/experiment/fsot-fixed-precision/docs/LANGUAGE_LEARNING_METHODOLOGY.md)
+---
 
-## Doctrine docs (repo only)
+## Key documentation
 
-- **`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`** — math used to build this system + archive bridge
-- `docs/WHY_NOT_ALL_ATOM_MD.md` — MD is lab, not mind
-- `docs/ZIG_MIND_AUTHORITY.md`
-- `docs/FIXED_POINT_EXPERIMENT.md`
-- `docs/TRINARY_BARE_METAL.md`
-- `docs/GENOME_AS_CODE.md`
-- `docs/BARE_METAL_IO.md`
-- `docs/SPEECH_ORGAN_DOCTRINE.md`
-- `docs/BIO_SENSORY_SYSTEM.md`
-- `docs/HOST_IO_ZIG.md`
-- `docs/LANGUAGE_AND_SPEECH.md`
+| Doc | Topic |
+|-----|--------|
+| [`docs/METRICS_AND_ACCOMPLISHMENTS.md`](docs/METRICS_AND_ACCOMPLISHMENTS.md) | **Metrics ledger (keep updated)** |
+| [`docs/BIO_TISSUE_MAP.md`](docs/BIO_TISSUE_MAP.md) | Neurons, white matter, glia, ECM, regions |
+| [`docs/FLUENT_INTELLIGENCE.md`](docs/FLUENT_INTELLIGENCE.md) | Read → grow → honest speak |
+| [`docs/BIO_ACCURACY_AUDIT.md`](docs/BIO_ACCURACY_AUDIT.md) | Bio process audit |
+| [`docs/ZIG_MIND_AUTHORITY.md`](docs/ZIG_MIND_AUTHORITY.md) | Why Zig Fixed is authority |
+| [`docs/ARCHIVE_PIN_AND_MIND_FOLD.md`](docs/ARCHIVE_PIN_AND_MIND_FOLD.md) | Pin · archive map |
+| [`docs/CLAIMS_AND_NONCLAIMS.md`](docs/CLAIMS_AND_NONCLAIMS.md) | Claims hygiene |
+| [`docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md`](docs/FSOT_MATH_SYSTEM_SOLIDIFIED.md) | Math / seeds |
+| [`docs/TOP_TO_BOTTOM_VERIFICATION.md`](docs/TOP_TO_BOTTOM_VERIFICATION.md) | Verification stack |
+| [`docs/README_BOOT.md`](docs/README_BOOT.md) | Desktop boot |
 
-Monorepo-only (Python host, Lean formal, wet-lab battery):  
-`WET_BIOPHYSICS`, `GRADE_SCHOOL_DEPTH`, `SYNAPTIC_PATHWAYS`, `formal/`, wetlab certificate.
+---
 
-Do **not** put project docs on the Desktop. Authority lives in this repository.
+## Result artifacts
+
+| File | Content |
+|------|---------|
+| `data/results/LIVE_MIND_LOG.txt` | Continuous / mind-long summary |
+| `data/results/LOGIC_PROBE_LOG.txt` | Logic probe scores |
+| `data/results/LOGIC_PROBE_OUT.txt` | Full probe transcript |
+| `data/results/MIND_LONG_OUT.txt` | Full long-run transcript |
+| `data/results/FLUENT_READ_LOG.txt` | Fluent session |
+
+---
 
 ## QEMU bare metal
 
@@ -183,7 +294,9 @@ Do **not** put project docs on the Desktop. Authority lives in this repository.
 ./run_qemu.ps1
 ```
 
-Builds freestanding Multiboot kernel (`src/main_kernel.zig`) when QEMU is available.
+Freestanding Multiboot kernel (`src/main_kernel.zig`) when QEMU is available.
+
+---
 
 ## License
 
@@ -199,5 +312,4 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 ```
 
-Apache-2.0 includes an express patent grant (useful for neural / systems code). Seed constants and scalar law follow the FSOT methodology pin used in the monorepo.
-
+Apache-2.0 includes an express patent grant. Seed constants and scalar law follow the FSOT methodology pin used in the monorepo and [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean).
