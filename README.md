@@ -21,7 +21,8 @@ A **new class of artificial intelligence**: not an LLM with biology metaphors, b
 **Tissue map:** [`docs/BIO_TISSUE_MAP.md`](docs/BIO_TISSUE_MAP.md)  
 **Fluent doctrine:** [`docs/FLUENT_INTELLIGENCE.md`](docs/FLUENT_INTELLIGENCE.md)  
 **Native-mind architecture (from FSOT-Quantum fold):** [`docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md`](docs/FSOT_NATIVE_MIND_FROM_QUANTUM_FOLD.md)  
-**Quantum law organ:** [`docs/FSOT_QUANTUM_ORGAN.md`](docs/FSOT_QUANTUM_ORGAN.md)
+**Quantum law organ:** [`docs/FSOT_QUANTUM_ORGAN.md`](docs/FSOT_QUANTUM_ORGAN.md)  
+**Quantum wrap (law fold, same pin):** [FSOT-Quantum `docs/STATUS.md`](https://github.com/dappalumbo91/FSOT-Quantum/blob/main/docs/STATUS.md)
 
 ---
 
