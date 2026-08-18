@@ -83,7 +83,7 @@ Published numbers the quantum fold just hit (13/13):
 
 Reproduce on the quantum side: `python -m fsot_quantum forward`  
 Mind query: `python -m fsot_quantum mind`  
-Quantum wrap (later rungs, same pin): [FSOT-Quantum `docs/STATUS.md`](https://github.com/dappalumbo91/FSOT-Quantum/blob/main/docs/STATUS.md) — audit 20/20, leftover hired physics 41/41, Gset family 7/7 under 1%. This organism is still the body. That fold is still the organ.
+Quantum wrap (later rungs, same pin): [FSOT-Quantum `docs/STATUS.md`](https://github.com/dappalumbo91/FSOT-Quantum/blob/main/docs/STATUS.md) · [CLAIMS.md](https://github.com/dappalumbo91/FSOT-Quantum/blob/main/docs/CLAIMS.md) — audit 20/20, leftover hired physics 41/41, Gset family 10/11 under 1% (G17 1.017%). This organism is still the body. That fold is still the organ.
 
 ---
 

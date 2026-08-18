@@ -54,7 +54,8 @@ The organ JSON is a law readout. The quantum fold’s living wrap is
 
 - stale-target audit **20/20 @ 0.5%** vs YR4/PDG (three earlier misses were wrong objects, not a retune)
 - leftover hired physics **41/41** + 212/212 Lean
-- Gset family **7/7 under 1%** (champions still unmatched)
+- Gset family **10/11 under 1%** (G17 1.017% written, not crawled; champions still unmatched)
+- exclusive \(B\to D\ell\nu\) **0.15%**; \(H_0\) Planck **0.024%** / SH0ES **1.00%** (Lean BH→WH)
 - pin **D1D38A** not edited
 
 Regenerate the JSON after a quantum wrap if the skill should carry the new `wrap` field.
