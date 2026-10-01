@@ -109,7 +109,7 @@ Continuous analytic \(S=K(T_1+T_2+T_3)\) remains proved in the Lean theory hub /
 
 ```powershell
 # --- Zig mind (this repo) ---
-cd I:\fsot-neuron-zig
+cd fsot-neuron-zig
 $out = Join-Path $env:TEMP "fsot_mind_v.exe"
 $cache = Join-Path $env:TEMP "fsot_zig_cache_v"
 zig build-exe -OReleaseFast "-femit-bin=$out" --cache-dir $cache --name fsot_mind_v src/main_mind.zig -lgdi32 -luser32 -lwinmm
@@ -123,8 +123,8 @@ $env:Path = "C:\Program Files\qemu;" + $env:Path
 powershell -File .\run_qemu.ps1
 
 # --- Monorepo formal + bio (companion) ---
-cd "I:\fsot nuron"
-$env:PYTHONPATH = "I:\fsot nuron"
+cd "FSOT-2.1-Neural"
+$env:PYTHONPATH = "FSOT-2.1-Neural"
 $env:FSOT_STANDALONE = "1"
 python run_archive_pin.py
 python scripts/verify_formal.py

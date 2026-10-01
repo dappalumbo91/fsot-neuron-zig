@@ -7,7 +7,7 @@
 ## Run
 
 ```powershell
-cd I:\fsot-neuron-zig
+cd fsot-neuron-zig
 # build mind, then:
 fsot_mind brain-learn           # silent teach→practice→sleep→prove
 fsot_mind brain-learn-speak     # same + English TTS of learned facts
@@ -34,7 +34,7 @@ fsot_mind practice              # utter → TTS → self-hear → encode
 3. **Export from monorepo experience school:**
 
 ```powershell
-cd "I:\fsot nuron"
+cd "FSOT-2.1-Neural"
 python scripts/export_brain_teach_bank.py
 ```
 

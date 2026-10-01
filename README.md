@@ -59,7 +59,7 @@ Full map: [`docs/LANGUAGE_TWINS_NETWORK.md`](docs/LANGUAGE_TWINS_NETWORK.md)
 
 | Authority | Where |
 |-----------|--------|
-| Physical Archive (offline master) | `I:\FSOT-Physical-Archive` |
+| Physical Archive (offline master) | `<local folder, not included in repo: FSOT-Physical-Archive>` |
 | Law + multi-prover hub | [**FSOT-2.1-Lean**](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | Neural monorepo (Allen / wet-lab) | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
 | Neuron → OS roadmap (hub) | [NEURON_ZIG_TO_OS_ROADMAP.md](https://github.com/dappalumbo91/FSOT-2.1-Lean/blob/main/docs/NEURON_ZIG_TO_OS_ROADMAP.md) |

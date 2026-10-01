@@ -11,7 +11,7 @@ Copy lives in each twin repo under `docs/LANGUAGE_TWINS_NETWORK.md`.
 
 | Role | Language | GitHub | Local (lab) |
 |------|----------|--------|-------------|
-| **Authority** | Zig 0.15+ | [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig) | `I:\fsot-neuron-zig` |
+| **Authority** | Zig 0.15+ | [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig) | `.` |
 | **Host twin** | Haskell (GHC 9.x) | [fsot-neuron-haskell](https://github.com/dappalumbo91/fsot-neuron-haskell) | `Desktop\FSOT NEURON haskell` |
 | **Host twin + structure** | Idris 2 | [fsot-neuron-idris](https://github.com/dappalumbo91/fsot-neuron-idris) | `Desktop\FSOT NEURON idris` |
 | **Host twin (usability)** | Python 3 | planned `fsot-neuron-python` | `Desktop\FSOT NEURON python` |

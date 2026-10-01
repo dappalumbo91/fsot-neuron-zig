@@ -2,7 +2,7 @@
 
 **Mode:** `fsot_mind know-query` · `know-query-live`  
 **Code:** `query_tool_fixed.zig` · `know_query_fixed.zig`  
-**Archive curriculum:** `I:\FSOT-Physical-Archive` (OpenAlex cache, oracle streams, live API policy)
+**Archive curriculum:** `<local folder, not included in repo: FSOT-Physical-Archive>` (OpenAlex cache, oracle streams, live API policy)
 
 ## Human pattern
 
@@ -23,9 +23,9 @@ Example: **table** → not known → query → “a flat surface with legs…”
 |----------|--------|------------|
 | 1 | Embedded seed | offline (offline smoke) |
 | 2 | Dictionary | `data/lexicon/en_dictionary.jsonl` |
-| 3 | Simple Wiki | `D:\training data\nlp\simple-wiki\…` |
-| 4 | OpenAlex cache | `I:\FSOT-Physical-Archive\03_FSOT-PublicData\openalex\` |
-| 5 | arXiv / oracle streams | `D:\training data\arxiv_fsot_core.txt` + archive `stream_*.txt` |
+| 3 | Simple Wiki | `<local folder, not included in repo: training data/nlp/simple-wiki>` |
+| 4 | OpenAlex cache | `<local folder, not included in repo: FSOT-Physical-Archive/03_FSOT-PublicData/openalex>` |
+| 5 | arXiv / oracle streams | `<local file, not included in repo: arxiv_fsot_core.txt>` + archive `stream_*.txt` |
 | 6 | Live (optional) | Wikipedia REST summary (credential-free) |
 
 Matches Physical Archive spirit: **local first**, credential-free APIs when allowed (`public_api_policy` / live fetch curriculum).

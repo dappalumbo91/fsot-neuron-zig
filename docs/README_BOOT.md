@@ -28,7 +28,7 @@ Double-click ran `python run_mind.py` with **no arguments**. The program printed
 
 ```text
 python run_mind.py phase-b
-I:\fsot-neuron-zig\zig-out\bin\fsot_mind.exe glia-ca
+zig-out/bin/fsot_mind.exe glia-ca
 bin\fsot-mind.exe phase-a
 wsl ... ./build/exec/fsot-mind self-talk
 ```

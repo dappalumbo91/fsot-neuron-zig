@@ -11,7 +11,7 @@
 
 | Layer | Location | What it is |
 |-------|----------|------------|
-| **Physical Archive (offline master)** | `I:\FSOT-Physical-Archive` | Full proofs, vendor pin, multi-prover, public-data caches, SR-ITE |
+| **Physical Archive (offline master)** | `<local folder, not included in repo: FSOT-Physical-Archive>` | Full proofs, vendor pin, multi-prover, public-data caches, SR-ITE |
 | **GitHub = public archive face** | [**FSOT-2.1-Lean**](https://github.com/dappalumbo91/FSOT-2.1-Lean) | Lean + verification bundle representing the archive on GitHub |
 | **Neural monorepo** | [**FSOT-2.1-Neural**](https://github.com/dappalumbo91/FSOT-2.1-Neural) | Wet-lab battery, Allen calibrate/scalpel, Python lab, Neural Lean panel |
 | **Zig mind (this repo)** | [**fsot-neuron-zig**](https://github.com/dappalumbo91/fsot-neuron-zig) | Fixed-lattice **neuroscience-domain engine** under the same pin |
@@ -69,7 +69,7 @@ They do **not** replace FSOT; they **do not** orphan cosmology. Same law, differ
 
 | If someone asks… | Point them here |
 |------------------|-----------------|
-| “Where is the math / cosmology / multi-domain FSOT?” | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) + `I:\FSOT-Physical-Archive` |
+| “Where is the math / cosmology / multi-domain FSOT?” | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) + `<local folder, not included in repo: FSOT-Physical-Archive>` |
 | “Where is Allen wet-lab / Python battery?” | [FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural) |
 | “Where is the silicon mind body?” | This repo — [fsot-neuron-zig](https://github.com/dappalumbo91/fsot-neuron-zig) |
 
@@ -88,10 +88,10 @@ pip install -r requirements.txt
 python scripts/run_publication_verification_bundle.py   # or fsot_verification_runner.py
 
 # Neural embodiment (this repo)
-cd I:\fsot-neuron-zig   # or clone fsot-neuron-zig
+cd fsot-neuron-zig   # or clone fsot-neuron-zig
 zig build -Doptimize=ReleaseFast
 .\zig-out\bin\fsot_mind.exe fixed
 .\zig-out\bin\fsot_mind.exe scalpel
 ```
 
-Offline master: set `FSOT_PHYSICAL_ARCHIVE=I:\FSOT-Physical-Archive` and follow archive `READ_ME_FIRST.md`.
+Offline master: set `FSOT_PHYSICAL_ARCHIVE=<local folder, not included in repo: FSOT-Physical-Archive>` and follow archive `READ_ME_FIRST.md`.

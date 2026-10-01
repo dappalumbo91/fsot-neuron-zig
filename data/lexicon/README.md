@@ -18,8 +18,8 @@ It **recognizes** dictionary words on input and **speaks** with core grammar tem
 ## Rebuild from dictionary
 
 ```powershell
-cd "I:\fsot nuron"
-$env:PYTHONPATH = "I:\fsot nuron"
+cd "FSOT-2.1-Neural"
+$env:PYTHONPATH = "FSOT-2.1-Neural"
 python scripts/build_lexicon_from_dictionary.py --ensure-wordnet --max-words 20000
 # copies into this data/lexicon/
 ```
