@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "FSOT Neuron Zig: Fluid Spacetime Omni-Theory neural mind (Zig reference implementation)"
+authors:
+  - family-names: Palumbo
+    given-names: Damian Arthur
+repository-code: "https://github.com/dappalumbo91/fsot-neuron-zig"
+license: Apache-2.0
+abstract: >-
+  Fixed-point Zig reference implementation of the FSOT neural mind: multi-region
+  brain, 64-codon genetics and episodic memory, zero free parameters. Haskell
+  and Idris 2 twins (fsot-neuron-haskell, fsot-neuron-idris) are held to the
+  same accuracy gates.
+keywords: [fsot, zig, computational-neuroscience, genetics]
