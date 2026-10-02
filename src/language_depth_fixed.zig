@@ -265,8 +265,8 @@ fn loadDepthFile() void {
     const paths = [_][]const u8{
         "data/lexicon/en_depth.tsv",
         "../data/lexicon/en_depth.tsv",
-        "I:/fsot-neuron-zig/data/lexicon/en_depth.tsv",
-        "I:/fsot nuron/data/lexicon/en_depth.tsv",
+        "data/lexicon/en_depth.tsv",
+        "../FSOT-2.1-Neural/data/lexicon/en_depth.tsv",
     };
     for (paths) |path| {
         const file = std.fs.cwd().openFile(path, .{}) catch continue;

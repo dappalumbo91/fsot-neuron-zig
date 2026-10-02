@@ -1,6 +1,6 @@
 # Archive-solved math → Zig mind (orientation)
 
-**Source of truth:** `I:\FSOT-Physical-Archive`  
+**Source of truth:** `<local folder, not included in repo: FSOT-Physical-Archive>`  
 **Pin:** `D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70`  
 **Status (on-disk cert):** GREEN — `VERIFICATION_REPORT.json` · multi-prover · 405-domain science panels  
 
@@ -104,15 +104,15 @@ NeuroLab pathway contract: **max mean abs gap 0.15** on brain fit dashboards (`n
 
 | Path |
 |------|
-| `I:\FSOT-Physical-Archive\READ_ME_FIRST.md` |
-| `I:\FSOT-Physical-Archive\VERIFICATION_REPORT.json` |
-| `I:\FSOT-Physical-Archive\FSOT_USAGE_DOCTRINE.md` |
-| `I:\FSOT-Physical-Archive\ARCHIVE_MATH_AND_VERIFICATION_DEEP_DIG.md` |
-| `I:\FSOT-Physical-Archive\ZIG_MIND_AND_GITHUB_MAP.md` |
-| `I:\FSOT-Physical-Archive\01_SR-ITE-USB-Original\6_unified_oracle\fsot_3_0\FSOT_BIOLOGICAL_BRAIN_MATHEMATICAL_DERIVATIONS.md` |
-| `I:\FSOT-Physical-Archive\04_Genetics-Longevity\64_codon_trinary_map.txt` |
-| `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full\data\codon_manifest.yaml` |
-| `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full\data\neurolab_bio_manifest.yaml` |
+| `<local file, not included in repo: READ_ME_FIRST.md>` |
+| `<local file, not included in repo: VERIFICATION_REPORT.json>` |
+| `<local file, not included in repo: FSOT_USAGE_DOCTRINE.md>` |
+| `<local file, not included in repo: ARCHIVE_MATH_AND_VERIFICATION_DEEP_DIG.md>` |
+| `<local file, not included in repo: ZIG_MIND_AND_GITHUB_MAP.md>` |
+| `<local file, not included in repo: FSOT_BIOLOGICAL_BRAIN_MATHEMATICAL_DERIVATIONS.md>` |
+| `<local file, not included in repo: 64_codon_trinary_map.txt>` |
+| `FSOT-2.1-Lean/data/codon_manifest.yaml` |
+| `FSOT-2.1-Lean/data/neurolab_bio_manifest.yaml` |
 
 ---
 

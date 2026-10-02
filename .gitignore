@@ -6,3 +6,6 @@
 *.obj
 .DS_Store
 __pycache__/
+
+# Local external data (see FSOT_* env vars); never committed
+data_external/

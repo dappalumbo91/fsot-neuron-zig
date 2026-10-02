@@ -61,7 +61,7 @@ var file_n: usize = 0;
 const PATHS = [_][]const u8{
     "data/curriculum/brain_teach/lessons.tsv",
     "../data/curriculum/brain_teach/lessons.tsv",
-    "I:/fsot-neuron-zig/data/curriculum/brain_teach/lessons.tsv",
+    "data/curriculum/brain_teach/lessons.tsv",
 };
 
 fn loadFileMaterials() void {

@@ -6,9 +6,9 @@
 //! Order of authority (local first, then live credential-free APIs):
 //!   1) embedded micro lexicon
 //!   2) data/lexicon/en_dictionary.jsonl (repo)
-//!   3) D:\training data simple-wiki shards
-//!   4) D:\training data arxiv_fsot_core.txt
-//!   5) I:\FSOT-Physical-Archive openalex cache + oracle streams
+//!   3) $FSOT_TRAINING_DATA simple-wiki shards
+//!   4) $FSOT_TRAINING_DATA arxiv_fsot_core.txt
+//!   5) $FSOT_ARCHIVE_ROOT openalex cache + oracle streams
 //!   6) optional live Wikipedia REST summary (credential-free)
 //!
 //! NOT an LLM. Returns a short definition string for encode→engram.
@@ -180,8 +180,8 @@ fn queryDictionaryFile(term: []const u8, hit: *QueryHit) bool {
     const paths = [_][]const u8{
         "data/lexicon/en_dictionary.jsonl",
         "../data/lexicon/en_dictionary.jsonl",
-        "I:/fsot-neuron-zig/data/lexicon/en_dictionary.jsonl",
-        "I:/fsot nuron/data/lexicon/en_dictionary.jsonl",
+        "data/lexicon/en_dictionary.jsonl",
+        "../FSOT-2.1-Neural/data/lexicon/en_dictionary.jsonl",
     };
     for (paths) |path| {
         const file = std.fs.cwd().openFile(path, .{}) catch continue;
@@ -235,11 +235,11 @@ fn queryDictionaryFile(term: []const u8, hit: *QueryHit) bool {
 
 fn queryWikiFiles(term: []const u8, hit: *QueryHit) bool {
     const paths = [_][]const u8{
-        "D:/training data/nlp/simple-wiki/1of2/wiki_00",
-        "D:/training data/nlp/simple-wiki/1of2/wiki_01",
-        "D:/training data/nlp/simple-wiki/1of2/wiki_02",
-        "D:/training data/nlp/simple-wiki/1of2/wiki_03",
-        "D:/training data/nlp/simple-wiki/1of2/wiki_04",
+        "data_external/training_data/nlp/simple-wiki/1of2/wiki_00",
+        "data_external/training_data/nlp/simple-wiki/1of2/wiki_01",
+        "data_external/training_data/nlp/simple-wiki/1of2/wiki_02",
+        "data_external/training_data/nlp/simple-wiki/1of2/wiki_03",
+        "data_external/training_data/nlp/simple-wiki/1of2/wiki_04",
     };
     for (paths) |path| {
         const file = std.fs.cwd().openFile(path, .{}) catch continue;
@@ -307,11 +307,11 @@ fn queryWikiFiles(term: []const u8, hit: *QueryHit) bool {
 
 fn queryArxivCore(term: []const u8, hit: *QueryHit) bool {
     const paths = [_][]const u8{
-        "D:/training data/arxiv_fsot_core.txt",
-        "I:/FSOT-Physical-Archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_arxiv_science.txt",
-        "I:/FSOT-Physical-Archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_physics.txt",
-        "I:/FSOT-Physical-Archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_math.txt",
-        "I:/FSOT-Physical-Archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_bio.txt",
+        "data_external/training_data/arxiv_fsot_core.txt",
+        "data_external/physical_archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_arxiv_science.txt",
+        "data_external/physical_archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_physics.txt",
+        "data_external/physical_archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_math.txt",
+        "data_external/physical_archive/01_SR-ITE-USB-Original/6_unified_oracle/stream_bio.txt",
     };
     for (paths) |path| {
         const file = std.fs.cwd().openFile(path, .{}) catch continue;
@@ -340,7 +340,7 @@ fn queryArxivCore(term: []const u8, hit: *QueryHit) bool {
 
 fn queryOpenAlexCache(term: []const u8, hit: *QueryHit) bool {
     const paths = [_][]const u8{
-        "I:/FSOT-Physical-Archive/03_FSOT-PublicData/openalex/openalex_cache.json",
+        "data_external/physical_archive/03_FSOT-PublicData/openalex/openalex_cache.json",
     };
     for (paths) |path| {
         const file = std.fs.cwd().openFile(path, .{}) catch continue;

@@ -3,7 +3,7 @@
 **Status:** Authority document for the mathematics *used to build* FSOT-2.1-Neural as it stands now.  
 **Date:** 2026-07-29  
 **Owner:** Damian Arthur Palumbo  
-**Physical archive (master reference):** `I:\FSOT-Physical-Archive`  
+**Physical archive (master reference):** `<local folder, not included in repo: FSOT-Physical-Archive>`  
 **GitHub face of that archive (Lean verification):** https://github.com/dappalumbo91/FSOT-2.1-Lean  
 **Zig mind (this embodiment):** https://github.com/dappalumbo91/fsot-neuron-zig  
 **Authority pin (SHA-256 of `vendor/fsot_compute.py`):**  
@@ -17,10 +17,10 @@ Cross-links:
 
 | Layer | Path |
 |-------|------|
-| Archive usage doctrine | `I:\FSOT-Physical-Archive\FSOT_USAGE_DOCTRINE.md` |
-| Archive math deep dig | `I:\FSOT-Physical-Archive\ARCHIVE_MATH_AND_VERIFICATION_DEEP_DIG.md` |
-| Archive ↔ GitHub ↔ Zig map | `I:\FSOT-Physical-Archive\ZIG_MIND_AND_GITHUB_MAP.md` |
-| Full Lean hub (analytic S) | `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full` · [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
+| Archive usage doctrine | `<local file, not included in repo: FSOT_USAGE_DOCTRINE.md>` |
+| Archive math deep dig | `<local file, not included in repo: ARCHIVE_MATH_AND_VERIFICATION_DEEP_DIG.md>` |
+| Archive ↔ GitHub ↔ Zig map | `<local file, not included in repo: ZIG_MIND_AND_GITHUB_MAP.md>` |
+| Full Lean hub (analytic S) | `FSOT-2.1-Lean` · [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | Neural formula ledger | [`FORMULAS.md`](FORMULAS.md) |
 | Neural Lean panel | monorepo `formal/` · theorem `scientific_panel_ok` |
 | Certificate stamp | `data/results/LEAN_WETLAB_CERTIFICATE.md` |
@@ -257,7 +257,7 @@ FSOT does not replace curriculum; it **lawfully couples** genetics → weight �
 ### 3.2 What remains archive-only (by design)
 
 Continuous analytic \(S=K(T_1+T_2+T_3)\), Wave-1 closed forms, 405-domain green panels, seven-way cross-proof of the **full** formal spine:  
-`I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full` + `VERIFICATION_REPORT.json`.
+`FSOT-2.1-Lean` + `VERIFICATION_REPORT.json`.
 
 Neural Lean **inherits** that pin; it does not re-prove 2000+ obligations.
 

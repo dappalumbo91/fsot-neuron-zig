@@ -54,7 +54,7 @@ to project doctrine:
 ### Build & run mind
 
 ```powershell
-cd "I:\fsot nuron\embodiment\zig"
+cd "FSOT-2.1-Neural/embodiment/zig"
 zig build mind
 # or with args:
 zig build mind -- selftest

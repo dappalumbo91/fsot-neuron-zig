@@ -91,7 +91,7 @@ ablation: corrupt intermediate → edge must break (proves dependence)
 ## Run
 
 ```powershell
-cd I:\fsot-neuron-zig
+cd fsot-neuron-zig
 .\zig-out\bin\fsot_mind.exe neuromod
 .\zig-out\bin\fsot_mind.exe sleep          # consolidate / replay
 .\zig-out\bin\fsot_mind.exe claim          # multi-hop claimability (parallel cues)

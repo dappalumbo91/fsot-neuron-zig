@@ -1,7 +1,7 @@
 //! Biological FI metrics on fixed-point neurons — wet-lab accuracy gate.
 //!
 //! Allen bio_match authority (archive already solved; port analytical lock):
-//!   I:\fsot nuron\artifacts\bio_report_card.json — 6/6 gaps closed
+//!   FSOT-2.1-Neural/artifacts/bio_report_card.json — 6/6 gaps closed
 //!   calibrate.py analytical_lock: R ≈ isi·(1−0.45A), δ from AHP formula
 //!
 //! Field metric doctrine (ephys / computational neuroscience):

@@ -4,10 +4,10 @@
 
 | Authority | Role |
 |-----------|------|
-| **I:\FSOT-Physical-Archive** | Offline master: scalar, pin D1D38A, multi-prover, public-data panels |
+| **<local folder, not included in repo: FSOT-Physical-Archive>** | Offline master: scalar, pin D1D38A, multi-prover, public-data panels |
 | **[FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)** | **GitHub face of the Physical Archive** — Lean + verification bundle |
-| **[FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural)** / `I:\fsot nuron` | Allen ephys, wetlab 37/37, calibrate/scalpel, Python battery |
-| **This repo** / `I:\fsot-neuron-zig` | Fixed lattice **neural fold** domain engine: genetics, wet cascade, think/sleep/LTM/GPU |
+| **[FSOT-2.1-Neural](https://github.com/dappalumbo91/FSOT-2.1-Neural)** / `FSOT-2.1-Neural` | Allen ephys, wetlab 37/37, calibrate/scalpel, Python battery |
+| **This repo** / `.` | Fixed lattice **neural fold** domain engine: genetics, wet cascade, think/sleep/LTM/GPU |
 
 **Unity claim:** Cosmology fold and neural fold share \(S=K(T_1+T_2+T_3)\) (pin D1D38A). Zig is embodiment + domain metrics, not a second theory.  
 Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · archive `ZIG_MIND_AND_GITHUB_MAP.md`
@@ -81,14 +81,14 @@ Full map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md) · arch
 
 ```powershell
 # Zig mind
-cd I:\fsot-neuron-zig
+cd fsot-neuron-zig
 zig build -Doptimize=ReleaseFast
 .\zig-out\bin\fsot_mind.exe fixed      # Allen lock + structure
 .\zig-out\bin\fsot_mind.exe scalpel    # class rates |Δ| Hz
 
 # Archive monorepo (when env set)
-cd "I:\fsot nuron"
-$env:FSOT_PHYSICAL_ARCHIVE = "I:\FSOT-Physical-Archive"
+cd "FSOT-2.1-Neural"
+$env:FSOT_PHYSICAL_ARCHIVE = "<local folder, not included in repo: FSOT-Physical-Archive>"
 python run_wetlab_accuracy_battery.py
 python run_bio_validate.py
 ```

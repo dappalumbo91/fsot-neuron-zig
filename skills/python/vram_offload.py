@@ -21,6 +21,18 @@ Usage:
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import ctypes
 import json
 import os
@@ -34,9 +46,9 @@ COLLAPSE = 0.9174663774653723
 
 LAB_CANDIDATES = [
     os.environ.get("FSOT_GPU_ROOT", ""),
-    r"C:\Users\damia\Desktop\gpu exparment for lean coq isabell andf star",
-    r"C:\Users\damia\Desktop\FSOT-GPU",
-    r"I:\FSOT-GPU",
+    _os.fspath(_fsot_local_path('FSOT_GPU_ROOT', '../FSOT-GPU')),
+    _os.fspath(_fsot_local_path('FSOT_GPU_ROOT', '../FSOT-GPU')),
+    _os.fspath(_fsot_local_path('FSOT_GPU_ROOT', '../FSOT-GPU')),
 ]
 
 

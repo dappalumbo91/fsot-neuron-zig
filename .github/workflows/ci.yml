@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zig:
+    name: Zig build + self-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.15.2
+
+      # build.zig has no `test` step; these are the existing gates instead.
+      - name: zig build (fsot_mind host + freestanding kernel)
+        run: zig build
+
+      - name: zig build host (trinary + neuron self-test, runs on host)
+        run: zig build host
+
+      - name: fsot_mind selftest
+        run: ./zig-out/bin/fsot_mind selftest
+
+      - name: zig test (modules with unit tests)
+        run: |
+          zig test src/frame_inject.zig
+          zig test src/metric_inject.zig

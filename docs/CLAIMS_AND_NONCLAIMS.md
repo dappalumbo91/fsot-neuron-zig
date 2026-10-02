@@ -5,7 +5,7 @@
 **Purpose:** Scientific claim hygiene. Only what is verified in artifacts.
 
 **Law spine (shared with cosmology folds):** pin **D1D38A** · \(S=K(T_1+T_2+T_3)\)  
-→ [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) · `I:\FSOT-Physical-Archive`  
+→ [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) · `<local folder, not included in repo: FSOT-Physical-Archive>`  
 → map: [`ARCHIVE_PIN_AND_MIND_FOLD.md`](ARCHIVE_PIN_AND_MIND_FOLD.md)
 
 ---

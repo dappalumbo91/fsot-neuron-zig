@@ -229,8 +229,8 @@ pub fn tryLoadDefaultRoles() u32 {
         "data/lexicon/en_roles.tsv",
         "../data/lexicon/en_roles.tsv",
         "../../data/lexicon/en_roles.tsv",
-        "I:/fsot-neuron-zig/data/lexicon/en_roles.tsv",
-        "I:/fsot nuron/data/lexicon/en_roles.tsv",
+        "data/lexicon/en_roles.tsv",
+        "../FSOT-2.1-Neural/data/lexicon/en_roles.tsv",
     };
     var total: u32 = 0;
     for (paths) |p| {

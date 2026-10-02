@@ -1,8 +1,8 @@
 //! Stream real literature into organism-scale study cards.
 //!
 //! Sources (local training data — not LLM benchmarks):
-//!   D:\training data\arxiv_fsot_core.txt   ([CAT]…[TITLE]…[ABS]…[END])
-//!   D:\training data\nlp\simple-wiki\…\wiki_*  (title + blank-line articles)
+//!   $FSOT_TRAINING_DATA/arxiv_fsot_core.txt   ([CAT]…[TITLE]…[ABS]…[END])
+//!   $FSOT_TRAINING_DATA/nlp/simple-wiki/…/wiki_*  (title + blank-line articles)
 //!
 //! Doctrine: give the mind **literature to experience**, not exam ranks.
 //! Cards become episodic encode + SpeakEngram — then internal think can
@@ -39,16 +39,16 @@ pub const LitBank = struct {
 };
 
 const ARXIV_PATHS = [_][]const u8{
-    "D:/training data/arxiv_fsot_core.txt",
-    "D:\\training data\\arxiv_fsot_core.txt",
-    "I:/fsot-neuron-zig/data/literature/arxiv_fsot_core.txt",
+    "data_external/training_data/arxiv_fsot_core.txt",
+    "data_external/training_data/arxiv_fsot_core.txt",
+    "data/literature/arxiv_fsot_core.txt",
 };
 
 const WIKI_PATHS = [_][]const u8{
-    "D:/training data/nlp/simple-wiki/1of2/wiki_00",
-    "D:\\training data\\nlp\\simple-wiki\\1of2\\wiki_00",
-    "D:/training data/nlp/simple-wiki/1of2/wiki_01",
-    "D:/training data/nlp/simple-wiki/1of2/wiki_02",
+    "data_external/training_data/nlp/simple-wiki/1of2/wiki_00",
+    "data_external/training_data/nlp/simple-wiki/1of2/wiki_00",
+    "data_external/training_data/nlp/simple-wiki/1of2/wiki_01",
+    "data_external/training_data/nlp/simple-wiki/1of2/wiki_02",
 };
 
 fn setPath(bank: *LitBank, path: []const u8) void {

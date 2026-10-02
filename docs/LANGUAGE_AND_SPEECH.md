@@ -46,7 +46,7 @@ zig build-exe -OReleaseFast "-femit-bin=$out" --cache-dir $cache --name fsot_min
 
 Runtime can load `en_roles.tsv` from the monorepo path if present:
 
-- `I:/fsot nuron/data/lexicon/en_roles.tsv` (dev machine)
+- `FSOT-2.1-Neural/data/lexicon/en_roles.tsv` (dev machine)
 - or `data/lexicon/en_roles.tsv` relative to cwd
 
 Embedded core words always work without external files.  
