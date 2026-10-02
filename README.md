@@ -12,7 +12,7 @@ A **new class of artificial intelligence**: not an LLM with biology metaphors, b
 | **Lattice** | Fixed-point SCALE=**1e12** (`src/fixed.zig`) |
 | **Live lattice** | **7 regions · 60 units** (+ limited hipp recruit → **63**) · striatum selection strip |
 | **Neurological folds** | BG go/nogo · striatum · cerebellar timing · MB sparse · multi-STDP · glia/ECM |
-| **Active intelligence** | think → retrieve → multi-hop compose → honest speak (`fsot_mind active`) |
+| **Active intelligence** | think → retrieve → multi-hop compose → honest speak (`fsot_mind think` · `fsot_mind compose`) |
 | **License** | Apache-2.0 |
 
 **Living metrics ledger:** [`docs/METRICS_AND_ACCOMPLISHMENTS.md`](docs/METRICS_AND_ACCOMPLISHMENTS.md)  
@@ -80,10 +80,10 @@ zig build -Doptimize=ReleaseFast
 
 ```powershell
 zig build -Doptimize=ReleaseFast
-.\zig-out\bin\fsot_mind.exe mind-smoke
-.\zig-out\bin\fsot_mind.exe logic-probe
-.\zig-out\bin\fsot_mind.exe verify-stamp   # residual stamp → FSOT-2.1-Lean multiprover
-.\zig-out\bin\fsot_mind.exe mind-long
+.\zig-out\bin\fsot_mind.exe suite        # unit-test gates
+.\zig-out\bin\fsot_mind.exe mind         # full connected organism
+.\zig-out\bin\fsot_mind.exe think-min 5  # internal think for N minutes
+.\zig-out\bin\fsot_mind.exe              # no mode: prints the full CLI list
 ```
 
 Or double-click **`BOOT_MIND.cmd`** / **`BOOT_MENU.cmd`**.
@@ -95,6 +95,12 @@ If antivirus locks `zig-out`, emit to `%TEMP%` (see [`docs/README_BOOT.md`](docs
 ## Headline verified metrics
 
 *Snapshot from session runs 2026-08-05. Refresh via commands below; authoritative detail in [`docs/METRICS_AND_ACCOMPLISHMENTS.md`](docs/METRICS_AND_ACCOMPLISHMENTS.md).*
+
+> **Command availability (2026-10-02):** `logic-probe`, `verify-stamp`, `mind-long`, `fluent` and `mind-smoke`
+> are **not** modes of the current `fsot_mind` binary. No implementation of them exists in this repo's history
+> (they entered this README in `db1453a`), so running them prints the usage list and exits 2.
+> The tables below are the recorded session snapshot and cannot be regenerated with this build.
+> Current gate run: `fsot_mind suite`. Full CLI list: run `fsot_mind` with no mode.
 
 ### Logic / STEM reasoning probe
 
@@ -219,15 +225,10 @@ Speech order: PFC think  →  motor articulate  →  self-hear
 
 | Mode | Purpose |
 |------|---------|
-| **`logic-probe`** | STEM/logic retrieve + multi-hop + history refusal suite |
-| **`mind-long`** | Longer continuous saturation (900 ticks, STEM diet) |
-| **`mind-smoke`** | Short connected organism smoke |
+| **`suite`** | Unit-test gates (genetic, brain-learn, mind host, fixed authority, …) |
 | **`mind`** | Full continuous connected organism |
-| **`fluent`** / `fluent FILE` | Read materials → grow → honest speak |
-| **`learn-metrics`** | Human-fn + EEG SME + pin stamp |
-| **`develop`** | DNA-stage program + 6-region report |
-| **`hipp-recruit`** / **`stdp-multi`** | Recruit · multi-timescale STDP |
-| **`white-matter`** / **`ei`** / **`mb-sparse`** | Tracts · E–I · sparse hipp |
+| **`think`** / **`think-min N`** / **`think-hour`** | Internal retrace · cross-check · brainstorm · self-correct |
+| **`compose`** / **`multi-hop`** | Answer-dependent hops · schema discovery · ablation |
 | **`pathways`** / `glia` / `molecular` | Wet cascade smoke |
 | **`brain-learn`** | Curriculum into `OrganismF` |
 | **`ladder`** / **`depth`** | Grade PK→G8 · paraphrase ≥95% project gates |
@@ -237,6 +238,10 @@ Speech order: PFC think  →  motor articulate  →  self-hear
 | **`all`** / **`stress`** | Fixed suite gates |
 
 Unknown mode prints the full CLI list.
+
+Not in the current binary (documented earlier, no implementation in this repo): `logic-probe`, `verify-stamp`,
+`mind-long`, `mind-smoke`, `fluent`, `active`, `learn-metrics`, `develop`, `hipp-recruit`, `stdp-multi`,
+`white-matter`, `ei`, `mb-sparse`.
 
 ---
 
