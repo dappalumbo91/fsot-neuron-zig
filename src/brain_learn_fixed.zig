@@ -347,7 +347,7 @@ var file_count: usize = 0;
 const BANK_PATHS = [_][]const u8{
     "data/curriculum/brain_teach/lessons.tsv",
     "../data/curriculum/brain_teach/lessons.tsv",
-    "I:/fsot-neuron-zig/data/curriculum/brain_teach/lessons.tsv",
+    "data/curriculum/brain_teach/lessons.tsv",
 };
 
 fn loadFileLessons() void {

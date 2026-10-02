@@ -34,9 +34,9 @@ pub const COLLAPSE_THRESHOLD: f64 = C_EFF * P_VAR;
 
 /// Default lab roots to search (Windows development host).
 const LAB_CANDIDATES = [_][]const u8{
-    "C:\\Users\\damia\\Desktop\\gpu exparment for lean coq isabell andf star",
-    "C:\\Users\\damia\\Desktop\\FSOT-GPU",
-    "I:\\FSOT-GPU",
+    "../FSOT-GPU",
+    "../FSOT-GPU",
+    "../FSOT-GPU",
 };
 
 pub const GpuReport = struct {

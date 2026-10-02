@@ -1433,7 +1433,7 @@ pub fn runInternalThink(cfg: ThinkConfig) ThinkReport {
             rep.n_motor += 1;
         }
     } else {
-        hbPrint(log_ptr, "THINK_BOOT literature miss — seed world only (check D:\\training data)\n", .{});
+        hbPrint(log_ptr, "THINK_BOOT literature miss — seed world only (check $FSOT_TRAINING_DATA)\n", .{});
     }
 
     // Post-encode offline pass (light NREM + wet maintenance — no VRAM deep at boot)

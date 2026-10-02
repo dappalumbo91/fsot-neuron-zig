@@ -1,7 +1,7 @@
 //! Allen Cell Types **full CSV distribution** match (not mean-only bio_match).
 //!
 //! Authority:
-//!   I:\fsot nuron\data\eeg\allen_ephys\ephys_features.csv  (~2k cells)
+//!   FSOT-2.1-Neural/data/eeg/allen_ephys/ephys_features.csv  (~2k cells)
 //! Snapshots in-repo:
 //!   data/allen/allen_dist_targets.txt   — mean/sd/sem/quantiles
 //!   data/allen/allen_sample_*.txt       — specimen samples
