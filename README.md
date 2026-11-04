@@ -1,5 +1,7 @@
 # FSOT Neuron Zig
 
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 **Fluid Spacetime Omni-Theory (FSOT) neural mind — Zig authority.**
 
 A **new class of artificial intelligence**: not an LLM with biology metaphors, but a **genetic Fixed-lattice organism** under one seed pin — multi-region brain, developmental expression, wet process plasticity, STEM/logic experience, and **honest** speak (only what was experienced).
